@@ -40,10 +40,11 @@ header img{
 #name{
     text-align: left;
     font-family: "League Spartan", sans-serif;
-    font-size: 140%;
+    font-size: 200%;
     color: #171D1C;
     margin: 0;
-    padding-top: 8%; /*See if it can be done better*/
+    padding-top: 4%; /*See if it can be done better*/
+    font-weight: bold;
 }
 
 #lineBetweenNameAndMoto{
@@ -59,13 +60,14 @@ header img{
     letter-spacing: 2px;
     color: #171D1C;
     margin: 0 auto;
+    font-weight: lighter;
 }
 
 containerSearch{
     width: 25%;
     min-width: 120px;
     display: flex;
-    height: 64px;
+    height: 60px;
     background: #FFFFFF;
     border-radius: 22px;
     margin: 0 auto;
@@ -133,7 +135,7 @@ form{
     height: fit-content;
     width: 96%;
     flex-direction: row;
-    margin-top: 12.5vh;
+    padding-top:2%;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-gap: 10px;
