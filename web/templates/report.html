@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" href="./../static/css/report.css">
     <title>HappyStreet</title>
+    <script src='https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.js'></script>
+    <link href='https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.css' rel='stylesheet' />
+
 </head>
 <body>
 <header>
@@ -31,8 +34,15 @@
         <button id="mailIcon"></button>
     </nav>
     <textarea id="descriptionInput" placeholder="Description..."></textarea>
-    <textarea id="addressInput" placeholder="Address..." ></textarea>
+    <div id='map'></div>
     <button id="postItButton">Post Incident</button>
 </form>
 </body>
+<script type="text/javascript">
+    mapboxgl.accessToken = 'pk.eyJ1IjoidmFyeW5jYW1sbyIsImEiOiJja2ZpYWd5cGswdDQ1MnFudjhocHA1bTVzIn0.-keMO_74HFJ2INvkbMqNpA';
+    var map = new mapboxgl.Map({
+    container: 'map',
+    style: 'mapbox://styles/mapbox/streets-v11'
+    });
+</script>
 </html>
