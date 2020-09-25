@@ -13,19 +13,17 @@ header{
     display: flex;
     flex-direction: row;
     align-items: center;
-    padding-left: 10px;
 }
 
 header img{
     height: 90%;
-    margin: 0 auto;
 }
 
 #lineNextToName {
     border: 2px solid #171D1C;
     height: 70%;
     width: 0;
-    margin: 0 0 0 10px;
+    margin: 0 0 0 5px;
     padding: 0;
 }
 
@@ -49,7 +47,7 @@ header img{
 
 #lineBetweenNameAndMoto{
     width: 100%;
-    height: 0;
+    height: 1px;
     border-color: #171D1C;
     margin: 0;
 }
@@ -93,26 +91,32 @@ containersearch:focus{
     z-index: 1;
     margin: 0 auto;
     display: block;
+    padding: 0;
 }
 
 .search form input[type="text"]{
     background-color: transparent;
     border-width: 0;
-    height: 92%;
-    width: 99%;
+    height: 100%;
+    width: 100%;
     outline-width: 0;
     font-size: 24px;
+    margin: 0 auto;
+    padding: 0;
 }
 
 .search form input[type="text"]:focus{
     border-width: 0;
     outline-width: 0;
 }
-
+.search form input[type="text"],textarea{
+    height: 100%;
+    width:100%;
+}
 .search form input[type="text"],textarea:focus{
     background-color: transparent;
     border-width: 0;
-    height: 92%;
+    height: 100%;
     width: 99%;
     outline-width: 0;
     font-size: 24px;
@@ -147,7 +151,7 @@ form{
 
 #imageLoaderContainer{
     width: 500px;
-    height: 644px;
+    height: 600px;
     background: #FFFFFF;
     box-shadow: 0 0 24px #00000029;
     border: 1px solid #707070;
@@ -167,7 +171,7 @@ form{
 
 #descriptionInput{
     width: 582px;
-    height: 334px;
+    height: 300px;
     background: #FFFFFF 0 0 no-repeat padding-box;
     box-shadow: 0 0 24px #00000029;
     border: 1px solid #707070;
@@ -178,7 +182,7 @@ form{
 
 #addressInput{
     width: 582px;
-    height: 206px;
+    height: 190px;
     background: #FFFFFF 0 0 no-repeat padding-box;
     box-shadow: 0 0 24px #00000029;
     border: 1px solid #707070;
@@ -262,6 +266,8 @@ input[type="text"], textarea{
     font-size: 24px;
     color: #FFFFFF;
     font-weight: lighter;
+    outline-width: 0;
+    border: #007B89;
 }
 
 #postItButton:active{

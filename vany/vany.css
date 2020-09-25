@@ -251,19 +251,6 @@ input[type="text"], textarea{
     box-shadow: transparent;
 }
 
-#postItButton{
-    width: 200px;
-    height: 50px;
-    background: #007B89 0 0 no-repeat padding-box;
-    border-radius: 51px;
-    grid-column: 2;
-    grid-row: 2;
-    margin: auto;
-    font-size: 24px;
-    color: #FFFFFF;
-    font-weight: lighter;
-}
-
 #postItButton:active{
     outline:0;
     text-decoration-width: 0;
