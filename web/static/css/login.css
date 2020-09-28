@@ -1,25 +1,25 @@
-hr{
-	border:0;
+
+body form{
+	margin-top: 10%;
 }
 
 label{
 	color: #545454 ;
-	text-align: left;
+	float: left;
+	width: 38%;
 }
 
-input[type="text"], [type="password"],[type="email"] {
-	float: right;
-	width: 80%;
-	border-width: 0;
-	border-bottom-width: 1px; 
-	outline-width: 0;
-	background-color: transparent;
+hr{
+	border:0;
 }
+
+/* For loging in */
+
 
 .login{
 	float: left;
 	margin-left: 30px;
-	width: 30%;
+	width: 60%;
 	padding-top: 0;
 	padding-bottom: 0;
 	padding-right: 25px;
@@ -27,33 +27,74 @@ input[type="text"], [type="password"],[type="email"] {
 	background-color: #FF8270;	
 }
 
+
 .login h1{
 	padding-bottom: 30px;
+	font-family: sans-serif;
+	font-size:20px;
 }
+
+.login{
+	float: left;
+	margin-left: 30px;
+	width: 70%;
+	grid-column:1; 
+	padding: 0px 30px;
+
+}
+
+.login input[type="text"], [type="password"]{
+	float: right;
+	width: 60%;
+	border-width: 0;
+	border-bottom-width: 1px; 
+	outline-width: 0;
+	background-color: transparent;
+}
+
 
 .login button{
-	margin: content;
-	margin-top: 30px;
-	margin-right: 32%;
-	margin-left: 32%;
-	padding: 2.5% 9%;
+	
+	margin-top: 25%;
+	margin-left: 20%;
+	padding: 2% 20%;
 }
 
+/* For Signing up */ 
 
 .signup{
 	float: right;
-	margin-right: 30px;
-	width: 30%;
+	margin-left: 30px;
+	width: 70%;
+	grid-column:3; 
 	min-height: 32vh;
-	padding: 0px 25px;
+	padding: 0px 30px;
 	background-color: #FF8270;
 }
 
+.signup h1{
+	padding-bottom: 30px;
+	font-family: sans-serif;
+	font-size:20px;
+}
+
+.signup input[type="text"], [type="password"],[type="email"] {
+	float: right;
+	width: 60%;
+	border-width: 0;
+	border-bottom-width: 1px; 
+	outline-width: 0;
+	background-color: transparent;
+}
+
 .signup button{
+	margin-top: 15%;
 	margin-right: 35%;
 	margin-left: 35%;
 	padding: 2.5% 9%;
 }
+
+/* For all button in general */
 
 .button{
 	margin: 3px;
