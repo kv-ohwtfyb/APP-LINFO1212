@@ -69,11 +69,12 @@ containerSearch{
     height: 60px;
     background: #FFFFFF;
     border-radius: 22px;
-    margin: 0 auto;
+    margin: auto 0 auto auto;
     padding: 0;
     align-items: center;
+    float: right;
 
-    /*Effects*/
+/*Effects*/
     transition: width 0.4s ease-in-out;
 }
 
@@ -84,7 +85,6 @@ containerSearch:hover{
 containersearch:focus{
     width: 50%;
 }
-
 .search form{
     background-color: transparent;
     height: 100%;
@@ -133,7 +133,7 @@ containersearch:focus{
 }
 
 #userName{
-    margin-right: auto;
+    margin: auto 6% auto 0;
 }
 
 form{
