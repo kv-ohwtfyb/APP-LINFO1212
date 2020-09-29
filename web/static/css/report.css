@@ -150,7 +150,7 @@ form{
 
 }
 
-#imageLoaderContainer{
+.bodyForm input[type="file"]{
     width: 500px;
     height: 600px;
     background: #FFFFFF;

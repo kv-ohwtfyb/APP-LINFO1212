@@ -1,4 +1,3 @@
-
 body form{
 	margin-top: 10%;
 }
@@ -7,14 +6,15 @@ label{
 	color: #545454 ;
 	float: left;
 	width: 38%;
+	margin-top: 12px;
+	margin-bottom: 12px;
 }
 
 hr{
 	border:0;
 }
 
-/* For loging in */
-
+/* For logging in */
 
 .login{
 	float: left;
@@ -50,14 +50,16 @@ hr{
 	border-bottom-width: 1px; 
 	outline-width: 0;
 	background-color: transparent;
+	margin-top: 12px;
+	margin-bottom: 12px;
 }
 
 
 .login button{
-	
 	margin-top: 25%;
 	margin-left: 20%;
 	padding: 2% 20%;
+	float: bottom;
 }
 
 /* For Signing up */ 
@@ -85,6 +87,8 @@ hr{
 	border-bottom-width: 1px; 
 	outline-width: 0;
 	background-color: transparent;
+	margin-top: 12px;
+	margin-bottom: 12px;
 }
 
 .signup button{
@@ -98,7 +102,8 @@ hr{
 
 .button{
 	margin: 3px;
-	font: GeosansLight;
+	font-family: "GeosansLight", sans-serif;
 	color: lightgrey;
 	background-color: #007B89;
+	float: bottom;
 }
