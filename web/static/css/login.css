@@ -3,7 +3,7 @@ body form{
 }
 
 label{
-    font: normal normal normal GeosansLight;
+	font-family: "GeosansLight", serif;
 	color: #545454 ;
 	float: left;
 	width: 38%;
