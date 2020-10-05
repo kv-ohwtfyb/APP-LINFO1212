@@ -1,0 +1,132 @@
+body{
+    margin: 0;
+    font: normal normal 10 Helvetica;
+    line-height: 1;
+    background-image: url("./../images/background2.jpg.png");
+    background-size: 95%;
+    background-attachment: fixed;
+    background-position: center center;
+    background-blend-mode: multiply;
+}
+
+
+h1,h2,h3,p{
+    margin:0;
+}
+header{
+    width: 85%;
+    margin: 0 auto;
+    text-align: center;
+    padding-top: 200px;
+
+}
+
+main{
+    width: 85%;
+    margin: 0 auto;
+    padding: 16em 0;
+}
+section{
+    width: 85%;
+    margin: 0 auto;
+    padding: 15em 0;
+}
+.report{
+    width: 290px;
+    height: 90px;
+    background: #007B89 0 0 no-repeat padding-box;
+    border-radius: 51px;
+    grid-column: 2;
+    grid-row: 2;
+    margin: auto;
+    font-size: 24px;
+    color: #FFFFFF;
+    font-weight: lighter;
+    outline-width: 0;
+    border: #007B89;;
+
+
+}
+.report:hover{
+    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+}
+h1{
+    font-size: 4rem;
+    font-family: League Spartan, sans-serif;
+    text-shadow: 0 4px 6px #000000;
+}
+header h2{
+    vertical-align: bottom;
+    padding-top: 199px;
+}
+header p{
+    text-align: center;
+    align-items: center;
+    padding-top: 90px;
+    padding-bottom: 80px;
+}
+header img{
+    height: 15vh;
+    width:15vh;
+    align-content: center;
+}
+.All_incidents h2{
+    text-align: center;
+    font-size: 2rem;
+
+.incident img{
+     width: content-box;
+     height:150px;
+ }
+ li{
+     list-style: none;
+ }
+.contact{
+    float:left;
+    width:30%;
+    text-align: center;
+    object-position: bottom;
+}
+.contact h2{
+    padding-bottom: 30px;
+}
+.contact li{
+    line-height: 1.6;
+}
+.info{
+  text-align: center;
+  float:right;
+  width:30%;
+}
+.info h2{
+    padding-bottom: 30px;
+}
+.info li{
+    line-height: 1.6;
+}
+.signature{
+    text-align: center;
+    width: 100%;
+    position: absolute;
+    bottom:0px;
+    left:0;
+    padding-top: 5px;
+}
+
+footer{
+    position: absolute;
+    margin-top: auto;
+    clear: both;
+    height: 40px;
+    width: 100%;
+}
+.page1{
+    height:1000px;
+    background-image: url("./../images/shape.svg");
+    background-size: cover;
+
+
+}
+.page2{
+    height:2000px;
+}
