@@ -1,45 +1,58 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <title>HappyStreet | Report</title>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="../static/css/main.css">
-    <title>Report</title>
+    <link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.css'>
     <script src='https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.js'></script>
-    <link href='https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.css' rel='stylesheet' />
 </head>
 <body>
-<header>
-    <img src="./../static/images/logo.png" alt="logo">
-    <hr id="lineNextToName">
-    <section id="nameAndMotoSection">
-        <p id="name">HappyStreet</p>
-        <hr id="lineBetweenNameAndMoto">
-        <p id="moto">Report it To Annihilate it</p>
-    </section>
-    <containerSearch class="search">
-        <form>
-            <input type="text" name="search">
-        </form>
-        <img src="./../static/images/loop_magnifier.png" alt="search">
-    </containerSearch>
-    <img src="./../static/images/user.png" alt="user">
-    <p id="userName">User</p>
-</header>
-<form class="bodyForm">
-    <input type="file"  accept=".jpg, .jpeg, .png">
-    <nav class="navButton">
-        <button id="homeIcon"></button>
-        <button id="listIcon"></button>
-        <button id="mailIcon"></button>
-    </nav>
-    <textarea id="descriptionInput" placeholder="Description..."></textarea>
-    <div id='map'></div>
-    <button id="postItButton">Post Incident</button>
-</form>
+    <header>
+        <img src="./../static/images/logo.png" alt="logo">
+        <hr id="lineNextToName">
+        <section id="nameAndMotoSection">
+            <p id="name">HappyStreet</p>
+            <hr id="lineBetweenNameAndMoto">
+            <p id="moto">Report it To Annihilate it</p>
+        </section>
+        <containerSearch class="search">
+            <form>
+                <input type="text" name="search">
+            </form>
+            <img src="./../static/images/loop_magnifier.png" alt="search">
+        </containerSearch>
+        <img src="./../static/images/user.png" alt="user">
+        <p id="userName">User</p>
+    </header>
+    <form class="bodyForm">
+        <input type="file"  accept=".jpg, .jpeg, .png">
+        <nav class="navButton">
+            <button id="homeIcon"></button>
+            <button id="listIcon"></button>
+            <button id="mailIcon"></button>
+        </nav>
+        <textarea id="descriptionInput" placeholder="Description..."></textarea>
+        <section id='map'></section>
+        <button id="postItButton">Post Incident</button>
+    </form>
+    <footer class="page3">
+            <section id="contact">
+                <h2>CONTACT</h2>
+                <li>02 080 99 99 (HELP) - 911 (EMERGENCY)</li>
+                <li>email@happystreet.be</li>
+                <li>Boulevard Voila 90, 000 Là-bas</li>
+            </section>
+            <section id="info">
+                <h2>MORE INFOS</h2>
+                <li><a href="#">Legal terms </a></li>
+                <li><a href="#">About us</a></li>
+            </section>
+    </footer>
 </body>
 <script type="text/javascript">
     mapboxgl.accessToken = 'pk.eyJ1IjoidmFyeW5jYW1sbyIsImEiOiJja2ZpYWd5cGswdDQ1MnFudjhocHA1bTVzIn0.-keMO_74HFJ2INvkbMqNpA';
-    var map = new mapboxgl.Map({
+    const map = new mapboxgl.Map({
     container: 'map',
     style: 'mapbox://styles/mapbox/streets-v11'
     });

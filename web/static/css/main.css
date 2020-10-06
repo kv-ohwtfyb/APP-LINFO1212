@@ -4,6 +4,7 @@ body{
     flex-direction: column;
     text-align: center;
     width: 100%;
+    min-height: 100vh;
     overflow: auto;
 }
 
@@ -11,7 +12,7 @@ ul,li{
     list-style-type: none;
 }
 
-a,p,li,td{
+a,p,li,td,label{
     font-family: "Montserrat", sans-serif;
     font-weight: lighter;
     text-decoration: none;
@@ -155,22 +156,22 @@ containersearch:focus{
 }
 
 .bodyForm{
-    height: fit-content;
     width: 96%;
+    height: 90vh;
     flex-direction: row;
     padding-top:2%;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-gap: 10px;
-    grid-template-rows: auto;
+    grid-template-rows: 80% 10%;
     padding-left: 2%;
     padding-right: 2%;
     margin: 0 auto;
 }
 
 .bodyForm input[type="file"]{
-    width: 500px;
-    height: 600px;
+    width: 100%;
+    height: 100%;
     background: #FFFFFF;
     box-shadow: 0 0 24px #00000029;
     border: 1px solid #707070;
@@ -180,7 +181,7 @@ containersearch:focus{
     grid-row: 1;
 }
 
-.verticalCenteredElements{
+#verticalCenteredElements{
     margin: 0;
     position: absolute;
     top: 50%;
@@ -189,8 +190,8 @@ containersearch:focus{
 }
 
 #descriptionInput{
-    width: 582px;
-    height: 300px;
+    width: 100%;
+    height: 30%;
     background: #FFFFFF 0 0 no-repeat padding-box;
     box-shadow: 0 0 24px #00000029;
     border: 1px solid #707070;
@@ -200,8 +201,8 @@ containersearch:focus{
 }
 
 #map{
-    width: 582px;
-    height: 190px;
+    width: 100%;
+    height: 40%;
     background: #FFFFFF 0 0 no-repeat padding-box;
     box-shadow: 0 0 24px #00000029;
     border: 1px solid #707070;
@@ -364,7 +365,7 @@ input[type="text"], textarea{
 }
 
 .incidents table{
-    width: 96%;
+    width: 90%;
     border-right:hidden;
     border-collapse:separate;
     border-spacing: 0 30px;
@@ -395,41 +396,12 @@ input[type="text"], textarea{
     margin: 0 auto;
 }
 
-div{
-    width: 100%;
-    height: 80px;
-    background: transparent linear-gradient(90deg, #007B89 0%, #ff8270 100%) 0 0 no-repeat padding-box;
-    box-shadow: 0 3px 10px #00000029;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    position: fixed;
-    top:0;
-}
-
-div img{
-    height: 90%;
-}
-.page3{
-    background-color: #007B89;
-    box-shadow: 0 0 10px #00000029;
-    display: grid;
-    padding:4%;
-    grid-template-columns: repeat(2, 1fr);
-    grid-gap: 20px;
-}
-
 #contact{
     text-align: left;
 }
 
 #info{
     text-align: right;
-}
-
-:root{
-    --opacity-login:1;
-    --opacity-signup:1;
 }
 
 
@@ -448,31 +420,33 @@ hr{
 
 /* For logging in */
 
-.login{
+.loginForm{
     width: 60%;
     padding: 0 25px;
     background-color: #FF8270;
     margin: 0 auto;
+    text-align: left;
+    height: 400px;
 }
 
-.login:hover{
+.loginForm:hover{
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.16);
 }
-
 
 h1{
     font: normal normal bold 24px/30px League Spartan;
     padding-bottom: 30px;
 }
 
-.login{
+.loginForm{
     float: left;
     width: 70%;
     grid-column:1;
     box-shadow: 0 0 50px #00000029;
+    margin: auto auto auto;
 }
 
-.login input[type="text"], [type="password"]{
+.loginForm input[type="text"], [type="password"]{
     float: right;
     width: 60%;
     border-width: 0;
@@ -484,7 +458,7 @@ h1{
 }
 
 
-.login button{
+.loginForm button{
     margin-top: 34%;
     margin-left: 25%;
     padding: 2.5% 15%;
@@ -499,7 +473,7 @@ h1{
 
 /* For Signing up */
 
-.signup{
+.signupForm{
     float: right;
     width: 70%;
     grid-column:3;
@@ -507,13 +481,12 @@ h1{
     padding: 0 30px;
     background-color: #FF8270;
     box-shadow: 0 0 50px #00000029;
-    margin: 0 auto;
-    opacity: var(--opacity-signup);
+    text-align: left;
+    height: 400px;
+    margin: auto auto auto;
 }
 
-
-
-.signup input[type="text"], [type="password"],[type="email"] {
+.signupForm input[type="text"], [type="password"],[type="email"] {
     float: right;
     width: 60%;
     border-width: 0;
@@ -525,7 +498,7 @@ h1{
 
 }
 
-.signup button{
+.signupForm button{
     margin-top: 13%;
     margin-right: 35%;
     margin-left: 35%;
@@ -544,4 +517,22 @@ h1{
 button:hover{
     background-color:white;
     color: #007B89;
+}
+
+footer{
+    width: 92%;
+    background-color: #007B89;
+    box-shadow: 0 0 10px #00000029;
+    display: grid;
+    padding:4%;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 20px;
+}
+
+#navBarOnHomePage{
+    position: fixed;
+    float: right;
+    right: 1%;
+    top: 40%;
+    z-index: 2;
 }
