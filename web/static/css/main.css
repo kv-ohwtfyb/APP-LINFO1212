@@ -3,21 +3,25 @@ body{
     background-image: url("./../images/background2.jpg.png");
     flex-direction: column;
     text-align: center;
+    width: 100%;
+    overflow: auto;
 }
 
 ul,li{
     list-style-type: none;
 }
 
-a,p,li{
+a,p,li,td{
     font-family: "Montserrat", sans-serif;
     font-weight: lighter;
+    text-decoration: none;
 }
 
 h2{
     font-family: "Roboto",sans-serif;
     font-weight: bold;
 }
+
 header{
     width: 100%;
     height: 80px;
@@ -150,7 +154,7 @@ containersearch:focus{
     margin: auto 6% auto 0;
 }
 
-form{
+.bodyForm{
     height: fit-content;
     width: 96%;
     flex-direction: row;
@@ -288,4 +292,256 @@ input[type="text"], textarea{
     outline:0;
     text-decoration-width: 0;
     border-width: 0;
+}
+
+
+.homeDisplay{
+    width: 100%;
+    height:100vh;
+    background: url("../../static/images/header_shape.svg") no-repeat;
+    background-size: 100%;
+}
+
+.homeDisplay section{
+    width: 100%;
+    height: 30vw;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding-bottom: 2vw;
+    padding-top: 2vw;
+    overflow: auto;
+}
+
+.homeDisplay section img{
+    height: 15vw;
+}
+
+.homeDisplay section h1{
+    font-size: 5vw;
+}
+
+.homeDisplay h1 p{
+    float: right;
+    padding-right: 35%;
+    padding-top:3%;
+    font-size: 40px;
+}
+
+.homeDisplay p{
+    padding-bottom: 30px;
+    margin-left: 4%;
+    margin-right: 4%;
+}
+
+.report{
+    width: 200px;
+    height: 50px;
+    background: #007B89 0 0 no-repeat padding-box;
+    border-radius: 51px;
+    grid-column: 2;
+    grid-row: 2;
+    margin: auto;
+    font-size: 24px;
+    color: #FFFFFF;
+    font-weight: lighter;
+    outline-width: 0;
+    border: #007B89;
+}
+
+.report button:active {
+    outline:0;
+    text-decoration-width: 0;
+    border-width: 0;
+}
+
+.incidents{
+    padding: 5px;
+    margin-top: 10%;
+    margin-bottom: 35%;
+    align-content: center;
+}
+
+.incidents table{
+    width: 96%;
+    border-right:hidden;
+    border-collapse:separate;
+    border-spacing: 0 30px;
+    align-content: center;
+    margin: 0 auto;
+}
+
+.incidents table tr th{
+    background-color: transparent;
+    box-shadow: none;
+}
+
+.incidents table tr{
+    background: white;
+    box-shadow: 0 0 10px #00000029;
+    border-radius: 12px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.incidents table tr td{
+    height: 300px;
+}
+
+.incidents table tr td img{
+    width: 300px;
+    height: 200px;
+    margin: 0 auto;
+}
+
+div{
+    width: 100%;
+    height: 80px;
+    background: transparent linear-gradient(90deg, #007B89 0%, #ff8270 100%) 0 0 no-repeat padding-box;
+    box-shadow: 0 3px 10px #00000029;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    position: fixed;
+    top:0;
+}
+
+div img{
+    height: 90%;
+}
+.page3{
+    background-color: #007B89;
+    box-shadow: 0 0 10px #00000029;
+    display: grid;
+    padding:4%;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 20px;
+}
+
+#contact{
+    text-align: left;
+}
+
+#info{
+    text-align: right;
+}
+
+:root{
+    --opacity-login:1;
+    --opacity-signup:1;
+}
+
+
+label{
+    font-family: "GeosansLight", serif;
+    color: #545454 ;
+    float: left;
+    width: 38%;
+    margin-top: 12px;
+    margin-bottom: 12px;
+}
+
+hr{
+    border:0;
+}
+
+/* For logging in */
+
+.login{
+    width: 60%;
+    padding: 0 25px;
+    background-color: #FF8270;
+    margin: 0 auto;
+}
+
+.login:hover{
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.16);
+}
+
+
+h1{
+    font: normal normal bold 24px/30px League Spartan;
+    padding-bottom: 30px;
+}
+
+.login{
+    float: left;
+    width: 70%;
+    grid-column:1;
+    box-shadow: 0 0 50px #00000029;
+}
+
+.login input[type="text"], [type="password"]{
+    float: right;
+    width: 60%;
+    border-width: 0;
+    border-bottom-width: 1px;
+    outline-width: 0;
+    background-color: transparent;
+    margin-top: 12px;
+    margin-bottom: 12px;
+}
+
+
+.login button{
+    margin-top: 34%;
+    margin-left: 25%;
+    padding: 2.5% 15%;
+    border:0;
+}
+
+/* For navigation bar */
+
+.navbar {
+    display: flex;
+}
+
+/* For Signing up */
+
+.signup{
+    float: right;
+    width: 70%;
+    grid-column:3;
+    min-height: 32vh;
+    padding: 0 30px;
+    background-color: #FF8270;
+    box-shadow: 0 0 50px #00000029;
+    margin: 0 auto;
+    opacity: var(--opacity-signup);
+}
+
+
+
+.signup input[type="text"], [type="password"],[type="email"] {
+    float: right;
+    width: 60%;
+    border-width: 0;
+    border-bottom-width: 1px;
+    outline-width: 0;
+    background-color: transparent;
+    margin-top: 12px;
+    margin-bottom: 12px;
+
+}
+
+.signup button{
+    margin-top: 13%;
+    margin-right: 35%;
+    margin-left: 35%;
+    padding: 2.5% 9%;
+    border:0;
+}
+
+/* For all button in general */
+
+.button{
+    margin: 3px;
+    font-family: "GeosansLight", sans-serif;
+    color: lightgrey;
+    background-color: #007B89;
+}
+button:hover{
+    background-color:white;
+    color: #007B89;
 }
