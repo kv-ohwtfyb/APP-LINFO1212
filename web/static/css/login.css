@@ -1,3 +1,8 @@
+:root{
+	--opacity-login:1;
+	--opacity-signup:1;
+}
+
 body form{
 	margin-top: 10%;
 }
@@ -18,14 +23,14 @@ hr{
 /* For logging in */
 
 .login{
-	float: left;
-	margin-left: 30px;
 	width: 60%;
-	padding-top: 0;
-	padding-bottom: 0;
-	padding-right: 25px;
-	padding-left: 25px;
-	background-color: #FF8270;	
+	padding: 0 25px;
+	background-color: #FF8270;
+	margin: 0 auto;
+}
+
+.login:hover{
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.16);
 }
 
 
@@ -36,12 +41,9 @@ h1{
 
 .login{
 	float: left;
-	margin-left: 30px;
 	width: 70%;
 	grid-column:1; 
-	padding: 0px 30px;
 	box-shadow: 0 0 50px #00000029;
-
 }
 
 .login input[type="text"], [type="password"]{
@@ -57,7 +59,7 @@ h1{
 
 
 .login button{
-	margin-top: 33%;
+	margin-top: 34%;
 	margin-left: 25%;
 	padding: 2.5% 15%;
 	border:0;
@@ -73,13 +75,14 @@ h1{
 
 .signup{
 	float: right;
-	margin-left: 30px;
 	width: 70%;
 	grid-column:3; 
 	min-height: 32vh;
-	padding: 0px 30px;
+	padding: 0 30px;
 	background-color: #FF8270;
 	box-shadow: 0 0 50px #00000029;
+	margin: 0 auto;
+	opacity: var(--opacity-signup);
 }
 
 
@@ -103,7 +106,6 @@ h1{
 	padding: 2.5% 9%;
 	border:0;
 }
-
 
 /* For all button in general */
 
