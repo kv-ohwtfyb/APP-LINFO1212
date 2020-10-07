@@ -181,14 +181,6 @@ containersearch:focus{
     grid-row: 1;
 }
 
-#verticalCenteredElements{
-    margin: 0;
-    position: absolute;
-    top: 50%;
-    -ms-transform: translateY(-50%);
-    transform: translateY(-50%);
-}
-
 #descriptionInput{
     width: 100%;
     height: 30%;
@@ -508,13 +500,13 @@ h1{
 
 /* For all button in general */
 
-.button{
+.johnnysButton{
     margin: 3px;
     font-family: "GeosansLight", sans-serif;
     color: lightgrey;
     background-color: #007B89;
 }
-button:hover{
+.johnnysButton:hover{
     background-color:white;
     color: #007B89;
 }
