@@ -1,0 +1,12 @@
+{
+  "name": "projetpreparatoire",
+  "version": "1.0.0",
+  "description": "Ceci est le projet de preparatoire pour le cours de LINFO1212 contenant un serveur pour un site web",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "Raissa Hirwa Mihigo, Jonathan Manzi Mihigo, Vany Valentin Ingenzi",
+  "license": "ISC"
+}
