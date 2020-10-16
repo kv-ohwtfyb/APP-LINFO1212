@@ -6,7 +6,7 @@ app.engine ('html', consolidate.hogan)
 app.set('views', 'templates');
 
 app.get('/', function(req,res) {
-  res.render('index.html', {username:"Please login",
+  res.render('index.html', {username: req.query.username || "Please login",
                                           incident:{"description":"There's some hoes in this house",
                                                     "address":"Bld Hoes 96, 9999 New York",
                                                     "person":"Raïssa Hirwa Mihigo",

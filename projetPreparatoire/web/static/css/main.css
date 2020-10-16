@@ -34,12 +34,15 @@ header{
     top: 0;
 }
 
-header nav{
-    width: 80px;
-    height: 80px;
-}
 header img{
     height: 90%;
+}
+header a {
+    color: #000000;
+}
+
+header a:hover{
+    text-decoration: underline;
 }
 
 #lineNextToName {
@@ -173,7 +176,7 @@ containersearch:focus{
     margin: 0 auto;
 }
 
-.bodyForm input[type="file"]{
+#imagePreview{
     width: 100%;
     height: 100%;
     background: #FFFFFF;
@@ -196,15 +199,25 @@ containersearch:focus{
     grid-row: 1;
 }
 
-#map{
+.map{
     width: 100%;
     height: 40%;
     background: #FFFFFF 0 0 no-repeat padding-box;
     box-shadow: 0 0 24px #00000029;
     border: 1px solid #707070;
+    display: flex;
     grid-column: 3;
     grid-row: 1;
     margin-top: auto;
+    align-items: center;
+}
+
+.map button{
+    height: 30px;
+    margin: 0 auto;
+    background-color: #FF8270;
+    color: white;
+    border-width: 0;
 }
 
 input[type="text"], textarea{
@@ -270,28 +283,6 @@ input[type="text"], textarea{
     box-shadow: transparent;
 }
 
-#postItButton{
-    width: 200px;
-    height: 50px;
-    background: #007B89 0 0 no-repeat padding-box;
-    border-radius: 51px;
-    grid-column: 2;
-    grid-row: 2;
-    margin: auto;
-    font-size: 24px;
-    color: #FFFFFF;
-    font-weight: lighter;
-    outline-width: 0;
-    border: #007B89;
-}
-
-#postItButton:active{
-    outline:0;
-    text-decoration-width: 0;
-    border-width: 0;
-}
-
-
 .homeDisplay{
     width: 100%;
     height:100vh;
@@ -336,7 +327,6 @@ input[type="text"], textarea{
     width: 200px;
     height: 50px;
     background: #007B89 0 0 no-repeat padding-box;
-    border-radius: 51px;
     grid-column: 2;
     grid-row: 2;
     margin: auto;
@@ -347,10 +337,14 @@ input[type="text"], textarea{
     border: #007B89;
 }
 
-.report button:active {
+.report:active {
     outline:0;
     text-decoration-width: 0;
     border-width: 0;
+}
+
+.report:hover{
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.16);
 }
 
 .incidents{
@@ -504,13 +498,13 @@ h1{
 
 /* For all button in general */
 
-.johnnysButton{
+.johnyButton{
     margin: 3px;
     font-family: "GeosansLight", sans-serif;
     color: lightgrey;
     background-color: #007B89;
 }
-.johnnysButton:hover{
+.johnyButton:hover{
     background-color:white;
     color: #007B89;
 }
@@ -538,12 +532,13 @@ footer{
     float: top;
     z-index: 2;
     transition: all .3s ease-in-out;
-}
-
-#headerOnHomePage.hide{
     opacity: 0;
 }
 
-#headerOnHomePage:hover{
+#headerOnHomePage.seen{
     opacity: 1;
+}
+
+#spanOnLoginPageHeader{
+    width: 166px;
 }

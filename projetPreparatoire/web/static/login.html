@@ -6,7 +6,7 @@
 </head>
 <body>
 	<header>
-		<img src="images/logo.png" alt="logo">
+		<img src="images/logo.png" alt="logo" onclick="window.open('/', '_parent')">
 		<hr id="lineNextToName">
 		<section id="nameAndMotoSection">
 			<p id="name">HappyStreet</p>
@@ -19,20 +19,19 @@
 			</form>
 			<img src="images/loop_magnifier.png" alt="search">
 		</containerSearch>
-		<img src="images/user.png" alt="user">
-		<p id="userName">User</p>
+		<div id="spanOnLoginPageHeader"></div>
 	</header>
-	<form class="bodyForm">
+	<form class="bodyForm" action="/" name="login" onsubmit="return loginFormChecker()" method="get">
 		<section class="loginForm">
 			<!--SECTION for LOG IN-->
 			<h2> ALREADY USER</h2>
 			<label>Username :</label>
-			<input type="text">
+			<input type="text" name="username">
 			<hr>
 			<label>Password :</label>
-			<input type="Password">
+			<input type="Password" name="password">
 			<hr>
-			<button class="johnnysButton">LOGIN</button>
+			<button class="johnyButton" type="submit" name="submit">LOGIN</button>
 		</section>
 		<!-- navigation bottom -->
 		<section class = "navbar">
@@ -44,24 +43,20 @@
 		</section>
 		<!-- SECTION FOR SIGNING UP-->
 		<section class="signupForm">
-			<p>
-				<h2>NOT YET A USER</h2>
-				<label>Username :</label>
-				<input type="text" >
-				<hr>
-				<label>Password :</label>
-				<input type="Password" >
-				<hr>
-				<label>Name :</label>
-				<input type="text">
-				<hr>
-				<label>Email :</label>
-				<input type="Email" >
-				<br>
-			</p>
-			<p>
-				<button class="johnnysButton"> REGISTER</button>
-			</p>
+			<h2>NOT YET A USER</h2>
+			<label>Username :</label>
+			<input type="text" >
+			<hr>
+			<label>Password :</label>
+			<input type="Password" >
+			<hr>
+			<label>Name :</label>
+			<input type="text">
+			<hr>
+			<label>Email :</label>
+			<input type="Email" >
+			<br>
+			<button class="johnyButton"> REGISTER</button>
 		</section>
 	</form>
 	<footer class="page3">
@@ -77,5 +72,6 @@
             <li><a href="#">About us</a></li>
         </section>
     </footer>
+	<script src="js/main.js"></script>
 </body>
 </html>
