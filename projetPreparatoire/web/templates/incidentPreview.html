@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>HappyStreet | Report</title>
+    <title>HappyStreet | Incident </title>
     <meta charset="UTF-8">
     <script src='https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.js'></script>
     <link href='https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.css' rel='stylesheet' />
@@ -26,11 +26,10 @@
             <img src="images/loop_magnifier.png" alt="search">
         </containerSearch>
         <img src="images/user.png" alt="user">
-        <p id="userName">User</p>
+        <p id="userName">{{username}}</p>
     </header>
     <form class="bodyForm" name="report">
         <section class="imagePreview" id="imagePreview">
-            <input type="file" accept="image/*" name="imageInput" id="imageInput" onchange="previewImage(event)">
             <img src="" id="theImagePreviewer" alt="Image Preview">
         </section>
         <nav class="navButton">
@@ -38,10 +37,16 @@
             <a id="listIcon" href="/#tableOfIncidents"></a>
             <a id="mailIcon" href="#contact"></a>
         </nav>
-        <label for="descriptionInput"></label><textarea id="descriptionInput" placeholder="Description..."></textarea>
+        <label for="descriptionInput"></label>
+        <section id="descriptionInput">
+            <p>{{incident.description}}</p>
+            <br>
+            <p>By : {{incident.person}}</p>
+            <p>On : {{incident.date}}</p>
+            <p>Status : {{incident.status}}</p>
+        </section>
         <div class='map' id="map">
-            <button onclick="getPosition()">Current position</button>
-            <button>Enter address</button>
+            <p>{{incident.address}}</p>
         </div>
         <button class="report">Post Incident</button>
     </form>

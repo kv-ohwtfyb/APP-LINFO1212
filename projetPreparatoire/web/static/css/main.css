@@ -176,7 +176,7 @@ containersearch:focus{
     margin: 0 auto;
 }
 
-#imagePreview{
+.imagePreview{
     width: 100%;
     height: 100%;
     background: #FFFFFF;
@@ -184,8 +184,28 @@ containersearch:focus{
     border: 1px solid #707070;
     align-items: center;
     padding: 0;
-    grid-column: 1;
-    grid-row: 1;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.imagePreview img{
+    width: 100%;
+    font-family: "Montserrat", serif;
+    max-height: 90%;
+    font-size: 24px;
+    align-self: center;
+    margin-top: auto;
+    margin-bottom: auto;
+    text-transform: uppercase;
+}
+
+.imagePreview input {
+    display: block;
+}
+
+.imagePreview label{
+    display: block;
 }
 
 #descriptionInput{

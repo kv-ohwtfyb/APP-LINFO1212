@@ -66,7 +66,11 @@ function showPositionOnAMap(lat,log){
       .addTo(map);
 }
 
-function previewImage(){
-  const output = document.getElementById("imagePreview");
-  output.innerHTML="<img " + "src="+ "images/logo.png>";
+function previewImage(event){
+  if(event.target.files.length > 0){
+    const src = URL.createObjectURL(event.target.files[0]);
+    const preview = document.getElementById("theImagePreviewer");
+    preview.src = src;
+    preview.style.display = "block";
+  }
 }
