@@ -1,10 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+    <meta charset="UTF-8">
+    <title>HappyStreet | Error</title>
+<!--    CSS Imports-->
+    <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Montserrat' >
+    <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Roboto' >
+    <link rel="stylesheet" href="css/main.css">
 </head>
 <body>
-$END$
+    <header>
+		<img src="images/logo.png" alt="logo" onclick="window.open('/', '_parent')">
+		<hr id="lineNextToName">
+		<section id="nameAndMotoSection">
+			<p id="name">HappyStreet</p>
+			<hr id="lineBetweenNameAndMoto">
+			<p id="moto">Report it To Annihilate it</p>
+		</section>
+		<containerSearch class="search">
+			<form>
+				<input type="text" name="search">
+			</form>
+			<img src="images/loop_magnifier.png" alt="search">
+		</containerSearch>
+		<div id="spanOnLoginPageHeader"></div>
+	</header>
+    <section class="navbar" id="navBarOnHomePage">
+			<nav class = "navButton">
+				<a id="homeIcon" href="#homeDisplay"></a>
+				<a id="listIcon" href="#tableOfIncidents"></a>
+				<a id="mailIcon" href="#contact"></a>
+			</nav>
+    </section>
+	<section>
+		<h1>{{error}}</h1>
+	</section>
 </body>
 </html>

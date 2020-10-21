@@ -65,7 +65,10 @@ function showPositionOnAMap(lat,log){
       .setLngLat([lat,log])
       .addTo(map);
 }
-
+/*
+* Previews an image of the when uploading an image on the report page.
+* That way the user can see the image he ios going to upload.
+ */
 function previewImage(event){
   if(event.target.files.length > 0){
     const src = URL.createObjectURL(event.target.files[0]);

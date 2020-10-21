@@ -59,14 +59,16 @@
                 <th>Address</th>
                 <th>Reported by</th>
             </tr>
-            <tr onclick=window.open("/preview?description=Hello",'_parent')>
+            {{#incidents}}
+            <tr onclick="window.open('/preview','_parent')">
                 <td></td>
-                <td>{{incident.description}}</td>
-                <td>{{incident.address}}</td>
-                <td><li>{{incident.person}}</li>
-                    <li>{{incident.date}}
+                <td>{{description}}</td>
+                <td>{{address}}</td>
+                <td><li>{{user}}</li>
+                    <li>{{date}}</li>
                 </td>
             </tr>
+            {{/incidents}}
         </table>
     </section>
     <footer>
