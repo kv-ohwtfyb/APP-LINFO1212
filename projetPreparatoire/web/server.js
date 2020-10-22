@@ -2,21 +2,21 @@ const express = require('express');
      consolidate = require('consolidate');
      app = express ();
      MongoClient = require('mongodb').MongoClient;
+     connectionString = "mongodb+srv://admin:admin@projetpreparatoire.66hzo.mongodb.net/projectdb?retryWrites=true&w=majority"
      Server = require('mongodb').Server;
-
+     client = new MongoClient(connectionString,{ useNewUrlParser:true });
 
 app.engine ('html', consolidate.hogan)
 app.set('views', 'templates');
 
 // MongoDb connection
-MongoClient.connect('mongodb://localhost:27017',{ useUnifiedTopology: true }, (err, db) => {
-    const db_ = db.db("projectdb"); //Loading the db
+client.connect( err => {
 
     // When requesting the home page.
     app.get('/', function (req, res) {
         // Loading the incidents
         // Doc is the result.
-        db_.collection('incidents').find({}).toArray((err, doc) => {
+        client.db("projectdb").collection('incidents').find({}).toArray((err, doc) => {
                 if (err) throw err;
                 res.render('index.html', {"incidents":doc});
         });

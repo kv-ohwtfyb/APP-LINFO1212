@@ -1,3 +1,0 @@
-{ "_id" : ObjectId("5f901f5018b3034a48942b83"), "description" : "Dogs'shit, I can't enter my building", "image" : null, "status" : "Ongoing", "user" : "Raissa Abby", "date" : "11.02.2020", "address" : "Boulevard Hennessy 22, 2330 Washington" }
-{ "_id" : ObjectId("5f901f5018b3034a48942b84"), "description" : "There's some hoes in this house that I didn't invite", "image" : null, "status" : "Ongoing", "user" : "Raissa Abby", "date" : "12.02.2020", "address" : "Boulevard Hennessy 22, 2330 Washington" }
-{ "_id" : ObjectId("5f901f5018b3034a48942b85"), "description" : "My neighbor keep making noises", "image" : null, "status" : "Ongoing", "user" : "Johnny Henry", "date" : "13.02.2020", "address" : "Boulevard Hennessy 20, 2330 Washington" }
