@@ -18,7 +18,7 @@ client.connect( err => {
         // Doc is the result.
         client.db("projectdb").collection('incidents').find({}).toArray((err, doc) => {
                 if (err) throw err;
-                res.render('index.html', {"incidents":doc});
+                res.render('index.html', {"incidents":doc, username: req.query.username || "Please login"});
         });
     });
 
