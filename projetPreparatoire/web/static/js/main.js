@@ -1,3 +1,46 @@
+$(document).ready(function (){
+  // This contains all the Jquery methods
+
+  /*
+   * On the report page. This is the report HTML page.
+   */
+  if ($('#reportForm').length) {
+    /*
+     * This function is called when the report bodyForm is submitted.
+     * It's main purpose is to check the inputs before being sent to the server.
+     */
+    $(".reportForm").on('submit',(function () {
+      //Checks the description text area.
+
+      if ($("#descriptionInput").val().length < 10 ){
+        alert("Please write a comprehensive description ! Thank you.");
+        return false;
+      }
+      // Checks the streetName
+      if ($("#streetNameAndNumber").val().length < 10){
+        alert("Please enter a valid street name and number if possible please.");
+        return false;
+      }
+      // Check the postal code
+      if ($("#postalCode").val().length < 4){
+        alert("Please enter a valid postal code ! Thank you.");
+        return false;
+      }
+      // Checks the region
+      if ($("#regionInput").val().length < 3){
+        alert("Please a valid Region Name ! Thank You.")
+      }
+      return true;
+    }));
+  }
+
+  if ($('.report').length){
+    $('.report').on('click', function () {
+      window.open('/report?username='+$("#userName").html(),'_parent');
+    })
+  }
+});
+
 window.onscroll = function () {headerChecker()} //Checks for the header display
 
 /*
@@ -30,41 +73,6 @@ function loginFormChecker(){
   }
 }
 
-/*
-* Gets the position of the user*/
-function getPosition(){
-
-  if (navigator.geolocation){
-    navigator.geolocation.getCurrentPosition(successPosition, null,{enableHighAccuracy:true} )
-  }else {
-    console.warn("This browser doesn't support geolocation")
-  }
-}
-
-/*
-* If getting the position was successful we are going to display a map at the
-* position. or show the coordinates*/
-function successPosition(position) {
-  showPositionOnAMap(position.coords.latitude, position.coords.longitude)
-}
-
-/*
-* Loads up a map showing a marker at the position given in the
-* parameters*/
-function showPositionOnAMap(lat,log){
-  mapboxgl.accessToken = 'pk.eyJ1IjoidmFyeW5jYW1sbyIsImEiOiJja2ZpYWd5cGswdDQ1MnFudjhocHA1bTVzIn0.-keMO_74HFJ2INvkbMqNpA';
-
-  const map = new mapboxgl.Map({
-    container: 'map',
-    style: 'mapbox://styles/mapbox/streets-v11',
-    center: [lat, log],
-    zoom: 8
-  });
-
-  const marker = new mapboxgl.Marker()
-      .setLngLat([lat,log])
-      .addTo(map);
-}
 /*
 * Previews an image of the when uploading an image on the report page.
 * That way the user can see the image he ios going to upload.

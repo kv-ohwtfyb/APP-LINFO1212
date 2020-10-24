@@ -3,16 +3,21 @@
 <head>
     <title>HappyStreet | Report</title>
     <meta charset="UTF-8">
-    <script src='https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.js'></script>
-    <link href='https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.css' rel='stylesheet' />
+
+<!--    CSS Imports-->
+    <link rel='stylesheet'  href='https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.css'/>
     <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Montserrat' >
-    <script src="js/main.js"></script>
     <link rel="stylesheet" href="css/main.css">
+
+<!--    JavaScript imports-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src='https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.js'></script>
+    <script src="js/main.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 </head>
 <body>
     <header>
-        <img src="images/logo.png" alt="logo" onclick="window.open('/', '_parent')">
+        <img src="images/logo.png" alt="logo">
         <hr id="lineNextToName">
         <section id="nameAndMotoSection">
             <p id="name">HappyStreet</p>
@@ -26,24 +31,28 @@
             <img src="images/loop_magnifier.png" alt="search">
         </containerSearch>
         <img src="images/user.png" alt="user">
-        <p id="userName">User</p>
+        <a id="userName" href="login.html">{{username}}</a>
     </header>
-    <form class="bodyForm" name="report">
+    <form class="bodyForm" id="reportForm" method="POST" action="/report">
         <section class="imagePreview" id="imagePreview">
             <input type="file" accept="image/*" name="imageInput" id="imageInput" onchange="previewImage(event)">
             <img src="" id="theImagePreviewer" alt="Image Preview">
         </section>
         <nav class="navButton">
-            <a id="homeIcon" href="/#homeDisplay"></a>
+            <a id="homeIcon" href="/"></a>
             <a id="listIcon" href="/#tableOfIncidents"></a>
             <a id="mailIcon" href="#contact"></a>
         </nav>
-        <label for="descriptionInput"></label><textarea id="descriptionInput" placeholder="Description..."></textarea>
-        <div class='map' id="map">
-            <button onclick="getPosition()">Current position</button>
-            <button>Enter address</button>
+        <label for="descriptionInput"></label><textarea id="descriptionInput" placeholder="Description..." name="description"></textarea>
+        <div class='addressInput' id="map">
+            <label>Street, Number<input type="text" id="streetNameAndNumber" name="streetAddress">
+            </label>
+            <label>Postal Code<input type="number" id="postalCode" name="postalCode" accept="application/vnd.apple.numbers">
+            </label>
+            <label for="regionInput"> Region<input type="text" id="regionInput" name="region">
+            </label>
         </div>
-        <button class="report">Post Incident</button>
+        <button class="report" type="submit">Post Incident</button>
     </form>
     <footer class="page3">
             <section id="contact">

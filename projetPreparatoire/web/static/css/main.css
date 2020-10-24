@@ -219,25 +219,44 @@ containersearch:focus{
     grid-row: 1;
 }
 
-.map{
+.addressInput{
     width: 100%;
     height: 40%;
-    background: #FFFFFF 0 0 no-repeat padding-box;
+    grid-column: 3;
+    grid-row: 1;
+    background: #FFFFFF;
     box-shadow: 0 0 24px #00000029;
     border: 1px solid #707070;
     display: flex;
-    grid-column: 3;
-    grid-row: 1;
+    flex-direction: column;
     margin-top: auto;
-    align-items: center;
+    padding: 2%;
+    align-content: center;
 }
 
-.map button{
-    height: 30px;
-    margin: 0 auto;
+.addressInput label{
+    width: 98%;
+    margin: auto;
+    display: flex;
+    flex-direction: row;
+    padding: 0;
+    align-content: center;
+    font-family: "Montserrat", sans-serif;
+    text-align: center;
+    font-size: 16px;
+}
+
+.addressInput input[type="text"], input[type="number"]{
+    margin-right: 0;
+    margin-left: auto;
+    float: right;
+    left: 0;
+    width: 48%;
+}
+
+.addressInput input[type="text"] textarea{
+    float: right;
     background-color: #FF8270;
-    color: white;
-    border-width: 0;
 }
 
 input[type="text"], textarea{
