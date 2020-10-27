@@ -56,20 +56,41 @@ function headerChecker(){
 }
 
 /*
-* The function checks the inputs of the login form of the authentication
+* The function checks the inputs of the LOGIN and SIGNUP form of the authentication
 * page.*/
 function loginFormChecker(){
-  const username = document.forms["login"]["username"].value;
-  const password = document.forms["login"]["password"].value;
+  const message = document.querySelector('.msg');
+  const username = document.forms["form"]["username"].value;
+  const password = document.forms["form"]["password"].value;
+  
+  
+  if(username == ""){
 
-  if (username === ""){
-    alert("Please fill in your username. Thank you")
+    alert("Please fill in your username. Thank You")
     return false;
-  }
 
-  if (password === ""){
-    alert("Please fill in your password. Thank you")
+  } else if (password === ""){
+
+    message.innerHTML = "Fill in the password, Please.";
+    setTimeout(() => message.remove(), 1000);
     return false;
+  } 
+}
+
+function signFormChecker(){
+  const message = document.querySelector('.msg1');
+  const username = document.forms["form"]["signUsername"].value;
+  const password = document.forms["form"]["signPassword"].value;
+  const name = document.forms["form"]["signName"].value;
+  let list = {};
+
+
+  if(username == "" || password === "" || name == "" ){
+    alert("Please fill in all fields. Thank You")
+    return false;
+  } else {
+    list[$(username)] = $(password);
+    return true;
   }
 }
 
