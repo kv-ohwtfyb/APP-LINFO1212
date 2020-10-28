@@ -69,7 +69,8 @@ function loginFormChecker(){
     alert("Please fill in your username. Thank You")
     return false;
 
-  } else if (password === ""){
+  } 
+  if (password === ""){
 
     message.innerHTML = "Fill in the password, Please.";
     setTimeout(() => message.remove(), 1000);
@@ -88,6 +89,7 @@ function signFormChecker(){
   if(username == "" || password === "" || name == "" ){
     alert("Please fill in all fields. Thank You")
     return false;
+
   } else {
     list[$(username)] = $(password);
     return true;
