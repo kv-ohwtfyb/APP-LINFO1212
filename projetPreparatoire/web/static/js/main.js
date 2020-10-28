@@ -38,6 +38,37 @@ $(document).ready(function (){
       window.open('/report?username='+$("#userName").html(),'_parent');
     })
   }
+
+
+  // Checks for the login and signup page.
+  // Can be refactored
+  if ($('.loginForm').length){
+    $('.loginForm').on('submit', function () {
+      const message = $('#loginMsg');
+      $.each($('#loginForm').serializeArray(), function(i, field) {
+        if (field.value === ""){
+          message.text(`Please fill in the ${field.name}`);
+          return false;
+        }
+      })
+      return true;
+    })
+  }
+
+  if ($('.signUpForm').length){
+    $('.signUpForm').on('submit', function () {
+      const message = $('#signMsg');
+      $.each($('#signUpForm').serializeArray(), function(i, field) {
+        if (field.value === ""){
+          message.text(`Please fill in the ${field.name}`);
+          setTimeout(() => message.text(""), 3000);
+          return false;
+        }
+      })
+      return true;
+    })
+  }
+
 });
 
 window.onscroll = function () {headerChecker()} //Checks for the header display
@@ -51,47 +82,6 @@ function headerChecker(){
     document.getElementById("headerOnHomePage").classList.add("seen");
   }else {
     document.getElementById("headerOnHomePage").classList.remove("seen");
-  }
-}
-
-/*
-* The function checks the inputs of the LOGIN and SIGNUP form of the authentication
-* page.*/
-function loginFormChecker(){
-  const message = document.querySelector('.msg');
-  const username = document.forms["form"]["username"].value;
-  const password = document.forms["form"]["password"].value;
-  
-  
-  if(username == ""){
-
-    alert("Please fill in your username. Thank You")
-    return false;
-
-  } 
-  if (password === ""){
-
-    message.innerHTML = "Fill in the password, Please.";
-    setTimeout(() => message.remove(), 1000);
-    return false;
-  } 
-}
-
-function signFormChecker(){
-  const message = document.querySelector('.msg1');
-  const username = document.forms["form"]["signUsername"].value;
-  const password = document.forms["form"]["signPassword"].value;
-  const name = document.forms["form"]["signName"].value;
-  let list = {};
-
-
-  if(username == "" || password === "" || name == "" ){
-    alert("Please fill in all fields. Thank You")
-    return false;
-
-  } else {
-    list[$(username)] = $(password);
-    return true;
   }
 }
 

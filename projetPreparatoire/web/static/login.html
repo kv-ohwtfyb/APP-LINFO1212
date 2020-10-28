@@ -1,8 +1,19 @@
 <!DOCTYPE html>
 <html lang="en-BE">
 <head>
-	<title>HappyStreet | Authentication </title>
-	<link rel="stylesheet" type="text/css" href="css/main.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>HappyStreet | Authentication</title>
+
+<!--    CSS imports-->
+    <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Montserrat' >
+    <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Roboto' >
+    <link rel="stylesheet" href="css/main.css">
+
+<!--    Javascript imports-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="js/main.js" type="text/javascript"></script>
 </head>
 <body>
 	<header>
@@ -22,39 +33,33 @@
 		<div id="spanOnLoginPageHeader"></div>
 	</header>
 
-	<form class="bodyForm" action="/"  name = "form" method="GET">
-
+	<section class="bodyForm" >
 		<!--SECTION for LOG IN-->
-		<section class="loginForm" >
+		<form class="loginForm" id="loginForm" action="/login" method="post" >
 			<h2> ALREADY USER</h2>
-			<p class ="msg"> </p>
+			<p class="msg" id="loginMsg"></p>
 			<label>Username :</label>
 			<input type="text" name="username">
 			<hr>
 			<label>Password :</label>
 			<input type="Password" name="password">
 			<hr>
-			<button class="johnyButton"  onclick= "return loginFormChecker()">LOGIN</button>
-
-		</section>
-
+			<button class="johnyButton" type="submit">LOGIN</button>
+		</form>
 		<!-- navigation bottom -->
 		<section class = "navbar">
-
 			<nav class = "navButton">
-				<a id="homeIcon" href="/#homeDisplay"></a>
+				<a id="homeIcon" href="/"></a>
 				<a id="listIcon" href="/#tableOfIncidents"></a>
 				<a id="mailIcon" href="#contact"></a>
 			</nav>
-
 		</section>
-
 		<!-- SECTION FOR SIGNING UP-->
-		<section class="signupForm" >
-
+		<form class="signUpForm" id="signUpForm" action="/login" method="post">
 			<h2>NOT YET A USER</h2>
+			<p class="msg" id="signMsg"></p>
 			<label>Username :</label>
-			<input type="text" name = "signUsername" >
+			<input type="text" name="signUsername">
 			<hr>
 			<label>Password :</label>
 			<input type="Password" name = "signPassword" >
@@ -63,13 +68,11 @@
 			<input type="text" name = "signName" >
 			<hr>
 			<label>Email :</label>
-			<input type="Email" >
+			<input type="Email" name="email">
 			<br>
-			<button class="johnyButton" onclick="return signFormChecker()"> REGISTER</button>
-
-		</section>
-
-	</form>
+			<button class="johnyButton">REGISTER</button>
+		</form>
+	</section>
 
 	<footer class="page3">
         <section id="contact">

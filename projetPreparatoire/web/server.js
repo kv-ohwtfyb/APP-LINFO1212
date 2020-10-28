@@ -1,38 +1,48 @@
-const   express = require('express');
-        consolidate = require('consolidate');
-        app = express ();
-        bodyParser = require('body-parser');
-        MongoClient = require('mongodb').MongoClient;
-<<<<<<< HEAD
-=======
-        //connectionString = "mongodb+srv://admin:admin@projetpreparatoire.66hzo.mongodb.net/projectdb?retryWrites=true&w=majority"
->>>>>>> 8ceafead486dd536b8683b0e73a7b50db130dfde
-        Server = require('mongodb').Server;
+const express = require('express');
+      consolidate = require('consolidate');
+      app = express ();
+      bodyParser = require('body-parser');
+      MongoClient = require('mongodb').MongoClient;
+      session = require('express-session');
+      fs = require('fs');
+      Server = require('mongodb').Server;
+      https = require('https');
+      path = require('path');
 
 app.engine('html', consolidate.hogan);
-app.use(bodyParser.urlencoded({ extend:true }));
 app.set('views', 'templates');
+
+app.use(bodyParser.urlencoded({ extend:true }));
+app.use(session({
+    secret: "EnCRypTIoNKeY",
+    resave: false,
+    saveUninitialized: true,
+    cookie: {path: '/', httpOnly: true}
+}));
 
 // MongoDb connection
 MongoClient.connect('mongodb://localhost:27017',{ useUnifiedTopology: true } ,  (err, db) => {
     const db_ = db.db("projectdb");
     const incidentsCollection = db_.collection("incidents");
+    const usersCollection = db_.collection("users");
+    const date = new Date();
+    let incidents;
+    // Loading the incidents
+    incidentsCollection.find().toArray((err, doc) => {
+        if (err) throw err;
+        incidents = doc;})
 
     /**************** Get Requests ****************/
 
     // When requesting the home page.
     app.get('/', function (req, res) {
-        // Loading the incidents
-        incidentsCollection.find().toArray((err, doc) => {
-            if (err) throw err;
-            res.render('index.html', {"incidents":doc, username: req.query.username || "Please login"});
-        });
+            res.render('index.html', {incidents:incidents, username: req.session.username || "Please login"});
     });
 
     // When requesting the preview page
     app.get('/preview', function (req, res) {
         res.render('incidentPreview.html', {
-            username: req.query.username || "Please login",
+            username: req.session.username || "Please login",
             incident: {
                 "description":  req.query.description || 'Not provided',
                 "address":      req.query.address     || 'Not provided',
@@ -52,19 +62,67 @@ MongoClient.connect('mongodb://localhost:27017',{ useUnifiedTopology: true } ,  
 
     // When submitting a report
     app.post('/report', function (req, res) {
-        console.log(req.body);
+        if (req.session.username) {                         // If he is logged in
+            incidentsCollection.insertOne({
+                "description": req.body.description,
+                "user": req.session.username,
+                "address": req.body.streetAddress + "," + req.body.postalCode + " " + req.body.region,
+                "image": null,
+                "status": "Ongoing",
+                "date": date.toLocaleDateString()
+            }, function (err, reslt) {
+                if (err) throw err;
+                // Re-collects the incidents
+                incidentsCollection.find().toArray((err, doc) => {
+                    if (err) throw err;
+                    incidents = doc;
+                })
+                res.render('index.html', {incidents : incidents, username  : req.body.username});
+            })
 
-        res.render('index.html', {username: req.query.username || "Please login"});
-
-        // incidentsCollection.insertOne(req.body)
-        //     .then(result => {console.log(result);
-        //                     res.redirect('/');})
-        //     .catch(err   =>{
-        //         res.render("errorPage.html",{error: err});
-        //                 });
-
+        } else {                                            // If he hasn't logged in
+            res.sendFile(path.join(__dirname + '/static/login.html'));
+        }
     });
+
+    // When login in
+    app.post('/login', function (req, res) {
+        // db searching
+        usersCollection.findOne({username: req.body.username})
+            .then(result => {
+                if (result && result.password === req.body.password) {
+                    req.session.username = req.body.username;
+                    res.render('index.html', {incidents: incidents, username: req.body.username});
+                } else { res.status(204).send(); }
+            })
+            .catch(err => {
+                console.log(err);
+                res.status(204).send();
+            })
+        })
+
+    // When signing up
+    app.post('/sign', function (req, res){
+        // Check ups to ensure there's n't someone with the same username
+        usersCollection.findOne({username : req.body.signUsername})
+            .then( result => {
+                if (!result) {                          // Not other user with the same username
+                    usersCollection.insertOne({username: req.body.signUsername,
+                        email: req.body.email, password: req.body.signPassword,
+                        name : req.body.signName})
+                    req.session.username = req.body.signUsername;
+                    res.render('index.html', {username: req.session.username || "Please Login",
+                        incidents: incidents});
+                } else {res.status(204).send();}})
+            .catch(error => {console.log(error);})
+        })
+
 });
 
 app.use(express.static('static'));
-app.listen(8080);
+
+https.createServer({
+    key         : fs.readFileSync('./ssl/key.pem'),
+    cert        : fs.readFileSync('./ssl/cert.pem'),
+    passphrase  : 'ndakwiyamye'
+}, app).listen(8080);

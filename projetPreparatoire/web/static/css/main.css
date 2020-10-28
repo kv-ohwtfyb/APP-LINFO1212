@@ -502,7 +502,7 @@ h1{
 
 /* For Signing up */
 
-.signupForm{
+.signUpForm{
     float: right;
     width: 70%;
     grid-column:3;
@@ -515,7 +515,7 @@ h1{
     margin: auto auto auto;
 }
 
-.signupForm input[type="text"], [type="password"],[type="email"] {
+.signUpForm input[type="text"], [type="password"],[type="email"] {
     float: right;
     width: 60%;
     border-width: 0;
@@ -527,7 +527,7 @@ h1{
 
 }
 
-.signupForm button{
+.signUpForm button{
     margin-top: 13%;
     margin-right: 35%;
     margin-left: 35%;
@@ -580,4 +580,9 @@ footer{
 
 #spanOnLoginPageHeader{
     width: 166px;
+}
+
+.textMessages{
+    font-size: 12px;
+    transition: all .3s ease-in-out;
 }
