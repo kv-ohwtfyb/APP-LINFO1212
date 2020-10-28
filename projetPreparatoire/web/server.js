@@ -3,6 +3,10 @@ const   express = require('express');
         app = express ();
         bodyParser = require('body-parser');
         MongoClient = require('mongodb').MongoClient;
+<<<<<<< HEAD
+=======
+        //connectionString = "mongodb+srv://admin:admin@projetpreparatoire.66hzo.mongodb.net/projectdb?retryWrites=true&w=majority"
+>>>>>>> 8ceafead486dd536b8683b0e73a7b50db130dfde
         Server = require('mongodb').Server;
 
 app.engine('html', consolidate.hogan);
