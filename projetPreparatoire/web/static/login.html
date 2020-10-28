@@ -21,44 +21,56 @@
 		</containerSearch>
 		<div id="spanOnLoginPageHeader"></div>
 	</header>
-	<form class="bodyForm" action="/" name="login" onsubmit="return loginFormChecker()" method="get">
-		<section class="loginForm">
-			<!--SECTION for LOG IN-->
+
+	<form class="bodyForm" action="/"  name = "form" method="get">
+
+		<!--SECTION for LOG IN-->
+		<section class="loginForm" >
 			<h2> ALREADY USER</h2>
+			<p class ="msg"> </p>
 			<label>Username :</label>
 			<input type="text" name="username">
 			<hr>
 			<label>Password :</label>
 			<input type="Password" name="password">
 			<hr>
-			<button class="johnyButton" type="submit" name="submit">LOGIN</button>
+			<button class="johnyButton"  onclick= "return loginFormChecker()">LOGIN</button>
+
 		</section>
+
 		<!-- navigation bottom -->
 		<section class = "navbar">
+
 			<nav class = "navButton">
 				<a id="homeIcon" href="/#homeDisplay"></a>
 				<a id="listIcon" href="/#tableOfIncidents"></a>
 				<a id="mailIcon" href="#contact"></a>
 			</nav>
+
 		</section>
+
 		<!-- SECTION FOR SIGNING UP-->
-		<section class="signupForm">
+		<section class="signupForm" >
+
 			<h2>NOT YET A USER</h2>
 			<label>Username :</label>
-			<input type="text" >
+			<input type="text" name = "signUsername" >
 			<hr>
 			<label>Password :</label>
-			<input type="Password" >
+			<input type="Password" name = "signPassword" >
 			<hr>
 			<label>Name :</label>
-			<input type="text">
+			<input type="text" name = "signName" >
 			<hr>
 			<label>Email :</label>
 			<input type="Email" >
 			<br>
-			<button class="johnyButton"> REGISTER</button>
+			<button class="johnyButton" onclick="return signFormChecker()"> REGISTER</button>
+
 		</section>
+
 	</form>
+
 	<footer class="page3">
         <section id="contact">
             <h2>CONTACT</h2>
