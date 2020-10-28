@@ -33,7 +33,6 @@ $(document).ready(function (){
       return true;
     }));
   }
-
   if ($('.report').length){
     $('.report').on('click', function () {
       window.open('/report?username='+$("#userName").html(),'_parent');

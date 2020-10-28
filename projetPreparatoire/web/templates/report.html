@@ -35,9 +35,10 @@
     </header>
     <form class="bodyForm" id="reportForm" method="POST" action="/report">
         <section class="imagePreview" id="imagePreview">
-            <input type="file" accept="image/*" name="imageInput" id="imageInput" onchange="previewImage(event)">
+            <input type="file" accept="image/*" name="image" id="imageInput" onchange="previewImage(event)">
             <img src="" id="theImagePreviewer" alt="Image Preview">
         </section>
+        <input type="hidden" value={{username}} name="person"/>
         <nav class="navButton">
             <a id="homeIcon" href="/"></a>
             <a id="listIcon" href="/#tableOfIncidents"></a>
@@ -49,7 +50,7 @@
             </label>
             <label>Postal Code<input type="number" id="postalCode" name="postalCode" accept="application/vnd.apple.numbers">
             </label>
-            <label for="regionInput"> Region<input type="text" id="regionInput" name="region">
+            <label for="regionInput">Region<input type="text" id="regionInput" name="region">
             </label>
         </div>
         <button class="report" type="submit">Post Incident</button>

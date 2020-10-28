@@ -49,15 +49,17 @@ MongoClient.connect('mongodb://localhost:27017',{ useUnifiedTopology: true } ,  
 
     // When submitting a report
     app.post('/report', function (req, res) {
-        console.log(req.body, {username : req.query.username});
+        console.log(req.body);
+
         res.render('index.html', {username: req.query.username || "Please login"});
-        /*incidentsCollection.insertOne(req.body)
-            .then(result => {console.log(result);
-                            res.redirect('/');})
-            .catch(err   =>{
-                res.render("errorPage.html",{error: err});
-                        });
-         */
+
+        // incidentsCollection.insertOne(req.body)
+        //     .then(result => {console.log(result);
+        //                     res.redirect('/');})
+        //     .catch(err   =>{
+        //         res.render("errorPage.html",{error: err});
+        //                 });
+
     });
 });
 
