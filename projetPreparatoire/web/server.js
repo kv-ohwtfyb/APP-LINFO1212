@@ -1,10 +1,10 @@
-const express = require('express');
-consolidate = require('consolidate');
-app = express ();
-bodyParser = require('body-parser');
-MongoClient = require('mongodb').MongoClient;
-//connectionString = "mongodb+srv://admin:admin@projetpreparatoire.66hzo.mongodb.net/projectdb?retryWrites=true&w=majority"
-Server = require('mongodb').Server;
+const   express = require('express');
+        consolidate = require('consolidate');
+        app = express ();
+        bodyParser = require('body-parser');
+        MongoClient = require('mongodb').MongoClient;
+        //connectionString = "mongodb+srv://admin:admin@projetpreparatoire.66hzo.mongodb.net/projectdb?retryWrites=true&w=majority"
+        Server = require('mongodb').Server;
 
 app.engine('html', consolidate.hogan);
 app.use(bodyParser.urlencoded({ extend:true }));
