@@ -30,7 +30,7 @@
             <img src="images/loop_magnifier.png" alt="search">
         </containerSearch>
         <img src="images/user.png" alt="user">
-        <a id="userName" href="login.html">{{username}}</a>
+        <a id="userName" href="/login">{{username}}</a>
     </header>
     <section class="navbar" id="navBarOnHomePage">
 			<nav class = "navButton">
@@ -61,7 +61,7 @@
                 <th>Reported by</th>
             </tr>
             {{#incidents}}
-            <tr onclick="window.open('/preview','_parent')">
+            <tr onclick="window.open('/preview?description=blah','_parent')">
                 <td></td>
                 <td>{{description}}</td>
                 <td>{{address}}</td>

@@ -35,8 +35,7 @@ $(document).ready(function (){
   }
   if ($('.report').length){
     $('.report').on('click', function () {
-      window.open('/report?username='+$("#userName").html(),'_parent');
-    })
+      window.open('/report?username='+$("#userName").html(),'_parent');})
   }
 
 
@@ -48,11 +47,8 @@ $(document).ready(function (){
       $.each($('#loginForm').serializeArray(), function(i, field) {
         if (field.value === ""){
           message.text(`Please fill in the ${field.name}`);
-          return false;
-        }
-      })
-      return true;
-    })
+          return false;}})
+      return true;})
   }
 
   if ($('.signUpForm').length){
@@ -62,13 +58,9 @@ $(document).ready(function (){
         if (field.value === ""){
           message.text(`Please fill in the ${field.name}`);
           setTimeout(() => message.text(""), 3000);
-          return false;
-        }
-      })
+          return false;}})
       return true;
-    })
-  }
-
+    })}
 });
 
 window.onscroll = function () {headerChecker()} //Checks for the header display

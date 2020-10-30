@@ -47,7 +47,7 @@ MongoClient.connect('mongodb://localhost:27017', {useUnifiedTopology: true}, (er
             incident: {
                 "description": req.query.description || 'Not provided',
                 "address": req.query.address || 'Not provided',
-                "person": req.query.person || 'Not provided',
+                "user": req.query.user || 'Not provided',
                 "status": req.query.status || 'Not provided',
                 "date": req.query.date
             }
@@ -59,26 +59,26 @@ MongoClient.connect('mongodb://localhost:27017', {useUnifiedTopology: true}, (er
         res.render('report.html', {username: req.query.username || "Please login"});
     })
 
+    // When requesting the login page
+    app.get('/login', function (req, res) {
+        res.render('login.html');
+    })
+
     /**************** Post Requests ****************/
 
     // When submitting a report
     app.post('/report', function (req, res) {
         if (req.session.username) {                         // If he is logged in
-            incidentsCollection.insertOne({
-                "description": req.body.description,
-                "user": req.session.username,
-                "address": req.body.streetAddress + "," + req.body.postalCode + " " + req.body.region,
-                "image": null,
-                "status": "Ongoing",
-                "date": date.toLocaleDateString()
-            }, function (err, reslt) {
+
+            const newInc = {"description": req.body.description, "user": req.session.username,
+                "address": req.body.streetAddress + "," + req.body.postalCode + " " + req.body.region, "image": null,
+                "status": "Ongoing", "date": date.toLocaleDateString()};
+
+            incidentsCollection.insertOne(newInc, function (err, reslt) {
                 if (err) throw err;
-                // Re-collects the incidents
-                incidentsCollection.find().toArray((err, doc) => {
-                    if (err) throw err;
-                    incidents = doc;
-                })
-                res.render('index.html', {incidents: incidents, username: req.body.username});
+                // Updates the incidents
+                incidents.push(newInc);
+                res.render('index.html', {incidents: incidents, username: req.session.username});
             })
 
         } else {                                            // If he hasn't logged in
@@ -93,7 +93,7 @@ MongoClient.connect('mongodb://localhost:27017', {useUnifiedTopology: true}, (er
         .then(result => {
             if (result && result.password === req.body.password) {
                 req.session.username = req.body.username;
-                res.render('index.html', {incidents: incidents, username: req.body.username});
+                res.render('index.html', {incidents: incidents, username: req.session.username});
             } else {
                 res.render("login.html",{"msgLogin":"Password Incorrect or Username not found"});
             }
@@ -120,7 +120,7 @@ MongoClient.connect('mongodb://localhost:27017', {useUnifiedTopology: true}, (er
                     username: req.session.username || "Please Login",
                     incidents: incidents
                 });
-            } else {
+            } else {                                // Another user with the same name
                 res.render("login.html",{"msgSignUp":"Another user has the same username. Try a different using another."});
             }
         })
