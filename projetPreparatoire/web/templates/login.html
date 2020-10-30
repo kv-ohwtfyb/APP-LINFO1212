@@ -32,12 +32,11 @@
 		</containerSearch>
 		<div id="spanOnLoginPageHeader"></div>
 	</header>
-
 	<section class="bodyForm" >
 		<!--SECTION for LOG IN-->
 		<form class="loginForm" id="loginForm" action="/login" method="post" >
 			<h2> ALREADY USER</h2>
-			<p class="msg" id="loginMsg"></p>
+			<p class="msg" id="loginMsg">{{msgLogin}}</p>
 			<label>Username :</label>
 			<input type="text" name="username">
 			<hr>
@@ -55,9 +54,9 @@
 			</nav>
 		</section>
 		<!-- SECTION FOR SIGNING UP-->
-		<form class="signUpForm" id="signUpForm" action="/login" method="post">
+		<form class="signUpForm" id="signUpForm" action="/sign" method="post">
 			<h2>NOT YET A USER</h2>
-			<p class="msg" id="signMsg"></p>
+			<p class="msg" id="signMsg">{{msgSignUp}}</p>
 			<label>Username :</label>
 			<input type="text" name="signUsername">
 			<hr>
@@ -87,6 +86,6 @@
             <li><a href="#">About us</a></li>
         </section>
     </footer>
-	<script src="js/main.js"></script>
+	<script src="../static/js/main.js"></script>
 </body>
 </html>
