@@ -103,12 +103,11 @@ MongoClient.connect('mongodb://localhost:27017', {useUnifiedTopology: true}, (er
     });
 });
 app.use(express.static('static'));
-app.listen(8080);
-// https.createServer({
-//     key         : fs.readFileSync('./ssl/key.pem','utf-8'),
-//     cert        : fs.readFileSync('./ssl/cert.pem','utf-8'),
-//     passphrase  : 'ndakwiyamye'
-// }, app).listen(8080);
+https.createServer({
+    key         : fs.readFileSync('./ssl/key.pem','utf-8'),
+    cert        : fs.readFileSync('./ssl/cert.pem','utf-8'),
+    passphrase  : 'ndakwiyamye'
+}, app).listen(8080);
 
 /*
     Returns a the result of a quest in the database.
@@ -171,7 +170,8 @@ async function loggingIn(db, body){
  */
 async function signingUp(db, body){
     //Check if there's some on with the same username
-    if(await fetchFromDb(db, 'users', body.username)){
+    const rez = await fetchFromDb(db, 'users', {username: body.signUsername},true);
+    if(rez.length > 0){
         return false;
     }else{
         insertIntoDb(db, 'users',{username: body.signUsername,
