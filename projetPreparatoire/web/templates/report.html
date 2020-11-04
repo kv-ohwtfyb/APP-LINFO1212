@@ -11,61 +11,59 @@
 
 <!--    JavaScript imports-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src='https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.js'></script>
     <script src="js/main.js"></script>
-    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 </head>
 <body>
     <header>
         <img src="images/logo.png" alt="logo">
-        <hr id="lineNextToName">
-        <section id="nameAndMotoSection">
-            <p id="name">HappyStreet</p>
-            <hr id="lineBetweenNameAndMoto">
-            <p id="moto">Report it To Annihilate it</p>
+        <hr>
+        <section>
+            <p>HappyStreet</p>
+            <hr>
+            <a>Report it To Annihilate it</a>
         </section>
-        <containerSearch class="search">
+        <div class="search">
             <form>
                 <input type="text" name="search">
             </form>
             <img src="images/loop_magnifier.png" alt="search">
-        </containerSearch>
+        </div>
         <img src="images/user.png" alt="user">
-        <a id="userName" href="/login">{{username}}</a>
+        <a href="/login">{{username}}</a>
     </header>
     <form class="bodyForm" id="reportForm" method="POST" action="/report">
         <section class="imagePreview" id="imagePreview">
             <input type="file" accept="image/*" name="image" id="imageInput" onchange="previewImage(event)">
-            <img src="" id="theImagePreviewer" alt="Image Preview">
+            <img id="theImagePreviewer" alt="Image Preview">
         </section>
-        <nav class="navButton">
-            <a id="homeIcon" href="/"></a>
+        <nav class="navBar">
+            <a id="homeIcon" href="/#homeDisplay"></a>
             <a id="listIcon" href="/#tableOfIncidents"></a>
             <a id="mailIcon" href="#contact"></a>
         </nav>
-        <label for="descriptionInput"></label><textarea id="descriptionInput" placeholder="Description..." name="description"></textarea>
-        <div class='addressInput' id="map">
-            <label>Street, Number<input type="text" id="streetNameAndNumber" name="streetAddress">
+        <textarea id="descriptionInput" placeholder="Description..." name="description"></textarea>
+        <section class='addressInput' id="addressInput">
+            <label for="streetNameAndNumber">Street, Number<input type="text" id="streetNameAndNumber" name="streetAddress">
             </label>
-            <label>Postal Code<input type="number" id="postalCode" name="postalCode" accept="application/vnd.apple.numbers">
+            <label for="postalCode">Postal Code<input type="number" id="postalCode" name="postalCode" accept="application/vnd.apple.numbers">
             </label>
             <label for="regionInput">Region<input type="text" id="regionInput" name="region">
             </label>
-        </div>
+        </section>
         <button class="report" type="submit">Post Incident</button>
     </form>
-    <footer class="page3">
-            <section id="contact">
-                <h2>CONTACT</h2>
-                <li>02 080 99 99 (HELP) - 911 (EMERGENCY)</li>
-                <li>email@happystreet.be</li>
-                <li>Boulevard Voila 90, 000 Là-bas</li>
-            </section>
-            <section id="info">
-                <h2>MORE INFOS</h2>
-                <li><a href="#">Legal terms </a></li>
-                <li><a href="#">About us</a></li>
-            </section>
+    <footer>
+        <section id="contact">
+            <h2>CONTACT</h2>
+            <li>02 080 99 99 (HELP) - 911 (EMERGENCY)</li>
+            <li>email@happystreet.be</li>
+            <li>Boulevard Voila 90, 000 Là-bas</li>
+        </section>
+        <section id="info">
+            <h2>MORE INFOS</h2>
+            <li><a href="#">Legal terms </a></li>
+            <li><a href="#">About us</a></li>
+        </section>
     </footer>
 </body>
 </html>

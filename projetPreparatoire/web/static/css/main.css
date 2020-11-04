@@ -18,6 +18,12 @@ a,p,li,td,label{
     text-decoration: none;
 }
 
+h1{
+    font: normal normal bold 24px/30px League Spartan;
+    padding-bottom: 30px;
+}
+
+
 h2{
     font-family: "Roboto",sans-serif;
     font-weight: bold;
@@ -39,13 +45,13 @@ header img{
 }
 header a {
     color: #000000;
+    margin: auto 6% auto 0;
 }
 
 header a:hover{
     text-decoration: underline;
 }
-
-#lineNextToName {
+header hr {
     border: 2px solid #171D1C;
     height: 70%;
     width: 0;
@@ -53,7 +59,7 @@ header a:hover{
     padding: 0;
 }
 
-#nameAndMotoSection{
+header section{
     margin-left: 15px;
     height: 100%;
     min-width: fit-content;
@@ -61,14 +67,41 @@ header a:hover{
     margin-right: 15px;
 }
 
-#name{
+header section hr{
+    width: 100%;
+    height: 1%;
+    border-color: #171D1C;
+    margin: 0;
+    background-color: #171D1C;
+    border-width: 0;
+}
+
+header section p{
     text-align: left;
     font-family: "League Spartan", sans-serif;
+    font-weight: bold;
     font-size: 200%;
     color: #171D1C;
     margin: 0;
     padding-top: 4%; /*See if it can be done better*/
-    font-weight: bold;
+}
+
+header section a{
+    text-align: left;
+    font-family: "GeosansLight", sans-serif;
+    letter-spacing: 2px;
+    color: #171D1C;
+    margin: 0 auto;
+    font-weight: lighter;
+    text-decoration: none;
+}
+
+header section a:hover{
+    text-decoration: none;
+}
+
+header span{
+    width: 166px;
 }
 
 #lineBetweenNameAndMoto{
@@ -79,16 +112,7 @@ header a:hover{
     background-color: #171D1C;
 }
 
-#moto{
-    text-align: left;
-    font-family: "GeosansLight", sans-serif;
-    letter-spacing: 2px;
-    color: #171D1C;
-    margin: 0 auto;
-    font-weight: lighter;
-}
-
-containerSearch{
+.search{
     width: 25%;
     min-width: 120px;
     display: flex;
@@ -100,15 +124,14 @@ containerSearch{
     align-items: center;
     float: right;
 
-/*Effects*/
     transition: width 0.4s ease-in-out;
 }
 
-containerSearch:hover{
+.search:hover{
     width: 50%;
 }
 
-containersearch:focus{
+.search:focus{
     width: 50%;
 }
 .search form{
@@ -158,10 +181,6 @@ containersearch:focus{
     margin-right: 8px;
 }
 
-#userName{
-    margin: auto 6% auto 0;
-}
-
 .bodyForm{
     width: 96%;
     height: 90vh;
@@ -209,8 +228,8 @@ containersearch:focus{
 }
 
 #descriptionInput{
-    width: 100%;
-    height: 30%;
+    max-width : 100%;
+    max-height: 30%;
     background: #FFFFFF 0 0 no-repeat padding-box;
     box-shadow: 0 0 24px #00000029;
     border: 1px solid #707070;
@@ -264,7 +283,8 @@ input[type="text"], textarea{
 }
 
 /*The navigation bar*/
-.navButton{
+
+.navBar{
     width: 47px;
     height: 209px;
     background: #FF8270 0 0 no-repeat padding-box;
@@ -273,10 +293,10 @@ input[type="text"], textarea{
     display:flex;
     flex-direction:column;
     align-items:center;
-    margin: auto auto auto;
+    margin: auto;
 }
 
-.navButton a {
+.navBar a {
     margin: auto;
     width: 17px;
     height: 17px;
@@ -284,9 +304,17 @@ input[type="text"], textarea{
     border-width: 0;
 }
 
-.navButton a:active {
+.navBar a:active {
     outline-width: 0;
     border-width: 0;
+}
+
+#navBarOnHomePage{
+    position: fixed;
+    float: right;
+    right: 1%;
+    top: 40%;
+    z-index: 2;
 }
 
 #homeIcon{
@@ -449,55 +477,41 @@ hr{
 
 /* For logging in */
 
-.loginForm{
-    width: 60%;
+.loginForm {
+    width: 70%;
     padding: 0 25px;
     background-color: #FF8270;
-    margin: 0 auto;
     text-align: left;
     height: 400px;
-}
-
-.loginForm:hover{
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.16);
-}
-
-h1{
-    font: normal normal bold 24px/30px League Spartan;
-    padding-bottom: 30px;
-}
-
-.loginForm{
+    align-content: center;
     float: left;
-    width: 70%;
     grid-column:1;
     box-shadow: 0 0 50px #00000029;
     margin: auto auto auto;
 }
 
-.loginForm input[type="text"], [type="password"]{
+.loginForm label{
+    margin-top: 4%;
+    width: 100%;
+    padding: 0;
+    flex-direction: row;
+}
+
+.loginForm input[type="text"], [type="password"], input[type="email"]{
     float: right;
     width: 60%;
     border-width: 0;
     border-bottom-width: 1px;
     outline-width: 0;
     background-color: transparent;
-    margin-top: 12px;
-    margin-bottom: 12px;
+    margin: 0 auto 0;
 }
-
 
 .loginForm button{
     margin-top: 34%;
     margin-left: 25%;
     padding: 2.5% 15%;
     border:0;
-}
-
-/* For navigation bar */
-
-.navbar {
-    display: flex;
 }
 
 /* For Signing up */
@@ -513,26 +527,6 @@ h1{
     text-align: left;
     height: 400px;
     margin: auto auto auto;
-}
-
-.signUpForm input[type="text"], [type="password"],[type="email"] {
-    float: right;
-    width: 60%;
-    border-width: 0;
-    border-bottom-width: 1px;
-    outline-width: 0;
-    background-color: transparent;
-    margin-top: 12px;
-    margin-bottom: 12px;
-
-}
-
-.signUpForm button{
-    margin-top: 13%;
-    margin-right: 35%;
-    margin-left: 35%;
-    padding: 2.5% 9%;
-    border:0;
 }
 
 /* For all button in general */
@@ -558,28 +552,12 @@ footer{
     grid-gap: 20px;
 }
 
-#navBarOnHomePage{
-    position: fixed;
-    float: right;
-    right: 1%;
-    top: 40%;
-    z-index: 2;
-}
-
 #headerOnHomePage{
     position: fixed;
     float: top;
     z-index: 2;
     transition: all .3s ease-in-out;
     opacity: 0;
-}
-
-#headerOnHomePage.seen{
-    opacity: 1;
-}
-
-#spanOnLoginPageHeader{
-    width: 166px;
 }
 
 .textMessages{

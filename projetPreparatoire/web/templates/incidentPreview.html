@@ -1,37 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>HappyStreet | Incident </title>
     <meta charset="UTF-8">
-    <script src='https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.js'></script>
-    <link href='https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.css' rel='stylesheet' />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>HappyStreet | Incident </title>
+
+<!--    CSS imports-->
     <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Montserrat' >
-    <script src="js/main.js"></script>
+    <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Roboto' >
     <link rel="stylesheet" href="css/main.css">
-    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+<!--    Javascript imports-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="js/main.js" type="text/javascript"></script>
 </head>
 <body>
     <header>
-		<img src="images/logo.png" alt="logo" onclick="window.open('/', '_parent')">
-		<hr id="lineNextToName">
-		<section id="nameAndMotoSection">
-			<p id="name">HappyStreet</p>
-			<hr id="lineBetweenNameAndMoto">
-			<p id="moto">Report it To Annihilate it</p>
-		</section>
-		<containerSearch class="search">
-			<form>
-				<input type="text" name="search">
-			</form>
-			<img src="images/loop_magnifier.png" alt="search">
-		</containerSearch>
-		<div id="spanOnLoginPageHeader"></div>
-	</header>
-    <form class="bodyForm" name="report">
+        <img src="images/logo.png" alt="logo">
+        <hr>
+        <section>
+            <p>HappyStreet</p>
+            <hr>
+            <a>Report it To Annihilate it</a>
+        </section>
+        <div class="search">
+            <form>
+                <input type="text" name="search">
+            </form>
+            <img src="images/loop_magnifier.png" alt="search">
+        </div>
+        <img src="images/user.png" alt="user">
+        <a href="/login">{{username}}</a>
+    </header>
+    <section class="bodyForm">
         <section class="imagePreview" id="imagePreview">
             <img src="" id="theImagePreviewer" alt="Image Preview">
         </section>
-        <nav class="navButton">
+        <nav class="navBar">
             <a id="homeIcon" href="/#homeDisplay"></a>
             <a id="listIcon" href="/#tableOfIncidents"></a>
             <a id="mailIcon" href="#contact"></a>
@@ -42,24 +48,26 @@
             <br>
             <p>By : {{incident.user}}</p>
             <p>On : {{incident.date}}</p>
-            <p>Status : {{incident.status}}</p>
         </section>
         <div class='addressInput' id="map">
             <p>{{incident.address}}</p>
         </div>
-    </form>
-    <footer class="page3">
-            <section id="contact">
-                <h2>CONTACT</h2>
-                <li>02 080 99 99 (HELP) - 911 (EMERGENCY)</li>
-                <li>email@happystreet.be</li>
-                <li>Boulevard Voila 90, 000 Là-bas</li>
-            </section>
-            <section id="info">
-                <h2>MORE INFOS</h2>
-                <li><a href="#">Legal terms </a></li>
-                <li><a href="#">About us</a></li>
-            </section>
+        {{#admin}}
+            <button class="report" id="deleteButton">Delete Incident</button>
+        {{/admin}}
+    </section>
+    <footer>
+        <section id="contact">
+            <h2>CONTACT</h2>
+            <li>02 080 99 99 (HELP) - 911 (EMERGENCY)</li>
+            <li>email@happystreet.be</li>
+            <li>Boulevard Voila 90, 000 Là-bas</li>
+        </section>
+        <section id="info">
+            <h2>MORE INFOS</h2>
+            <li><a href="#">Legal terms </a></li>
+            <li><a href="#">About us</a></li>
+        </section>
     </footer>
 </body>
 </html>

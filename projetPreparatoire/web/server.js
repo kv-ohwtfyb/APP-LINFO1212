@@ -23,15 +23,13 @@ app.use(session({
 // MongoDb connection
 MongoClient.connect('mongodb://localhost:27017', {useUnifiedTopology: true}, (err, db) => {
     const db_ = db.db("projectdb");
-    const incidentsCollection = db_.collection("incidents");
-    const usersCollection = db_.collection("users");
     const date = new Date();
-    let incidents;
     // Loading the incidents
-    incidentsCollection.find().toArray((err, doc) => {
-        if (err) throw err;
-        incidents = doc;
-    })
+    let incidents;
+    loadingIncidents(db_)
+        .then( r => {
+            incidents = r.result;
+    });
 
     /**************** Get Requests ****************/
 
@@ -45,18 +43,17 @@ MongoClient.connect('mongodb://localhost:27017', {useUnifiedTopology: true}, (er
         res.render('incidentPreview.html', {
             username: req.session.username || "Please login",
             incident: {
-                "description": req.query.description || 'Not provided',
-                "address": req.query.address || 'Not provided',
-                "user": req.query.user || 'Not provided',
-                "status": req.query.status || 'Not provided',
+                "description": req.query.description || 'Not provided', "address": req.query.address || 'Not provided',
+                "user": req.query.user || 'Not provided', "status": req.query.status || 'Not provided',
                 "date": req.query.date
-            }
+            },
+            admin: req.session.username === "vany"
         });
     });
 
     // When requesting the report page
     app.get('/report', function (req, res) {
-        res.render('report.html', {username: req.query.username || "Please login"});
+        res.render('report.html', {username: req.session.username || "Please login"});
     })
 
     // When requesting the login page
@@ -69,64 +66,40 @@ MongoClient.connect('mongodb://localhost:27017', {useUnifiedTopology: true}, (er
     // When submitting a report
     app.post('/report', function (req, res) {
         if (req.session.username) {                         // If he is logged in
-
-            const newInc = {"description": req.body.description, "user": req.session.username,
-                "address": req.body.streetAddress + "," + req.body.postalCode + " " + req.body.region, "image": null,
-                "status": "Ongoing", "date": date.toLocaleDateString()};
-
-            incidentsCollection.insertOne(newInc, function (err, reslt) {
-                if (err) throw err;
-                // Updates the incidents
-                incidents.push(newInc);
+            if (reporting(db_, req.body, date, req.session, incidents)) {
                 res.render('index.html', {incidents: incidents, username: req.session.username});
-            })
-
+            }
         } else {                                            // If he hasn't logged in
-            res.render('login.html',{"msgLogin":"Please first login"});
+            res.render('login.html', {"msgLogin": "Please first login"});
         }
     });
 
     // When login in
     app.post('/login', function (req, res) {
         // db searching
-        usersCollection.findOne({username: req.body.username})
-        .then(result => {
-            if (result && result.password === req.body.password) {
+        loggingIn(db_, req.body).then(r => {
+            if (r.status) {                                  //Login passed
                 req.session.username = req.body.username;
                 res.render('index.html', {incidents: incidents, username: req.session.username});
-            } else {
-                res.render("login.html",{"msgLogin":"Password Incorrect or Username not found"});
+            } else {                                             //Login failed
+                res.render("login.html", {"msgLogin": r.msg, username: req.body.username});
             }
-        })
-        .catch(err => {
-            console.log(err);
-            res.render("login.html",{"msgLogin":"User not found."});
-        })
-    })
+        });
+    });
 
     // When signing up
     app.post('/sign', function (req, res) {
         // Check ups to ensure there's n't someone with the same username
-        usersCollection.findOne({username: req.body.signUsername})
-        .then(result => {
-            if (!result) {                          // Not other user with the same username
-                usersCollection.insertOne({
-                    username: req.body.signUsername,
-                    email: req.body.email, password: req.body.signPassword,
-                    name: req.body.signName
-                })
+        signingUp(db_, req.body).then(value => {
+            if (value) {                                     //signup passed
                 req.session.username = req.body.signUsername;
                 res.render('index.html', {
                     username: req.session.username || "Please Login",
                     incidents: incidents
                 });
-            } else {                                // Another user with the same name
-                res.render("login.html",{"msgSignUp":"Another user has the same username. Try a different using another."});
-            }
-        })
-        .catch(error => {
-            console.log(error);
-        })
+            } else {                                         //signup failed
+                res.render("login.html", {"msgSignUp": "Another user has the same username. Try a different using another."});
+            }});
     });
 });
 app.use(express.static('static'));
@@ -136,3 +109,97 @@ app.listen(8080);
 //     cert        : fs.readFileSync('./ssl/cert.pem','utf-8'),
 //     passphrase  : 'ndakwiyamye'
 // }, app).listen(8080);
+
+/*
+    Returns a the result of a quest in the database.
+
+    db (Object)         : mongodb, db object.
+    collection (String) : of a collection into the db.
+    spec (JSON)         : contains the criteria.
+    toArray (Boolean)   : if the result is an array.
+    one (Boolean)       : if the function fetch on element.
+ */
+function fetchFromDb(db, collection, spec = {}, toArray= false, one = false){
+    if (one) {
+        return db.collection(collection).findOne(spec);
+    } else if (toArray) {
+        return db.collection(collection).find(spec).toArray();
+    } else {
+        return db.collection(collection).find(spec);
+    }
+}
+
+/*
+    Insert the body to the db.
+
+    db (Object)         : mongodb, db object
+    collection (String) : of a collection into the db
+    spec (JSON)         : contains the criteria.
+    toArray (Boolean)   : if the result is an array.
+ */
+function insertIntoDb(db, collection, body){
+    db.collection(collection).insertOne(body)
+        .then(()=> {})
+        .catch((err) =>{ throw err;});
+}
+
+/*
+    When logging in
+
+    db (Object)         : mongodb, db object.
+    body(JSON)          : body of the request.
+ */
+async function loggingIn(db, body){
+    const result = await fetchFromDb(db, "users",{username: body.username}, false, true);
+    if (result){
+        if (result.password === body.password){
+            this.status = true; this.msg = '';
+            return this;
+        }
+        this.status = false; this.msg = "Password incorrect try again"
+        return this;
+    }
+    this.status = false; this.msg = "No username with that name found";
+    return this;
+}
+
+/*
+    When signing somebody up
+
+    db (Object)         : mongodb, db object.
+    body(JSON)          : body of the request.
+ */
+async function signingUp(db, body){
+    //Check if there's some on with the same username
+    if(await fetchFromDb(db, 'users', body.username)){
+        return false;
+    }else{
+        insertIntoDb(db, 'users',{username: body.signUsername,
+            email: body.email, password: body.signPassword, name: body.signName});
+        return true;
+    }
+}
+
+/*
+    When signing somebody up
+
+    db (Object)         : mongodb, db object.
+    body(JSON)          : body of the request.
+ */
+function reporting(db, body, date, session, incidents){
+    const newInc = {"description": body.description, "user": session.username,
+        "address": body.streetAddress + "," + body.postalCode + " " + body.region,
+        "image": null, "status": "Ongoing", "date": date.toLocaleDateString()};
+    insertIntoDb(db, newInc);
+    incidents.push(newInc);
+    return true;
+}
+
+/*
+    Loads up the list of incidents
+    db (Object)         : mongodb, db object.
+ */
+async function loadingIncidents(db){
+    this.result = await fetchFromDb(db,"incidents",{},true);
+    return this;
+}
