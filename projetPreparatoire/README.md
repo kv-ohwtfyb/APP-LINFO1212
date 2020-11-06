@@ -48,7 +48,7 @@ This databse contain the following collections :
 
 ### Collections
 
-#### incidents 
+#### - incidents 
   Containing all the incidents. 
   {"description":"...", "address":"...", "user":"...", "image": id, "date": integer}
   This collection has 3 indexes to improve search operations.
@@ -62,9 +62,12 @@ This databse contain the following collections :
   ##### (${date : '...'})        
       This index will be used when the user input is only digits with '.',',' therefore looking for a date.
   
-#### users : 
+#### - users : 
   Containing users info. 
   {"username":"...", "password":"...", "email":"...", "name":"..."}
+  
+#### - images :
+  Containing images info.
 
 
 ## Run App
