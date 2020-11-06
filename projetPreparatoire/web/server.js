@@ -172,16 +172,21 @@ function insertIntoDb(db, collection, body){
 async function loggingIn(db, body){
     const result = await fetchFromDb(db, "users",{username: body.username}, false, true);
     if (result){
-        if (result.password === body.password){
-            this.status = true; this.msg = '';
+        if(await bcrypt.compare(body.password, result.password)){
+            this.status = true;
+            this.msg = "";
             return this;
+        }else{
+           this.status = false; 
+           this.msg = "Password incorrect try again";
+           return this;
         }
-        this.status = false; this.msg = "Password incorrect try again"
+    }else{
+        this.status = false; 
+        this.msg = "No username with that name found";
         return this;
     }
-    this.status = false; this.msg = "No username with that name found";
-    return this;
-}
+};
 
 /*
     When signing somebody up
@@ -192,11 +197,18 @@ async function loggingIn(db, body){
 async function signingUp(db, body){
     //Check if there's some on with the same username
     const rez = await fetchFromDb(db, 'users', {username: body.signUsername},true);
+    const pswd = body.signPassword;
+    const saltRounds = 10;
+
     if(rez.length > 0){
         return false;
     }else{
-        insertIntoDb(db, 'users',{username: body.signUsername,
-            email: body.email, password: body.signPassword, name: body.signName});
+        
+        bcrypt.hash(pswd, saltRounds, (hash) => {
+            insertIntoDb(db, 'users',{username: body.signUsername,
+                email: body.email, password: hash, name: body.signName});
+        })
+
         return true;
     }
 }
