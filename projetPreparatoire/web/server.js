@@ -8,6 +8,7 @@ const fs = require('fs');
 const Server = require('mongodb').Server;
 const https = require('https');
 const path = require('path');
+const bcrypt = require('bcrypt');
 
 app.engine('html', consolidate.hogan);
 app.set('views', 'templates');
@@ -103,11 +104,15 @@ MongoClient.connect('mongodb://localhost:27017', {useUnifiedTopology: true}, (er
     });
 });
 app.use(express.static('static'));
-https.createServer({
-    key         : fs.readFileSync('./ssl/key.pem','utf-8'),
-    cert        : fs.readFileSync('./ssl/cert.pem','utf-8'),
+
+options = {
+
+    key         : fs.readFileSync('./ssl/key.pem'),
+    cert        : fs.readFileSync('./ssl/cert.pem'),
     passphrase  : 'ndakwiyamye'
-}, app).listen(8080);
+};
+
+https.createServer(options, app).listen(8080);
 
 /*
     Returns a the result of a quest in the database.
