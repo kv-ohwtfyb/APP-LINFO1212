@@ -7,7 +7,7 @@ const session = require('express-session');
 const fs = require('fs');
 const Server = require('mongodb').Server;
 const https = require('https');
-const path = require('path');
+const bcrypt = require('bcrypt');
 
 app.engine('html', consolidate.hogan);
 app.set('views', 'templates');
@@ -48,7 +48,7 @@ MongoClient.connect('mongodb://localhost:27017', {useUnifiedTopology: true}, (er
                 "user": req.query.user || 'Not provided', "status": req.query.status || 'Not provided',
                 "date": req.query.date
             },
-            admin: req.session.username === "vany"
+            admin: req.session.admin
         });
     });
 
@@ -81,6 +81,7 @@ MongoClient.connect('mongodb://localhost:27017', {useUnifiedTopology: true}, (er
         loggingIn(db_, req.body).then(r => {
             if (r.status) {                                  //Login passed
                 req.session.username = req.body.username;
+                req.session.admin = req.session.username === 'vany';
                 res.render('index.html', {incidents: incidents, username: req.session.username});
             } else {                                             //Login failed
                 res.render("login.html", {"msgLogin": r.msg, username: req.body.username});
@@ -117,19 +118,18 @@ MongoClient.connect('mongodb://localhost:27017', {useUnifiedTopology: true}, (er
                     }
                     res.json({'success': r.status});
                 });
-        }
+        }else { res.json({'success': false}); }
     })
 });
 
 app.use(express.static('static'));
 
-https.createServer({
+options = {
     key         : fs.readFileSync('./ssl/key.pem'),
     cert        : fs.readFileSync('./ssl/cert.pem'),
     passphrase  : 'ndakwiyamye'
-}, app).listen(8080, () => {
-    console.log("Server Running on port 8080.")
-});
+};
+https.createServer(options, app).listen(8080);
 
 /*
     Returns a the result of a quest in the database.
@@ -235,8 +235,7 @@ async function loadingIncidents(db){
 async function deleteDocument(db, collection, spec){
     await db.collection(collection).deleteOne(spec)
         .then( r => {
-            if (r.deletedCount === 0){ this.status = false; }
-            else this.status = true;
+            this.status = r.deletedCount !== 0;
         }).catch( err => { throw err; })
     return this;
 }
