@@ -50,7 +50,7 @@ This databse contain the following collections :
 
 #### - incidents 
   Containing all the incidents. 
-  {"description":"...", "address":"...", "user":"...", "image": id, "date": integer}
+  {"description":"...", "address":"...", "user":"...", "image": id, "date": integer}.
   This collection has 3 indexes to improve search operations.
   to understand indexes I recommand to visit this page :
   https://beginnersbook.com/2017/09/mongodb-indexing-tutorial-with-example/#:~:text=An%20index%20in%20MongoDB%20is,that%20holds%20only%20few%20fields.
