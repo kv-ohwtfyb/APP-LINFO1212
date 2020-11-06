@@ -200,11 +200,12 @@ async function signingUp(db, body){
     const rez = await fetchFromDb(db, 'users', {username: body.signUsername},true);
     const pswd = body.signPassword;
     const saltRounds = 10;
+
     if(rez.length > 0){
         return false;
     }else{
-        console.log(pswd);
-        bcrypt.hash(pswd, saltRounds, (err, hash) => {
+        
+        bcrypt.hash(pswd, saltRounds, (hash) => {
             insertIntoDb(db, 'users',{username: body.signUsername,
                 email: body.email, password: hash, name: body.signName});
         })
