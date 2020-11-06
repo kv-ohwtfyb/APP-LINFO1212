@@ -42,18 +42,17 @@
             <a id="listIcon" href="/#tableOfIncidents"></a>
             <a id="mailIcon" href="#contact"></a>
         </nav>
-        <label for="descriptionInput"></label>
         <section id="descriptionInput">
-            <p>{{incident.description}}</p>
+            <p id="description">{{incident.description}}</p>
             <br>
-            <p>By : {{incident.user}}</p>
-            <p>On : {{incident.date}}</p>
+            <p>By :</p><p id="user">{{incident.user}}</p>
+            <p>On :</p><p id="date">{{incident.date}}</p>
         </section>
         <div class='addressInput' id="map">
-            <p>{{incident.address}}</p>
+            <p id="address">{{incident.address}}</p>
         </div>
         {{#admin}}
-            <button class="report" id="deleteButton">Delete Incident</button>
+            <button type="button" class="report" id="deleteButton">Delete Incident</button>
         {{/admin}}
     </section>
     <footer>

@@ -13,6 +13,7 @@ app.engine('html', consolidate.hogan);
 app.set('views', 'templates');
 
 app.use(bodyParser.urlencoded({ extend:true }));
+
 app.use(session({
     secret: "EnCRypTIoNKeY",
     resave: false,
@@ -101,13 +102,34 @@ MongoClient.connect('mongodb://localhost:27017', {useUnifiedTopology: true}, (er
                 res.render("login.html", {"msgSignUp": "Another user has the same username. Try a different using another."});
             }});
     });
+
+    /**************** delete Requests ****************/
+
+    // Deleting an incident
+    app.delete('/deleteIncident', function (req, res) {
+        if (req.session.admin) {
+            deleteDocument(db_, 'incidents', req.body)
+                .then(r => {
+                    if (r.status) {
+                        loadingIncidents(db_).then(r => {
+                            incidents = r.result;
+                        });
+                    }
+                    res.json({'success': r.status});
+                });
+        }
+    })
 });
+
 app.use(express.static('static'));
+
 https.createServer({
-    key         : fs.readFileSync('./ssl/key.pem','utf-8'),
-    cert        : fs.readFileSync('./ssl/cert.pem','utf-8'),
+    key         : fs.readFileSync('./ssl/key.pem'),
+    cert        : fs.readFileSync('./ssl/cert.pem'),
     passphrase  : 'ndakwiyamye'
-}, app).listen(8080);
+}, app).listen(8080, () => {
+    console.log("Server Running on port 8080.")
+});
 
 /*
     Returns a the result of a quest in the database.
@@ -201,5 +223,20 @@ function reporting(db, body, date, session, incidents){
  */
 async function loadingIncidents(db){
     this.result = await fetchFromDb(db,"incidents",{},true);
+    return this;
+}
+
+/*
+    Delete an element from the db
+    db (Object)         : mongodb, db object
+    collection (String) : of a collection into the db
+    spec (JSON)         : contains the criteria.
+ */
+async function deleteDocument(db, collection, spec){
+    await db.collection(collection).deleteOne(spec)
+        .then( r => {
+            if (r.deletedCount === 0){ this.status = false; }
+            else this.status = true;
+        }).catch( err => { throw err; })
     return this;
 }

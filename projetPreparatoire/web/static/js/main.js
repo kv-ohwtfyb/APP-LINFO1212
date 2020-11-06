@@ -51,9 +51,21 @@ $(document).ready(function (){
     console.log(userDate[0]);
     const data = {"description":row.find('.description').text(),
                   "address":    row.find('.address').text(),
-                  "user":       userDate[0], "date":userDate[1]}
+                  "user":       userDate[0].trim(), "date":userDate[1].trim()}
     window.open('/preview?'+encodeQuery(data));
   });
+
+  if($('#deleteButton').length) {
+    $(this).on('click', function () {
+      const data = { description : $('#description').text(), address: $('#address').text(),
+         user : $('#user').text().trim(), date:$('#date').text().trim()};
+      $.ajax('/deleteIncident',
+          {method:'delete', data: data,
+                  success: function (response) {
+                    if (response.success) {window.open('/','_parent');}
+                    else {alert("Couldn't delete the incident");}
+                  }});
+    })}
 });
 
 /*
