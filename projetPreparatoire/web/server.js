@@ -124,12 +124,11 @@ MongoClient.connect('mongodb://localhost:27017', {useUnifiedTopology: true}, (er
 
 app.use(express.static('static'));
 
-options = {
+https.createServer({
     key         : fs.readFileSync('./ssl/key.pem'),
     cert        : fs.readFileSync('./ssl/cert.pem'),
     passphrase  : 'ndakwiyamye'
-};
-https.createServer(options, app).listen(8080);
+}, app).listen(8080);
 
 /*
     Returns a the result of a quest in the database.

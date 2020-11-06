@@ -45,11 +45,12 @@
         <section id="descriptionInput">
             <p id="description">{{incident.description}}</p>
             <br>
-            <p>By :</p><p id="user">{{incident.user}}</p>
-            <p>On :</p><p id="date">{{incident.date}}</p>
         </section>
         <div class='addressInput' id="map">
             <p id="address">{{incident.address}}</p>
+            <p>Reported by</p>
+            <p id="user">{{incident.user}}</p>
+            <p id="date">{{incident.date}}</p>
         </div>
         {{#admin}}
             <button type="button" class="report" id="deleteButton">Delete Incident</button>

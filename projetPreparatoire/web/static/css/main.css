@@ -167,7 +167,7 @@ header span{
     background-color: transparent;
     border-width: 0;
     height: 100%;
-    width: 99%;
+    width: 75%;
     outline-width: 0;
     font-size: 24px;
     font-weight: lighter;
@@ -193,6 +193,10 @@ header span{
     padding-left: 2%;
     padding-right: 2%;
     margin: 0 auto;
+}
+
+.bodyForm section{
+    overflow: hidden;
 }
 
 .imagePreview{
@@ -563,4 +567,8 @@ footer{
 .textMessages{
     font-size: 12px;
     transition: all .3s ease-in-out;
+}
+
+#descriptionInput{
+    overflow: auto;
 }
