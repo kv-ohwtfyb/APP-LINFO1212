@@ -1,3 +1,14 @@
 # APP-LINFO1212
 Projet d'approfondissement
-link to xd-designs : https://xd.adobe.com/view/cb471699-3668-4d30-add4-0411f3ab3e24-9e14/#access_token=eyJ4NXUiOiJpbXNfbmExLWtleS0xLmNlciIsImFsZyI6IlJTMjU2In0.eyJpZCI6IjE2MDA3NjA1NjI0MjBfNjg3ZTFkOTgtMTdmYi00NGYzLWJlNzQtYjlmN2MxODQ0NGNmX2V3MSIsImNsaWVudF9pZCI6IkNvbWV0V2ViMSIsInVzZXJfaWQiOiIwNURDNEM3MDU4QTk3Nzk1MEE0OTVFNUFAQWRvYmVJRCIsInR5cGUiOiJhY2Nlc3NfdG9rZW4iLCJhcyI6Imltcy1uYTEiLCJmZyI6IlVaTEdYVEhPVkxQNVlQNEdDNkJMWlBRQVZJPT09PT09Iiwic2lkIjoiMTYwMDc2MDU2MjQyMF84ZGFmYjQ2NC02YjZhLTRiMmQtYmIxMi0wNWE0Y2EyZTRiNzZfZXcxIiwibW9pIjoiZWY4NDdlN2IiLCJjIjoiZUo5WWF3Z3EySUp5L1h1OCtsdy9KZz09IiwiZXhwaXJlc19pbiI6Ijg2NDAwMDAwIiwic2NvcGUiOiIiLCJjcmVhdGVkX2F0IjoiMTYwMDc2MDU2MjQyMCJ9.Kkgh9_JHWJ245R7D58nd_7tWqN29EYGdqcQNSNU5Uu-lhbE4pqw5QaSD8tZ8sk5DJrvbd8Ua6Hv8bg-ggJLnmqPZPg5Afpaod5jWSffEeweswsBq3eeo3FqV6xSX6wtEjg5q-0upWv2HoR8ZmFt6a6f7Hdvqctd07BblFuVntg21yO1eYEPnLixAOsYt6wzQ7E-kYTJTeD5Kwpsz5gzn6f9n95kgPttQvSUL1gZDar-HA_b0-NdM7Ynu2NAgK9qfBfHya5OBAlXkznqPyuGjzP-RIbtkOel9NFh4sr41fO8gGkZ5yM3kpCG7umGaGrmvNwzzd_SG1n8lR6ttAGlZMw&token_type=bearer&expires_in=86399997
+
+link : https://docs.google.com/document/d/1GVpDZDma0xKbCdZuQmhLgGUIcbTJLORsDYZCI_Tm4T8/edit?usp=sharing
+
+This file contain two folders:
+
+  - projetPreparatoire  : For the initial project. 
+  - finalProject        : For the final project.
+
+Both files contain distinct web applications projects that were(are) (being) constructed for the course LINFO1212 At UCLouvain. Each file contain it's own README to explain in depth the web application.
+
+Authors are : Jonathan Manzi Mihigo, Raissa Hirwa Mihigo and Vany Valentin Ingenzi.
+>>>>>>> a0a671253d9a2c1519379046691c02056e9c35ff
