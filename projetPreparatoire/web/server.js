@@ -27,6 +27,7 @@ MongoClient.connect('mongodb://localhost:27017', {useUnifiedTopology: true}, (er
     const date = new Date();
     // Loading the incidents
     let incidents;
+
     loadingIncidents(db_)
         .then( r => {
             incidents = r.result;
@@ -62,6 +63,17 @@ MongoClient.connect('mongodb://localhost:27017', {useUnifiedTopology: true}, (er
         res.render('login.html');
     })
 
+    // When getting search request
+    app.get('/search', function (req, res){
+        userSearching(db_, "incidents", req.query.search)
+            .then(r =>{
+                if (r){ res.render('index.html', {username : req.session.username,
+                                                                incidents : r,
+                                                                search:req.query.search});}
+                else{ res.status(204);}})
+            .catch(err => { throw err; })
+    });
+
     /**************** Post Requests ****************/
 
     // When submitting a report
@@ -81,9 +93,9 @@ MongoClient.connect('mongodb://localhost:27017', {useUnifiedTopology: true}, (er
         loggingIn(db_, req.body).then(r => {
             if (r.status) {                                  //Login passed
                 req.session.username = req.body.username;
-                req.session.admin = req.session.username === 'vany';
+                req.session.admin = (req.session.username === 'vany') ;
                 res.render('index.html', {incidents: incidents, username: req.session.username});
-            } else {                                             //Login failed
+            } else {                                         //Login failed
                 res.render("login.html", {"msgLogin": r.msg, username: req.body.username});
             }
         });
@@ -186,7 +198,7 @@ async function loggingIn(db, body){
         this.msg = "No username with that name found";
         return this;
     }
-};
+}
 
 /*
     When signing somebody up
@@ -203,12 +215,11 @@ async function signingUp(db, body){
     if(rez.length > 0){
         return false;
     }else{
-        
-        bcrypt.hash(pswd, saltRounds, (hash) => {
+        bcrypt.hash(pswd, saltRounds, (err, hash) => {
+            if (err) throw err;
             insertIntoDb(db, 'users',{username: body.signUsername,
                 email: body.email, password: hash, name: body.signName});
-        })
-
+        });
         return true;
     }
 }
@@ -249,4 +260,16 @@ async function deleteDocument(db, collection, spec){
             this.status = r.deletedCount !== 0;
         }).catch( err => { throw err; })
     return this;
+}
+
+/*
+    Handles searching requests.
+    db (Object)             : mongodb, db object.
+    searchString (String)   : a string of the user input.
+ */
+async function userSearching(db, collection, searchString){
+    await db.collection(collection).ensureIndex({ description : "text", address: "text", date: "text", user: "text"});
+    this.result = await db.collection(collection).find({ $text: { $search: searchString }},
+                                         { score: { $meta: "textScore" }}).sort( { score: { $meta: "textScore" } });
+    return this.result.toArray()
 }
