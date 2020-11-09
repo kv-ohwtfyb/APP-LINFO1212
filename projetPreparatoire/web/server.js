@@ -104,7 +104,7 @@ MongoClient.connect('mongodb://localhost:27017', {useUnifiedTopology: true}, (er
     });
 
     // When signing up
-    app.post('/sign', function (req, res) {
+    app.post('/sign', signinLimit, function (req, res) {
         // Check ups to ensure there's n't someone with the same username
         signingUp(db_, req.body).then(value => {
             if (value) {                                     //signup passed
@@ -140,10 +140,6 @@ app.use(express.static('static'));
 /*
     Variable that checks number of times you are requesting the page
 */
-app.use(limitter( {
-    max: 5,
-    windowMs:  1 * 60 * 1000,
-}));
 
 https.createServer({
     key         : fs.readFileSync('./ssl/key.pem'),
@@ -155,15 +151,25 @@ https.createServer({
     Variables that check how many times you trying to log in or you request the 'log in' page
 */
 const loginLimit = limitter( {
-    max: 5,
-    windowMs: 1 * 60 * 1000,
-    message : "YOU ENTERED THE WRONG USERNAME OR PASSWORD SO MANY TIMES, PLEASE TRY AGAIN LATER"
+    max: 5, //Max 5 essays
+    windowMs: 5 * 60 * 1000,  // 5 minutes
+    message : "You entered the wrong username or password so many times, Please try again later"
 });
 
 const loginRequestLimit = limitter( {
-    max: 5,
-    windowMs: 1 * 60 * 1000,
-    message: "Sheh. Now, please try again later"
+    max: 100,
+    windowMs: 60 * 60 * 1000, //1 hour
+    message: "Too much requests for this page. Please try again later"
+})
+
+/* 
+    Variable that checks accounts created for 1 user
+*/
+
+const signinLimit = limitter({
+    max:3, // Max 3 accounts that can be created
+    windowMs: 24 * 60 * 60 * 1000, // blocking for 24 hours
+    message : "Too much accounts were created with this IP. Please try again tomorrow"
 })
 
 /*
