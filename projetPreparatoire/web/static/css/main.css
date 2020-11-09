@@ -138,10 +138,11 @@ header span{
     background-color: transparent;
     height: 100%;
     width: 85%;
-    z-index: 1;
     margin: 0 auto;
-    display: block;
     padding: 0;
+    overflow: auto;
+    flex-direction: row;
+    align-content: center;
 }
 
 .search form input[type="text"]{
@@ -153,6 +154,14 @@ header span{
     font-size: 24px;
     margin: 0 auto;
     padding: 0;
+    flex-direction: row;
+}
+
+.search form label{
+    padding: 0;
+    margin: 0;
+    width: 80%;
+    height: 100%;
 }
 
 .search form input[type="text"]:focus{
@@ -167,18 +176,22 @@ header span{
     background-color: transparent;
     border-width: 0;
     height: 100%;
-    width: 99%;
+    width: 75%;
     outline-width: 0;
     font-size: 24px;
     font-weight: lighter;
 }
-
-.search img{
-    width: 30px;
-    height: 30px;
+.search form input[type="submit"]{
+    background-size: 40px;
+    background-image: url("../images/loop_magnifier.png");
+    width: 40px;
+    height: 42px;
+    border-width: 0;
+    background-color: white;
+    margin-top: 10px;
+    padding: 0;
+    align-self: center;
     float: right;
-    z-index: 2;
-    margin-right: 8px;
 }
 
 .bodyForm{
@@ -193,6 +206,10 @@ header span{
     padding-left: 2%;
     padding-right: 2%;
     margin: 0 auto;
+}
+
+.bodyForm section{
+    overflow: hidden;
 }
 
 .imagePreview{
@@ -564,3 +581,8 @@ footer{
     font-size: 12px;
     transition: all .3s ease-in-out;
 }
+
+#descriptionInput{
+    overflow: auto;
+}
+

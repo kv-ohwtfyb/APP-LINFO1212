@@ -8,6 +8,7 @@ const fs = require('fs');
 const Server = require('mongodb').Server;
 const https = require('https');
 const bcrypt = require('bcrypt');
+const limitter = require('express-rate-limit');
 
 app.engine('html', consolidate.hogan);
 app.set('views', 'templates');
@@ -27,6 +28,7 @@ MongoClient.connect('mongodb://localhost:27017', {useUnifiedTopology: true}, (er
     const date = new Date();
     // Loading the incidents
     let incidents;
+
     loadingIncidents(db_)
         .then( r => {
             incidents = r.result;
@@ -58,9 +60,20 @@ MongoClient.connect('mongodb://localhost:27017', {useUnifiedTopology: true}, (er
     })
 
     // When requesting the login page
-    app.get('/login', function (req, res) {
+    app.get('/login', loginRequestLimit, function (req, res) {
         res.render('login.html');
     })
+
+    // When getting search request
+    app.get('/search', function (req, res){
+        userSearching(db_, "incidents", req.query.search)
+            .then(r =>{
+                if (r){ res.render('index.html', {username : req.session.username,
+                                                                incidents : r,
+                                                                search:req.query.search});}
+                else{ res.status(204);}})
+            .catch(err => { throw err; })
+    });
 
     /**************** Post Requests ****************/
 
@@ -75,15 +88,16 @@ MongoClient.connect('mongodb://localhost:27017', {useUnifiedTopology: true}, (er
         }
     });
 
+    
     // When login in
-    app.post('/login', function (req, res) {
+    app.post('/login', loginLimit, function (req, res) {
         // db searching
         loggingIn(db_, req.body).then(r => {
             if (r.status) {                                  //Login passed
                 req.session.username = req.body.username;
-                req.session.admin = req.session.username === 'vany';
+                req.session.admin = (req.session.username === 'vany') ;
                 res.render('index.html', {incidents: incidents, username: req.session.username});
-            } else {                                             //Login failed
+            } else {                                         //Login failed
                 res.render("login.html", {"msgLogin": r.msg, username: req.body.username});
             }
         });
@@ -92,7 +106,7 @@ MongoClient.connect('mongodb://localhost:27017', {useUnifiedTopology: true}, (er
     //When logging out
 
     // When signing up
-    app.post('/sign', function (req, res) {
+    app.post('/sign', signinLimit, function (req, res) {
         // Check ups to ensure there's n't someone with the same username
         signingUp(db_, req.body).then(value => {
             if (value) {                                     //signup passed
@@ -125,13 +139,40 @@ MongoClient.connect('mongodb://localhost:27017', {useUnifiedTopology: true}, (er
 });
 
 app.use(express.static('static'));
+/*
+    Variable that checks number of times you are requesting the page
+*/
 
-options = {
+https.createServer({
     key         : fs.readFileSync('./ssl/key.pem'),
     cert        : fs.readFileSync('./ssl/cert.pem'),
     passphrase  : 'ndakwiyamye'
-};
-https.createServer(options, app).listen(8080);
+}, app).listen(8080);
+
+/*
+    Variables that check how many times you trying to log in or you request the 'log in' page
+*/
+const loginLimit = limitter( {
+    max: 5, //Max 5 essays
+    windowMs: 5 * 60 * 1000,  // 5 minutes
+    message : "You entered the wrong username or password so many times, Please try again later"
+});
+
+const loginRequestLimit = limitter( {
+    max: 100,
+    windowMs: 60 * 60 * 1000, //1 hour
+    message: "Too much requests for this page. Please try again later"
+})
+
+/* 
+    Variable that checks accounts created for 1 user
+*/
+
+const signinLimit = limitter({
+    max:3, // Max 3 accounts that can be created
+    windowMs: 24 * 60 * 60 * 1000, // blocking for 24 hours
+    message : "Too much accounts were created with this IP. Please try again tomorrow"
+})
 
 /*
     Returns a the result of a quest in the database.
@@ -166,6 +207,8 @@ function insertIntoDb(db, collection, body){
         .catch((err) =>{ throw err;});
 }
 
+
+
 /*
     When logging in
 
@@ -189,7 +232,7 @@ async function loggingIn(db, body){
         this.msg = "No username with that name found";
         return this;
     }
-};
+}
 
 /*
     When signing somebody up
@@ -206,12 +249,11 @@ async function signingUp(db, body){
     if(rez.length > 0){
         return false;
     }else{
-        
-        bcrypt.hash(pswd, saltRounds, (hash) => {
+        bcrypt.hash(pswd, saltRounds, (err, hash) => {
+            if (err) throw err;
             insertIntoDb(db, 'users',{username: body.signUsername,
                 email: body.email, password: hash, name: body.signName});
-        })
-
+        });
         return true;
     }
 }
@@ -252,4 +294,16 @@ async function deleteDocument(db, collection, spec){
             this.status = r.deletedCount !== 0;
         }).catch( err => { throw err; })
     return this;
+}
+
+/*
+    Handles searching requests.
+    db (Object)             : mongodb, db object.
+    searchString (String)   : a string of the user input.
+ */
+async function userSearching(db, collection, searchString){
+    await db.collection(collection).ensureIndex({ description : "text", address: "text", date: "text", user: "text"});
+    this.result = await db.collection(collection).find({ $text: { $search: searchString }},
+                                         { score: { $meta: "textScore" }}).sort( { score: { $meta: "textScore" } });
+    return this.result.toArray()
 }

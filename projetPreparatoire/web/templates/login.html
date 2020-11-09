@@ -22,10 +22,10 @@
             <a>Report it To Annihilate it</a>
         </section>
         <div class="search">
-            <form>
-                <input type="text" name="search">
+            <form action="/search" method="get">
+                <label for="searchInput"><input type="text" name="search" id="searchInput" minlength="2" required></label>
+                <input type="submit" alt="search" id="searchLogo" value="">
             </form>
-            <img src="images/loop_magnifier.png" alt="search">
         </div>
 		<span id="spanOnLoginPageHeader"></span>
 	</header>

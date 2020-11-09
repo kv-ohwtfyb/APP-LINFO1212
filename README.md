@@ -11,4 +11,3 @@ This file contain two folders:
 Both files contain distinct web applications projects that were(are) (being) constructed for the course LINFO1212 At UCLouvain. Each file contain it's own README to explain in depth the web application.
 
 Authors are : Jonathan Manzi Mihigo, Raissa Hirwa Mihigo and Vany Valentin Ingenzi.
->>>>>>> a0a671253d9a2c1519379046691c02056e9c35ff

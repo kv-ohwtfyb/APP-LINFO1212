@@ -25,10 +25,10 @@
             <a>Report it To Annihilate it</a>
         </section>
         <div class="search">
-            <form>
-                <input type="text" name="search">
+            <form action="/search" method="get">
+                <label for="searchInput"><input type="text" name="search" id="searchInput" minlength="2" required></label>
+                <input type="submit" alt="search" id="searchLogo" value="">
             </form>
-            <img src="images/loop_magnifier.png" alt="search">
         </div>
         <img src="images/user.png" alt="user">
         <a href="/login">{{username}}</a>
@@ -45,11 +45,12 @@
         <section id="descriptionInput">
             <p id="description">{{incident.description}}</p>
             <br>
-            <p>By :</p><p id="user">{{incident.user}}</p>
-            <p>On :</p><p id="date">{{incident.date}}</p>
         </section>
         <div class='addressInput' id="map">
             <p id="address">{{incident.address}}</p>
+            <p>Reported by</p>
+            <p id="user">{{incident.user}}</p>
+            <p id="date">{{incident.date}}</p>
         </div>
         {{#admin}}
             <button type="button" class="report" id="deleteButton">Delete Incident</button>
