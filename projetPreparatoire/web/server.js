@@ -89,6 +89,8 @@ MongoClient.connect('mongodb://localhost:27017', {useUnifiedTopology: true}, (er
         });
     });
 
+    //When logging out
+
     // When signing up
     app.post('/sign', function (req, res) {
         // Check ups to ensure there's n't someone with the same username
