@@ -8,6 +8,7 @@ const fs = require('fs');
 const Server = require('mongodb').Server;
 const https = require('https');
 const bcrypt = require('bcrypt');
+const limitter = require('express-rate-limit');
 
 app.engine('html', consolidate.hogan);
 app.set('views', 'templates');
@@ -59,7 +60,7 @@ MongoClient.connect('mongodb://localhost:27017', {useUnifiedTopology: true}, (er
     })
 
     // When requesting the login page
-    app.get('/login', function (req, res) {
+    app.get('/login', loginRequestLimit, function (req, res) {
         res.render('login.html');
     })
 
@@ -87,8 +88,9 @@ MongoClient.connect('mongodb://localhost:27017', {useUnifiedTopology: true}, (er
         }
     });
 
+    
     // When login in
-    app.post('/login', function (req, res) {
+    app.post('/login', loginLimit, function (req, res) {
         // db searching
         loggingIn(db_, req.body).then(r => {
             if (r.status) {                                  //Login passed
@@ -135,12 +137,34 @@ MongoClient.connect('mongodb://localhost:27017', {useUnifiedTopology: true}, (er
 });
 
 app.use(express.static('static'));
+/*
+    Variable that checks number of times you are requesting the page
+*/
+app.use(limitter( {
+    max: 5,
+    windowMs:  1 * 60 * 1000,
+}));
 
 https.createServer({
     key         : fs.readFileSync('./ssl/key.pem'),
     cert        : fs.readFileSync('./ssl/cert.pem'),
     passphrase  : 'ndakwiyamye'
 }, app).listen(8080);
+
+/*
+    Variables that check how many times you trying to log in or you request the 'log in' page
+*/
+const loginLimit = limitter( {
+    max: 5,
+    windowMs: 1 * 60 * 1000,
+    message : "YOU ENTERED THE WRONG USERNAME OR PASSWORD SO MANY TIMES, PLEASE TRY AGAIN LATER"
+});
+
+const loginRequestLimit = limitter( {
+    max: 5,
+    windowMs: 1 * 60 * 1000,
+    message: "Sheh. Now, please try again later"
+})
 
 /*
     Returns a the result of a quest in the database.
@@ -174,6 +198,8 @@ function insertIntoDb(db, collection, body){
         .then(()=> {})
         .catch((err) =>{ throw err;});
 }
+
+
 
 /*
     When logging in
