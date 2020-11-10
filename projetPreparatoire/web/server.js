@@ -266,7 +266,7 @@ function reporting(db, body, date, session, incidents){
     const newInc = {"description": body.description, "user": session.username,
         "address": body.streetAddress + "," + body.postalCode + " " + body.region,
         "image": null, "status": "Ongoing", "date": date.toLocaleDateString()};
-    insertIntoDb(db, newInc);
+    insertIntoDb(db, 'incidents', newInc);
     incidents.push(newInc);
     return true;
 }
