@@ -282,7 +282,6 @@ async function signingUp(db, body){
     session
     incidents(JSON)     : array fo incidents.
  */
-<<<<<<< HEAD
 async function reporting(db, body, date, session, incidents){
     try{
         const newInc = new IncidentSchema({
@@ -297,19 +296,9 @@ async function reporting(db, body, date, session, incidents){
         return true;
     } catch (err){
         console.error(err);
-        return false;
+    return false;
     }
-=======
-function reporting(db, body, date, session, incidents){
-    const newInc = {"description": body.description, "user": session.username,
-        "address": body.streetAddress + "," + body.postalCode + " " + body.region,
-        "image": null, "status": "Ongoing", "date": date.toLocaleDateString()};
-    insertIntoDb(db, 'incidents', newInc);
-    incidents.push(newInc);
-    return true;
->>>>>>> a19efbe080bcc6df3d4f592324e0bf5959226786
 }
-
 /*
     Loads up the list of incidents
     db (Object)         : mongodb, db object.
@@ -376,6 +365,6 @@ function savingImage(incident, imgEncoded) {
 function setImageSrc(incident){
     if (incident.image != null){
         incident["imgSrc"] = `data:${incident.imageType};charset=utf-8;base64,${incident.image.toString('base64')}`;
-    }else { incident["imgSrc"] = '';}
+    }else { incident["imgSrc"] = "" }
 }
 
