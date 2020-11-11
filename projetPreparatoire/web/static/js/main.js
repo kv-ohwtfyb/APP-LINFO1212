@@ -35,7 +35,13 @@ $(document).ready(function (){
   if (buttonToReportPage.length){
     buttonToReportPage.on('click', function () {
       window.open('/report','_parent');});
-  }
+  };
+  //This is for the second report button
+  const secondbuttonToReportPage = $('#toReportPage2');
+  if (secondbuttonToReportPage.length){
+    secondbuttonToReportPage.on('click', function () {
+      window.open('/report','_parent');});
+  };
 
   // Checks the header in the home page
   $(window).on('scroll', function () {
