@@ -225,15 +225,19 @@ header span{
     flex-direction: column;
 }
 
-.imagePreview img{
+.filepond{
     width: 100%;
-    font-family: "Montserrat", serif;
     max-height: 90%;
     font-size: 24px;
     align-self: center;
     margin-top: auto;
     margin-bottom: auto;
     text-transform: uppercase;
+}
+
+.filepond label{
+    font-family: "Montserrat", serif;
+    font-size: 16px;
 }
 
 .imagePreview input {
@@ -255,6 +259,9 @@ header span{
     grid-row: 1;
 }
 
+#descriptionInput:focus{
+    width: 100%;
+}
 .addressInput{
     width: 100%;
     height: 40%;

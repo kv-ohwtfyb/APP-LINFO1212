@@ -34,8 +34,9 @@
         <a href="/login">{{username}}</a>
     </header>
     <section class="bodyForm">
+
         <section class="imagePreview" id="imagePreview">
-            <img src="" id="theImagePreviewer" alt="Image Preview">
+            <img src={{incident.imgSrc}} id="theImagePreviewer" alt="Image Preview" class="filepond">
         </section>
         <nav class="navBar">
             <a id="homeIcon" href="/#homeDisplay"></a>
@@ -44,7 +45,6 @@
         </nav>
         <section id="descriptionInput">
             <p id="description">{{incident.description}}</p>
-            <br>
         </section>
         <div class='addressInput' id="map">
             <p id="address">{{incident.address}}</p>

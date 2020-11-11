@@ -48,10 +48,10 @@ $(document).ready(function (){
   $('#tableOfIncidents').on('click', '.tableRow',function () {
     const row = $(this).closest("tr");
     const userDate = row.find('.userAndDate').text().slice(1,-2).split("\n");
-    console.log(userDate[0]);
     const data = {"description":row.find('.description').text(),
                   "address":    row.find('.address').text(),
-                  "user":       userDate[0].trim(), "date":userDate[1].trim()}
+                  "user":       userDate[0].trim(), "date":userDate[1].trim(),
+                  }
     window.open('/preview?'+encodeQuery(data));
   });
 
@@ -66,6 +66,10 @@ $(document).ready(function (){
                     else {alert("Couldn't delete the incident");}
                   }});
     })}
+
+  const imageHolder = $('#theImagePreviewer')
+  imageHolder.css("height", "90vh");
+
 });
 
 /*
@@ -88,3 +92,15 @@ function encodeQuery(data){
                   + encodeURIComponent(data[d]) + '&'
     return query.slice(0, -1)
 }
+
+document.addEventListener('DOMContentLoaded', ()=>{
+    FilePond.registerPlugin(FilePondPluginFileEncode,
+                            FilePondPluginImagePreview,
+                            FilePondPluginImageResize);
+    FilePond.setOptions({
+      stylePanelAspectRatio: 4/5,
+      imageResizeTargetHeight: 125,
+      imageResizeTargetWidth: 100,
+    });
+    FilePond.parse(document.body)
+});
