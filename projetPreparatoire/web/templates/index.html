@@ -25,12 +25,12 @@
         </section>
         <div class="search">
             <form action="/search" method="get">
-                <label for="searchInput"><input type="text" name="search" id="searchInput" minlength="2" required value={{search}}></label>
+                <label for="searchInput"><input type="search" name="search" id="searchInput" minlength="2" required value={{search}}></label>
                 <input type="submit" alt="search" id="searchLogo" value="">
             </form>
         </div>
         <img src="images/user.png" alt="user">
-        <a href="/login">{{username}}</a>
+        <a href="/login" id="sessionUsername">{{username}}</a>
     </header>
     <nav class="navBar" id="navBarOnHomePage">
         <a id="homeIcon" href="/#homeDisplay"></a>
@@ -73,7 +73,6 @@
     </section>
     <button type="button" class="report" id="toReportPage2">Report</button>
     <br><br><br><br><br>
-    
     <footer>
         <section id="contact">
             <h2>CONTACT</h2>
