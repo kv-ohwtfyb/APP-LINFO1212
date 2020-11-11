@@ -24,10 +24,6 @@ app.use(session({
     saveUninitialized: true,
     cookie: {path: '/', httpOnly: true, limit: 30 * 60 * 1000}
 }));
-app.use(function (req,res,next){
-    res.locals.isAuthenticated = isIn;
-    next();
-});
 
 // MongoDb connection
 MongoClient.connect('mongodb://localhost:27017', {useUnifiedTopology: true}, (err, db) => {
@@ -45,9 +41,9 @@ MongoClient.connect('mongodb://localhost:27017', {useUnifiedTopology: true}, (er
     /**************** Get Requests ****************/
 
     // When requesting the home page.
-    app.get('/', function (req, res) {
-        console.log(req.isAuthenticated())
-        res.render('index.html', {incidents: incidents, username: req.session.username || "Please login"});
+    app.get('/', function (req , res) {
+        res.render('index.html', {incidents: incidents,
+            username: req.session.username || "Please login", loggedIn :(req.session.username != null)})
     });
 
 
@@ -57,8 +53,9 @@ MongoClient.connect('mongodb://localhost:27017', {useUnifiedTopology: true}, (er
             user:req.query.user, date:req.query.date})
             .then(inc => {
                 setImageSrc(inc);
+                console.log(req.session.username);
                 res.render('incidentPreview.html', {
-                    username: inc.username || "Please login",
+                    username: req.session.username || "Please login",
                     incident: inc,
                     admin: req.session.admin
                 });
@@ -115,16 +112,13 @@ MongoClient.connect('mongodb://localhost:27017', {useUnifiedTopology: true}, (er
     // When login in
     app.post('/login', loginLimit, function (req, res) {
         // db searching
-        loggingIn(db_, req.body).then(r => {
-
-                res.render('index.html', {incidents: incidents, username: req.session.username});
-
+        loggingIn(db_, req.body, req.session).then(r => {
+            if (r.status) {                                  //Login passed
+               res.redirect('/');
             } else {                                         //Login failed
                 res.render("login.html", {"msgLogin": r.msg, username: req.body.username});
             }
         });
-
-
     });
 
     //When logging out
@@ -149,10 +143,7 @@ MongoClient.connect('mongodb://localhost:27017', {useUnifiedTopology: true}, (er
         signingUp(db_, req.body).then(value => {
             if (value) {                                     //signup passed
                 req.session.username = req.body.signUsername;
-                res.render('index.html', {
-                    username: req.session.username || "Please Login",
-                    incidents: incidents
-                });
+                res.redirect('/');
             } else {                                         //signup failed
                 res.render("login.html", {"msgSignUp": "Another user has the same username. Try a different using another."});
             }
@@ -181,7 +172,6 @@ MongoClient.connect('mongodb://localhost:27017', {useUnifiedTopology: true}, (er
 });
 
 app.use(express.static('static'));
-
 /*
     Variable that checks number of times you are requesting the page
 */
@@ -192,7 +182,6 @@ https.createServer({
 }, app).listen(8080, function () {
     console.log( new Date().toLocaleTimeString() + " Server running on port 8080.");
 });
-
 /*
     Variables that check how many times you trying to log in or you request the 'log in' page
 */
@@ -208,7 +197,7 @@ const loginRequestLimit = limiter( {
     message: "Too much requests for this page. Please try again later"
 })
 
-/* 
+/*
     Variable that checks accounts created for 1 user.
 */
 const signInLimit = limiter({
@@ -258,20 +247,22 @@ function insertIntoDb(db, collection, body){
     db (Object)         : mongodb, db object.
     body(JSON)          : body of the request.
  */
-async function loggingIn(db, body){
+async function loggingIn(db, body, session){
     const result = await fetchFromDb(db, "users",{username: body.username}, false, true);
     if (result){
         if(await bcrypt.compare(body.password, result.password)){
             this.status = true;
             this.msg = "";
+            session.username = result.username;
+            session.admin = (result.admin === 1);
             return this;
         }else{
-           this.status = false; 
+           this.status = false;
            this.msg = "Password incorrect try again";
            return this;
         }
     }else{
-        this.status = false; 
+        this.status = false;
         this.msg = "No username with that name found";
         return this;
     }
@@ -296,7 +287,7 @@ async function signingUp(db, body){
             if (err) throw err;
             insertIntoDb(db, 'users', {
                 username: body.signUsername,
-                email: body.email, password: hash, name: body.signName
+                email: body.email, password: hash, name: body.signName, admin: 0
             });
         });
         return true;
@@ -329,17 +320,7 @@ async function reporting(db, body, date, session, incidents){
     return false;
     }
 }
-<<<<<<< HEAD
 
-function authentificationMiddleware(){
-    return(req,res,next) => {
-        if (req.isAuthenticated()) return next();
-        req.redirect('/login')
-    }
-}
-
-=======
->>>>>>> 38fcd4c82aada9a84b1c0faf2e7f8e66c4660ca8
 /*
     Loads up the list of incidents
     db (Object)         : mongodb, db object.
@@ -408,4 +389,3 @@ function setImageSrc(incident){
         incident["imgSrc"] = `data:${incident.imageType};charset=utf-8;base64,${incident.image.toString('base64')}`;
     }else { incident["imgSrc"] = "" }
 }
-

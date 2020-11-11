@@ -145,7 +145,7 @@ header span{
     align-content: center;
 }
 
-.search form input[type="text"]{
+.search form input[type="search"]{
     background-color: transparent;
     border-width: 0;
     height: 100%;

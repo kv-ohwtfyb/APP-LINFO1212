@@ -72,16 +72,12 @@ $(document).ready(function (){
                     if (response.success) {window.open('/','_parent');}
                     else {alert("Couldn't delete the incident");}
                   }});
-<<<<<<< HEAD
-    })
-  };
 
-=======
-    })}
+    })
+  }
 
   const imageHolder = $('#theImagePreviewer')
   imageHolder.css("height", "90vh");
->>>>>>> 38fcd4c82aada9a84b1c0faf2e7f8e66c4660ca8
 
 });
 
