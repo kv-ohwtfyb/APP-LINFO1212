@@ -7,7 +7,7 @@ The web application main functionalities is to be able to report, read, (delete)
 ## Functionalities
 The functionalities available in the web applications are :
   - Viewing incidents.
-  - Authentification (Log in / Register).
+  - Authentication (Log in / Register).
   - Reporting an incident.
   - Deleting an incident (Admin).
   - Searching incidents based your criteria.
