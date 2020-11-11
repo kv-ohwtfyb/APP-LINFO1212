@@ -31,12 +31,13 @@
                 <input type="submit" alt="search" id="searchLogo" value="">
             </form>
         </div>
-        <img src="images/user.png" alt="user">
-        <a href="/login">{{username}}</a>
-        {{#if isIn}}
-            <a href = "/logout"><img src="images/logout.svg" alt="LOG OUT"> </a>
-        {{/if}}
-
+        <a href="/login" id="sessionUsername">{{username}}</a>
+        {{^loggedIn}}
+            <img src="images/user.png" alt="user">
+        {{/loggedIn}}
+        {{#loggedIn}}
+            <a href="/logout" id="logout"></a>
+        {{/loggedIn}}
     </header>
     <section class="bodyForm">
 
@@ -57,9 +58,6 @@
             <p id="user">{{incident.user}}</p>
             <p id="date">{{incident.date}}</p>
         </div>
-        {{#admin}}
-            <button type="button" class="report" id="deleteButton">Delete Incident</button>
-        {{/admin}}
     </section>
     <footer>
         <section id="contact">

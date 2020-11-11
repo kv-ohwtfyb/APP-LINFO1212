@@ -76,7 +76,7 @@ $(document).ready(function (){
     })
   }
 
-  const imageHolder = $('#theImagePreviewer')
+  const imageHolder = $('#theImagePreviewer');
   imageHolder.css("height", "90vh");
 
 });

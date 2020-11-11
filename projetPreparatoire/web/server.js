@@ -8,7 +8,6 @@ const fs = require('fs');
 const Server = require('mongodb').Server;
 const https = require('https');
 const bcrypt = require('bcrypt');
-const limitter = require('express-rate-limit');
 const limiter = require('express-rate-limit');
 const imageMimeTypes = ["image/jpeg", "image/png", "images/gif"]; // Accepted Image Types
 const IncidentSchema = require('./static/js/incidentModel');
@@ -49,14 +48,13 @@ MongoClient.connect('mongodb://localhost:27017', {useUnifiedTopology: true}, (er
 
     // When requesting the preview page
     app.get('/preview', function (req, res) {
-        db_.collection("incidents").findOne({description : req.query.description, address: req.query.address,
-            user:req.query.user, date:req.query.date})
+        fetchFromDb(db_, 'incidents', {description : req.query.description, address: req.query.address,
+            user:req.query.user, date:req.query.date},false, true)
             .then(inc => {
                 setImageSrc(inc);
-                console.log(req.session.username);
                 res.render('incidentPreview.html', {
                     username: req.session.username || "Please login",
-                    incident: inc,
+                    incident: inc,  loggedIn :(req.session.username != null),
                     admin: req.session.admin
                 });
             })
@@ -84,7 +82,7 @@ MongoClient.connect('mongodb://localhost:27017', {useUnifiedTopology: true}, (er
                 if (r) {
                     res.render('index.html', {
                         username: req.session.username,
-                        incidents: r,
+                        incidents: r, loggedIn :(req.session.username != null),
                         search: req.query.search
                     });
                 } else {
@@ -101,12 +99,15 @@ MongoClient.connect('mongodb://localhost:27017', {useUnifiedTopology: true}, (er
     // When submitting a report
     app.post('/report', function (req, res) {
         if (req.session.username) {                         // If he is logged in
-            if (reporting(db_, req.body, date, req.session, incidents)) {
-                res.render('index.html', {incidents: incidents, username: req.session.username});
+            reporting(db_, req.body, date, req.session, incidents)
+                .then(promise => {
+                    if (promise.status) { res.redirect('/'); }
+                    else { ( res.send("Sorry an error was detected when inserting an incident")); }
+                })
+                .catch( err => { res.send(424)})
+        }else {                                            // If he hasn't logged in
+                res.render('login.html', {"msgLogin": "Please first login"});
             }
-        } else {                                            // If he hasn't logged in
-            res.render('login.html', {"msgLogin": "Please first login"});
-        }
     });
 
     // When login in
@@ -124,18 +125,12 @@ MongoClient.connect('mongodb://localhost:27017', {useUnifiedTopology: true}, (er
     //When logging out
     app.get('/logout',function(req,res){
         if(req.session.username){
-            req.session.logout();
             req.session.destroy(function (err) {
-                if (err) {
-                    console.log(err);
-                } else {
-                    res.redirect('/');
-                }
+                if (err) throw err;
+                res.redirect('/');
             });
-
         }
     });
-
 
     // When signing up
     app.post('/sign', signInLimit, function (req, res) {
@@ -205,8 +200,6 @@ const signInLimit = limiter({
     windowMs: 24 * 60 * 60 * 1000, // blocking for 24 hours
     message : "Too much accounts were created with this IP. Please try again tomorrow"
 })
-
-
 
 /*
     Returns a the result of a quest in the database.
@@ -313,11 +306,14 @@ async function reporting(db, body, date, session, incidents){
         });
         await savingImage(newInc,body.image);
         await newInc.save();
+        setImageSrc(newInc);
         incidents.push(newInc);
-        return true;
+        this.status = true;
+        return this;
     } catch (err){
         console.error(err);
-    return false;
+        this.status = false;
+        return this;
     }
 }
 
