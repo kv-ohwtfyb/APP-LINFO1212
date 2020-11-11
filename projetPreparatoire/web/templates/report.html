@@ -7,10 +7,17 @@
 <!--    CSS Imports-->
     <link rel='stylesheet'  href='https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.css'/>
     <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Montserrat' >
+    <link href="https://unpkg.com/filepond/dist/filepond.css" rel="stylesheet">
+    <link href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css" rel="stylesheet">
+
     <link rel="stylesheet" href="css/main.css">
 
 <!--    JavaScript imports-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.js"></script>
+    <script src="https://unpkg.com/filepond-plugin-file-encode/dist/filepond-plugin-file-encode.js"></script>
+    <script src="https://unpkg.com/filepond-plugin-image-resize/dist/filepond-plugin-image-resize.js"></script>
+    <script src="https://unpkg.com/filepond/dist/filepond.min.js"></script>
     <script src="js/main.js"></script>
 </head>
 <body>
@@ -34,15 +41,14 @@
     </header>
     <form class="bodyForm" id="reportForm" method="POST" action="/report">
         <section class="imagePreview" id="imagePreview">
-            <input type="file" accept="image/*" name="image" id="imageInput" onchange="previewImage(event)">
-            <img id="theImagePreviewer" alt="Image Preview">
+            <input type="file" name="image" class="filepond">
         </section>
         <nav class="navBar">
             <a id="homeIcon" href="/#homeDisplay"></a>
             <a id="listIcon" href="/#tableOfIncidents"></a>
             <a id="mailIcon" href="#contact"></a>
         </nav>
-        <textarea id="descriptionInput" placeholder="Description..." name="description"></textarea>
+        <label for="descriptionInput"></label><textarea id="descriptionInput" placeholder="Description..." name="description"></textarea>
         <section class='addressInput' id="addressInput">
             <label for="streetNameAndNumber">Street, Number<input type="text" id="streetNameAndNumber" name="streetAddress">
             </label>

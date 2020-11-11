@@ -36,7 +36,13 @@ $(document).ready(function (){
   if (buttonToReportPage.length){
     buttonToReportPage.on('click', function () {
       window.open('/report','_parent');});
-  }
+  };
+  //This is for the second report button
+  const secondbuttonToReportPage = $('#toReportPage2');
+  if (secondbuttonToReportPage.length){
+    secondbuttonToReportPage.on('click', function () {
+      window.open('/report','_parent');});
+  };
 
   // Checks the header in the home page
   $(window).on('scroll', function () {
@@ -49,10 +55,10 @@ $(document).ready(function (){
   $('#tableOfIncidents').on('click', '.tableRow',function () {
     const row = $(this).closest("tr");
     const userDate = row.find('.userAndDate').text().slice(1,-2).split("\n");
-    console.log(userDate[0]);
     const data = {"description":row.find('.description').text(),
                   "address":    row.find('.address').text(),
-                  "user":       userDate[0].trim(), "date":userDate[1].trim()}
+                  "user":       userDate[0].trim(), "date":userDate[1].trim(),
+                  }
     window.open('/preview?'+encodeQuery(data));
   });
 
@@ -66,9 +72,16 @@ $(document).ready(function (){
                     if (response.success) {window.open('/','_parent');}
                     else {alert("Couldn't delete the incident");}
                   }});
+<<<<<<< HEAD
     })
   };
 
+=======
+    })}
+
+  const imageHolder = $('#theImagePreviewer')
+  imageHolder.css("height", "90vh");
+>>>>>>> 38fcd4c82aada9a84b1c0faf2e7f8e66c4660ca8
 
 });
 
@@ -94,3 +107,15 @@ function encodeQuery(data){
                   + encodeURIComponent(data[d]) + '&'
     return query.slice(0, -1)
 }
+
+document.addEventListener('DOMContentLoaded', ()=>{
+    FilePond.registerPlugin(FilePondPluginFileEncode,
+                            FilePondPluginImagePreview,
+                            FilePondPluginImageResize);
+    FilePond.setOptions({
+      stylePanelAspectRatio: 4/5,
+      imageResizeTargetHeight: 125,
+      imageResizeTargetWidth: 100,
+    });
+    FilePond.parse(document.body)
+});
