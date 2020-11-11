@@ -40,9 +40,12 @@ We had to make a secure web app, so we needed to create use a https server for t
 #### BCRYPT JS
 We had to hash sensitive informations from clients for extra ptotection so we used this library for that task.
 
+#### EXPRESS-RATE-LIMIT
+This was for another extra protection of clients' sensitive informations against brute-force attack, etc. 
+
 ## DataBase Structure
 
-Since we use MongoDb we will be using theri terminology here.
+Since we use MongoDb we will be using the terminology here.
 In the application we use a database called "projectdb". 
 This databse contain the following collections :
 
@@ -59,7 +62,7 @@ This databse contain the following collections :
       This index will be used when the user's input search put is all text meaning he's looking for an incident that fit a certain description.
   
   ##### * ( {date : '...'})        
-      This index will be used when the user input is only digits with '.',',' therefore looking for a date.
+      This index will be used when the user input is only digits with "." / "," therefore looking for a date.
   
 #### - users : 
   Containing users info. 
@@ -70,12 +73,20 @@ This databse contain the following collections :
 #### - images :
   Containing images info.
 
+#### file 'DBCOMMANDS'
+To make things a little easier for you, we created a file "dbCommands.js" that contains all necessary commands needed to copy our database structure
+in your MongoDB.
+
+To copy our database, check the 'Run App' section
 
 ## Run App
 
 To run the app :
   - Make sure you have a mongodb server running on port 27017.
-  - (For better experience make sure you respect the db structure).
+  - (For better experience make sure you respect the db structure). To do so, run 'mongo < dbcommands.js' in  a new terminal (Make sure you are in 
+      the same folder as the file).
+    ATTENTION : You only have to do this once (not everytime you run the server or mongod).
+    
   - You installed all the dependencies.
   - Open "web" folder.
   - Open terminal in the folder and run this command "node server.js".
