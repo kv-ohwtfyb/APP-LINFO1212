@@ -193,6 +193,9 @@ header span{
     align-self: center;
     float: right;
 }
+li {
+    text-decoration: none;
+}
 
 .bodyForm{
     width: 96%;

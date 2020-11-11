@@ -9,6 +9,7 @@ const Server = require('mongodb').Server;
 const https = require('https');
 const bcrypt = require('bcrypt');
 const limitter = require('express-rate-limit');
+const passport = require('passport');
 
 app.engine('html', consolidate.hogan);
 app.set('views', 'templates');
@@ -21,6 +22,10 @@ app.use(session({
     saveUninitialized: true,
     cookie: {path: '/', httpOnly: true}
 }));
+app.use(function (req,res,next){
+    res.locals.isAuthenticated = isIn;
+    next();
+});
 
 // MongoDb connection
 MongoClient.connect('mongodb://localhost:27017', {useUnifiedTopology: true}, (err, db) => {
@@ -38,8 +43,10 @@ MongoClient.connect('mongodb://localhost:27017', {useUnifiedTopology: true}, (er
 
     // When requesting the home page.
     app.get('/', function (req, res) {
+        console.log(req.isAuthenticated())
         res.render('index.html', {incidents: incidents, username: req.session.username || "Please login"});
     });
+
 
     // When requesting the preview page
     app.get('/preview', function (req, res) {
@@ -50,7 +57,7 @@ MongoClient.connect('mongodb://localhost:27017', {useUnifiedTopology: true}, (er
                 "user": req.query.user || 'Not provided', "status": req.query.status || 'Not provided',
                 "date": req.query.date
             },
-            admin: req.session.admin
+            admin: req.session.admin,
         });
     });
 
@@ -93,17 +100,35 @@ MongoClient.connect('mongodb://localhost:27017', {useUnifiedTopology: true}, (er
     app.post('/login', loginLimit, function (req, res) {
         // db searching
         loggingIn(db_, req.body).then(r => {
-            if (r.status) {                                  //Login passed
+            isIn = r.status;
+            if (r.status) {                         //Login passed
                 req.session.username = req.body.username;
-                req.session.admin = (req.session.username === 'vany') ;
+                req.session.admin = (req.session.username === 'vany');
                 res.render('index.html', {incidents: incidents, username: req.session.username});
+
             } else {                                         //Login failed
                 res.render("login.html", {"msgLogin": r.msg, username: req.body.username});
             }
         });
+
+
     });
 
     //When logging out
+    app.get('/logout',function(req,res){
+        if(req.session.username){
+            req.session.logout();
+            req.session.destroy(function (err) {
+                if (err) {
+                    console.log(err);
+                } else {
+                    res.redirect('/');
+                }
+            });
+
+        }
+    });
+
 
     // When signing up
     app.post('/sign', signinLimit, function (req, res) {
@@ -119,6 +144,7 @@ MongoClient.connect('mongodb://localhost:27017', {useUnifiedTopology: true}, (er
                 res.render("login.html", {"msgSignUp": "Another user has the same username. Try a different using another."});
             }});
     });
+
 
     /**************** delete Requests ****************/
 
@@ -173,6 +199,8 @@ const signinLimit = limitter({
     windowMs: 24 * 60 * 60 * 1000, // blocking for 24 hours
     message : "Too much accounts were created with this IP. Please try again tomorrow"
 })
+
+
 
 /*
     Returns a the result of a quest in the database.
@@ -271,6 +299,13 @@ function reporting(db, body, date, session, incidents){
     insertIntoDb(db, newInc);
     incidents.push(newInc);
     return true;
+}
+
+function authentificationMiddleware(){
+    return(req,res,next) => {
+        if (req.isAuthenticated()) return next();
+        req.redirect('/login')
+    }
 }
 
 /*

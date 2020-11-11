@@ -30,6 +30,7 @@ $(document).ready(function (){
     }));
   }
 
+
   // If the report page clicked
   const buttonToReportPage = $('#toReportPage');
   if (buttonToReportPage.length){
@@ -65,8 +66,13 @@ $(document).ready(function (){
                     if (response.success) {window.open('/','_parent');}
                     else {alert("Couldn't delete the incident");}
                   }});
-    })}
+    })
+  };
+
+
 });
+
+
 
 /*
 * Previews an image of the when uploading an image on the report page.
