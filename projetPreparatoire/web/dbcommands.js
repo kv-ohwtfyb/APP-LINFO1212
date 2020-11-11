@@ -1,7 +1,7 @@
 use projectdb
 db.incidents.insert([
-    {"description" : "The public bin is overfilled.", "user" : "vany", "address" : "The street Name,1283 Province", "date" : "11/11/2020"}
-{ "description" : "There's a riot I can't sleep", "user" : "anotherUser", "address" : "This streeet,2324 That Province", "date" : "11/11/2020"}])
+    {"description" : "The public bin is overfilled.", "user" : "vany", "address" : "The street Name,1283 Province", "date": "11/11/2020"},
+{ "description" : "There's a riot I can't sleep", "user" : "anotherUser", "address" : "This streeet,2324 That Province", "date": "11/11/2020"}])
 db.incidents.createIndex({ description : "text", address: "text", date: "text", user: "text"})
 db.users.insert([
     {"username" : "loveisgood", "admin" : "1", "email" : "mushipatrick99@gmail.com", "password" : "$2b$10$EiV9OoQljGrt8o3qsstmbetXeb4mbCYvpFmS46SkMwbKGTBIOR/p."},

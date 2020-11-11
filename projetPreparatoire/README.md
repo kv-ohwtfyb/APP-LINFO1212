@@ -86,7 +86,7 @@ To run the app :
   - (For better experience make sure you respect the db structure). To do so, run 'mongo < dbcommands.js' in  a new terminal (Make sure you are in 
       the same folder as the file).
     ATTENTION : You only have to do this once (not everytime you run the server or mongod).
-    
+    (Due to the mongodb structure we couldn't load our binary data so try to report incidents with your own images)
   - You installed all the dependencies.
   - Open "web" folder.
   - Open terminal in the folder and run this command "node server.js".
