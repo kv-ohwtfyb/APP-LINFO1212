@@ -12,7 +12,6 @@ const limiter = require('express-rate-limit');
 const imageMimeTypes = ["image/jpeg", "image/png", "images/gif"]; // Accepted Image Types
 const IncidentSchema = require('./static/js/incidentModel');
 
-
 app.engine('html', consolidate.hogan);
 app.set('views', 'templates');
 
@@ -62,7 +61,11 @@ MongoClient.connect('mongodb://localhost:27017', {useUnifiedTopology: true}, (er
 
     // When requesting the report page
     app.get('/report', function (req, res) {
-        res.render('report.html', {username: req.session.username || "Please login"});
+        if (req.session.username){
+            res.render('report.html', {username: req.session.username || "Please login"});
+        }else {
+            res.render('login.html');
+        }
     })
 
     // When requesting the login page
