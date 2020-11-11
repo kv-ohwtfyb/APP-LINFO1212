@@ -430,7 +430,6 @@ input[type="text"], textarea{
 
 .report:active {
     outline:0;
-    text-decoration-width: 0;
     border-width: 0;
 }
 

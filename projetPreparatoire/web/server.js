@@ -111,7 +111,7 @@ MongoClient.connect('mongodb://localhost:27017', {useUnifiedTopology: true}, (er
         loggingIn(db_, req.body).then(r => {
             if (r.status) {                                  //Login passed
                 req.session.username = req.body.username;
-                req.session.admin = (req.session.username === 'vany');
+                req.session.admin = (req.session.username === 'vany' || 'hirwa' || 'jonathan');
                 res.render('index.html', {incidents: incidents, username: req.session.username});
             } else {                                         //Login failed
                 res.render("login.html", {"msgLogin": r.msg, username: req.body.username});
