@@ -1,6 +1,7 @@
 # Projet finale
 This folder contains the final project for the LINFO1212 Course. 
-
+This is a link to our [XD UI design](https://xd.adobe.com/view/55df3040-04f0-4185-98be-db1e66c10891-008c/).
+And here the link to our [tasks timeline](https://docs.google.com/document/d/1ffFzls8U0NDZME7glb_DqhvGBNL_LUBWAEz5BC5bzjw/edit).
 ## 1. Abstract
 This application is a web application that allows UCLouvain students to order food in all the restaurants on the Louvain La neuve Campus, and have their orders delivered to the Halls in which they selected. 
 
