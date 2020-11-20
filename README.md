@@ -4,7 +4,7 @@ Projet d'approfondissement
 This file contain two folders:
 
   - projetPreparatoire  : For the initial project. 
-  - finalProject        : For the final project.
+  - projetFinale        : For the final project.
 
 Both files contain distinct web applications projects that were(are) (being) constructed for the course LINFO1212 At UCLouvain. Each file contain it's own README to explain in depth the web application.
 
