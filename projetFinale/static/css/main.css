@@ -1,9 +1,228 @@
 :root{
-
+    /* Colors variables*/
+    --green : #2EC4B6;
+    --red : #E71D36;
+    --orange: #FF9F1C;
+    --grey : #C4C4C44D;
+    --shadow : 0px 0px 6px #00000029;
 }
 
 body{
     padding:0;
     margin: 0;
-    width: 100vw;
+    width: 100%;
+    min-width: fit-content;
+    font-family: "HelveticaNeue", sans-serif;
+    text-align: center;
 }
+
+header{
+    width: 100%;
+    height: 60px;
+    display: grid;
+    grid-template-rows: 60px;
+    grid-template-columns: 40px 230px auto 100px;
+    align-items: center;
+    background-color: var(--grey);
+}
+
+header div{
+    margin: auto;
+}
+
+header form{
+    margin: 0 auto;
+}
+
+header form input[type=search]{
+    height: 30px;
+    width: 420px;
+    margin: auto;
+    border-color: black;
+    border-top: 1px;
+    border-left: 1px;
+    border-right: 1px;
+    border-bottom-width: 3px;
+}
+
+header form input[type=submit]{
+    width: 20px;
+    height: 20px;
+    border: 0;
+    background-image: url("./../images/loop_magnifier.png");
+    background-size: 20px;
+}
+
+header form input[type=submit]:active{
+    border-width: 0;
+}
+
+.name-logo{
+    text-align: center;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.name-logo h2{
+    margin: 0;
+    color: var(--orange);
+}
+
+.name-logo h3{
+    color: black;
+}
+
+.name-logo h4{
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.plate{
+    width: 50px;
+    height: 30px;
+    margin: auto;
+    display: flex;
+    flex-direction: row;
+    background-color: black;
+    color: #FFFFFF;
+    align-items: center;
+    text-align: center;
+}
+.plate img{
+    content: url("./../images/plate.png");
+    width: 20px;
+    height: 20px;
+    margin-left: auto;
+    margin-right: 0;
+}
+
+.plate p{
+    margin-left: 0;
+    margin-right: auto;
+}
+
+.emojis-section{
+    width: 50%;
+    margin: auto;
+    height: 50px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.emojis-section a{
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.emojis-section a img{
+    height: 25px;
+}
+
+.emojis-section a p{
+    margin: 0;
+    font-size: 10px;
+}
+
+.popular-section{
+    height: 180px;
+    background-color: var(--green);
+    text-align: center;
+}
+
+.popular-section h1{
+    z-index: 1;
+    color: white;
+    margin: 0;
+    left: 50%;
+}
+
+.popular-section section{
+    z-index: 2;
+    display: flex;
+    flex-direction: row;
+}
+
+.popular-section a{
+    width: 105px;
+    height: 105px;
+    display: flex;
+    border-radius: 100%;
+    align-items: center;
+    margin: auto;
+}
+.popular-section a img{
+
+    height: 80px;
+    margin: auto;
+}
+.list-of-restaurants{
+    margin: auto;
+    grid-gap: 10px;
+    list-style-type: none;
+    align-items: center;
+}
+.list-of-restaurants li a{
+    width: 360px;
+    height: 200px;
+    margin: auto;
+    justify-items: center;
+}
+.list-of-restaurants li a div{
+    width: 360px;
+    height: 166px;
+    overflow: hidden;
+}
+.list-of-restaurants li a div img{
+    width: 100%;
+}
+.list-of-restaurants li a section{
+    display: flex;
+    flex-direction: row;
+}
+.list-of-restaurants li a section h1{
+    float: left;
+}
+.list-of-restaurants li a section p{
+    color: var(--green);
+}
+footer{
+    width: 100%;
+    height: 300px;
+    background-color: black;
+}
+/* Special attributes classes these classes possess only special attributes and
+are used as secondary classes in html*/
+
+.round-border{
+    border-radius: 20px;
+}
+
+.full-width-section{
+    width: 100%;
+}
+
+.bg-color-red{
+    background-color: var(--red);;
+}
+.bg-color-green{
+    background-color: var(--green);
+}
+.bg-color-orange{
+    background-color: var(--orange);
+}
+.bg-color-white{
+    background-color: white;
+}
+.bg-color-black{
+    background-color: black;
+}
+
+.three-gridded-layout{
+    display: grid;
+    grid-template-columns: auto auto auto;
+}
+
