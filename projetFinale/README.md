@@ -53,7 +53,7 @@ For JavaScript (.js) files here are the rules :
   * Async / sync functions ? this will depend on the developpers needs.
   * Functions name will started with a small letter but a Capital letter is a must when starting a new word.
   ```js
-  async fetchFromDb(db, spec){
+  async function fetchFromDb(db, spec){
     ...
   }
   ```
