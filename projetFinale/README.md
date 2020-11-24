@@ -4,18 +4,19 @@ This is a link to our [XD UI design](https://xd.adobe.com/view/55df3040-04f0-418
 And here the link to our [tasks timeline](https://docs.google.com/document/d/1ffFzls8U0NDZME7glb_DqhvGBNL_LUBWAEz5BC5bzjw/edit).
 ## 1. Abstract
 This application is a web application that allows UCLouvain students to order food in all the restaurants on the Louvain La neuve Campus, and have their orders delivered to the Halls in which they selected. 
-
 ## 2. File structure
 The file structure is like follow.
 ```
+| db
+| private
+|--- ssl
+|--- js
+|---|--- customer
+|---|--- seller
+|---|--- apis
 | static
 |--- css
 |--- js
-|---|--- frontend
-|---|--- backend
-|---|---|--- customer
-|---|---|--- seller
-|---|---|--- apis
 |--- images
 | templates
 |--- customer
@@ -33,24 +34,24 @@ For JavaScript (.js) files here are the rules :
 
 * Imports 
   * Importing modules we will be using the `<require>` keyword.
-  * The name given to the variable containg the import is declared with const and the name starts with a capital Letter.
+  * The name given to the variable containing the import is declared with const and the name starts with a capital Letter.
   ```js
   const Mongoose = Require('mongoose');
   const MongodbServer = Require('mongodb').Server;
   const AppClients = Require('./clients/app');
   ```
 * Variables 
-  * Unchaging variables, are named all in caps with the const declarations. Ex :
+  * Unchanging variables, are named all in caps with the const declarations. Ex :
   ```js
   const DB = Mongoose.connect(...);
   ```
-  * Changing varibles, are named in small letters but with a dash between two words. 
+  * Changing variables, are named in small letters but with a dash between two words. 
   ```js
-  let orders_array = [{}, {}];
+  let orders_array = [{...}, {...}];
   ```
 * Functions 
   * For functions we are going to prioritize promises than callbacks. Meaning when possible we are going to always return promises. 
-  * Async / sync functions ? this will depend on the developpers needs.
+  * Async / sync functions ? this will depend on the developers needs.
   * Functions name will started with a small letter but a Capital letter is a must when starting a new word.
   ```js
   async function fetchFromDb(db, spec){
@@ -62,5 +63,3 @@ For JavaScript (.js) files here are the rules :
  
  ### 3.3 HTML
  The html files are mostly going to be `<templates>` that use mustache [mustache](https://github.com/janl/mustache.js).
-
-  
