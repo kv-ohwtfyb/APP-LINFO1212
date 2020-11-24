@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIGN UP</title>
+    <link rel="stylesheet" href="./css/main.css">
+</head>
+<body>
+    <header>
+        <div class="name-logo">
+            <h2>GIQ</h2>
+            <h4>|</h4>
+            <h3>UCLouvain</h3>
+        </div>
+    </header>
+    <div class="register-login-rectangle">
+        {{codeError}}
+            <p>
+                The code doesn't match.Make sure you entered the correct phone number.
+            </p>
+        {{\codeError}}
+        <input type="number" placeholder="Enter the 4-digit code you received ...">
+        <p><button type="submit" name="verifyButton">VERIFY</button> </p>
+    </div>
+    <div class="resend-changenumber">
+        <p><ul>
+        <li><a href="">Resend Code</a></li>
+        <li><a href="">Change Phone Number</a></li>
+        </ul></p>
+    </div>
+
+    <p>
+        Thank you for trusting us. Your security is one of our priority.
+    </p>
+
+</body>
+</html>
