@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ORDERS</title>
+    <link rel="stylesheet" href="./css/main.css">
+</head>
+<body>
+    <header>
+        <div>≡
+        <!-- This is the pop up nav bar section the user is not yet logged in-->
+            <span id="NavBar-NotLoggedin">
+                <button type="submit" name ="logIn">LOG IN</button>
+                <p>
+                <ul>
+                    <li><a href="">SIGN UP</a></li>
+                    <li><a href="">ADD YOUR RESTAURANT</a></li>
+                    <li><a href="">LOG IN AS A SELLER</a></li>
+                </ul>
+                </p>
+            </span>
+            <!-- This is the pop up nav bar section the user is logged in || Maybe use Mustache??!!-->
+            <span id="NavBar-Loggedin">
+                <img src ="" alt="User_Avatar" class="UserAvatar">
+                <div class="user-name">Client Lambda</div>
+                <ul>
+                    <li><a href="">ODERS</a></li>
+                    <li><a href="">ADD YOUR RESTAURANT</a></li>
+                    <li><a href="">LOG IN AS A SELLER</a></li>
+                </ul>
+                </p>
+            </span>
+        </div>
+        <div class="name-logo">
+            <h2>GIQ</h2>
+            <h4>|</h4>
+            <h3>UCLouvain</h3>
+        </div>
+        <form>
+            <input type="search" name="search" id="searchInput" placeholder="Quoi avez vous envie de savourer :) …">
+            <input type="submit" value="">
+        </form>
+        <div class="plate round-border">
+            <img>
+            <p>2</p>
+        </div>
+        <!-- When clicked on the plate -->
+        <span class="popup-plate">
+            <h2>PLATE</h2>
+            <table class="commandes">
+                <tr>
+                    <th>O'TACOS</th>
+                </tr>
+                {{#commande}}
+                <tr class="commande-restaurant">
+                    <td>
+                        <form action="">
+                            <input type="number" id="quantity" name="quantity" min="1" max="20">
+                        </form>
+                    </td>
+                    <td>
+                        O'TACOS XL & sauce Andalouse
+                    </td>
+                    <td>
+                        7,80€
+                    </td>
+                </tr>
+                {{/commande}}
+            </table>
+
+            <button type="submit" class="order-button">ORDER {{total}}</button>
+        </span>
+    </header>
+    <section class="list-orders">
+        <h1>All of Your Orders</h1>
+        <table id="table-Of-Orders">
+            <tr>
+                <th>Order</th>
+                <th>Date</th>
+                <th>Batiment</th>
+                <th>Status</th>
+                <th>Total</th>
+                <th>Action</th>
+            </tr>
+            {{#order}}
+            <tr class="tableRow">
+                <td class="orderId">#i896eh6983h</td >
+                <td class="date">
+                    <li><Date>25 Feb 2020</Date></li>
+                    <li>11:09</li>
+                </td>
+                <td class="batiment">Batiment Reamur</td>
+                <td class="status">Delivered</td>
+                <td class="total">29,78€</td>
+                <td class="action">
+                    <div class="reorder">Reorder
+                        <span class="popup-reoder">
+                            <h2>ORDER</h2>
+                            <ul>
+                                <li>Order ID :{{orderId}}</li>
+                                <li>Date     :{{date}}</li>
+                                <li>Batiment :{{batiment}}</li>
+                                <li>Status   :{{status}}</li>
+
+                            </ul>
+                            <table class="commandes">
+                                <tr>
+                                    <th>O'TACOS</th>
+                                </tr>
+                                {{#commande}}
+                                <tr class="commande-restaurant">
+                                    <td>
+                                        <form action="">
+                                            <input type="number" id="quantity" name="quantity" min="1" max="20">
+                                        </form>
+                                    </td>
+                                    <td>
+                                        O'TACOS XL & sauce Andalouse
+                                    </td>
+                                    <td>
+                                        7,80€
+                                    </td>
+                                </tr>
+                                {{/commande}}
+                            </table>
+
+                            <button type="submit" class="reorder-button">REORDER {{total}}</button>
+                        </span>
+                    </div>
+                </td>
+            </tr>
+            {{/order}}
+        </table>
+    </section>
+</body>
+</html>

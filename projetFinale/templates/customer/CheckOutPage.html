@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CHECK OUT</title>
+    <link rel="stylesheet" href="./css/main.css">
+</head>
+<body>
+    <header>
+        <div class="name-logo">
+            <h2>GIQ</h2>
+            <h4>|</h4>
+            <h3>UCLouvain</h3>
+        </div>
+    </header>
+    <div class="register-login-rectangle">
+        <input type="text" class="batiment" placeholder="Building to which deliver the food ...">
+        <!-- I dont understand what this input works-->
+        <input type="day" placeholder="Order for Today">
+
+        <p><button type="submit">Proceed to payment</button></p>
+    </div>
+    <section class="plate">
+        <span class="popup-plate">
+            <h2>PLATE</h2>
+            <table class="commandes">
+                <tr>
+                    <th>O'TACOS</th>
+                </tr>
+                {{#commande}}
+                <tr class="commande-restaurant">
+                    <td>
+                        <form action="">
+                            <input type="number" id="quantity" name="quantity" min="1" max="20">
+                        </form>
+                    </td>
+                    <td>
+                        O'TACOS XL & sauce Andalouse
+                    </td>
+                    <td>
+                        7,80€
+                    </td>
+                </tr>
+                {{/commande}}
+            </table>
+
+            <button type="button" class="total">TOTAL {{total}}</button>
+        </span>
+    </section>
+</body>
+</html>
