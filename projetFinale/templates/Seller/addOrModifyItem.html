@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>GIQ | Item Modification page</title>
+        <link rel="stylesheet" href="././static/css/main.css">
+    </head>
+
+    <body>
+        <header>
+            <!-- This is the header with GIQ | Uclouvain -->
+            <div>≡</div>
+            <div class="name-logo">
+                <h2>GIQ</h2>
+                <h4>|</h4>
+                <h3>UCLouvain</h3>
+            </div>
+            
+            <ul class="seller-ul">
+                <li><a href="DashboardPage.html"> Orders </a></li>
+                <li><a href="StorePage.html"> Store </a></li>
+                <li><a href="PaymentsPage.html"> Payments </a></li>
+            </ul>
+        </header>
+
+        <form name="addingItem">
+            <!-- Image section-->
+            <section class="image">
+                <input type="file" name="itemImage" class="itemImage" >
+            </section><br>
+
+            <!-- Item Name Input section-->
+            <section class="item-Name">
+                <input type="text" name="itemName" class="itemName" placeholder="Item Name..." autocomplete="on"><br>
+            </section><br>
+
+            <!-- Item Description Input section-->
+            <section class="item-Description">
+                <textarea name="itemDescription" class="itemDescription" cols="50" rows="10"> Description..</textarea><br>
+            </section><br>
+
+            <!-- The little choice of oui/non section-->
+            <section class="trueFalse">
+                <label for="trueFalse"> Vendre le produit seul: </label>
+                <input type="radio" name="trueFalse"> Oui
+                <input type="radio" name="trueFalse"> Non
+            </section><br>
+
+            <!-- Category part section-->
+            <section class="choose-Category">
+                <label for="chooseCategory">Choisissez la catégorie: </label>
+                <input type="search" name="chooseCategory" class="chooseCategory" placeholder="Rechercher des catégories..." autocomplete="on">
+            </section><br>
+
+            <!-- Price and Promotion part section-->
+            <section class="item-Price">
+                <label for="itemPice">Prix: </label>
+                <input type="number" name="itemPrice" class="itemPrice" placeholder="Default Price (TVA inclus)..." autocomplete="off">
+            </section><br>
+
+            <section class="item-promotion">
+                <input type="number" name="promotion" class="promotion" placeholder="Promotion en %" autocomplete="on">
+
+                <label for="finalPrice">Prix finale: </label>
+                <input type="number" name="finalPrice" class="finalPrice" placeholder="En €" autocomplete="off">
+            </section><br>
+
+            <!-- Group part section-->
+            <section class="item-group">
+                <label >Groupes: </label>
+                <input type="search" name="group" class="itemGroup" placeholder="Rechercher des groupes..." autocomplete="on">
+                <ul class="url-inputs">
+                    <li> 
+                        <label for="groupchoosed">{{group}}</label> <input type="radio" name="groupchoosed"> <label for="groupchoosed">Nécessaires au produit</label>
+                     </li>
+                </ul>
+            </section>
+            
+            <!-- Quantity part section-->
+            <section class="item-quantity">
+                <label> Quantité: </label>
+                <input type="radio" name="quant"> 
+                <label for="quant"> Indefini</label>
+                <input type="number" class="quantNumber" placeholder="Quantité...">
+            </section>
+
+            <!-- button part section-->
+            <section class="button-part">
+                <button class="supprimerBtn"> Supprimer</button>
+                <button class="annulerBtn"> Annuler</button>
+                <button class="enregisterBtn"> Enregistrer les modifications</button>
+            </section>
+
+        </form>
+
+        <footer>
+            
+        </footer>
+
+    </body>
+</html>

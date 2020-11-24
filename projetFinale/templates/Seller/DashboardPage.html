@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>GIQ | Orders page</title>
+        <link rel="stylesheet" href="/static/css/main.css">
+    </head>
+
+    <body>
+        <header>
+            <!-- This is the header with GIQ | Uclouvain -->
+            <div>≡</div>
+            <div class="name-logo">
+                <h2>GIQ</h2>
+                <h4>|</h4>
+                <h3>UCLouvain</h3>
+            </div>
+            
+            <ul class="seller-ul">
+                <li><a href="DashboardPage.html"> Orders </a></li>
+                <li><a href="StorePage.html"> Store </a></li>
+                <li><a href="PaymentsPage.html"> Payments </a></li>
+            </ul>
+        </header>
+        <section class="restoDetails">
+            <h1 class="restoName">O'Tacos</h1>
+            <ul class="details">
+                <li>Sales today : <strong> 89,56 €</strong></li>
+                <li>Sales this month : <strong> 389,56 €</strong></li>
+                <li>Total Sales : <strong> 2344,09 €</strong></li>
+                <li>Orders today : <strong> 10 €</strong></li>
+                <li>Average price per order : <strong> 7,09€</strong></li> 
+            </ul>
+        </section>
+
+        <section class="nameOrdersToday">
+            <h2>Orders Today</h2>
+        </section>
+    
+        <table class="tableOfOrders">
+            <tr>
+                <th>Order</th>
+                <th>Date</th>
+                <th>Description</th>
+                <th>Total</th>
+                <th>Action</th>
+            </tr>
+            <tr>
+                <td>#i89eh795g</td>
+                <td>25 Feb 2020 11h09</td>
+                <td>
+                    <dl>
+                        <dt> Menu Etudiant : </dt>
+                        <dd>- L'eau</dd>
+                        <dd>- Nourriture piquant</dd>
+
+                        <dt> Durum : </dt>
+                        <dd>- Sauce fromagères</dd>
+
+                    </dl>
+                </td>
+                <td> 29,78 €</td>
+                <td> 
+                    {{show}}
+                    <button class="doneBtn"> Done </button>
+                    <button class="annulerBtn">Cancel</button>
+                </td>
+
+            </tr>
+            <tr>
+                <td>#i89eh795g</td>
+                <td>25 Feb 2020 11h09</td>
+                <td>
+                    <dl>
+                        <dt> Menu Etudiant :</dt>
+                        <dd>- L'eau</dd>
+                        <dd>- Nourriture piquant</dd>
+
+                        <dt> Durum :</dt>
+                        <dd>- Sauce fromagères</dd>
+
+                    </dl>
+                </td>
+                <td> 29,78 €</td>
+                <td> 
+                    <button class="doneBtn"> Done </button>
+                    <button class="annulerBtn">Cancel</button>
+                </td>
+
+            </tr>
+
+        </table>
+
+        <!-- This is the pop up page (the overview) you get when you click on an order-->
+
+        <section class="orderView">
+            <h1> Plates </h1>
+            <table>
+                <tr>
+                    <th class="restoName"> O'Tacos</th>
+                </tr>
+                <tr>
+                    <td>
+                        <ol>
+                            <li> <label for="platName">Double Whooper Bacon</label> <input type="text" name="platName" value="7,90€" disabled></li>
+                            <li> <label for="platName">Grandes Frites </label> <input type="text"  name="platName"  value="5,80€" disabled ></li>
+                        </ol>
+                    </td>
+                    
+                </tr>
+            </table>
+            <div class="orderViewBtn">
+                <button class="totalBtn"> 5 Total 34,30 € </button>
+                <button class="doneBtn"> Done </button>
+                <button class="annulerBtn">Cancel</button>
+            </div>
+        </section>
+
+        <footer>
+
+        </footer>
+        
+
+    </body>
+</html>

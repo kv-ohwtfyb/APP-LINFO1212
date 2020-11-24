@@ -41,7 +41,8 @@ MongoClient.connect('mongodb://localhost:27017', {useUnifiedTopology: true}, (er
 
     // When requesting the home page.
     app.get('/', function (req , res) {
-        res.render('index.html', {incidents: incidents,
+        res.render('index.html', {
+            incidents: incidents,
             username: req.session.username || "Please login", loggedIn :(req.session.username != null)})
     });
 
