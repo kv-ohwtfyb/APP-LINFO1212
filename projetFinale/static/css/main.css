@@ -16,6 +16,13 @@ body{
     text-align: center;
 }
 
+ul{
+    list-style-type: none;
+}
+h2{
+    padding: 0;
+    margin: 0;
+}
 header{
     width: 100%;
     height: 60px;
@@ -32,6 +39,7 @@ header div{
 
 header form{
     margin: 0 auto;
+    align-items: baseline;
 }
 
 header form input[type=search]{
@@ -48,9 +56,12 @@ header form input[type=search]{
 header form input[type=submit]{
     width: 20px;
     height: 20px;
-    border: 0;
+    border-width: 0;
     background-image: url("./../images/loop_magnifier.png");
     background-size: 20px;
+}
+header form input[type=submit]:focus{
+    border-width: 0;
 }
 
 header form input[type=submit]:active{
@@ -70,7 +81,6 @@ header form input[type=submit]:active{
 }
 
 .name-logo h3{
-    color: black;
 }
 
 .name-logo h4{
@@ -95,10 +105,6 @@ header form input[type=submit]:active{
     height: 20px;
     margin-left: auto;
     margin-right: 0;
-}
-
-.popup-plate{
-    visibility: hidden;
 }
 
 .plate p{
@@ -138,7 +144,6 @@ header form input[type=submit]:active{
 }
 
 .popular-section h1{
-    z-index: 1;
     color: white;
     margin: 0;
     left: 50%;
@@ -167,7 +172,6 @@ header form input[type=submit]:active{
     width: 96%;
     margin: auto;
     grid-gap: 10px;
-    list-style-type: none;
 }
 .list-of-restaurants li{
     margin: auto;
@@ -189,23 +193,178 @@ header form input[type=submit]:active{
 .list-of-restaurants li a section{
     display: flex;
     flex-direction: row;
+    align-items: baseline;
 }
 .list-of-restaurants li a section h1{
+    font-size: 20px;
+    font-weight: bold;
     float: left;
+    margin-right: 10px;
 }
 .list-of-restaurants li a section p{
     color: var(--green);
+    width: fit-content;
+    height: fit-content;
 }
 
 .filter-bar-open{
     visibility: hidden;
 }
 
+.navbar{
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: #111;
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+.navbar .seen{
+    width: 420px;
+}
+.navbar h4{
+    text-align: right;
+    margin-right: 20px;
+}
+.navbar button{
+    width: 70%;
+    height: 30px;
+    margin: auto;
+    color: white;
+}
+.navbar ul{
+    padding: 0;
+    width: 100%;
+}
+.navbar ul li{
+    width: 70%;
+    height: 40px;
+    margin: auto;
+    padding: 0;
+}
+
+.navbar ul li a{
+    float: left;
+    text-decoration: none;
+    color: black;
+    padding-left: 0;
+    margin-left: 0;
+}
+.navbar ul li a:hover{
+    text-decoration: underline;
+}
+.popup-plate{
+    width: 0;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    right: 0;
+    overflow: auto;
+    transition: 0.5s;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    align-items: center;
+}
+.popup-plate .seen{
+    width: 420px;
+}
+.popup-plate ul li h2{
+    text-align: left;
+}
+.popup-plate ul li hr{
+    border-color: black;
+    width: 90%;
+    margin-left: 0;
+}
+.popup-plate ul li ul{
+    width: 90%;
+    padding: 0;
+    margin-left: 0;
+    margin-right: auto;
+}
+.popup-plate ul li ul li{
+    width: 100%;
+    display: grid;
+    grid-template-columns: auto auto auto;
+}
+.popup-plate ul li ul li input[type=number]{
+    width: 30px;
+    height: 18px;
+    color: white;
+    margin-top: auto;
+    margin-bottom: auto;
+    text-align: center;
+}
+.popup-plate div{
+    width: 70%;
+    margin: auto;
+    color: white;
+    display: grid;
+    grid-template-columns: auto auto auto;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.filter-button{
+    position: fixed;
+    float: left;
+    left: 1%;
+    top: 40%;
+    z-index: 2;
+    width: fit-content;
+    height: fit-content;
+    color: white;
+    box-shadow: var(--shadow);
+    padding: 0;
+}
+.filter-button p{
+    writing-mode: vertical-rl;
+    text-orientation: upright;
+    margin: 20px 5px;
+}
+
 footer{
     width: 100%;
     height: 300px;
     background-color: black;
+    display: grid;
+    grid-template-columns: auto 300px 300px;
+    color: white;
 }
+
+footer div{
+    width: fit-content;
+    margin-right: auto;
+    margin-left: 0;
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+}
+footer a{
+    color: white;
+    text-decoration: none;
+    font-weight: lighter;
+}
+footer a:hover{
+    text-decoration: underline;
+}
+
+footer div div {
+    margin-top: 0;
+    margin-left: 20px;
+    margin-right: auto;
+}
+
+footer p,a{
+    margin: 2px 0;
+    padding: 0;
+}
+
 /* Special attributes classes these classes possess only special attributes and
 are used as secondary classes in html*/
 
@@ -216,9 +375,12 @@ are used as secondary classes in html*/
 .full-width-section{
     width: 100%;
 }
+.full-height-section{
+    height: 100%;
+}
 
 .bg-color-red{
-    background-color: var(--red);;
+    background-color: var(--red);
 }
 .bg-color-green{
     background-color: var(--green);
@@ -232,9 +394,24 @@ are used as secondary classes in html*/
 .bg-color-black{
     background-color: black;
 }
-
 .three-gridded-layout{
     display: grid;
     grid-template-columns: auto auto auto;
 }
 
+.border-less{
+    border-width: 0;
+}
+.border-less:hover{
+    border-width: 0;
+}
+.text-align-left{
+    text-align: left;
+}
+.text-align-right{
+    text-align: right;
+}
+.left {
+    position: absolute;
+    left: 0;
+}
