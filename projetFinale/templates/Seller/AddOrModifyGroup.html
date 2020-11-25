@@ -10,7 +10,7 @@
     <body>
         <header>
             <!-- Depending on the page, Show the menu bar and (orders, store, payments) parts -->
-            {{# isseller}}
+            {{isseller}}
             <div>≡</div>
             {{isseller}}
 
@@ -20,13 +20,12 @@
                 <h3>UCLouvain</h3>
             </div>
             
-            {{#isseller}}
+            {{isseller}}
             <ul class="seller-ul">
                 <li><a href="DashboardPage.html"> Orders </a></li>
                 <li><a href="StorePage.html"> Store </a></li>
                 <li><a href="PaymentsPage.html"> Payments </a></li>
             </ul>
-            {{/isseller}}
         </header>
 
         <!-- Group name and Description-->
@@ -58,7 +57,7 @@
                     <li> <input type="text" class="products" value="L'eau" disabled>  Extra charge <input type="number" name="numberInput" class="numberInput">€<br>
                     
                 </ul> 
-                {{/suggestion}}
+                {{suggestion}}
 
             </div>
         </form>
