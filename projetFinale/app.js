@@ -63,10 +63,16 @@ app.get('/login_page', (req, res) => {
 
 /************ SELLER POST Request PART ************/ 
 
+app.post('/add-group', function (req, res) {
+    console.log(req.body);
+    return true;
+});
+
+
 app.post('/seller_login', function (req, res) {
     console.log(req.body)
 
-})
+});
 
 app.use(express.static('static'));
 

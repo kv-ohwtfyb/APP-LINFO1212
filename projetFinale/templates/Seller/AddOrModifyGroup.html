@@ -27,64 +27,60 @@
                 <li><a href="PaymentsPage.html"> Payments </a></li>
             </ul>
         </header>
+        <form  action="/add-group" method="POST">
 
-        <!-- Group name and Description-->
+            <!-- Group name and Description-->
 
-        <input type="text" class = "group-name" placeholder="Group Name"> <br>
+            <input type="text" class="group-name" name="group-name" placeholder="Group Name"> <br>
 
-        <textarea class="description-Area" placeholder="Description..."></textarea> 
+            <textarea class="description-Area" name="group-description" placeholder="Description..."></textarea> 
 
-        <!-- Where to choose additional products like Fanta, Coca-cola-->
-        
-        <form class="products" action="add_group" method="POST">
-            <div class="products-inputs">
-                <label for="productSearchInput" > Produits: </label>
-                <input type="search" class="productSearchInput"  name="productSearch" placeholder="Rechercher des produits"><br>
-                
-                {{suggestion}}
-                <!--
-                    Idea nuko tubona :
-                    
-                    <ul>
-                        <li> {{the product}} Extra charge <input type="number" name="numberInput" class="numberInput"><br>
-                        <li> {{the product}} Extra charge <input type="number" name="numberInput" class="numberInput"><br>
-                        <li> {{the product}} Extra charge <input type="number" name="numberInput" class="numberInput"><br>
-                    </ul> 
-                
-                    -->
-                <ul>
-                    <li> Coca cola Extra charge <input type="number" name="numberInput" class="numberInput">€<br>
-                    <li> <input type="text" class="products" value="L'eau" disabled>  Extra charge <input type="number" name="numberInput" class="numberInput">€<br>
-                    
-                </ul> 
-                {{suggestion}}
-
-            </div>
-        </form>
-
-        <!-- LÀ OÙ LE VENDEUR CHOISI 2 REGLES CONCERNANT CE GROUPE -->
-
-        <form class = "regles">
-            <div class="regles-word"> 
-                <p>Régles: </p>
-            </div>
+            <!-- Where to choose additional products like Fanta, Coca-cola-->
             
-            <div class="regles-inputs">
-                <input type="radio"  value="numberInput"> 
-                <label for="numberInput">limites des selections</label> <input type="number"  name="numberInput" class="numberInput"><br>
+            <section class="products">
+
+                <div class="products-inputs">
+
+                    <label for="productSearchInput" > Produits: </label>
+                    <input type="search" class="productSearchInput"  name="productSearch" placeholder="Rechercher des produits"><br>
+                   
+                   
+                    <!-- Mustache Here-->
+                    <ul>
+                        <li> {{the product}}Ex: Coca-cola  Extra charge <input type="number" name="priceInput" class="numberInput">€<br>
+                        <li> {{the product}}Ex: L'eau      Extra charge <input type="number" name="priceInput" class="numberInput">€<br>
+                        
+                    </ul> 
+                   <!-- End of mustache here -->
+
+                </div>
+            </section>
+
+            <!-- LÀ OÙ LE VENDEUR CHOISI 2 REGLES CONCERNANT CE GROUPE -->
+
+            <section class = "regles">
+                <div class="regles-word"> 
+                    <p>Régles: </p>
+                </div>
                 
-                <input type="radio" value="numberInput"> 
-                <label for="numberInput2"> Nombres minimales des selections</label> <input type="number" name="numberInput2" class="numberInput2"><br>
+                <div class="regles-inputs">
+                    <input type="radio"  value="numberInput"> 
+                    <label for="numberInput">limites des selections</label> <input type="number"  name="limiteDeSelection" class="groupLimiteDeSelection"><br>
+                    
+                    <input type="radio" value="numberInput"> 
+                    <label for="numberInput2"> Nombres minimales des selections</label> <input type="number" name="selectionMinimales" class="selectionMinimales"><br>
+                </div>
+            </section>
+
+            <!-- Buttons -->
+
+            <div class="button-part">
+                <button name="supprimerBtn" class="supprimerBtn"> Supprimer</button>
+                <button class="AnnulerBtn"> Annuler</button>
+                <button type="submit" class="EnregisterBtn"> Enregistrer les modifications</button>
             </div>
+
         </form>
-
-        <!-- Buttons -->
-
-        <div class="button-part">
-            <button class="supprimerBtn"> Supprimer</button>
-            <button class="AnnulerBtn"> Annuler</button>
-            <button class="EnregisterBtn"> Enregistrer les modifications</button>
-        </div>
 
         <footer>
 
