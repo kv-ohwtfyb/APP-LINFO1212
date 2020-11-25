@@ -97,6 +97,10 @@ header form input[type=submit]:active{
     margin-right: 0;
 }
 
+.popup-plate{
+    visibility: hidden;
+}
+
 .plate p{
     margin-left: 0;
     margin-right: auto;
@@ -160,10 +164,13 @@ header form input[type=submit]:active{
     margin: auto;
 }
 .list-of-restaurants{
+    width: 96%;
     margin: auto;
     grid-gap: 10px;
     list-style-type: none;
-    align-items: center;
+}
+.list-of-restaurants li{
+    margin: auto;
 }
 .list-of-restaurants li a{
     width: 360px;
@@ -189,6 +196,11 @@ header form input[type=submit]:active{
 .list-of-restaurants li a section p{
     color: var(--green);
 }
+
+.filter-bar-open{
+    visibility: hidden;
+}
+
 footer{
     width: 100%;
     height: 300px;
