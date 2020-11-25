@@ -31,22 +31,25 @@
             </ul>
 
         </header>
+        <form action="/menu" method="POST">
 
-        <input type="text" class = "category-name" placeholder="Category Name"> <br>
+            <input type="text" class="category-name" name="CategoryName" placeholder="Category Name"> <br>
 
-        <textarea class="description-Area" placeholder="Description..."></textarea> 
+            <textarea class="description-Area" name="CategoryDescri" placeholder="Description..."></textarea> 
 
-        <section class="trueFalse">
-            <label for="trueFalse"> Vendre le produit seul: </label>
-            <input type="radio" name="trueFalse"> Oui
-            <input type="radio" name="trueFalse"> Non
-        </section>
+            <section class="trueFalse">
+                <label for="trueFalse"> Vendre le produit seul: </label>
+                <input type="radio" name="trueFalse"> Oui
+                <input type="radio" name="trueFalse"> Non
+            </section>
 
-        <section class="button-part">
-            <button class="supprimerBtn"> Supprimer</button>
-            <button class="AnnulerBtn"> Annuler</button>
-            <button class="EnregisterBtn"> Enregistrer les modifications</button>
-        </section>
+            <section class="button-part">
+                <button class="supprimerBtn"> Supprimer</button>
+                <button class="annulerBtn"> Annuler</button>
+                <button type="submit" class="enregisterBtn"> Enregistrer les modifications</button>
+            </section>
+
+        </form>
 
         <footer>
 

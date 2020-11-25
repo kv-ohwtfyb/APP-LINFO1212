@@ -24,7 +24,7 @@
             </ul>
         </header>
 
-        <form name="addingItem">
+        <form name="addingItem" action="/add-item" method="POST">
             <!-- Image section-->
             <section class="image">
                 <input type="file" name="itemImage" class="itemImage" >
@@ -72,7 +72,7 @@
                 <input type="search" name="group" class="itemGroup" placeholder="Rechercher des groupes..." autocomplete="on">
                 <ul class="url-inputs">
                     <li> 
-                        <label for="groupchoosed">{{group}}</label> <input type="radio" name="groupchoosed"> <label for="groupchoosed">Nécessaires au produit</label>
+                        <label for="groupchoosed">{{group}}</label>Group you have choosed <input type="radio" name="groupchoosed"> <label for="groupchoosed">Nécessaires au produit</label>
                      </li>
                 </ul>
             </section>
@@ -80,17 +80,19 @@
             <!-- Quantity part section-->
             <section class="item-quantity">
                 <label> Quantité: </label>
-                <input type="radio" name="quant"> 
-                <label for="quant"> Indefini</label>
-                <input type="number" class="quantNumber" placeholder="Quantité...">
+                <input type="radio" name="quantIndefini"> 
+                <label for="quantIndefini"> Indefini</label>
+                <input type="number" class="quantNumber" name="quantNumber" placeholder="Quantité...">
             </section>
 
             <!-- button part section-->
             <section class="button-part">
                 <button class="supprimerBtn"> Supprimer</button>
                 <button class="annulerBtn"> Annuler</button>
-                <button class="enregisterBtn"> Enregistrer les modifications</button>
+                <button type="submit" class="enregisterBtn"> Enregistrer les modifications</button>
             </section>
+
+            <!-- INPUT ZA RADIO TYPE TUGOMBA KUZIHINDURIRA MURI JS-->
 
         </form>
 

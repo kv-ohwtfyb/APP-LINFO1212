@@ -25,6 +25,7 @@ const {
     getPaymentsPage,
     getTheStorePage,
     getSellerLoginPage } = require('./private/js/Seller/GET');
+const cons = require('consolidate');
 
 app.use(bodyParser.urlencoded({ extended :true, limit: '50mb' }));
 
@@ -74,17 +75,26 @@ app.get('/seller_login', (req, res) =>{
     getSellerLoginPage(app, req, res);
 });
 
-
+/************ Seller POST Request PART ************/
 
 app.post('/add-group', function (req, res) {
     console.log(req.body);
-    
 });
 
+app.post('/add-item', function(req, res){
+    console.log(req.body);
+});
+
+app.post('/menu', function (req, res){
+    console.log(req.body);
+});
+
+app.post('/creatingRestaurant', function (req, res){
+    console.log(req.body);
+});
 
 app.post('/seller_login', function (req, res) {
     console.log(req.body)
-
 });
 
 /************ CUSTOMER GET Request PART ************/
