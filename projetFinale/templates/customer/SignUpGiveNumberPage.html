@@ -3,26 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SIGN UP</title>
+    <title>GiQ | Sign Up</title>
     <link rel="stylesheet" href="./css/main.css">
 </head>
-<body>
-    <header>
+<body class="input-page">
+    <div>
         <div class="name-logo">
             <h2>GIQ</h2>
             <h4>|</h4>
             <h3>UCLouvain</h3>
         </div>
-    </header>
-    <div class="register-login-rectangle">
-        <input type="number" placeholder="Enter Phone Number ...">
-
-        <p><button type="submit">SEND</button> </p>
+        <form class="round-border" method="GET" action="">
+            <label for="number"></label>
+            <input type="tel" placeholder="Phone Number ..." id="number">
+            <input type="submit" value="Send" class="bg-color-black">
+        </form>
     </div>
-    <p>
-        We are asking your phone number in order to verify that you are a physical person.
-        Thus, we are able to increase security with the 2-step verification.
-    </p>
-
+    <div class="announcement">
+        <h1><span class="color-orange">We are asking your</span> phone number <span>in order to</span>
+        verify that you are physical person.<span class="color-orange"> And in order to
+        be able</span> increase security <span class="color-orange">with the 2-step verification.</span></h1>
+    </div>
 </body>
 </html>

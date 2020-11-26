@@ -3,35 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SEARCH</title>
+    <title>GiQ | Search</title>
+    <!--    CSS Imports-->
     <link rel="stylesheet" href="./css/main.css">
 </head>
 <body>
     <header>
         <div>≡
             <!-- This is the pop up nav bar section the user is not yet logged in-->
-            <span id="NavBar-NotLoggedin">
-                <button type="submit" name ="logIn">LOG IN</button>
-                <p>
-                    <ul>
-                        <li><a href="">SIGN UP</a></li>
-                        <li><a href="">ADD YOUR RESTAURANT</a></li>
-                        <li><a href="">LOG IN AS A SELLER</a></li>
-                    </ul>
-                </p>
-            </span>
-            <!-- This is the pop up nav bar section the user is logged in || Maybe use Mustache??!!-->
-            <span id="NavBar-Loggedin">
+            <div class="navbar bg-color-white">
+                <h4>X</h4>
+                {{#loggedIn}}
                 <img src ="" alt="User_Avatar" class="UserAvatar">
                 <div class="user-name">Client Lambda</div>
-                <p>
-                    <ul>
-                        <li><a href="">ODERS</a></li>
-                        <li><a href="">ADD YOUR RESTAURANT</a></li>
-                        <li><a href="">LOG IN AS A SELLER</a></li>
-                    </ul>
-                </p>
-            </span>
+                <ul>
+                    <li><a href="./OrdersPage.html">ORDERS</a></li>
+                {{/loggedIn}}
+                {{^loggedIn}}
+                    <button type="submit" name ="logIn" class="border-less bg-color-black">LOG IN</button>
+                <ul>
+                    <li><a href="./UserSignUpCompletingPage.html">SIGN UP</a></li>
+                {{/loggedIn}}
+                    <li><a href="../Seller/CreateRestaurantSpeci.html">ADD YOUR RESTAURANT</a></li>
+                    <li><a href="../Seller/SellerLoginPage.html">LOG IN AS A SELLER</a></li>
+                </ul>
+            </div>
         </div>
         <div class="name-logo">
             <h2>GIQ</h2>
@@ -39,42 +35,60 @@
             <h3>UCLouvain</h3>
         </div>
         <form>
-            <input type="search" name="search" id="searchInput" placeholder="Quoi avez vous envie de savourer :) …">
-            <input type="submit" value="">
+            <input type="search" name="search" id="searchInput" placeholder="De quoi avez vous envie de savourer :) …">
+            <input type="submit" value=" ">
         </form>
         <div class="plate round-border">
             <img>
             <p>2</p>
         </div>
+        <!-- When clicked on the plate -->
+        <div class="popup-plate full-height-section bg-color-white" style="display: none">
+            <button class="bg-color-white border-less left">X</button>
+            <h2>PLATE</h2>
+            <ul>
+                <li>
+                    <h2>Burger King</h2>
+                    <hr class="bg-color-black">
+                    <ul>
+                        <li>
+                            <input type="number" min="0" max="20" value="1" class="bg-color-black border-less">
+                            <p class="text-align-left">Item example</p>
+                            <p class="text-align-right">9,65€</p>
+                        </li>
+                        <li>
+                            <input type="number" min="0" max="20" value="2" class="bg-color-black border-less">
+                            <p class="text-align-left">Item example</p>
+                            <p class="text-align-right">9,65€</p>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <h2>O'Tacos</h2>
+                    <hr class="bg-color-black">
+                    <ul>
+                        <li>
+                            <input type="number" min="0" max="20" value="1" class="bg-color-black border-less">
+                            <p class="text-align-left">Item example</p>
+                            <p class="text-align-right">9,65€</p>
+                        </li>
+                        <li>
+                            <input type="number" min="0" max="20" value="2" class="bg-color-black border-less">
+                            <p class="text-align-left">Item example</p>
+                            <p class="text-align-right">9,65€</p>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            <div class="bg-color-black">
+                <p class="text-align-left">5</p>
+                <p>Total</p>
+                <p class="text-align-right">24,98€</p>
+            </div>
+        </div>
     </header>
-    <!-- When clicked on the plate -->
-    <span class="popup-plate">
-        <h2>PLATE</h2>
-        <table class="commandes">
-            <tr>
-                <th>O'TACOS</th>
-            </tr>
-            {{#commande}}
-            <tr class="commande-restaurant">
-                <td>
-                    <form action="">
-                        <input type="number" id="quantity" name="quantity" min="1" max="20">
-                    </form>
-                </td>
-                <td>
-                    O'TACOS XL & sauce Andalouse
-                </td>
-                <td>
-                    7,80€
-                </td>
-            </tr>
-            {{/commande}}
-        </table>
-        <button type="submit" class="order-button">ORDER {{total}}</button>
-    </span>
-    <!--
     <section>
-        <h1>{{nombre}} ETABLISSEMENTS</h1>
+        <h1>6 Etablissements</h1>
         <ul class="list-of-restaurants three-gridded-layout">
             <li>
                 <a>
@@ -114,7 +128,7 @@
             <li>
                 <a>
                     <div>
-                        <img src="./images/Quick/471b2929-9ac9-4efb-991f-4ce13450687.jpeg">
+                        <img src="./images/Quick/471b2929-9ac9-4efb-991f-4ce13450687f.jpeg">
                     </div>
                     <section><h1>Quick</h1><p>23.4€</p>
                     </section>
@@ -123,9 +137,18 @@
             <li>
                 <a>
                     <div>
-                        <img src="./images/Sandwicherie/sandwicherie-ice-shop.jpg">
+                        <img src="./images/Sandwicherie/sandwicheries-ice-shop.jpg">
                     </div>
                     <section><h1>Sandwicherie</h1><p>23.4€</p>
+                    </section>
+                </a>
+            </li>
+            <li>
+                <a>
+                    <div>
+                        <img src="./images/Sushi/5e5fed0c9978e2051e0387d4.webp">
+                    </div>
+                    <section><h1>Sushi</h1><p>23.4€</p>
                     </section>
                 </a>
             </li>
@@ -138,149 +161,52 @@
                     </section>
                 </a>
             </li>
-            <li>
-                <a>
-                    <div>
-                        <img src="./images/Sushi/burger.jpg">
-                    </div>
-                    <section><h1>Sushi</h1><p>23.4€</p>
-                    </section>
-                </a>
-            </li>
-
         </ul>
     </section>
-    -->
-    <h2>{{nombre}} ETABLISSEMENTS</h2>
-    <table class="3-layout-table">
-        <tr>
-            <td>
-                <a>
-                    <div>
-                        <img src="./projetFinale/static/images/Carrefour/original.jpeg">
-                    </div>
-                    <section><h1>Carrefour</h1><p>23.4€</p></section>
-                </a>
-            </td>
-            <td>
-                <a>
-                    <div>
-                        <img src="./projetFinale/static/images/Exki/carre_site_internet.jpg">
-                    </div>
-                    <section><h1>Exki</h1><p>23.4€</p>
-                    </section>
-                </a>
-            </td>
-            <td>
-                <a>
-                    <div>
-                        <img src="./projetFinale/static/images/Kebab/durum-doner-sandwich.jpg">
-                    </div>
-                    <section><h1>Kebab</h1><p>23.4€</p>
-                    </section>
-                </a>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <a>
-                    <div>
-                        <img src="./projetFinale/static/images/Otacos/otacos-tacos.jpg">
-                    </div>
-                    <section><h1>O'Tacos</h1><p>23.4€</p>
-                    </section>
-                </a>
-            </td>
-            <td>
-                <a>
-                    <div>
-                        <img src="./projetFinale/static/images/Quick/471b2929-9ac9-4efb-991f-4ce13450687.jpeg">
-                    </div>
-                    <section><h1>Quick</h1><p>23.4€</p>
-                    </section>
-                </a>
-            </td>
-            <td>
-                <a>
-                    <div>
-                        <img src="./projetFinale/static/images/Sandwicherie/sandwicherie-ice-shop.jpg">
-                    </div>
-                    <section><h1>Sandwicherie</h1><p>23.4€</p>
-                    </section>
-                </a>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <a>
-                    <div>
-                        <img src="./projetFinale/static/images/Sushi/burger.jpg">
-                    </div>
-                    <section><h1>Sushi</h1><p>23.4€</p>
-                    </section>
-                </a>
-            </td>
-            <td>
-                <a>
-                    <div>
-                        <img src="./projetFinale/static/images/Spar/SPAR-Brand-group_shot_sept-2014.jpg">
-                    </div>
-                    <section><h1>Spar</h1><p>23.4€</p>
-                    </section>
-                </a>
-            </td>
-        </tr>
-
-    </table>
-    <div class="filter-bar-closed"><p>FILTRE</p></div>
-    {{filter}}
-    <div class="filter-bar open">
-        <h3>Filtré par</h3>
-        <p>Prix:<input type="range"></p>
-        <p>Regime : <form>
-        <input type="radio" name="regime" value="vegetarien">
-        <label>Végétarien</label><br>
-        <input type="radio" name="regime" value="Halal">
-        <label>Halal</label><br>
-        <input type="radio" name="regime" value="vegan">
-        <label>Vegan</label><br>
-        <input type="radio" name="regime" value="sans-gluten">
-        <label>Sans gluten</label><br>
-    </form>
-        </p>
-        <p><input type="submit" value="Submit"></p>
+    <div class="filter-button bg-color-green round-border">
+        <p>TRIER</p>
     </div>
-    {{\filter}}
-
-
-    <footer>
-        <div class="name-logo">
-            <h2>GIQ</h2>
-            <h4>|</h4>
-            <h3>UCLouvain</h3>
+    <div class="filter-bar text-align-left">
+        <div>
+            <h2>Filtré par</h2>
+            <form>
+                <label>Prix:<input type="range" name="budget"></label>
+                    <p>Regime : </p>
+                    <input type="radio" name="regime" value="vegetarien">
+                    <label>Végétarien</label><br>
+                    <input type="radio" name="regime" value="Halal">
+                    <label>Halal</label><br>
+                    <input type="radio" name="regime" value="vegan">
+                    <label>Vegan</label><br>
+                    <input type="radio" name="regime" value="sans-gluten">
+                    <label>Sans gluten</label><br>
+                <input type="submit" value="Submit" class="bg-color-black border-less">
+            </form>
         </div>
-        <div class="politique-de-conf conditions tarif">
-            <ul>
-                <li><a href="">Politique de confidalité</a></li>
-                <li><a href="">Conditions</a></li>
-                <li><a href="">Tarifs</a></li>
-            </ul>
+    </div>
+    <footer class="full-width-section text-align-left">
+        <div>
+            <div class="name-logo">
+                <h2>GIQ</h2>
+                <h4>|</h4>
+                <h3>UCLouvain</h3>
+            </div>
+            <div class="politique-de-conf conditions tarif">
+                <a href="">Politique de confidalité</a>
+                <a href="">Conditions</a>
+                <a href="">Tarifs</a>
+            </div>
         </div>
-        <div class="apropos-de-giq">
-            <h2>A propos de GIQ</h2>
-            <ul>
-                <li><a href="">Histoire</a></li>
-                <li><a href="">Enregister votre commerce</a></li>
-                <li><a href="">Consulter le FAQ</a></li>
-            </ul>
+        <div>
+            <h1>A propos de GIQ</h1>
+            <a href="">Histoire</a>
+            <a href="">Enregister votre commerce</a>
+            <a href="">Consulter le FAQ</a>
         </div>
-        <div class="contact">
-            <h2>Nous Contacter</h2>
-            <ul>
-                <li>Tel : 0465 36 43 45 </li>
-                <li>E-Mail : contact@giq.be</li>
-
-            </ul>
+        <div>
+            <h1>Nous Contacter</h1>
+            <p>Tel : 0465 36 43 45 </p>
+            <p>E-Mail : contact@giq.be</p>
         </div>
     </footer>
 </body>

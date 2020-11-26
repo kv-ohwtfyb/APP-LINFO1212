@@ -3,36 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SIGN UP</title>
+    <title>GiQ | Sign Up</title>
     <link rel="stylesheet" href="./css/main.css">
 </head>
-<body>
-    <header>
+<body class="input-page">
+    <div>
         <div class="name-logo">
             <h2>GIQ</h2>
             <h4>|</h4>
             <h3>UCLouvain</h3>
         </div>
-    </header>
-    <div class="register-login-rectangle">
-        {{codeError}}
-            <p>
-                The code doesn't match.Make sure you entered the correct phone number.
-            </p>
-        {{\codeError}}
-        <input type="number" placeholder="Enter the 4-digit code you received ...">
-        <p><button type="submit" name="verifyButton">VERIFY</button> </p>
-    </div>
-    <div class="resend-changenumber">
-        <p><ul>
-        <li><a href="">Resend Code</a></li>
-        <li><a href="">Change Phone Number</a></li>
-        </ul></p>
-    </div>
+        <form class="round-border" method="GET">
+            <p>{{VerificationError}}</p>
+            <label for="number"></label>
+            <input type="number" id="number" placeholder="Enter the 4-digit code you received ..." minlength="4" maxlength="4">
+            <input type="submit" value="Send" class="bg-color-black">
+        </form>
 
-    <p>
+        <div class="column-display">
+            <a href="">Resend Code</a>
+            <a href="">Change Phone Number</a>
+        </div>
+    </div>
+    <div class="announcement">
+        <h1>
         Thank you for trusting us. Your security is one of our priority.
-    </p>
-
+        </h1>
+    </div>
 </body>
 </html>

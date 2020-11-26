@@ -1,7 +1,6 @@
 function homePage(app, req, res){
     res.render('./customer/homepage.html');
 }
-
 function ordersPage(app,req,res){
     res.render('./customer/OrdersPage.html');
 }
@@ -15,7 +14,7 @@ function restaurantsPage(app,req,res){
     res.render('./customer/RestaurantViewPage.html');
 }
 function searchRestaurants(app,req,res){
-    res.render('./customer/SearchViewPage.html');
+    res.render('./customer/SearchAnswerPage.html');
 }
 function checkOut(app,req,res){
     res.render('./customer/CheckOutPage.html');

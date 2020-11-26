@@ -3,28 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SIGN UP</title>
+    <title>GiQ | Sign Up</title>
     <link rel="stylesheet" href="./css/main.css">
 </head>
-<body>
-    <header>
+<body class="input-page">
+    <div>
         <div class="name-logo">
             <h2>GIQ</h2>
             <h4>|</h4>
             <h3>UCLouvain</h3>
         </div>
-    </header>
-    <div class="register-login-rectangle">
-        <input type="text" placeholder="Name">
-        <input type="email" placeholder="Email">
-        <input type="password" placeholder="Password">
-        <input type="password" placeholder="Confirm Password">
-        <p><button type="submit">SIGN UP</button> </p>
+        <form class="round-border">
+            <label for="name"></label>
+            <input type="text" placeholder="Name" id="name">
+            <label for="email"></label>
+            <input type="email" placeholder="Email" id="email">
+            <label for="password"></label>
+            <input type="password" placeholder="Password" id="password">
+            <label for="confirmPassword"></label>
+            <input type="password" placeholder="Confirm Password" id="confirmPassword">
+            <input type="submit" class="bg-color-black" value="Sign Up">
+        </form>
     </div>
-
-    <p>
+    <div class="announcement">
+        <h1>
         Thank you for trusting us. Your security is one of our priority.
-    </p>
-
+        </h1>
+    </div>
 </body>
 </html>

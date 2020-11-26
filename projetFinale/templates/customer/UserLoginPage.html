@@ -6,29 +6,25 @@
     <title>GiQ | User Login</title>
     <link rel="stylesheet" href="./css/main.css">
 </head>
-<body>
-    <header>
+<body class="input-page">
+    <div>
         <div class="name-logo">
             <h2>GIQ</h2>
             <h4>|</h4>
             <h3>UCLouvain</h3>
         </div>
-    </header>
-    <div class="register-login-rectangle">
-        {{LoginError}}
-            <p>The password doesn't match username <br>
-            Try another password ...</p>
-        {{\LoginError}}
-        <input type="email" placeholder="Email">
-        <input type="password" placeholder="Password">
-        <p><button type="submit">LOG IN</button> </p>
+        <form class="round-border" method="GET">
+            <p>{{loginError}}</p>
+            <label for="email"></label>
+            <input type="email" placeholder="Email..." id="email">
+            <label for="password"></label>
+            <input type="password" placeholder="Password..." id="password">
+            <input type="submit" value="Log in" class="bg-color-black">
+        </form>
+        <a href="">Forgot password?</a>
     </div>
-    <div class="forget-password">
-        <p><a href="">Forgot password?</a></p>
+    <div class="announcement">
+        <h1>Place an order and get a chance to have a <span class="color-orange">FREE <br> MEAL </span>the next day …</h1>
     </div>
-    <p>
-        Place an order and get a chance to have a FREE MEAL the next day ...
-    </p>
-
 </body>
 </html>

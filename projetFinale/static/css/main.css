@@ -12,8 +12,10 @@ body{
     margin: 0;
     width: 100%;
     min-width: fit-content;
-    font-family: "HelveticaNeue", sans-serif;
+    font-family: "Helvetica", sans-serif;
     text-align: center;
+    background-image: url("./../images/body-bg.png");
+    background-size: cover;
 }
 
 ul{
@@ -23,6 +25,13 @@ h2{
     padding: 0;
     margin: 0;
 }
+input[type=submit] {
+    width: 70%;
+    height: 30px;
+    bottom: 0;
+    color: white;
+    position: absolute;
+}
 header{
     width: 100%;
     height: 60px;
@@ -30,7 +39,6 @@ header{
     grid-template-rows: 60px;
     grid-template-columns: 40px 230px auto 100px;
     align-items: center;
-    background-color: var(--grey);
 }
 
 header div{
@@ -59,11 +67,11 @@ header form input[type=submit]{
     border-width: 0;
     background-image: url("./../images/loop_magnifier.png");
     background-size: 20px;
+    position: initial;
 }
 header form input[type=submit]:focus{
     border-width: 0;
 }
-
 header form input[type=submit]:active{
     border-width: 0;
 }
@@ -183,8 +191,8 @@ header form input[type=submit]:active{
     justify-items: center;
 }
 .list-of-restaurants li a div{
-    width: 360px;
-    height: 166px;
+    width: 400px;
+    height: 180px;
     overflow: hidden;
 }
 .list-of-restaurants li a div img{
@@ -259,7 +267,7 @@ header form input[type=submit]:active{
     text-decoration: underline;
 }
 .popup-plate{
-    width: 0;
+    width: 420px;
     position: fixed;
     z-index: 1;
     top: 0;
@@ -269,6 +277,7 @@ header form input[type=submit]:active{
     padding-top: 20px;
     padding-bottom: 20px;
     align-items: center;
+    color: black;
 }
 .popup-plate .seen{
     width: 420px;
@@ -306,8 +315,12 @@ header form input[type=submit]:active{
     color: white;
     display: grid;
     grid-template-columns: auto auto auto;
-    padding-left: 20px;
-    padding-right: 20px;
+    justify-items: center;
+}
+.popup-plate .bottom-of-container{
+    bottom: 10%;
+    position: absolute;
+    margin: 0 15%;
 }
 
 .filter-button{
@@ -378,13 +391,6 @@ header form input[type=submit]:active{
     background: black;
     cursor: pointer;
 }
-.filter-bar input[type=submit]{
-    width: 70%;
-    height: 30px;
-    bottom: 0;
-    color: white;
-    position: absolute;
-}
 .filter-bar input[type=radio]{
     margin-left: 30px;
     margin-bottom: 10px;
@@ -427,11 +433,83 @@ footer p,a{
     padding: 0;
 }
 
+.input-page{
+    margin: 0;
+    width: 100%;
+    min-width: fit-content;
+    font-family: "HelveticaNeue", sans-serif;
+    text-align: center;
+    display: grid;
+    grid-template-columns: 500px auto;
+}
+.input-page div{
+    justify-items: center;
+}
+.input-page .name-logo{
+    margin-left: 60px;
+    grid-gap: 10px;
+}
+.input-page .popup-plate{
+    width: 420px;
+    overflow: auto;
+    z-index: 0;
+    transition: 0.5s;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    align-items: center;
+}
+.input-page form{
+    width: 380px;
+    height: 420px;
+    min-width: fit-content;
+    min-height: fit-content;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--green);
+    align-items: center;
+    padding-top: 80px;
+    padding-bottom: 30px;
+    position: relative;
+    margin: auto;
+}
+.input-page form input{
+    width: 80%;
+    min-height: 25px;
+    height: 6%;
+    min-width: 160px;
+    border-width: 0;
+    margin: 10px auto;
+}
+.input-page form input:active{
+    border-width: 0;
+}
+.input-page form input:hover{
+    border-width: 0;
+}
+.input-page form input[type=submit]{
+    bottom: 20px;
+}
+.input-page form div{
+    height: 70%;
+    justify-content: center;
+    overflow: auto;
+}
+.input-page .announcement{
+    display: flex;
+    justify-content: center;
+    text-align: center;
+}
+
+.input-page .announcement h1{
+    margin: auto;
+    font-size: 60px;
+    text-align: left;
+}
 /* Special attributes classes these classes possess only special attributes and
 are used as secondary classes in html*/
 
 .round-border{
-    border-radius: 20px;
+    border-radius: max(20px, 4%);
 }
 
 .full-width-section{
@@ -476,4 +554,11 @@ are used as secondary classes in html*/
 .left {
     position: absolute;
     left: 0;
+}
+.color-orange{
+    color: var(--orange);
+}
+.column-display{
+    display: flex;
+    flex-direction: column;
 }

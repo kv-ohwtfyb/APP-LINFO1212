@@ -134,8 +134,6 @@ app.post('/seller_login', (req, res) => {
     console.log(req.body);
 });
 
-
-
 app.use(bodyParser.urlencoded({ extended :true, limit: '50mb' }));
 app.use(express.static('static'));
 

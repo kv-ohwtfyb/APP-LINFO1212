@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GiQ | Check Out</title>
+    <link rel="stylesheet" href="./css/main.css">
+</head>
+<body class="input-page">
+    <div>
+        <div class="name-logo">
+            <h2>GIQ</h2>
+            <h4>|</h4>
+            <h3>UCLouvain</h3>
+        </div>
+        <form class="round-border" method="GET">
+            <div>
+                <label for="building"></label>
+                <input type="text" placeholder="Building to which deliver the food ..." name="building" id="building">
+                <label for="date"></label>
+                <input type="date" placeholder="Order for Today" name="date" id="date">
+            </div>
+            <input type="submit" value="Proceed to payment" class="bg-color-black">
+        </form>
+    </div>
+    <div class="popup-plate full-height-section bg-color-white" >
+        <h2>Plate</h2>
+        <ul>
+            <li>
+                <h2>Burger King</h2>
+                <hr class="bg-color-black">
+                <ul>
+                    <li>
+                        <input type="number" min="0" max="20" value="1" class="bg-color-black border-less">
+                        <p class="text-align-left">Item example</p>
+                        <p class="text-align-right">9,65€</p>
+                    </li>
+                    <li>
+                        <input type="number" min="0" max="20" value="2" class="bg-color-black border-less">
+                        <p class="text-align-left">Item example</p>
+                        <p class="text-align-right">9,65€</p>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <h2>O'Tacos</h2>
+                <hr class="bg-color-black">
+                <ul>
+                    <li>
+                        <input type="number" min="0" max="20" value="1" class="bg-color-black border-less">
+                        <p class="text-align-left">Item example</p>
+                        <p class="text-align-right">9,65€</p>
+                    </li>
+                    <li>
+                        <input type="number" min="0" max="20" value="2" class="bg-color-black border-less">
+                        <p class="text-align-left">Item example</p>
+                        <p class="text-align-right">9,65€</p>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+        <div class="bg-color-black bottom-of-container">
+            <p class="text-align-left">5</p>
+            <p>Total</p>
+            <p class="text-align-right">24,98€</p>
+        </div>
+    </div>
+</body>
+</html>
