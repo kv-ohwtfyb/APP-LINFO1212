@@ -1,104 +1,132 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>GIQ | Item Modification page</title>
-        <link rel="stylesheet" href="././static/css/main.css">
-    </head>
-
-    <body>
-        <header>
-            <!-- This is the header with GIQ | Uclouvain -->
-            <div>≡</div>
+<html lang="EN-US">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GIQ | Item Modification page</title>
+    <!--    CSS Imports-->
+    <link rel="stylesheet" href="./css/main.css">
+    <link href="https://unpkg.com/filepond/dist/filepond.css" rel="stylesheet">
+    <link href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css" rel="stylesheet">
+    <!--    JavaScript Imports-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.js"></script>
+    <script src="https://unpkg.com/filepond-plugin-file-encode/dist/filepond-plugin-file-encode.js"></script>
+    <script src="https://unpkg.com/filepond-plugin-image-resize/dist/filepond-plugin-image-resize.js"></script>
+    <script src="https://unpkg.com/filepond/dist/filepond.min.js"></script>
+    <script type="text/javascript" src="js/header.js"></script>
+    <script type="text/javascript" src="js/dashboardPage.js"></script>
+    <script type="text/javascript" src="js/imageUpload.js"></script>
+</head>
+<body class="seller-page">
+    <header class="bg-color-white">
+        <div id="navbar_open">≡
+        </div>
+        <div class="navbar bg-color-white" id="navbar_header">
+                <h4 id="navbar_close">X</h4>
+                {{#loggedIn}}
+                <img src ="" alt="User_Avatar" class="UserAvatar">
+                <div class="user-name">Client Lambda</div>
+                <ul>
+                    <li><a href="/ord">ORDERS</a></li>
+                {{/loggedIn}}
+                {{^loggedIn}}
+                <ul>
+                    <li><a class="login border-less bg-color-black" href="/user_login"><h2>Log in</h2></a></li>
+                    <li><a href="/sign_up_giveNumber">Sign Up</a></li>
+                {{/loggedIn}}
+                    <li><a href="/restaurant_speci">Add your restaurant</a></li>
+                    <li><a href="/seller_login">Log in as a seller</a></li>
+                </ul>
+            </div>
+        <div class="name-logo">
+            <h2>GIQ</h2>
+            <h4>|</h4>
+            <h3>UCLouvain</h3>
+        </div>
+        <div></div>
+        <div class="nav-tab">
+            <a href="/orders">Orders</a>
+            <a href="/my_store">Store</a>
+            <a href="/payments_list">Payments</a>
+        </div>
+    </header>
+    <form class="add-item" action="/add_item" method="POST">
+        <!-- Image section-->
+        <section class="image-text-item">
+            <div class="image-container bg-color-white shadow">
+                <input type="file" name="image" class="filepond">
+            </div>
+            <div class="column-display margin-left-right margin-top-bottom">
+                <section>
+                    <label for="item_name"></label>
+                    <input type="text" name="itemName" id="item_name" placeholder="Item Name..." class="full-width-section shadow border-less">
+                </section>
+                <section>
+                    <label for="description"></label>
+                    <textarea name="itemDescription" class="full-width-section shadow border-less" id="description"></textarea>
+                </section>
+                <section>
+                    <p> Vendre le produit seul: </p>
+                    <input type="radio" name="trueFalse" id="sellAlone"> Oui
+                    <input type="radio" name="trueFalse"> Non
+                </section>
+            </div>
+        </section>
+        <section class="bg-color-green shadow">
+            <label for="choose-category">Choisissez la catégorie  :</label>
+            <input type="search" name="chooseCategory" id="choose-category" placeholder="Rechercher des catégories..." class="round-border border-less">
+        </section>
+        <section class="bg-color-green shadow">
+            <label for="item-price">Prix :</label>
+            <input type="number" id="item-price" class="round-border border-less margin-left-right" placeholder="Default Price (TVA inclus)...">
+            <div class="margin-left-right">
+                <label for="promotion">Promotion</label>
+                <input type="number" class="round-border border-less" name="promotion" id="promotion" placeholder="en %" min="0" max="100">
+                <label for="final-price">Prix finale :</label>
+                <input type="number" name="finalPrice" id="final-price" placeholder="En €" autocomplete="off">
+            </div>
+        </section>
+        <section class="bg-color-green shadow">
+            <label for="group">Groupes :</label>
+            <input type="search" id="group" class="round-border border-less margin-left-right" placeholder="Rechercher des groupes..." autocomplete="on">
+        </section>
+        <section class="bg-color-green shadow margin-left-right">
+            <label for="infinity-quantity"> Quantité: </label>
+            <input type="radio" id="infinity-quantity" class="margin-left-right">
+            <label for="quantity-number"> Indefini</label>
+            <input type="number" id="quantity-number" name="quantNumber" class="margin-left-right border-less round-border" placeholder="Quantité..." min="0" maxlength="100">
+        </section>
+    </form>
+    <section class="buttons margin-top-bottom margin-top-bottom">
+            <button class="bg-color-red color-white border-less margin-top-bottom"> Delete </button>
+            <button class="bg-color-black color-white border-less margin-top-bottom"> Cancel </button>
+            <button class="bg-color-green border-less margin-top-bottom"> Save </button>
+    </section>
+    <footer class="full-width-section text-align-left">
+        <div>
             <div class="name-logo">
                 <h2>GIQ</h2>
                 <h4>|</h4>
                 <h3>UCLouvain</h3>
             </div>
-            
-            <ul class="seller-ul">
-                <li><a href="/orders"> Orders </a></li>
-                <li><a href="/my_store"> Store </a></li>
-                <li><a href="/payments_list"> Payments </a></li>
-            </ul>
-        </header>
-
-        <form name="addingItem" action="/add-item" method="POST">
-            <!-- Image section-->
-            <section class="image">
-                <input type="file" name="itemImage" class="itemImage" >
-            </section><br>
-
-            <!-- Item Name Input section-->
-            <section class="item-Name">
-                <input type="text" name="itemName" class="itemName" placeholder="Item Name..." autocomplete="on"><br>
-            </section><br>
-
-            <!-- Item Description Input section-->
-            <section class="item-Description">
-                <textarea name="itemDescription" class="itemDescription" cols="50" rows="10"> Description..</textarea><br>
-            </section><br>
-
-            <!-- The little choice of oui/non section-->
-            <section class="trueFalse">
-                <label for="trueFalse"> Vendre le produit seul: </label>
-                <input type="radio" name="trueFalse"> Oui
-                <input type="radio" name="trueFalse"> Non
-            </section><br>
-
-            <!-- Category part section-->
-            <section class="choose-Category">
-                <label for="chooseCategory">Choisissez la catégorie: </label>
-                <input type="search" name="chooseCategory" class="chooseCategory" placeholder="Rechercher des catégories..." autocomplete="on">
-            </section><br>
-
-            <!-- Price and Promotion part section-->
-            <section class="item-Price">
-                <label for="itemPice">Prix: </label>
-                <input type="number" name="itemPrice" class="itemPrice" placeholder="Default Price (TVA inclus)..." autocomplete="off">
-            </section><br>
-
-            <section class="item-promotion">
-                <input type="number" name="promotion" class="promotion" placeholder="Promotion en %" autocomplete="on">
-
-                <label for="finalPrice">Prix finale: </label>
-                <input type="number" name="finalPrice" class="finalPrice" placeholder="En €" autocomplete="off">
-            </section><br>
-
-            <!-- Group part section-->
-            <section class="item-group">
-                <label >Groupes: </label>
-                <input type="search" name="group" class="itemGroup" placeholder="Rechercher des groupes..." autocomplete="on">
-                <ul class="url-inputs">
-                    <li> 
-                        <label for="groupchoosed">{{group}}</label>Group you have choosed <input type="radio" name="groupchoosed"> <label for="groupchoosed">Nécessaires au produit</label>
-                     </li>
-                </ul>
-            </section>
-            
-            <!-- Quantity part section-->
-            <section class="item-quantity">
-                <label> Quantité: </label>
-                <input type="radio" name="quantIndefini"> 
-                <label for="quantIndefini"> Indefini</label>
-                <input type="number" class="quantNumber" name="quantNumber" placeholder="Quantité...">
-            </section>
-
-            <!-- button part section-->
-            <section class="button-part">
-                <button class="supprimerBtn"> Supprimer</button>
-                <button class="annulerBtn"> Annuler</button>
-                <button type="submit" class="enregisterBtn"> Enregistrer les modifications</button>
-            </section>
-
-            <!-- INPUT ZA RADIO TYPE TUGOMBA KUZIHINDURIRA MURI JS-->
-
-        </form>
-
-        <footer>
-            
-        </footer>
-
-    </body>
+            <div class="politique-de-conf conditions tarif">
+                <a href="">Politique de confidalité</a>
+                <a href="">Conditions</a>
+                <a href="">Tarifs</a>
+            </div>
+        </div>
+        <div>
+            <h1>A propos de GIQ</h1>
+            <a href="">Histoire</a>
+            <a href="">Enregister votre commerce</a>
+            <a href="">Consulter le FAQ</a>
+        </div>
+        <div>
+            <h1>Nous Contacter</h1>
+            <p>Tel : 0465 36 43 45 </p>
+            <p>E-Mail : contact@giq.be</p>
+        </div>
+    </footer>
+</body>
 </html>

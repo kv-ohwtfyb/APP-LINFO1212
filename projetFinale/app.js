@@ -18,7 +18,7 @@ const { getHomePage,
 const {  
     getAddOrModifyGroup,
     getAddOrModifyItem,
-    getAddOrModifyMenu,
+    getAddOrModifyCategory,
     getAfterCreateRestoMessage,
     getCreateRestaurantSpeci,
     getOrders,
@@ -47,8 +47,12 @@ app.get('/add_item', (req, res) => {
     getAddOrModifyItem(app, req, res);
 });
 
+app.get('/add_category', ((req, res) => {
+    getAddOrModifyCategory(app, req, res);
+}));
+
 app.get('/menu', (req, res) => {
-    getAddOrModifyMenu(app, req, res);
+    getAddOrModifyCategory(app, req, res);
 });
 
 app.get('/message', (req, res) => {

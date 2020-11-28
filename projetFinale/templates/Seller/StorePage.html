@@ -1,93 +1,131 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>GIQ | Store page</title>
-        <link rel="stylesheet" href="/static/css/main.css">
-    </head>
+<html lang="EN-US">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GIQ | Store page</title>
+    <!--    CSS Imports-->
+    <link rel="stylesheet" href="./css/main.css">
+    <!--    JavaScript Imports-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script type="text/javascript" src="js/header.js"></script>
+</head>
+<body class="seller-page">
+    <header class="bg-color-white">
+        <div id="navbar_open">≡
+        </div>
+        <div class="navbar bg-color-white" id="navbar_header">
+                <h4 id="navbar_close">X</h4>
+                {{#loggedIn}}
+                <img src ="" alt="User_Avatar" class="UserAvatar">
+                <div class="user-name">Client Lambda</div>
+                <ul>
+                    <li><a href="/ord">ORDERS</a></li>
+                {{/loggedIn}}
+                {{^loggedIn}}
+                <ul>
+                    <li><a class="login border-less bg-color-black" href="/user_login"><h2>Log in</h2></a></li>
+                    <li><a href="/sign_up_giveNumber">Sign Up</a></li>
+                {{/loggedIn}}
+                    <li><a href="/restaurant_speci">Add your restaurant</a></li>
+                    <li><a href="/seller_login">Log in as a seller</a></li>
+                </ul>
+            </div>
+        <div class="name-logo">
+            <h2>GIQ</h2>
+            <h4>|</h4>
+            <h3>UCLouvain</h3>
+        </div>
+        <div></div>
+        <div class="nav-tab">
+            <a href="/orders">Orders</a>
+            <a href="/my_store">Store</a>
+            <a href="/payments_list">Payments</a>
+        </div>
+    </header>
+    <section class="top-section">
+        <div class="restaurant-details text-align-left">
+            <h2>O'Tacos</h2>
+            <div class="details text-align-left" >
+                <p>Sales today : <strong> 89,56 €</strong></p>
+                <p>Sales this month : <strong> 389,56 €</strong></p>
+                <p>Total Sales : <strong> 2344,09 €</strong></p>
+                <p>Orders today : <strong> 10 €</strong></p>
+                <p>Average price per order : <strong> 7,09€</strong></p>
+            </div>
+        </div>
+        <div>
+            <h1 class="text-align-right">Store</h1>
+            <div>
+                <button class="bg-color-black color-white border-less" onclick="location.href='/add_group'" type="button">Add a new group</button>
+                <button class="bg-color-black color-white border-less" onclick="location.href='/add_category'" type="button">Add a new category</button>
+                <button class="bg-color-black color-white border-less" onclick="location.href='/add_item'" type="button">Add a new Item</button>
+            </div>
+        </div>
+    </section>
+    <table class="table-of-items table-of-orders">
+        <tr class="bg-color-white header-row">
+            <th>Photo</th>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Categories</th>
+            <th>Specifications</th>
+            <th>Inventory</th>
+        </tr>
+        <tr>
+            <td class="image-container">
+                <img src="/images/Otacos/otacos-tacos.jpg">
+            </td>
+            <td> O'Tacos L</td>
+            <td> 29,78 € </td>
+            <td> O'Tacos </td>
+            <td> Choose your meat... </td>
+            <td> 100 </td>
+        </tr>
+        <tr class="out-of-stock">
+            <td>  </td>
+            <td> O'Tacos L</td>
+            <td> 29,78 € </td>
+            <td> O'Tacos </td>
+            <td> Choose your meat... </td>
+            <td> 0 </td>
+        </tr>
+        <tr>
+            <td class="image-container">
+                <img src="/static/images/Otacos/otacos-tacos.jpg" alt="Item Image">
+            </td>
+            <td> O'Tacos L</td>
+            <td> 29,78 € </td>
+            <td> O'Tacos </td>
+            <td> Choose your meat... </td>
+            <td> Unlimited </td>
+        </tr>
 
-    <body>
-        <header>
-            <!-- This is the header with GIQ | Uclouvain -->
-            <div>≡</div>
+    </table>
+    <footer class="full-width-section text-align-left">
+        <div>
             <div class="name-logo">
                 <h2>GIQ</h2>
                 <h4>|</h4>
                 <h3>UCLouvain</h3>
             </div>
-            
-            <ul class="seller-ul">
-                <li><a href="/orders"> Orders </a></li>
-                <li><a href="/my_store"> Store </a></li>
-                <li><a href="/payments_list"> Payments </a></li>
-            </ul>
-        </header>
-
-        <section class="restoDetails">
-            <h1>O'Tacos</h1>
-            <ul class="details">
-                <li>Sales today : <strong> 89,56 €</strong></li>
-                <li>Sales this month : <strong> 389,56 €</strong></li>
-                <li>Total Sales : <strong> 2344,09 €</strong></li>
-                <li>Orders today : <strong> 10 €</strong></li>
-                <li>Average price per order : <strong> 7,09€</strong></li> 
-            </ul>
-        </section>
-
-        <section class="addBtns">
-            <button class="addgroup"> Add a new group</button>
-            <button class="addCategory"> Add a new category</button>
-        </section>
-
-        <section class="nameStore">
-            <h2>Store</h2>
-        </section>
-
-        <section class="newItemBtn">
-            <button class="newItem"> +New Item</button>
-        </section>
-
-        <table class="tableOfStore">
-            <tr>
-                <th>Photo</th>
-                <th>Name</th>
-                <th>Price</th>
-                <th>Categories</th>
-                <th>Specifications</th>
-                <th>Inventory</th>
-
-            </tr>
-
-            <tr>
-                <td> <img src="/static/images/Otacos/otacos-tacos.jpg" height="25%" width="25%"> </td>
-                <td> O'Tacos L</td>
-                <td> 29,78 € </td>
-                <td> O'Tacos </td>
-                <td> Choose your meat... </td>
-                <td> 100 </td>
-            </tr>
-            <tr>
-                <td>  </td>
-                <td> O'Tacos L</td>
-                <td> 29,78 € </td>
-                <td> O'Tacos </td>
-                <td> Choose your meat... </td>
-                <td> 0 </td>
-            </tr>
-            <tr>
-                <td> <img src="/static/images/Otacos/otacos-tacos.jpg" height="25%" width="25%"> </td>
-                <td> O'Tacos L</td>
-                <td> 29,78 € </td>
-                <td> O'Tacos </td>
-                <td> Choose your meat... </td>
-                <td> Unlimited </td>
-            </tr>
-        </table>
-
-        <footer>
-
-        </footer>
-
-    </body>
+            <div class="politique-de-conf conditions tarif">
+                <a href="">Politique de confidalité</a>
+                <a href="">Conditions</a>
+                <a href="">Tarifs</a>
+            </div>
+        </div>
+        <div>
+            <h1>A propos de GIQ</h1>
+            <a href="">Histoire</a>
+            <a href="">Enregister votre commerce</a>
+            <a href="">Consulter le FAQ</a>
+        </div>
+        <div>
+            <h1>Nous Contacter</h1>
+            <p>Tel : 0465 36 43 45 </p>
+            <p>E-Mail : contact@giq.be</p>
+        </div>
+    </footer>
+</body>
 </html>

@@ -17,6 +17,7 @@
     "hogan": "^1.0.2",
     "hogan.js": "^3.0.2",
     "https": "^1.0.0",
+    "node-pre-gyp": "^0.16.0",
     "passport": "^0.4.1"
   },
   "devDependencies": {

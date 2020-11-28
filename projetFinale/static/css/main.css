@@ -291,9 +291,6 @@ header form input[type=submit]:active{
     align-items: center;
     color: black;
 }
-.popup-plate .seen{
-    width: 420px;
-}
 .popup-plate ul li h2{
     text-align: left;
 }
@@ -513,7 +510,7 @@ header form input[type=submit]:active{
     overflow: hidden;
 }
 .popup-item-specifications .image-container img{
-    width: 80%;
+    width: 100%;
 }
 .popup-item-specifications .buttons{
     width: 100%;
@@ -655,6 +652,13 @@ footer p,a{
 .seller-page .align-right{
     align-items: flex-end;
 }
+.seller-page a{
+    color: black;
+    text-decoration: none;
+}
+.seller-page footer a{
+    color: #FFFFFF;
+}
 .seller-page a:hover{
     text-decoration: underline;
     color: var(--orange);
@@ -693,6 +697,13 @@ footer p,a{
     font-size: 12px;
     margin: 2px 2px auto 0;
 }
+
+.seller-page .top-section button{
+    width: 140px;
+    min-width: fit-content;
+    height: 30px;
+}
+
 .table-of-orders{
     width: 90%;
     align-items: center;
@@ -705,6 +716,9 @@ footer p,a{
 }
 .table-of-orders .header-row{
     height: auto;
+}
+.table-of-orders th{
+    background-color: #FFFFFF;
 }
 .table-of-orders tr{
     display: grid;
@@ -723,6 +737,134 @@ footer p,a{
     height: 30px;
 }
 
+.order-view ul li {
+    margin: 5px auto;
+}
+
+.order-view ul li ul li{
+    display: block;
+    text-align: left;
+}
+
+.order-view .bottom-of-container{
+    display: grid;
+    grid-template-rows: 50% 50%;
+    grid-gap: 10px;
+    grid-template-columns:auto;
+}
+.order-view .bottom-of-container div{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+}
+.order-view .bottom-of-container button{
+    width: 49%;
+    height: 100%;
+    border-width: 0;
+}
+.seller-page button{
+    width: 100px;
+    height: 40px;
+}
+.table-of-payments tr{
+    height: 60px;
+    display: flex;
+    justify-content: space-evenly;
+    align-content: center;
+    background-color: #FFFFFF;
+}
+.table-of-payments tr{
+    grid-template-columns: auto 150px 200px auto 200px;
+}
+.table-of-payments .paid{
+    background-color: var(--green);
+}
+.table-of-payments .pending{
+    background-color: black;
+    color: #FFFFFF;
+}
+
+.new-item{
+    position: fixed;
+    top: 50%;
+    right: 2%;
+}
+
+.table-of-items tr{
+    grid-template-columns: 200px 200px 100px 100px auto 100px;
+    grid-template-rows: 100%;
+    background-color: var(--green);
+}
+.table-of-items .image-container{
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+.table-of-items .image-container .image{
+    height: fit-content;
+    image-resolution: inherit;
+}
+.table-of-items .out-of-stock{
+    background-color: var(--red);
+}
+
+.add-item{
+    width: 90%;
+    margin: 20px auto;
+}
+
+.add-item section{
+    display: inline-flex;
+    align-items: center;
+    width: 96%;
+    margin: 10px auto;
+    height: fit-content;
+    padding: 2%;
+}
+.add-item .image-container{
+    height: 400px;
+    width: 400px;
+    align-items: center;
+    padding: 0;
+    overflow: hidden;
+    display: block;
+    justify-content: center;
+}
+.add-item .image-container input[type=file]{
+    display: none;
+}
+.add-item .image-text-item{
+    display: grid;
+    grid-template-rows: 100%;
+    grid-template-columns: 400px auto;
+}
+
+.add-item input[type=text],input[type=number],input[type=search]{
+    height: 30px;
+}
+.add-item textarea{
+    height: 200px;
+    max-height: 300px;
+    max-width: 400px;
+}
+.filepond{
+    width: 100%;
+    height: 100%;
+    font-size: 24px;
+    margin: auto;
+    text-transform: uppercase;
+}
+
+.filepond label{
+    font-size: 16px;
+}
+.filepond--credits{
+    display: none;
+}
+
+
 /* Special attributes classes these classes possess only special attributes and
 are used as secondary classes in html*/
 
@@ -736,7 +878,6 @@ are used as secondary classes in html*/
 .full-height-section{
     height: 100%;
 }
-
 .bg-color-red{
     background-color: var(--red);
 }
@@ -792,6 +933,24 @@ are used as secondary classes in html*/
     display: flex;
     flex-direction: column;
 }
+.row-display{
+    display: flex;
+    flex-direction: row;
+}
 .margin-top-bottom{
-    margin: 2% auto;
+    margin-top: max(2%, 5px);
+    margin-bottom: max(2%, 5px);
+}
+.margin-left-right{
+    margin-left: max(2%, 5px);
+    margin-right: max(2%, 5px);
+}
+.shadow{
+    box-shadow: var(--shadow);
+}
+.margin{
+    margin: auto;
+}
+.block{
+    display: block;
 }

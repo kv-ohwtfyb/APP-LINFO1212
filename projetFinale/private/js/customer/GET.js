@@ -1,5 +1,5 @@
 function homePage(app, req, res){
-    res.render('./customer/homepage.html');
+    res.render('./customer/Homepage.html');
 }
 function ordersPage(app,req,res){
     res.render('./customer/OrdersPage.html');

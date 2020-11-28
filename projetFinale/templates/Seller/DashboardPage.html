@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="EN-US">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,7 +9,7 @@
     <!--    JavaScript Imports-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script type="text/javascript" src="js/header.js"></script>
-    <script type="text/javascript" src="js/filter.js"></script>
+    <script type="text/javascript" src="js/dashboardPage.js"></script>
 </head>
 <body class="seller-page">
     <header class="bg-color-white">
@@ -39,9 +39,9 @@
         </div>
         <div></div>
         <div class="nav-tab">
-            <a>Orders</a>
-            <a>Store</a>
-            <a>Payments</a>
+            <a href="/orders">Orders</a>
+            <a href="/my_store">Store</a>
+            <a href="/payments_list">Payments</a>
         </div>
     </header>
     <section class="top-section">
@@ -56,10 +56,10 @@
             </div>
         </div>
         <div>
-            <h1>Orders Today</h1>
+            <h1 class="text-align-right">Orders Today</h1>
         </div>
     </section>
-    <table class="table-of-orders">
+    <table class="table-of-orders" id="table_of_orders">
         <tr class="bg-color-white header-row">
             <th>Order</th>
             <th>Date</th>
@@ -67,7 +67,7 @@
             <th>Total</th>
             <th>Action</th>
         </tr>
-        <tr class="bg-color-green">
+        <tr class="order bg-color-green">
             <td>#i89eh795g</td>
             <td>25 Feb 2020 11h09</td>
             <td>
@@ -88,7 +88,7 @@
                 {{/action}}
             </td>
         </tr>
-        <tr class="bg-color-orange">
+        <tr class="order bg-color-orange">
             <td><p>#i89eh795g</p></td>
             <td>26 Feb 2020 10h09</td>
             <td>
@@ -107,27 +107,37 @@
             </td>
         </tr>
     </table>
-    <section class="orderView" style="display: none">
-        <h1> Plates </h1>
-        <table>
-            <tr>
-                <th class="restoName"> O'Tacos</th>
-            </tr>
-            <tr>
-                <td>
-                    <ol>
-                        <li> <label for="platName">Double Whooper Bacon</label> <input type="text" name="platName" value="7,90€" disabled></li>
-                        <li> <label for="platName">Grandes Frites </label> <input type="text"  name="platName"  value="5,80€" disabled ></li>
-                    </ol>
-                </td>
-            </tr>
-        </table>
-        <div class="orderViewBtn">
-            <button class="totalBtn"> 5 Total 34,30 € </button>
-            <button class="doneBtn"> Done </button>
-            <button class="annulerBtn">Cancel</button>
+    <div class="order-view popup-plate bg-color-white full-height-section" id="order_popup">
+        <button class="close border-less bg-color-black color-white">X</button>
+        <h1> Order #i89eh795g</h1>
+        <ul>
+            <li>
+                <h2>Menu Double Whooper Bacon</h2>
+                <hr class="bg-color-black">
+                <ul>
+                    <li>Petites frites</li>
+                    <li>Coca-cola</li>
+                    <li>Sauce Andalouse</li>
+                </ul>
+            </li>
+            <li>
+                <h2>Chicken nuggets</h2>
+                <hr class="bg-color-black">
+            </li>
+            <li>
+                <h2>Milk Shake</h2>
+                <hr class="bg-color-black">
+            </li>
+        </ul>
+        <div class="bottom-of-container">
+            <div class="total bg-color-black"><p>5</p><p>Total</p><p>34,30€</p></div>
+            <div class="buttons">
+                <button class="done bg-color-green"> Done </button>
+                <button class="cancel bg-color-red color-white">Cancel</button>
+            </div>
+
         </div>
-    </section>
+    </div>
     <footer class="full-width-section text-align-left">
         <div>
             <div class="name-logo">
