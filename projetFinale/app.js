@@ -94,7 +94,7 @@ app.post('/creating_restaurant', function (req, res){
 });
 
 app.post('/seller_login', function (req, res) {
-    console.log(req.body)
+    console.log(req.body);
 });
 
 /************ CUSTOMER GET Request PART ************/

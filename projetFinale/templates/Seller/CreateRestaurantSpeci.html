@@ -1,40 +1,33 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>GIQ | Restaurant Creation page</title>
-        <link rel="stylesheet" href="static/css/main.css">
-    </head>
-    <body>
-        <header>
-            <div class="name-logo">
-              <h2>GIQ</h2>
-              <h4>|</h4>
-              <h3>UCLouvain</h3>
-            </div>
-          </header>
-
-          <form action="/creatingRestaurant" method="POST">
-
-            <div class="RestoCreate-rectangle">
-              <input type="text" placeholder="Restaurant name..." name="restoName"><br>
-              <input type="number" placeholder="TVA Number" name="TVA"><br>
-              <input type="text" placeholder="Address" name="address"><br>
-              <input type="text" placeholder="Compte bancaire" name="Compte"><br>
-              <input type="text" placeholder="Restaurant authentifical key" name="authKey"><br>
-              <button type="submit"> submit </button>
-            </div>
-
-            <!-- A CHANGER -->
-
-            <div class="text-rectangle">
-              <label for="document">Documents à propos de votre restaurant. </label>
-              <input type="file" name="document"  placeholder="Necessary Documents">
-              <input type="file" name="document"  placeholder="Necessary Documents">
-            </div>
-            
-          </form>
-
-    </body>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GIQ | Restaurant Creation page</title>
+    <link rel="stylesheet" href="./css/main.css">
+</head>
+<body class="input-page">
+    <div>
+        <div class="name-logo">
+          <h2>GIQ</h2>
+          <h4>|</h4>
+          <h3>UCLouvain</h3>
+        </div>
+      <form action="/creatingRestaurant" method="POST" class="round-border">
+        <div>
+            <input type="text" placeholder="Restaurant name..." name="restoName">
+            <input type="number" placeholder="TVA Number" name="TVA">
+            <input type="text" placeholder="Address" name="address">
+            <input type="text" placeholder="Compte bancaire" name="Compte">
+            <input type="text" placeholder="Restaurant authentifical key" name="authKey">
+            <input type="file" name="document"  placeholder="Necessary Documents">
+            <input type="file" name="document"  placeholder="Necessary Documents">
+        </div>
+            <input type="submit" class="color-white bg-color-black">
+      </form>
+    </div>
+    <div class="announcement">
+      <h1>Documents à propos de votre restaurant. </h1>
+    </div>
+</body>
 </html>
