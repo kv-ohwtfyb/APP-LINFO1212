@@ -89,7 +89,7 @@ app.post('/menu', function (req, res){
     console.log(req.body);
 });
 
-app.post('/creatingRestaurant', function (req, res){
+app.post('/creating_restaurant', function (req, res){
     console.log(req.body);
 });
 
@@ -108,7 +108,7 @@ app.get('/user_login',(req,res) => {
 app.get('/user_signup',(req,res) =>{
     getUserSignUpPage(app,req,res);
 })
-app.get('/restaurants',(req,res) =>{
+app.get('/restaurant_view',(req,res) =>{
     getRestaurantsPage(app,req,res);
 })
 app.get('/search',(req,res) => {

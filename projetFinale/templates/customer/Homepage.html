@@ -6,29 +6,33 @@
     <title>GiQ | Home</title>
     <!--    CSS Imports-->
     <link rel="stylesheet" href="./css/main.css">
+    <!--    JavaScript Imports-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script type="text/javascript" src="js/header.js"></script>
+    <script type="text/javascript" src="js/filter.js"></script>
 </head>
 <body>
     <header>
-        <div>≡
+        <div id="navbar_open">≡
             <!-- This is the pop up nav bar section the user is not yet logged in-->
-            <div class="navbar bg-color-white">
-                <h4>X</h4>
+        </div>
+        <div class="navbar bg-color-white" id="navbar_header" style="">
+                <h4 id="navbar_close">X</h4>
                 {{#loggedIn}}
                 <img src ="" alt="User_Avatar" class="UserAvatar">
                 <div class="user-name">Client Lambda</div>
                 <ul>
-                    <li><a href="./OrdersPage.html">ORDERS</a></li>
+                    <li><a href="/ord">ORDERS</a></li>
                 {{/loggedIn}}
                 {{^loggedIn}}
-                    <button type="submit" name ="logIn" class="border-less bg-color-black">LOG IN</button>
                 <ul>
-                    <li><a href="./UserSignUpCompletingPage.html">SIGN UP</a></li>
+                    <li><a class="login border-less bg-color-black" href="/user_login"><h2>Log in</h2></a></li>
+                    <li><a href="/sign_up_giveNumber">Sign Up</a></li>
                 {{/loggedIn}}
-                    <li><a href="../Seller/CreateRestaurantSpeci.html">ADD YOUR RESTAURANT</a></li>
-                    <li><a href="../Seller/SellerLoginPage.html">LOG IN AS A SELLER</a></li>
+                    <li><a href="/restaurant_speci">Add your restaurant</a></li>
+                    <li><a href="/seller_login">Log in as a seller</a></li>
                 </ul>
             </div>
-        </div>
         <div class="name-logo">
             <h2>GIQ</h2>
             <h4>|</h4>
@@ -38,13 +42,13 @@
             <input type="search" name="search" id="searchInput" placeholder="De quoi avez vous envie de savourer :) …">
             <input type="submit" value=" ">
         </form>
-        <div class="plate round-border">
+        <div class="plate round-border" id="popup_plate_open">
             <img>
             <p>2</p>
         </div>
         <!-- When clicked on the plate -->
-        <div class="popup-plate full-height-section bg-color-white" style="display: none">
-            <button class="bg-color-white border-less left">X</button>
+        <div class="popup-plate full-height-section bg-color-white" id="popup_plate_header">
+            <button class="bg-color-white border-less left" id="popup_plate_close">X</button>
             <h2>PLATE</h2>
             <ul>
                 <li>
@@ -80,7 +84,7 @@
                     </ul>
                 </li>
             </ul>
-            <div class="bg-color-black">
+            <div class="bg-color-black bottom-of-container">
                 <p class="text-align-left">5</p>
                 <p>Total</p>
                 <p class="text-align-right">24,98€</p>
@@ -233,12 +237,12 @@
             </li>
         </ul>
     </section>
-    <div class="filter-button bg-color-green round-border">
+    <div class="filter-button bg-color-green round-border" id="filter_open">
         <p>TRIER</p>
     </div>
-    <div class="filter-bar text-align-left">
+    <div class="filter-bar text-align-left" id="filter_bar">
         <div>
-            <h2>Filtré par</h2>
+            <pre> <h2>Filtré par                 <span id="filter_close">x</span></h2></pre>
             <form>
                 <label>Prix:<input type="range" name="budget"></label>
                     <p>Regime : </p>

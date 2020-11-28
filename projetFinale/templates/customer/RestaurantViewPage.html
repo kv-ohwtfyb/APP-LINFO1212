@@ -3,343 +3,343 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RESTAURANT</title>
+    <title>GiQ | Restaurant</title>
+    <!--    CSS Imports-->
     <link rel="stylesheet" href="./css/main.css">
+    <!--    JavaScript Imports-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script type="text/javascript" src="js/header.js"></script>
+    <script type="text/javascript" src="js/checkoutPage.js"></script>
 </head>
 <body>
     <header>
-        <div>≡
+        <div id="navbar_open">≡
             <!-- This is the pop up nav bar section the user is not yet logged in-->
-            <span id="NavBar-NotLoggedin">
-                    <button type="submit" name ="logIn">LOG IN</button>
-                    <p>
-                        <ul>
-                            <li><a href="">SIGN UP</a></li>
-                            <li><a href="">ADD YOUR RESTAURANT</a></li>
-                            <li><a href="">LOG IN AS A SELLER</a></li>
-                        </ul>
-                </p>
-                </span>
-            <!-- This is the pop up nav bar section the user is logged in || Maybe use Mustache??!!-->
-            <span id="NavBar-Loggedin">
-                    <img src ="" alt="User_Avatar" class="UserAvatar">
-                    <div class="user-name">Client Lambda</div>
-                    <p>
-                        <ul>
-                            <li><a href="">ODERS</a></li>
-                            <li><a href="">ADD YOUR RESTAURANT</a></li>
-                            <li><a href="">LOG IN AS A SELLER</a></li>
-                        </ul>
-                </p>
-                </span>
         </div>
+        <div class="navbar bg-color-white" id="navbar_header" style="">
+                <h4 id="navbar_close">X</h4>
+                {{#loggedIn}}
+                <img src ="" alt="User_Avatar" class="UserAvatar">
+                <div class="user-name">Client Lambda</div>
+                <ul>
+                    <li><a href="/ord">ORDERS</a></li>
+                {{/loggedIn}}
+                {{^loggedIn}}
+                <ul>
+                    <li><a class="login border-less bg-color-black" href="/user_login"><h2>Log in</h2></a></li>
+                    <li><a href="/sign_up_giveNumber">Sign Up</a></li>
+                {{/loggedIn}}
+                    <li><a href="/restaurant_speci">Add your restaurant</a></li>
+                    <li><a href="/seller_login">Log in as a seller</a></li>
+                </ul>
+            </div>
         <div class="name-logo">
             <h2>GIQ</h2>
             <h4>|</h4>
             <h3>UCLouvain</h3>
         </div>
         <form>
-            <input type="search" name="search" id="searchInput" placeholder="Quoi avez vous envie de savourer :) …">
-            <input type="submit" value="">
+            <input type="search" name="search" id="searchInput" placeholder="De quoi avez vous envie de savourer :) …">
+            <input type="submit" value=" ">
         </form>
-        <div class="plate round-border">
+        <div class="plate round-border" id="popup_plate_open">
             <img>
             <p>2</p>
         </div>
         <!-- When clicked on the plate -->
-        <span class="popup-plate">
-                <h2>PLATE</h2>
-                <table class="commandes">
-                    <tr>
-                        <th>O'TACOS</th>
-                    </tr>
-                    {{#commande}}
-                    <tr class="commande-restaurant">
-                        <td>
-                            <form action="">
-                                <input type="number" id="quantity" name="quantity" min="1" max="20">
-                            </form>
-                        </td>
-                        <td>
-                            O'TACOS XL & sauce Andalouse
-                        </td>
-                        <td>
-                            7,80€
-                        </td>
-                    </tr>
-                    {{/commande}}
-                </table>
-
-                <button type="submit" class="order-button">ORDER {{total}}</button>
-            </span>
+        <div class="popup-plate full-height-section bg-color-white" id="popup_plate_header">
+            <button class="bg-color-white border-less left" id="popup_plate_close">X</button>
+            <h2>PLATE</h2>
+            <ul>
+                <li>
+                    <h2>Burger King</h2>
+                    <hr class="bg-color-black">
+                    <ul>
+                        <li>
+                            <input type="number" min="0" max="20" value="1" class="bg-color-black border-less">
+                            <p class="text-align-left">Item example</p>
+                            <p class="text-align-right">9,65€</p>
+                        </li>
+                        <li>
+                            <input type="number" min="0" max="20" value="2" class="bg-color-black border-less">
+                            <p class="text-align-left">Item example</p>
+                            <p class="text-align-right">9,65€</p>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <h2>O'Tacos</h2>
+                    <hr class="bg-color-black">
+                    <ul>
+                        <li>
+                            <input type="number" min="0" max="20" value="1" class="bg-color-black border-less">
+                            <p class="text-align-left">Item example</p>
+                            <p class="text-align-right">9,65€</p>
+                        </li>
+                        <li>
+                            <input type="number" min="0" max="20" value="2" class="bg-color-black border-less">
+                            <p class="text-align-left">Item example</p>
+                            <p class="text-align-right">9,65€</p>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            <div class="bg-color-black bottom-of-container">
+                <p class="text-align-left">5</p>
+                <p>Total</p>
+                <p class="text-align-right">24,98€</p>
+            </div>
+        </div>
     </header>
-    <section class="restaurant-info">
-        <h1>O'TACOS</h1>
-        <p class="address-numero-restaurant">
-            <ul>Ouvert 8H - 9H | +3271352463</ul>
-            <ul>Rue des savoureux 45, 1348 Louvain-La-Neuve</ul>
-        </p>
-        <p class="prix-moyen-restaurant">
-        Prix moyen dépensé : 7,83€
-        </p>
-        <img src="./images/Otacos/otacos-tacos.jg">
-    </section>
-    <section class="restaurant-content">
-        <div class="topbarnav">
-            <a href="#menu">Menus</a>
-            <a href="#tacos">O'Tacos</a>
-            <a href="#frite">Frites</a>
-            <a href="#boisson">Boissons</a>
+    <section class="restaurant-info bg-color-green">
+        <div class="text-align-right">
+            <h1>O'TACOS |</h1>
         </div>
-        <table id="menu">
+        <div class="text-align-left">
+            <p>Ouvert 8H - 9H | +3271352463</p>
+            <p>Rue des savoureux 45, 1348 Louvain-La-Neuve</p>
+            <p class="prix-moyen-restaurant">
+            Prix moyen dépensé : 7,83€
+            </p>
+        </div>
+        <div class="image-container">
+            <img src="./images/Otacos/otacos-tacos.jpg">
+        </div>
+    </section>
+    <div class="categories-tab round-border bg-color-white color-black">
+        <a href="#menus">Menus</a>
+        <a href="#tacos">O'Tacos</a>
+        <a href="#frites">Frites</a>
+        <a href="#boissons">Boissons</a>
+    </div>
+    <section>
+        <section id="menus" class="margin-top-bottom">
             <h2>Menus</h2>
-            <tr>
-                <td>
-                    <a>
-                        <section><h1>Menu étudiant</h1>
-                            <p>
-                                Choisissez la viande et une boisson.
-                            </p>
-                            <p>
-                                23.4€
-                            </p>
-                        </section>
-                        <div>
-                            <img src="./projetFinale/static/images/Otacos/otacos-tacos.jpg">
-                        </div>
-
-                    </a>
-                </td>
-                <td>
-                    <a>
-                        <section><h1>Menu enfant</h1>
-                            <p>
-                                Did you know you need to be a user in order to create/ add a restaurant
-                            </p>
-                            <p>23.4€</p>
-                        </section>
-                        <div>
-                            <img src="./projetFinale/static/images/Otacos/otacos-tacos.jg">
-                        </div>
-                    </a>
-                </td>
-                <td>
-                    <a>
-                        <section><h1>Menu étudiant</h1>
-                            <p>
-                                Did you know you need to be a user in order to create/ add a restaurant
-                            </p>
-                            <p>9.40€</p>
-                        </section>
-                        <div>
-                            <img src="./projetFinale/static/images/Otacos/otacos-tacos.jg">
-                        </div>
-                    </a>
-                </td>
-            </tr>
-
-        </table>
-        <table id="tacos">
-            <h2>O'Tacos</h2>
-            <tr>
-                <td>
-                    <a>
-                        <section><h1>O'Tacos L</h1>
-                            <p>
-                                Choisissez la viande et une boisson.
-                            </p>
-                            <p>
-                                23.4€
-                            </p>
-                        </section>
-                        <div>
-                            <img src="./projetFinale/static/images/Otacos/otacos-tacos.jg">
-                        </div>
-
-                    </a>
-                </td>
-                <td>
-                    <a>
-                        <section><h1>O'Tacos M</h1>
-                            <p>
-                                Did you know you need to be a user in order to create/ add a restaurant
-                            </p>
-                            <p>23.4€</p>
-                        </section>
-                        <div>
-                            <img src="./projetFinale/static/images/Otacos/otacos-tacos.jg">
-                        </div>
-                    </a>
-                </td>
-                <td>
-                    <section><h1>O'Tacos XL</h1>
-                        <p>
-                            Did you know you need to be a user in order to create/ add a restaurant
-                        </p>
-                        <p>9.40€</p>
-                    </section>
+            <ul class="list-of-items three-gridded-layout">
+                <li>
                     <div>
-                        <img src="./projetFinale/static/images/Otacos/otacos-tacos.jg">
+                        <section>
+                            <h1>Menu étudiant</h1>
+                            <p>Choisissez la viande et une boisson.</p>
+                            <p>23.40€</p>
+                        </section>
+                        <div>
+                            <img src="images/Otacos/otacos-tacos.jpg">
+                        </div>
                     </div>
-                </td>
-            </tr>
-
-        </table>
-        <table id="frite">
-            <h2>Frites</h2>
-            <tr>
-                <td>
-                    <a>
-                        <section><h1>Frites L</h1>
-                            <p>
-                                Choisissez la viande et une boisson.
-                            </p>
-                            <p>
-                                23.4€
-                            </p>
+                </li>
+                <li>
+                    <div>
+                        <section>
+                            <h1>Menu enfant</h1>
+                            <p>Did you know you need to be a user in order to create/ add a restaurant</p>
+                            <p class="bottom-of-container">23.40€</p>
                         </section>
                         <div>
-                            <img src="./projetFinale/static/images/Otacos/otacos-tacos.jg">
+                            <img src="images/Burger King/burger.jpg">
                         </div>
-
-                    </a>
-                </td>
-                <td>
-                    <a>
-                        <section><h1>Frites M</h1>
-                            <p>
-                                Did you know you need to be a user in order to create/ add a restaurant
-                            </p>
-                            <p>23.4€</p>
-                        </section>
-                        <div>
-                            <img src="./projetFinale/static/images/Otacos/otacos-tacos.jg">
-                        </div>
-                    </a>
-                </td>
-                <td>
-                    <a>
-                        <section><h1>Frites XL</h1>
-                            <p>
-                                Did you know you need to be a user in order to create/ add a restaurant
-                            </p>
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <section>
+                            <h1>Menu étudiant</h1>
+                            <p>Did you know you need to be a user in order to create/ add a restaurant</p>
                             <p>9.40€</p>
                         </section>
                         <div>
-                            <img src="./projetFinale/static/images/Otacos/otacos-tacos.jg">
+                            <img src="images/Otacos/otacos-tacos.jpg">
                         </div>
-                    </a>
-                </td>
-            </tr>
-
-        </table>
-        <table id="boisson">
-            <h2>Boissons</h2>
-            <tr>
-                <td>
-                    <a>
-                        <section><h1>Coca</h1>
-                            <p>
-                                Choisissez la viande et une boisson.
-                            </p>
-                            <p>
-                                23.4€
-                            </p>
-                        </section>
-                        <div>
-                            <img src="./projetFinale/static/images/Otacos/otacos-tacos.jg">
-                        </div>
-
-                    </a>
-                </td>
-                <td>
-                    <a>
-                        <section><h1>Fanta</h1>
-                            <p>
-                                Did you know you need to be a user in order to create/ add a restaurant
-                            </p>
-                            <p>23.4€</p>
-                        </section>
-                        <div>
-                            <img src="./projetFinale/static/images/Otacos/otacos-tacos.jg">
-                        </div>
-                    </a>
-                </td>
-                <td>
-                    <a>
-                        <section><h1>Sprite</h1>
-                            <p>
-                                Did you know you need to be a user in order to create/ add a restaurant
-                            </p>
-                            <p>9.40€</p>
-                        </section>
-                        <div>
-                            <img src="./projetFinale/static/images/Otacos/otacos-tacos.jg">
-                        </div>
-                    </a>
-                </td>
-            </tr>
-
-        </table>
-    </section>
-    <span id="popup-menu">
-        <a class="closebutton">&times;</a>
-        <h3>Menu étudiant</h3>
-        <img src="">
-        <p>Choisissez des légumes : <form>
-                <input type="radio" name="option" value="poivrons">
-                <label>Poivrons</label><br>
-                <input type="radio" name="option" value="onion">
-                <label>Onion</label><br>
-                <input type="radio" name="option" value="cocombres">
-                <label>Cocombres</label><br>
-                </form>
-        </p>
-        <p>Souhaitez vous des suppléments? <form>
-                <input type="checkbox" name="option" value="eau">
-                <label>Eau</label><br>
-                <input type="checkbox" name="option" value="maggi">
-                <label>Maggi</label><br>
-                <input type="checkbox" name="option" value="sel">
-                <label>Sel</label><br>
-                </form>
-        </p>
-
-        <section class="buttons">
-            <button type="submit" class="annuler">Annuler</button>
-            <button type="submit" class="ajouter-sur-assiette">Ajouter à vôtre assiette {{total_sup}}</button>
+                    </div>
+                </li>
+            </ul>
         </section>
-    </span>
-    <footer>
-        <div class="name-logo">
-            <h2>GIQ</h2>
-            <h4>|</h4>
-            <h3>UCLouvain</h3>
-        </div>
-        <div class="politique-de-conf conditions tarif">
-            <ul>
-                <li><a href="">Politique de confidalité</a></li>
-                <li><a href="">Conditions</a></li>
-                <li><a href="">Tarifs</a></li>
+        <section id="tacos" class="margin-top-bottom">
+            <h2>O'Tacos</h2>
+            <ul class="list-of-items three-gridded-layout">
+                <li>
+                    <div>
+                        <section>
+                            <h1>O'Tacos L</h1>
+                            <p>Choisissez la viande et une boisson.</p>
+                            <p>23.40€</p>
+                        </section>
+                        <div>
+                            <img src="images/Otacos/otacos-tacos.jpg">
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <section>
+                            <h1>O'Tacos M</h1>
+                            <p>Did you know you need to be a user in order to create/ add a restaurant</p>
+                            <p>23.4€</p>
+                        </section>
+                        <div>
+                            <img src="images/Otacos/otacos-tacos.jpg">
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <section>
+                            <h1>O'Tacos XL</h1>
+                            <p>Did you know you need to be a user in order to create/ add a restaurant</p>
+                            <p>9.40€</p>
+                        </section>
+                        <div>
+                            <img src="images/Otacos/otacos-tacos.jpg">
+                        </div>
+                    </div>
+                </li>
             </ul>
-        </div>
-        <div class="apropos-de-giq">
-            <h2>A propos de GIQ</h2>
-            <ul>
-                <li><a href="">Histoire</a></li>
-                <li><a href="">Enregister votre commerce</a></li>
-                <li><a href="">Consulter le FAQ</a></li>
+        </section>
+        <section id="frites" class="margin-top-bottom">
+            <h2>Frites</h2>
+            <ul class="list-of-items three-gridded-layout">
+                <li>
+                    <div>
+                        <section>
+                            <h1>Frites L</h1>
+                            <p>Choisissez la viande et une boisson.</p>
+                            <p>23.4€</p>
+                        </section>
+                        <div>
+                            <img src="images/Otacos/otacos-tacos.jpg">
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <section>
+                            <h1>Frites M</h1>
+                            <p>Did you know you need to be a user in order to create/ add a restaurant</p>
+                            <p>23.4€</p>
+                        </section>
+                        <div>
+                            <img src="images/Otacos/otacos-tacos.jpg">
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <section>
+                            <h1>Frites XL</h1>
+                            <p>Did you know you need to be a user in order to create/ add a restaurant</p>
+                            <p>9.40€</p>
+                        </section>
+                        <div>
+                            <img src="images/Otacos/otacos-tacos.jpg">
+                        </div>
+                    </div>
+                </li>
             </ul>
-        </div>
-        <div class="contact">
-            <h2>Nous Contacter</h2>
-            <ul>
-                <li>Tel : 0465 36 43 45 </li>
-                <li>E-Mail : contact@giq.be</li>
-
+        </section>
+        <section id="boissons" class="margin-top-bottom">
+            <h2>Boissons</h2>
+            <ul class="list-of-items three-gridded-layout">
+                <li>
+                    <div>
+                        <section>
+                            <h1>Coca</h1>
+                            <p>Choisissez la viande et une boisson.</p>
+                            <p>23.4€</p>
+                        </section>
+                        <div>
+                            <img src="images/Otacos/otacos-tacos.jpg">
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <section>
+                            <h1>Fanta</h1>
+                            <p>Did you know you need to be a user in order to create/ add a restaurant</p>
+                            <p>23.4€</p>
+                        </section>
+                        <div>
+                            <img src="images/Otacos/otacos-tacos.jpg">
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <section>
+                            <h1>Sprite</h1>
+                            <p>Did you know you need to be a user in order to create/ add a restaurant</p>
+                            <p>9.40€</p>
+                        </section>
+                        <div>
+                            <img src="images/Otacos/otacos-tacos.jpg">
+                        </div>
+                    </div>
+                </li>
             </ul>
+        </section>
+    </section>
+    <dialog class="popup-item-specifications bg-color-white text-align-left" id="popup_item">
+        <h3 id="item_name">Menu étudiant</h3>
+        <div class="image-container">
+            <img src="images/Otacos/otacos-tacos.jpg">
         </div>
-
+        <form method="dialog">
+                <p>Choisissez des légumes : </p>
+                <label for="poivrons">
+                    <input type="radio" name="option1" value="poivrons" id="poivrons">
+                    Poivrons
+                </label>
+                <label for="onions">
+                    <input type="radio" name="option1" value="onion" id="onions">
+                    Onions
+                </label>
+                <label for="cocombres">
+                    <input type="radio" name="option1" value="cocombres" id="cocombres">
+                    Cocombres
+                </label>
+                <p>Souhaitez vous des suppléments ?</p>
+                <label>
+                    <input type="checkbox" name="option2" value="eau">
+                    Eau
+                </label>
+                <label for="maggi">
+                    <input type="checkbox" name="option2" value="maggi" id="maggi">
+                    Maggi
+                </label>
+                <label for="sel">
+                    <input type="checkbox" name="option2" value="sel" id="sel">
+                    Sel
+                </label>
+        </form>
+        <section class="buttons">
+            <button type="submit" class="bg-color-black color-white" value="cancel" id="close_popup">Annuler</button>
+            <button type="submit" class="bg-color-green">Ajouter à vôtre assiette {{total_sup}}</button>
+        </section>
+    </dialog>
+    <footer class="full-width-section text-align-left">
+        <div>
+            <div class="name-logo">
+                <h2>GIQ</h2>
+                <h4>|</h4>
+                <h3>UCLouvain</h3>
+            </div>
+            <div class="politique-de-conf conditions tarif">
+                <a href="">Politique de confidalité</a>
+                <a href="">Conditions</a>
+                <a href="">Tarifs</a>
+            </div>
+        </div>
+        <div>
+            <h1>A propos de GIQ</h1>
+            <a href="">Histoire</a>
+            <a href="">Enregister votre commerce</a>
+            <a href="">Consulter le FAQ</a>
+        </div>
+        <div>
+            <h1>Nous Contacter</h1>
+            <p>Tel : 0465 36 43 45 </p>
+            <p>E-Mail : contact@giq.be</p>
+        </div>
     </footer>
 </body>
 </html>

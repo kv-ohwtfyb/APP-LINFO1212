@@ -7,6 +7,10 @@
     --shadow : 0px 0px 6px #00000029;
 }
 
+html{
+    scroll-behavior: smooth;
+}
+
 body{
     padding:0;
     margin: 0;
@@ -18,6 +22,12 @@ body{
     background-size: cover;
 }
 
+pre{
+    font-family: "Helvetica", sans-serif;
+}
+pre h2{
+    font-weight: initial;
+}
 ul{
     list-style-type: none;
 }
@@ -25,7 +35,7 @@ h2{
     padding: 0;
     margin: 0;
 }
-input[type=submit] {
+input[type=submit]{
     width: 70%;
     height: 30px;
     bottom: 0;
@@ -128,18 +138,15 @@ header form input[type=submit]:active{
     flex-direction: row;
     align-items: center;
 }
-
 .emojis-section a{
     margin: auto;
     display: flex;
     flex-direction: column;
     align-items: center;
 }
-
 .emojis-section a img{
     height: 25px;
 }
-
 .emojis-section a p{
     margin: 0;
     font-size: 10px;
@@ -150,19 +157,16 @@ header form input[type=submit]:active{
     background-color: var(--green);
     text-align: center;
 }
-
 .popular-section h1{
     color: white;
     margin: 0;
     left: 50%;
 }
-
 .popular-section section{
     z-index: 2;
     display: flex;
     flex-direction: row;
 }
-
 .popular-section a{
     width: 105px;
     height: 105px;
@@ -176,6 +180,7 @@ header form input[type=submit]:active{
     height: 80px;
     margin: auto;
 }
+
 .list-of-restaurants{
     width: 96%;
     margin: auto;
@@ -232,20 +237,24 @@ header form input[type=submit]:active{
     padding-top: 20px;
     padding-bottom: 20px;
 }
-.navbar .seen{
-    width: 420px;
-}
 .navbar h4{
     text-align: right;
     margin-right: 20px;
 }
-.navbar button{
-    width: 70%;
+.navbar .login{
+    width: 100%;
     height: 30px;
     margin: auto;
     color: white;
+    text-decoration: none;
+    text-align: center;
+    justify-content: center;
+}
+.navbar .login h2{
+    font-weight: lighter;
 }
 .navbar ul{
+    list-style-type: none;
     padding: 0;
     width: 100%;
 }
@@ -254,6 +263,8 @@ header form input[type=submit]:active{
     height: 40px;
     margin: auto;
     padding: 0;
+    list-style-type: none;
+    text-decoration: none;
 }
 
 .navbar ul li a{
@@ -267,7 +278,7 @@ header form input[type=submit]:active{
     text-decoration: underline;
 }
 .popup-plate{
-    width: 420px;
+    width: 0;
     position: fixed;
     z-index: 1;
     top: 0;
@@ -328,7 +339,7 @@ header form input[type=submit]:active{
     float: left;
     left: 1%;
     top: 40%;
-    z-index: 2;
+    z-index: 1;
     width: fit-content;
     height: fit-content;
     color: white;
@@ -342,7 +353,7 @@ header form input[type=submit]:active{
 }
 
 .filter-bar{
-    width: 300px;
+    width: 0;
     height: 530px;
     z-index: 3;
     position: fixed;
@@ -352,9 +363,7 @@ header form input[type=submit]:active{
     background-image: url("./../images/filter-bg.png");
     background-size: cover;
     display: none;
-}
-.filter-bar .open{
-    display: flex;
+    transition: 1s;
 }
 .filter-bar div{
     margin: 20% 1%;
@@ -394,6 +403,130 @@ header form input[type=submit]:active{
 .filter-bar input[type=radio]{
     margin-left: 30px;
     margin-bottom: 10px;
+}
+
+.restaurant-info{
+    width: 100%;
+    min-height: fit-content;
+    display: grid;
+    grid-template-columns: 300px 300px auto;
+    grid-gap: 20px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+.restaurant-info h1{
+    font-weight: bold;
+    font-size: 50px;
+    font-family: "League Spartan", sans-serif;
+}
+
+.restaurant-info .image-container {
+    width: min(500px,80%);
+    height: 135px;
+    overflow: hidden;
+    margin: auto;
+}
+.restaurant-info img {
+    width: 100%;
+}
+
+.categories-tab{
+    width: 40% ;
+    min-width: fit-content;
+    display: flex;
+    height: 40px;
+    margin: 20px auto;
+    padding-left: 5px;
+    padding-right: 5px;
+    align-items: center;
+    justify-content: space-evenly;
+}
+.categories-tab a{
+    color: black;
+}
+
+.list-of-items{
+    margin: auto;
+    padding: 0;
+    min-width: 1290px;
+}
+.list-of-items li{
+    height: fit-content;
+    min-width: max-content;
+    box-shadow: var(--shadow);
+}
+.list-of-items li div{
+    max-width: 430px;
+    max-height: 130px;
+    min-height:  130px;
+    background-color: #FFFFFF;
+    display: grid;
+    grid-template-columns: auto 130px;
+    grid-template-rows: 100%;
+}
+.list-of-items li div section{
+    text-align: left;
+    display: grid;
+    grid-template-rows: 33% 33% 33%;
+}
+.list-of-items li div section h1,p{
+    margin-left: 4px;
+}
+.list-of-items li div div{
+    display: block;
+    overflow: hidden;
+    position: relative;
+}
+.list-of-items li div div img{
+    height: 100%;
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+.popup-item-specifications{
+    width: 500px;
+    height: 90%;
+    position: fixed;
+    z-index: 2;
+    top: 2%;
+    overflow: auto;
+    transition: 0.5s;
+    align-items: center;
+    color: black;
+    display: flex;
+    flex-direction: column;
+}
+.popup-item-specifications form{
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+}
+.popup-item-specifications form input{
+    margin-left: 30px;
+}
+
+.popup-item-specifications .image-container{
+    width: 96%;
+    height: max(140px,28%);
+    overflow: hidden;
+}
+.popup-item-specifications .image-container img{
+    width: 80%;
+}
+.popup-item-specifications .buttons{
+    width: 100%;
+    bottom: 20px;
+    position: absolute;
+    display: flex;
+    align-content: space-evenly;
+    align-items: center;
+}
+.popup-item-specifications .buttons button{
+    width: 40%;
+    margin: auto;
+    height: 40px;
+    border-width: 0;
 }
 
 footer{
@@ -499,7 +632,6 @@ footer p,a{
     justify-content: center;
     text-align: center;
 }
-
 .input-page .announcement h1{
     margin: auto;
     font-size: 60px;
@@ -537,6 +669,8 @@ are used as secondary classes in html*/
 .three-gridded-layout{
     display: grid;
     grid-template-columns: auto auto auto;
+    justify-content: space-evenly;
+    min-width: min-content;
 }
 
 .border-less{
@@ -558,7 +692,16 @@ are used as secondary classes in html*/
 .color-orange{
     color: var(--orange);
 }
+.color-black{
+    color: black;
+}
+.color-white{
+    color: white;
+}
 .column-display{
     display: flex;
     flex-direction: column;
+}
+.margin-top-bottom{
+    margin: 2% auto;
 }
