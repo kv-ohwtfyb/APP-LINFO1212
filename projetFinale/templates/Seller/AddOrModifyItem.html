@@ -15,7 +15,6 @@
     <script src="https://unpkg.com/filepond-plugin-image-resize/dist/filepond-plugin-image-resize.js"></script>
     <script src="https://unpkg.com/filepond/dist/filepond.min.js"></script>
     <script type="text/javascript" src="js/header.js"></script>
-    <script type="text/javascript" src="js/dashboardPage.js"></script>
     <script type="text/javascript" src="js/imageUpload.js"></script>
 </head>
 <body class="seller-page">
@@ -52,7 +51,6 @@
         </div>
     </header>
     <form class="add-item" action="/add_item" method="POST">
-        <!-- Image section-->
         <section class="image-text-item">
             <div class="image-container bg-color-white shadow">
                 <input type="file" name="image" class="filepond">
@@ -83,7 +81,8 @@
             <label for="promotion">Promotion</label>
             <input type="number" class="round-border border-less margin-left-right" name="promotion" id="promotion" placeholder="en %" min="0" max="100">
             <label for="final-price">Prix finale :</label>
-            <input type="number" name="finalPrice" id="final-price" placeholder="En €" autocomplete="off">
+            <p class="final-price bg-color-black color-white" id="final-price">0.0</p>
+            <p>€</p>
         </section>
         <section class="bg-color-green shadow">
             <label for="group">Groupes :</label>

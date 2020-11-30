@@ -817,7 +817,7 @@ footer p,a{
 
 .add-item section{
     display: inline-flex;
-    align-items: center;
+    align-items: start;
     width: 96%;
     margin: 10px auto;
     height: fit-content;
@@ -852,6 +852,28 @@ footer p,a{
     height: 200px;
     max-height: 300px;
     max-width: 400px;
+}
+.add-item section ul{
+    padding-left: 0;
+    margin-left: 0;
+}
+.add-item section ul li .item{
+    width: 396px;
+    height: 20px;
+    text-align: left;
+    padding: 6px;
+    position: relative;
+    align-content: center;
+}
+.add-item section ul li .item p{
+    height: fit-content;
+    margin: 0;
+}
+.add-item section ul li .item button{
+    width: 30px;
+    height: fit-content;
+    right: 15px;
+    position: absolute;
 }
 .filepond{
     width: 100%;
