@@ -30,7 +30,11 @@ const {
 
 const {
     postUserLoggedIn
-} = require('./private/js/customer/POST')
+} = require('./private/js/customer/POST');
+
+const {
+    postSellerlogin
+} = require('./private/js/seller/POST');
 
 
 app.use(bodyParser.urlencoded({ extended :true, limit: '50mb' }));
@@ -106,7 +110,13 @@ app.post('/creating_restaurant', function (req, res){
 });
 
 app.post('/seller_login_submitted', function (req, res) {
-    console.log(req.body);
+    //TODO check if already logged In
+    //if so, just ask the authKey only
+    //else ask the whole page
+
+    postSellerlogin(app,req, res);
+
+
 });
 
 /************ CUSTOMER GET Request PART ************/

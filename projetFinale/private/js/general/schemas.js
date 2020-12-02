@@ -1,13 +1,15 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const userModel = mongoose.model('User', Schema({
+const userSchema = new Schema({
     name     : { type : String,                       required : true },
     email    : { type : String,                       required : true,               unique : true },
     phone    : { type : String,                       required : true,               unique : true },
     password : { type : String,                       required : true  },
     orders   : { type : [ String ],                   required : false }
-}));
+})
+
+const userModel = mongoose.model('User', userSchema);
 
 /*
     Checks if the userId is registered as the admin to at least a restaurant.
