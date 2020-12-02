@@ -51,6 +51,7 @@ app.get('/add_category', ((req, res) => {
     getAddOrModifyCategory(app, req, res);
 }));
 
+// "/menu" A CHANGER
 app.get('/menu', (req, res) => {
     getAddOrModifyCategory(app, req, res);
 });
@@ -97,7 +98,7 @@ app.post('/creating_restaurant', function (req, res){
     console.log(req.body);
 });
 
-app.post('/seller_login', function (req, res) {
+app.post('/seller_login_submitted', function (req, res) {
     console.log(req.body);
 });
 
