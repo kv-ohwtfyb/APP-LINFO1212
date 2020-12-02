@@ -149,8 +149,9 @@ app.get('/signUp_complete', (req, res) => {
 })
 
 /************ CUSTOMER POST Request PART ************/
+
 app.post('/user_log_in',(req, res) => {
-    postUserLoggedIn(app,body,req, res);
+    postUserLoggedIn(app,req, res);
 })
 app.post('/user_sign_up',(req, res, next) => {
     console.log(req.body);

@@ -13,8 +13,8 @@
             <h4>|</h4>
             <h3>UCLouvain</h3>
         </div>
-        <form class="round-border" method="GET">
-            <p>{{loginError}}</p>
+        <form action="/user_log_in" class="round-border" method="POST">
+            <p class="msg" >{{loginError}}</p>
             <label for="email"></label>
             <input type="email" name="mail" placeholder="Email..." id="email">
             <label for="password"></label>
