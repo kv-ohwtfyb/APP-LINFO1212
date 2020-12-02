@@ -13,7 +13,7 @@ const userSchema = new Schema({
     Checks if the userId is registered as the admin to at least a restaurant.
     userId (String)  : the string of the user admin.
  */
-userSchema.static.isSeller = function (userId) {
+userSchema.statics.isSeller = function (userId) {
     if (typeof userId !== "string") throw "The userId given is n't a string";
     restaurantModel.findOne({ admin : userId }).then((rest) => {
         return !!rest;
@@ -27,7 +27,7 @@ userSchema.static.isSeller = function (userId) {
     authKey (String) : the authentication key in the restaurant
  */
 
-userSchema.static.getSellerRestaurant = function (userId, authKey){
+userSchema.statics.getSellerRestaurant = function (userId, authKey){
     if (typeof userId  !== "string") throw  "The userId given is not a string";
     if (typeof authKey !== "string") throw "The authKey given is not a string";
     restaurantModel.findOne({ admin : userId, authKey : authKey }).then((rest) => {
@@ -114,6 +114,8 @@ restaurantSchema.statics.addGroup = function (theGroup) {
       throw "The group given doesn't use the group.";
     }
 }
+
+restaurantModel.statics.
 
 // TODO Method remove group
 // TODO Method update group
