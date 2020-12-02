@@ -7,7 +7,33 @@ const userModel = mongoose.model('User', Schema({
     phone    : { type : String,                       required : true,               unique : true },
     password : { type : String,                       required : true  },
     orders   : { type : [ String ],                   required : false }
-}), 'users');
+}));
+
+/*
+    Checks if the userId is registered as the admin to at least a restaurant.
+    userId (String)  : the string of the user admin.
+ */
+userSchema.statics.isSeller = function (userId) {
+    if (typeof userId !== "string") throw "The userId given is n't a string";
+    restaurantModel.findOne({ admin : userId }).then((rest) => {
+        return !!rest;
+    });
+}
+
+/*
+    Returns the restaurant where the userId is admin and the authKey is the
+    correspond.
+    userId (String)  : the string of the user admin.
+    authKey (String) : the authentication key in the restaurant
+ */
+
+userSchema.statics.getSellerRestaurant = function (userId, authKey){
+    if (typeof userId  !== "string") throw  "The userId given is not a string";
+    if (typeof authKey !== "string") throw "The authKey given is not a string";
+    restaurantModel.findOne({ admin : userId, authKey : authKey }).then((rest) => {
+        return rest;
+    });
+}
 
 // TODO isSeller method
 // TODO getSellerRestaurant method
@@ -89,6 +115,8 @@ restaurantSchema.statics.addGroup = function (theGroup) {
       throw "The group given doesn't use the group.";
     }
 }
+
+//restaurantModel.statics.
 
 // TODO Method remove group
 // TODO Method update group
