@@ -1,4 +1,3 @@
-const cons = require("consolidate");
 const {userModel} = require("./../general/schemas");
 /*
 
@@ -19,6 +18,18 @@ exports.postUserLoggedIn = userLogIn;
 
 
 /* 
+ Check if the user is in our database( with the email entered).
+
+ if we found the email in the database.
+  - we take the whole Json of the user (== parameter 'user').
+  - then we check if the password entered and the password in the database match.
+
+ if we didn't find the email or password
+  - we return a message
+
+  req.body.email = mail the user enterred
+  req.body.password = password the user enterred
+
 
 */
 async function userLoggingCheck(req){

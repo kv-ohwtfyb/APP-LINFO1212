@@ -21,11 +21,11 @@ const {
     getAddOrModifyGroup,
     getAddOrModifyItem,
     getAddOrModifyCategory,
-    getAfterCreateRestoMessage,
     getCreateRestaurantSpeci,
     getOrders,
     getPaymentsPage,
     getTheStorePage,
+    getSellerLoginPage
 } = require('./private/js/seller/GET');
 
 const {

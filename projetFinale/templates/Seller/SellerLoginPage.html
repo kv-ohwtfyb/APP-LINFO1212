@@ -14,13 +14,13 @@
             <h3>UCLouvain</h3>
         </div>
         <form action="/seller_login_submitted" class="round-border" method="POST">
-            <p>{{loginError}}</p>
+            <p class="msg">{{loginError}}</p>
             <label for="email"></label>
-            <input type="email" placeholder="Email..." id="email">
+            <input type="email" name="mail" placeholder="Email..." id="email">
             <label for="password"></label>
-            <input type="password" placeholder="Password..." id="password">
+            <input type="password" name="password" placeholder="Password..." id="password">
             <label for="authKey"></label>
-            <input type="password" placeholder="Authentication Key..." id="authKey">
+            <input type="password" name="authKey" placeholder="Authentication Key..." id="authKey">
             <input type="submit" value="Log in" class="bg-color-black">
         </form>
         <a href="">Forgot password?</a>
