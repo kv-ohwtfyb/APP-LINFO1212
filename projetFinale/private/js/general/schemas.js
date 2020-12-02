@@ -9,6 +9,32 @@ const userModel = mongoose.model('User', Schema({
     orders   : { type : [ String ],                   required : false }
 }), 'users');
 
+// TODO isSeller method
+// TODO getSellerRestaurant method
+
+const groupModel = mongoose.model('Group', Schema({
+    id            : { type : String,            required : true },
+    items         : { type : [{
+                                name   : String,
+                                charge : Number,
+                            }],                 required : true },
+    maxSelection  : { type : Number,            required : true },
+    minSelection  : { type : Number,            required : true }
+}));
+
+const itemSchema = new Schema ({
+    name        : { type : String,                      required : true,           unique : true },
+    restaurant  : { type : String,                      required : true },
+    price       : { type : Number,                      required : true },
+    promo       : { type : Number,                      required : true },
+    quantity    : { type : Number,                      required : true },
+    soldAlone   : { type : Boolean,                     required : true },
+    image       : { type : {
+            data : Buffer,
+            type : String,
+        },                                              required : false },
+});
+
 const restaurantSchema = new Schema({
     name       : { type : String,                     required : true,              unique : true },
     authKey    : { type : String,                     required : true,              unique : true },
@@ -24,12 +50,13 @@ const restaurantSchema = new Schema({
                             maxSelections : Number,
                             minSelections : Number
                         }],                           required : false },
-    admin      : { type : mongoose.ObjectId,          required : true  },
+    admin      : { type : String,          required : true  },
     orders     : { type : String,                     required : false }
 });
 
 restaurantSchema.pre('validate', function () {
-    const formattedName = formatRestaurantName(this.name);
+    if (!checkIfAdminExist(this.admin)) throw "Admin doesn't exist";
+    const formattedName = formatRemoveWhiteSpaces(this.name);
     // Creating a collection of items for the shop
     mongoose.connection.createCollection('items'+formattedName)
         .then(()   => this.items = 'items'+formattedName)
@@ -44,31 +71,34 @@ restaurantSchema.pre('validate', function () {
         .catch(err => console.log(`Caught by .catch ${err}`));
 });
 
-const groupSchema = Schema({
-    id            : { type : String,        required : true },
-    items         : { type : [{
-                                name   : String,
-                                charge : Number,
-                              }],           required : true },
-    maxSelections : { type : Number,        required : true },
-    minSelection  : { type : Number,        required : true }
-});
-
 /*
-    Adds a group to the restaurant
+    This is a static method that adds a group to the restaurant
     theGroup : Group schema.
  */
-restaurantSchema.methods.addGroup = function (theGroup) {
-    if (theGroup instanceof groupSchema){
-
+restaurantSchema.statics.addGroup = function (theGroup) {
+    if (theGroup instanceof groupModel){
+        checkItemsOfGroup(this, theGroup);
+        this.groups.forEach(function (group) {
+            if (format(group.id).localeCompare(format(theGroup)) === 0){
+                throw `The group name already exists ${theGroup.id} is similar to ${group.id}`;
+            }
+        });
+        this.groups.push(groupSchema);
+        this.groups.sort(function (a, b) { return a.id.localeCompare(b.id); });
     }else {
-      throw new Error("The group given doesn't use the group schema");
+      throw "The group given doesn't use the group.";
     }
 }
 
+// TODO Method remove group
+// TODO Method update group
+// TODO Method add Item
+// TODO Method update Item
+// TODO Method remove Item
+
 const restaurantModel = mongoose.model('Restaurant', restaurantSchema, 'restaurants');
 
-const restaurantOrderSchema = Schema({
+const restaurantOrderSchema = new Schema({
     date : { type : {
                         date   : Object,
                         orders : [ String ]
@@ -83,18 +113,6 @@ const paymentModel = mongoose.model('Payment', Schema({
     total       : { type : Number,                      required : true }
 }));
 
-const itemModel = mongoose.model('Item', Schema({
-    name        : { type : String,                      required : true,           unique : true },
-    restaurant  : { type : String,                      required : true },
-    price       : { type : Number,                      required : true },
-    promo       : { type : Number,                      required : true },
-    quantity    : { type : Number,                      required : true },
-    soldAlone   : { type : Boolean,                     required : true },
-    image       : { type : {
-                                data : Buffer,
-                                type : String,
-                            },                          required : false },
-}));
 
 const orderSchema = new Schema({
     total       : { type : Number,                      required : true },
@@ -117,7 +135,7 @@ const orderSchema = new Schema({
 });
 
 orderSchema.pre('save', function () {
-    // TODO Add the reference to the restaurant and the user.
+    // TODO Add the reference to the restaurants orders and the users orders
     console.log(this);
 });
 
@@ -125,10 +143,30 @@ const orderModel = mongoose.model('Orders', orderSchema, 'orders');
 
 exports.userModel = userModel;
 exports.orderModel = orderModel;
-exports.itemModel = itemModel;
+exports.itemSchema = itemSchema;
 exports.paymentModel = paymentModel;
 exports.restaurantModel = restaurantModel;
+exports.groupModel = groupModel;
 
-function formatRestaurantName(name) {
+function formatRemoveWhiteSpaces(name) {
     return name.trim().replace(" ","");
+}
+
+function format(text) {
+    return formatRemoveWhiteSpaces(text).toLowerCase();
+}
+
+function checkItemsOfGroup(restaurant, group){
+    group.items.forEach(function (item) {
+        const res = mongoose.connection.collection(restaurant.items).findOne({ name : item.name});
+        if (!res){
+            throw `The item ${item.name} doesn't exist in the ${restaurant.name}`;
+        }
+    });
+}
+
+function checkIfAdminExist(adminId) {
+    userModel.findById(adminId).then((rest) => {
+    return !!rest;
+    });
 }

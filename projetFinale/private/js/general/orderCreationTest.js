@@ -1,6 +1,4 @@
-const { restaurantModel,
-        orderModel,
-} = require('./schemas');
+const { orderModel } = require('./schemas');
 const mongoose = require('mongoose');
 
 mongoose.connect('mongodb://localhost:27017/testingdb',

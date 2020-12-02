@@ -8,7 +8,7 @@ mongoose.connect('mongodb://localhost:27017/testingdb',
 const user = new restaurantModel({
     name     : "Quick",
     authKey  : "test",
-    // TODO give admin _id
+    admin    : "5fc7658c693b30207c1f614a"
 });
 
 user.save(function (err, user) {
