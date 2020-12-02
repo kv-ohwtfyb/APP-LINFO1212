@@ -97,8 +97,30 @@ restaurantSchema.pre('validate', function () {
 });
 
 /*
+    Returns the groupModel that matches the name.
+    name (String) : the name of the group.
+ */
+restaurantSchema.statics.findGroup = function(name){
+    this.groups.forEach(function (group) {
+        if (group.name === name){
+            return group;
+        }
+    });
+}
+
+/*
+    Returns an array of the names of all the groups.
+ */
+restaurantSchema.statics.listOfGroupNames = function (){
+    const toReturn = [];
+    this.groups.forEach(function (group) {
+        toReturn.push(group.name);
+    });
+    return toReturn;
+}
+/*
     This is a static method that adds a group to the restaurant
-    theGroup : Group schema.
+    theGroup (groupModel) : Group Model.
  */
 restaurantSchema.statics.addGroup = function (theGroup) {
     if (theGroup instanceof groupModel){
@@ -115,7 +137,8 @@ restaurantSchema.statics.addGroup = function (theGroup) {
     }
 }
 
-restaurantModel.statics.
+restaurantSchema.statics.removeGroup = function (theGroup) {
+}
 
 // TODO Method remove group
 // TODO Method update group
