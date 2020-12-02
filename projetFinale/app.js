@@ -28,6 +28,11 @@ const {
     getTheStorePage,
 } = require('./private/js/seller/GET');
 
+const {
+    postUserLoggedIn
+} = require('./private/js/customer/POST')
+
+
 app.use(bodyParser.urlencoded({ extended :true, limit: '50mb' }));
 app.engine('html', consolidate.hogan);
 app.set('views', 'templates');
@@ -114,7 +119,8 @@ app.get('/orders_page',(req,res) =>{
     getOrdersPage(app,req,res);
 })
 app.get('/user_login',(req,res) => {
-    getUserLoginPage(app,req,res);
+    if (req.session.user) { req.redirect("/"); }
+    else { getUserLoginPage(app, req, res); }  
 })
 app.get('/user_signup',(req,res) =>{
     getUserSignUpPage(app,req,res);
@@ -144,8 +150,7 @@ app.get('/signUp_complete', (req, res) => {
 
 /************ CUSTOMER POST Request PART ************/
 app.post('/user_log_in',(req, res) => {
-    postUserLoggedIn(app,req,res);
-    req.redirect("/");
+    postUserLoggedIn(app,body,req, res);
 })
 app.post('/user_sign_up',(req, res, next) => {
     console.log(req.body);
