@@ -2,6 +2,7 @@ const express = require('express');
 const consolidate = require('consolidate');
 const app = express ();
 const bodyParser = require('body-parser');
+const session = require('express-session');
 
 const { getHomePage,
     getOrdersPage,
@@ -12,10 +13,11 @@ const { getHomePage,
     getCheckOutPage,
     getSignUpVerificationNumber,
     getSignUpGiveNumber,
-    getstripe,
-    getUserSignUpComplete} = require('./private/js/customer/GET');
+    getStripe,
+    getUserSignUpComplete
+} = require('./private/js/customer/GET');
 
-const {  
+const {
     getAddOrModifyGroup,
     getAddOrModifyItem,
     getAddOrModifyCategory,
@@ -24,18 +26,18 @@ const {
     getOrders,
     getPaymentsPage,
     getTheStorePage,
-    getSellerLoginPage } = require('./private/js/Seller/GET');
-const cons = require('consolidate');
+} = require('./private/js/seller/GET');
 
 app.use(bodyParser.urlencoded({ extended :true, limit: '50mb' }));
-
 app.engine('html', consolidate.hogan);
 app.set('views', 'templates');
-
-
-app.get('/', function (req, res) {
-    getHomePage(app, req, res);
-})
+app.use(express.static('static'));
+app.use(session({
+    secret: "EnCRypTIoNKeY",
+    resave: false,
+    saveUninitialized: true,
+    cookie: {path: '/', httpOnly: true, limit: 30 * 60 * 1000}
+}));
 
 /************ SELLER GET Request PART ************/ 
 
@@ -104,6 +106,10 @@ app.post('/seller_login_submitted', function (req, res) {
 
 /************ CUSTOMER GET Request PART ************/
 
+app.get('/', function (req, res) {
+    getHomePage(app, req, res);
+});
+
 app.get('/orders_page',(req,res) =>{
     getOrdersPage(app,req,res);
 })
@@ -135,11 +141,38 @@ app.get('/stripe', (req, res) => {
 app.get('/signUp_complete', (req, res) => {
     getUserSignUpComplete(app,req,res);
 })
-app.post('/seller_login', (req, res) => {
-    console.log(req.body);
-});
 
-app.use(bodyParser.urlencoded({ extended :true, limit: '50mb' }));
-app.use(express.static('static'));
+/************ CUSTOMER POST Request PART ************/
+app.post('/user_log_in',(req, res) => {
+    postUserLoggedIn(app,req,res);
+    req.redirect("/");
+})
+app.post('/user_sign_up',(req, res, next) => {
+    console.log(req.body);
+})
+app.post('/orders', (req, res) => {
+    console.log(req.body);
+})
+app.post('/restaurant', (req, res) => {
+    console.log(req.body);
+})
+app.post('/search_response', (req, res) => {
+    console.log(req.body);
+})
+app.post('/checkout', (req, res) => {
+    console.log(req.body);
+})
+app.post('/signup_verification',(req, res) => {
+    console.log(req.body);
+})
+app.post('/signup_giveNumber', (req, res) => {
+    console.log(req.body);
+})
+app.post('/stripe', (req, res) => {
+    console.log(req.body);
+})
+app.post('/signUpComplete', (req, res) => {
+    console.log(req.body);
+})
 
 module.exports = app;
