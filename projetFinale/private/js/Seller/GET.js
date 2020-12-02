@@ -7,7 +7,7 @@ function addOrModifyItem(app, req, res){
 }
 
 function addOrModifyMenu(app, req, res){
-    res.render('./Seller/AddOrModifyMenu.html')
+    res.render('./Seller/AddOrModifyCategory.html')
 }
 
 function createRestoFinishedMessage(app, req, res){
@@ -43,7 +43,7 @@ exports.getAddOrModifyGroup = addOrModifyGroup;
 
 exports.getAddOrModifyItem = addOrModifyItem;
 
-exports.getAddOrModifyMenu = addOrModifyMenu;
+exports.getAddOrModifyCategory = addOrModifyMenu;
 
 exports.getAfterCreateRestoMessage = createRestoFinishedMessage;
 

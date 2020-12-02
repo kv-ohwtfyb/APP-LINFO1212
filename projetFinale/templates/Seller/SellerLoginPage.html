@@ -1,45 +1,32 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>GIQ | Log In page</title>
-        <link rel="stylesheet" href="/static/css/main.css">
-    </head>
-    <body>
-        <header>
-            <div class="name-logo">
-              <h2>GIQ</h2>
-              <h4>|</h4>
-              <h3>UCLouvain</h3>
-            </div>
-          </header>
-
-          <form action="/seller_login" method="POST">
-              
-              <input type="email" placeholder="Enter Email..." name="email"><br>
-  
-              <input type="password" placeholder="Password..." name="password"><br>
-  
-              <input type="text" placeholder="Restaurant Key" name="key"><br>
-  
-              <button type="submit">LOG IN</button> 
-
-          </form>
-
-          <div class="forgotPswd-rectangle">
-
-            <a href="">Forgot password?</a><br>
-
-            <a href="">Forgot Restaurant Key</a>
-            
-          </div>
-
-          <div class="text-rectangle">
-            <p>
-                Place an order and get a chance to have a <strong>FREE MEAL</strong> the next day ...
-            </p>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GiQ | Seller Login</title>
+    <link rel="stylesheet" href="./css/main.css">
+</head>
+<body class="input-page">
+    <div>
+        <div class="name-logo">
+            <h2>GIQ</h2>
+            <h4>|</h4>
+            <h3>UCLouvain</h3>
         </div>
-
-    </body>
+        <form class="round-border" method="GET">
+            <p>{{loginError}}</p>
+            <label for="email"></label>
+            <input type="email" placeholder="Email..." id="email">
+            <label for="password"></label>
+            <input type="password" placeholder="Password..." id="password">
+            <label for="authKey"></label>
+            <input type="password" placeholder="Authentication Key..." id="authKey">
+            <input type="submit" value="Log in" class="bg-color-black">
+        </form>
+        <a href="">Forgot password?</a>
+    </div>
+    <div class="announcement">
+        <h1>We wish you an <span class="color-orange">AMAZING <br> SALES DAY </span>…</h1>
+    </div>
+</body>
 </html>
