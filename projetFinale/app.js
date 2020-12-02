@@ -2,6 +2,7 @@ const express = require('express');
 const consolidate = require('consolidate');
 const app = express ();
 const bodyParser = require('body-parser');
+const session = require('express-session');
 
 const { getHomePage,
     getOrdersPage,
@@ -12,8 +13,9 @@ const { getHomePage,
     getCheckOutPage,
     getSignUpVerificationNumber,
     getSignUpGiveNumber,
-    getstripe,
-    getUserSignUpComplete} = require('./private/js/customer/GET');
+    getStripe,
+    getUserSignUpComplete
+} = require('./private/js/customer/GET');
 
 const {  
     getAddOrModifyGroup,
@@ -24,18 +26,19 @@ const {
     getOrders,
     getPaymentsPage,
     getTheStorePage,
-    getSellerLoginPage } = require('./private/js/Seller/GET');
-const cons = require('consolidate');
+    getSellerLoginPage
+} = require('./private/js/Seller/GET');
 
 app.use(bodyParser.urlencoded({ extended :true, limit: '50mb' }));
-
 app.engine('html', consolidate.hogan);
 app.set('views', 'templates');
+app.use(session({
+    secret: "EnCRypTIoNKeY",
+    resave: false,
+    saveUninitialized: true,
+    cookie: {path: '/', httpOnly: true, limit: 30 * 60 * 1000}
+}));
 
-
-app.get('/', function (req, res) {
-    getHomePage(app, req, res);
-})
 
 /************ SELLER GET Request PART ************/ 
 
@@ -102,6 +105,10 @@ app.post('/seller_login', function (req, res) {
 });
 
 /************ CUSTOMER GET Request PART ************/
+
+app.get('/', function (req, res) {
+    getHomePage(app, req, res);
+});
 
 app.get('/orders_page',(req,res) =>{
     getOrdersPage(app,req,res);
