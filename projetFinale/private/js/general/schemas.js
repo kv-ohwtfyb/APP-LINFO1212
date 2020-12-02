@@ -38,7 +38,7 @@ userSchema.statics.getSellerRestaurant = function (userId, authKey){
 const userModel = mongoose.model('User', userSchema, 'users');
 
 const groupModel = mongoose.model('Group', Schema({
-    id            : { type : String,            required : true },
+    name          : { type : String,            required : true },
     items         : { type : [{
                                 name   : String,
                                 charge : Number,
@@ -102,8 +102,20 @@ restaurantSchema.pre('validate', function () {
  */
 restaurantSchema.statics.findGroup = function(name){
     this.groups.forEach(function (group) {
-        if (group.name === name){
+        if (formatRemoveWhiteSpaces(group.name).localeCompare(formatRemoveWhiteSpaces(name), 'fr', { sensitivity: 'base' }) === 0){
             return group;
+        }
+    });
+}
+
+/*
+    Returns the Index of the groupModel that matches the name.
+    name (String) : the name of the group.
+ */
+restaurantSchema.statics.findGroupIndex = function(name){
+    this.groups.forEach(function (group, index) {
+        if (formatRemoveWhiteSpaces(group.name).localeCompare(formatRemoveWhiteSpaces(name), 'fr', { sensitivity: 'base' }) === 0){
+            return index;
         }
     });
 }
@@ -119,32 +131,58 @@ restaurantSchema.statics.listOfGroupNames = function (){
     return toReturn;
 }
 /*
-    This is a static method that adds a group to the restaurant
+    This is a static method that adds a group to the restaurant.
+    Throws a TypeError if a group with the name already exist, if the argument is n't group model instance,
+    and if one of the elements doesn't exist.
     theGroup (groupModel) : Group Model.
  */
 restaurantSchema.statics.addGroup = function (theGroup) {
     if (theGroup instanceof groupModel){
-        checkItemsOfGroup(this, theGroup);
-        this.groups.forEach(function (group) {
-            if (format(group.id).localeCompare(format(theGroup)) === 0){
-                throw `The group name already exists ${theGroup.id} is similar to ${group.id}`;
-            }
-        });
-        this.groups.push(groupSchema);
-        this.groups.sort(function (a, b) { return a.id.localeCompare(b.id); });
+        checkItemsOfGroup(this, theGroup.items);
+        checkIfGroupWithNameExist(this, theGroup.name);
+        this.groups.push(theGroup);
+        this.groups.sort(function (a, b) { return format(a.name).localeCompare(format(b.name), 'fr', { sensitivity: 'base' }); });
     }else {
-      throw "The group given doesn't use the group.";
+      throw TypeError("The group given doesn't use the group Model.");
     }
 }
 
-restaurantSchema.statics.removeGroup = function (theGroup) {
+/*
+    Removes the group from the restaurant list of groups.
+    name (group name) : the name of the group to delete.
+ */
+restaurantSchema.statics.removeGroup = function (name) {
+    this.groups = this.groups.filter((group) =>{
+        return format(group.name) !== format(name);
+    });
 }
 
-// TODO Method remove group
-// TODO Method update group
+/*
+    Update a group from the list.
+    name (String) : name of the group to update.
+    spec (JSON Object) : the elements to change and their values. Ex :
+    { "name" : "Boisons Froide" }.
+ */
+restaurantSchema.statics.updateGroup = function (name, spec) {
+    const index = this.findGroupIndex(name);
+    if (index) {
+        if (spec.hasOwnProperty("name"))  { checkIfGroupWithNameExist(this, spec.name); }
+        if (spec.hasOwnProperty("items")) { checkItemsOfGroup(this, spec.items); }
+        for (let specKey in spec) {
+            this.groups[index].specKey = spec.specKey;
+        }
+    } else {
+        throw TypeError(`A group with such ${name} doesn't exist,`);
+    }
+}
+
 // TODO Method add Item
 // TODO Method update Item
 // TODO Method remove Item
+
+// TODO Method add Category
+// TODO Method update Category
+// TODO Method remove Category
 
 const restaurantModel = mongoose.model('Restaurant', restaurantSchema, 'restaurants');
 
@@ -198,25 +236,57 @@ exports.paymentModel = paymentModel;
 exports.restaurantModel = restaurantModel;
 exports.groupModel = groupModel;
 
+/*
+    Return the text without blank spaces.
+    text (String ) : the text to format.
+ */
 function formatRemoveWhiteSpaces(name) {
     return name.trim().replace(" ","");
 }
 
+/*
+    Return a the text in lowerCase and remove all the blank spaces.
+    text (String ) : the text to format.
+ */
 function format(text) {
     return formatRemoveWhiteSpaces(text).toLowerCase();
 }
 
-function checkItemsOfGroup(restaurant, group){
-    group.items.forEach(function (item) {
+/*
+    Throws an typeError if an item with the given name of the group is not available in the restaurant items collection.
+    restaurant (restaurantModel) : The model to which we using.
+    items (Array of items) : An array with items that have a name key on which we checking on. Ex
+    [{ name : "Fanta", ... }, { name : "Coca"} ].
+ */
+function checkItemsOfGroup(restaurant, items){
+    items.forEach(function (item) {
         const res = mongoose.connection.collection(restaurant.items).findOne({ name : item.name});
         if (!res){
-            throw `The item ${item.name} doesn't exist in the ${restaurant.name}`;
+            throw TypeError(`The item ${item.name} doesn't exist in the ${restaurant.name} restaurant.`);
         }
     });
 }
 
+/*
+    Return true if the adminId exists in the users collection, False else.
+    adminId (string) : the admin _id string.
+
+ */
 function checkIfAdminExist(adminId) {
     userModel.findById(adminId).then((rest) => {
     return !!rest;
     });
+}
+
+/*
+    Throws an typeError if an a group with the given group name of the group is not available in the restaurant items collection.
+    restaurant (restaurantModel) : The model to which we using.
+    name (String) : The group on which we checking on.
+ */
+function checkIfGroupWithNameExist(restaurant, name) {
+    restaurant.groups.forEach(function (group){
+        if (formatRemoveWhiteSpaces(group.name).localeCompare(formatRemoveWhiteSpaces(name), 'fr', { sensitivity: 'base' }) === 0){
+            throw `The group name already exists ${group.name} which is similar to ${name}. Try with different name`;
+        }
+    })
 }
