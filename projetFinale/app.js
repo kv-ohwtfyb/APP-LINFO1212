@@ -25,6 +25,9 @@ const {
     getPaymentsPage,
     getTheStorePage,
     getSellerLoginPage } = require('./private/js/Seller/GET');
+
+const {postUserLoggedIn} = require('./private/js/Seller/POST');
+
 const cons = require('consolidate');
 
 app.use(bodyParser.urlencoded({ extended :true, limit: '50mb' }));
@@ -130,9 +133,39 @@ app.get('/stripe', (req, res) => {
 app.get('/signUp_complete', (req, res) => {
     getUserSignUpComplete(app,req,res);
 })
-app.post('/seller_login', (req, res) => {
+
+/************ CUSTOMER POST Request PART ************/
+app.post('/user_log_in',(req, res) => {
+    postUserLoggedIn(app,req,res);
+    req.redirect("/");
+})
+app.post('/user_sign_up',(req, res, next) => {
     console.log(req.body);
-});
+})
+app.post('/orders', (req, res) => {
+    console.log(req.body);
+})
+app.post('/restaurant', (req, res) => {
+    console.log(req.body);
+})
+app.post('/search_response', (req, res) => {
+    console.log(req.body);
+})
+app.post('/checkout', (req, res) => {
+    console.log(req.body);
+})
+app.post('/signup_verification',(req, res) => {
+    console.log(req.body);
+})
+app.post('/signup_giveNumber', (req, res) => {
+    console.log(req.body);
+})
+app.post('/stripe', (req, res) => {
+    console.log(req.body);
+})
+app.post('/signUpComplete', (req, res) => {
+    console.log(req.body);
+})
 
 app.use(bodyParser.urlencoded({ extended :true, limit: '50mb' }));
 app.use(express.static('static'));
