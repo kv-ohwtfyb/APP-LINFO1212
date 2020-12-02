@@ -1,16 +1,41 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const userModel = mongoose.model('User', Schema({
+const userSchema = new Schema({
     name     : { type : String,                       required : true },
     email    : { type : String,                       required : true,               unique : true },
     phone    : { type : String,                       required : true,               unique : true },
     password : { type : String,                       required : true  },
     orders   : { type : [ String ],                   required : false }
-}), 'users');
+});
 
-// TODO isSeller method
-// TODO getSellerRestaurant method
+/*
+    Checks if the userId is registered as the admin to at least a restaurant.
+    userId (String)  : the string of the user admin.
+ */
+userSchema.static.isSeller = function (userId) {
+    if (typeof userId !== "string") throw "The userId given is n't a string";
+    restaurantModel.findOne({ admin : userId }).then((rest) => {
+        return !!rest;
+    });
+}
+
+/*
+    Returns the restaurant where the userId is admin and the authKey is the
+    correspond.
+    userId (String)  : the string of the user admin.
+    authKey (String) : the authentication key in the restaurant
+ */
+
+userSchema.static.getSellerRestaurant = function (userId, authKey){
+    if (typeof userId  !== "string") throw  "The userId given is not a string";
+    if (typeof authKey !== "string") throw "The authKey given is not a string";
+    restaurantModel.findOne({ admin : userId, authKey : authKey }).then((rest) => {
+        return rest;
+    });
+}
+
+const userModel = mongoose.model('User', userSchema, 'users');
 
 const groupModel = mongoose.model('Group', Schema({
     id            : { type : String,            required : true },
