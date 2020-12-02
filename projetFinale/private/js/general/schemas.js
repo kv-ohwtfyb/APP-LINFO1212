@@ -1,13 +1,13 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const userSchema = new Schema({
+const userModel = mongoose.model('User', Schema({
     name     : { type : String,                       required : true },
     email    : { type : String,                       required : true,               unique : true },
     phone    : { type : String,                       required : true,               unique : true },
     password : { type : String,                       required : true  },
     orders   : { type : [ String ],                   required : false }
-});
+}));
 
 /*
     Checks if the userId is registered as the admin to at least a restaurant.
@@ -35,7 +35,8 @@ userSchema.statics.getSellerRestaurant = function (userId, authKey){
     });
 }
 
-const userModel = mongoose.model('User', userSchema, 'users');
+// TODO isSeller method
+// TODO getSellerRestaurant method
 
 const groupModel = mongoose.model('Group', Schema({
     name          : { type : String,            required : true },
