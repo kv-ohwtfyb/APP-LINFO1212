@@ -36,34 +36,16 @@ async function sellerLogginCheck(req){
     const toReturn = this;
     await userModel.findOne({email:req.body.mail})
         .then((user) => {
-            
-            if (user) {
-                
-                if (user.password === req.body.password) {
-                    if(!req.body.authKey){ 
-                        this.msg = "There is no authentification key";
-                        this.status = false;
-                    } else {
-                        const isSeller = userIsSeller(user,req);
-                        if(isSeller){
-                            this.status = true;
-                        } else {
-                            this.msg = "Access Denied";
-                            this.status = false;
-                        }
-
-                    }
+            if (user) { //If the e-mail is valid
+                if (user.password === req.body.password) { // If the password is valid
+                    const checkAdmin = user;
                     
-                    /*
-                        .then((result) => {
-                            if(result){
-                                this.status = result;
-                            } else {
-                                this.msg = "Access Denied";
-                                this.status = result;
-                            }
-                        });
-                    */
+                    if (checkAdmin.IsSeller(user._id)) {
+
+                    } else {
+                        this.msg = "Access Denied";
+                        this.status = false;
+                    }
                 } else {
                     this.msg = "Password Invalid";
                     this.status = false;
@@ -80,7 +62,7 @@ async function sellerLogginCheck(req){
 /**
  * Check if the user is admin of any restaurant
  * then check the aunthentification key
- * @param  person => the user JSON doc.
+ * @param  person => the user's JSON doc.
  * @param  req => help us to get the authKey enterred
  */
 
@@ -100,3 +82,19 @@ function userIsSeller(person, req) {
         });
     
 }
+
+/* 
+if(!req.body.authKey){ 
+                        this.msg = "There is no authentification key";
+                        this.status = false;
+                    } else { 
+                        const isSeller = userIsSeller(user,req);
+                        if(isSeller){
+                            this.status = true;
+                        } else {
+                            this.msg = "Access Denied";
+                            this.status = false;
+                        }
+
+                    }
+                    */
