@@ -10,23 +10,21 @@ const userSchema = new Schema({
 })
 
 
-/*
-    Checks if the userId is registered as the admin to at least a restaurant.
-    userId (String)  : the string of the user admin.
+/**
+    Checks if the userId is registered as the admin to at least one restaurant.
  */
 userSchema.methods.isSeller = function () {
-    restaurantModel.findOne({ admin : this._id }).then((rest) => {
+    return restaurantModel.findOne({ admin : this._id }).then((rest) => {
         return !!rest;
     });
 }
 
-/*
-    Returns the restaurant where the userId is admin and the authKey is the
-    correspond.
-    userId (String)  : the string of the user admin.
-    authKey (String) : the authentication key in the restaurant
+/**
+    Returns the restaurant where this._id is admin and the authKey is the
+    correspond. If there's not then it returns none.
+    @param authKey (String) : the authentication key in the restaurant
+    @return restaurant (restaurantModel) : the restaurant.
  */
-
 userSchema.methods.getSellerRestaurant = function (authKey){
     if (typeof authKey !== "string") throw "The authKey given is not a string";
     restaurantModel.findOne({ admin : this._id, authKey : authKey }).then((rest) => {
@@ -44,6 +42,13 @@ const groupModel = mongoose.model('Group', Schema({
                             }],                 required : true },
     maxSelection  : { type : Number,            required : true },
     minSelection  : { type : Number,            required : true }
+}));
+
+const categoryModel = mongoose.model('Category', Schema({
+    name          : { type : String,            required : true },
+    items         : { type : [{
+                                name : String,
+                             }],                required : true },
 }));
 
 const itemSchema = new Schema ({
@@ -95,11 +100,12 @@ restaurantSchema.pre('validate', function () {
         .catch(err => console.log(`Caught by .catch ${err}`));
 });
 
-/*
+/**
     Returns the groupModel that matches the name.
-    name (String) : the name of the group.
+    @param name (String) : the name of the group.
+    @return group (groupModel) : the group.
  */
-restaurantSchema.statics.findGroup = function(name){
+restaurantSchema.methods.findGroup = function(name){
     this.groups.forEach(function (group) {
         if (formatRemoveWhiteSpaces(group.name).localeCompare(formatRemoveWhiteSpaces(name), 'fr', { sensitivity: 'base' }) === 0){
             return group;
@@ -107,35 +113,40 @@ restaurantSchema.statics.findGroup = function(name){
     });
 }
 
-/*
+/**
     Returns the Index of the groupModel that matches the name.
-    name (String) : the name of the group.
+    @param name (String) : the name of the group.
+    @return index (int) : the index of the group in the.
+    @return null : if the group is n't present.
  */
-restaurantSchema.statics.findGroupIndex = function(name){
+restaurantSchema.methods.findGroupIndex = function(name){
     this.groups.forEach(function (group, index) {
         if (formatRemoveWhiteSpaces(group.name).localeCompare(formatRemoveWhiteSpaces(name), 'fr', { sensitivity: 'base' }) === 0){
             return index;
         }
     });
+    return null;
 }
 
-/*
+/**
     Returns an array of the names of all the groups.
  */
-restaurantSchema.statics.listOfGroupNames = function (){
+restaurantSchema.methods.listOfGroupNames = function (){
     const toReturn = [];
     this.groups.forEach(function (group) {
         toReturn.push(group.name);
     });
     return toReturn;
 }
-/*
+
+/**
     This is a static method that adds a group to the restaurant.
     Throws a TypeError if a group with the name already exist, if the argument is n't group model instance,
     and if one of the elements doesn't exist.
-    theGroup (groupModel) : Group Model.
+    @param theGroup (groupModel) : Group Model.
+    @throws TypeError : if the group doesn't exist.
  */
-restaurantSchema.statics.addGroup = function (theGroup) {
+restaurantSchema.methods.addGroup = function (theGroup) {
     if (theGroup instanceof groupModel){
         checkItemsOfGroup(this, theGroup.items);
         checkIfGroupWithNameExist(this, theGroup.name);
@@ -150,7 +161,7 @@ restaurantSchema.statics.addGroup = function (theGroup) {
     Removes the group from the restaurant list of groups.
     name (group name) : the name of the group to delete.
  */
-restaurantSchema.statics.removeGroup = function (name) {
+restaurantSchema.methods.removeGroup = function (name) {
     this.groups = this.groups.filter((group) =>{
         return format(group.name) !== format(name);
     });
@@ -162,7 +173,7 @@ restaurantSchema.statics.removeGroup = function (name) {
     spec (JSON Object) : the elements to change and their values. Ex :
     { "name" : "Boisons Froide" }.
  */
-restaurantSchema.statics.updateGroup = function (name, spec) {
+restaurantSchema.methods.updateGroup = function (name, spec) {
     const index = this.findGroupIndex(name);
     if (index) {
         if (spec.hasOwnProperty("name"))  { checkIfGroupWithNameExist(this, spec.name); }
@@ -171,7 +182,7 @@ restaurantSchema.statics.updateGroup = function (name, spec) {
             this.groups[index].specKey = spec.specKey;
         }
     } else {
-        throw TypeError(`A group with such ${name} doesn't exist,`);
+        throw TypeError(`A group with such ${name} doesn't exist, in ${this.name} groups. `);
     }
 }
 
@@ -179,6 +190,10 @@ restaurantSchema.statics.updateGroup = function (name, spec) {
 // TODO Method update Item
 // TODO Method remove Item
 
+/*
+    Adds a Category to the restaurant's categories nested document.
+
+ */
 // TODO Method add Category
 // TODO Method update Category
 // TODO Method remove Category
@@ -272,8 +287,9 @@ function checkItemsOfGroup(restaurant, items){
 
  */
 function checkIfAdminExist(adminId) {
-    userModel.findById(adminId).then((rest) => {
-    return !!rest;
+    return userModel.findById(adminId).then((rest) => {
+        if (rest) { return true; }
+        else      { return false; }
     });
 }
 
