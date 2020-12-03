@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const { setImageSrc } = require('./functions');
 
 const userSchema = new Schema({
     name     : { type : String,                       required : true },
@@ -66,12 +67,12 @@ const itemSchema = new Schema ({
 });
 
 const restaurantSchema = new Schema({
-    name       : { type : String,                     required : true,              unique : true },
-    authKey    : { type : String,                     required : true,              unique : true },
-    payments   : { type : String,                     required : false },
-    items      : { type : String,                     required : false },
-    categories : { type : [ String ],                 required : false },
-    groups     : { type : [{
+    name        : { type : String,                     required : true,              unique : true },
+    authKey     : { type : String,                     required : true,              unique : true },
+    payments    : { type : String,                     required : true },
+    items       : { type : String,                     required : true },
+    categories  : { type : [ String ],                 required : false },
+    groups      : { type : [{
                             id    : String,
                             items : [{
                                         id : String,
@@ -80,25 +81,31 @@ const restaurantSchema = new Schema({
                             maxSelections : Number,
                             minSelections : Number
                         }],                           required : false },
-    admin      : { type : String,          required : true  },
-    orders     : { type : String,                     required : false }
+    admin       : { type : String,          required : true  },
+    orders      : { type : String,                     required : true },
+    image       : { type : {
+                                data : Buffer,
+                                type : String,
+                            },                                              required : false },
 });
 
-restaurantSchema.pre('validate', function () {
-    if (!checkIfAdminExist(this.admin)) throw "Admin doesn't exist";
-    const formattedName = formatRemoveWhiteSpaces(this.name);
-    // Creating a collection of items for the shop
-    mongoose.connection.createCollection('items'+formattedName)
-        .then(()   => this.items = 'items'+formattedName)
-        .catch(err => console.log(`Caught by .catch ${err}`));
-    // Creates a collection of payments for the shop
-    mongoose.connection.createCollection('payments'+formattedName)
-        .then(()   => this.payments = 'payments'+formattedName)
-        .catch(err => console.log(`Caught by .catch ${err}`));
-    // Creates a collection of orders for the shop containing references
-    mongoose.connection.createCollection('orders'+formattedName)
-        .then(()   => this.payments = 'orders'+formattedName)
-        .catch(err => console.log(`Caught by .catch ${err}`));
+restaurantSchema.pre('save',async function (next) {
+    await checkIfAdminExist(this.admin).then((bool) => {
+        if (!bool) throw "Admin doesn't exist";
+    });
+    await Promise.all([
+        mongoose.connection.createCollection(this.items)
+        .then(()   => {console.log(this.items + " collection created.");})
+        .catch(err => {console.log(`When creating items collection ${err}`);}),
+        mongoose.connection.createCollection(this.payments)
+        .then(()   => {console.log(this.payments + " collection created.");})
+        .catch(err => console.log(`When creating payments collection ${err}`)),
+        mongoose.connection.createCollection(this.orders)
+        .then(()   => {console.log("orders"+ this.orders + " collection created.");})
+        .catch(err => console.log(`When creating orders collection ${err}`)),
+    ]).then(() => {
+       next();
+    });
 });
 
 /**
@@ -168,7 +175,7 @@ restaurantSchema.methods.removeGroup = function (name) {
     });
 }
 
-/*
+/**
     Update a group from the list.
     name (String) : name of the group to update.
     spec (JSON Object) : the elements to change and their values. Ex :
@@ -187,6 +194,32 @@ restaurantSchema.methods.updateGroup = function (name, spec) {
     }
 }
 
+/**
+  Returns an array of the restaurant identities used for the homepage. ex :
+     {
+        name : ...,
+        avgPrice : ...,
+        imgSrc : ...,
+        imgType : ...
+     }
+ */
+restaurantSchema.statics.arrayOfRestaurantsForDisplay = function (){
+    const Mapper = {
+        map : function () { emit ( this.name, this.image) }
+        };
+    return restaurantModel.mapReduce(Mapper).then((result) => {
+        result.results.forEach(function (resto){
+            resto.name = resto._id; delete resto._id;
+            if (resto.value != null){
+                setImageSrc(resto);
+            }
+            resto.avgPrice = 99.99;
+            delete resto.value;
+
+        });
+        return result.results;
+    });
+}
 // TODO Method add Item
 // TODO Method update Item
 // TODO Method remove Item

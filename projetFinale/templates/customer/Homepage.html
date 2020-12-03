@@ -13,15 +13,17 @@
 </head>
 <body>
     <header>
-        <div id="navbar_open">≡
-        </div>
+        <button id="navbar_open" type="button" class="border-less">≡
+        </button>
         <div class="navbar bg-color-white" id="navbar_header">
-                <h4 id="navbar_close">X</h4>
+                <button id="navbar_close" class="border-less bg-color-black color-white">X</button>
                 {{#loggedIn}}
-                <img src ="" alt="User_Avatar" class="UserAvatar">
-                <div class="user-name">Client Lambda</div>
                 <ul>
-                    <li><a href="/ord">ORDERS</a></li>
+                    <li><a class="login border-less bg-color-black" href="/logout"><h2>Log out</h2></a></li>
+                    <li>
+                        <h3 class="user-name text-align-left">Hello, {{name}}</h3>
+                    </li>
+                    <li><a href="/orders_page">Orders</a></li>
                 {{/loggedIn}}
                 {{^loggedIn}}
                 <ul>
@@ -30,7 +32,6 @@
                 {{/loggedIn}}
                     <li><a href="/restaurant_speci">Add your restaurant</a></li>
                     <li><a href="/seller_login">Log in as a seller</a></li>
-                </ul>
                 </ul>
         </div>
         <div class="name-logo">
@@ -164,77 +165,21 @@
     <section>
         <h1>Restaurants</h1>
         <ul class="list-of-restaurants three-gridded-layout">
+            {{#restaurants}}
             <li>
                 <a>
                     <div>
-                        <img src="./images/Carrefour/original.jpeg">
+                        {{#frontImage}}
+                            <img src={{imgSrc}} alt="The Incident Image wasn't provided">
+                        {{/frontImage}}
+                        {{^frontImage}}
+                            <img src="./images/No-Photo-Available.jpg">
+                        {{/frontImage}}
                     </div>
-                    <section><h1>Carrefour</h1><p>23.4€</p></section>
+                    <section><h1>{{name}}</h1><p>{{avgPrice}}€</p></section>
                 </a>
             </li>
-            <li>
-                <a>
-                    <div>
-                        <img src="./images/Exki/carre_site_internet.jpg">
-                    </div>
-                    <section><h1>Exki</h1><p>23.4€</p>
-                    </section>
-                </a>
-            </li>
-            <li>
-                <a>
-                    <div>
-                        <img src="./images/Kebab/durum-doner-sandwich.jpg">
-                    </div>
-                    <section><h1>Kebab</h1><p>23.4€</p>
-                    </section>
-                </a>
-            </li>
-            <li>
-                <a>
-                    <div>
-                        <img src="./images/Otacos/otacos-tacos.jpg">
-                    </div>
-                    <section><h1>O'Tacos</h1><p>23.4€</p>
-                    </section>
-                </a>
-            </li>
-            <li>
-                <a>
-                    <div>
-                        <img src="./images/Quick/471b2929-9ac9-4efb-991f-4ce13450687f.jpeg">
-                    </div>
-                    <section><h1>Quick</h1><p>23.4€</p>
-                    </section>
-                </a>
-            </li>
-            <li>
-                <a>
-                    <div>
-                        <img src="./images/Sandwicherie/sandwicheries-ice-shop.jpg">
-                    </div>
-                    <section><h1>Sandwicherie</h1><p>23.4€</p>
-                    </section>
-                </a>
-            </li>
-            <li>
-                <a>
-                    <div>
-                        <img src="./images/Sushi/5e5fed0c9978e2051e0387d4.webp">
-                    </div>
-                    <section><h1>Sushi</h1><p>23.4€</p>
-                    </section>
-                </a>
-            </li>
-            <li>
-                <a>
-                    <div>
-                        <img src="./images/Spar/SPAR-Brand-group_shot_sept-2014.jpg">
-                    </div>
-                    <section><h1>Spar</h1><p>23.4€</p>
-                    </section>
-                </a>
-            </li>
+            {{/restaurants}}
         </ul>
     </section>
     <div class="filter-button bg-color-green round-border" id="filter_open">

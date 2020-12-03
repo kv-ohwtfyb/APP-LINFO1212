@@ -4,7 +4,8 @@ const app = express ();
 const bodyParser = require('body-parser');
 const session = require('express-session');
 
-const { getHomePage,
+const {
+    getHomePage,
     getOrdersPage,
     getUserLoginPage,
     getUserSignUpPage,
@@ -30,12 +31,12 @@ const {
 
 const {
     postPhoneNumberVerification,
-    postcodeCheck
+    postcodeCheck,
+    postUserLoggedIn
 } = require('./private/js/customer/POST');
 
 const {
     postSellerlogin,
-    postUserLoggedIn,
 } = require('./private/js/seller/POST');
 
 
@@ -50,6 +51,8 @@ app.use(session({
     saveUninitialized: true,
     cookie: {path: '/', httpOnly: true, limit: 30 * 60 * 1000}
 }));
+
+
 
 /************ SELLER GET Request PART ************/
 
@@ -92,6 +95,11 @@ app.get('/my_store', function (req, res){
 
 app.get('/seller_login', (req, res) =>{
     getSellerLoginPage(app, req, res);
+});
+
+app.get('/logout', (req,res ) => {
+   req.session.user = null;
+   res.redirect('/');
 });
 
 /************ Seller POST Request PART ************/
@@ -166,7 +174,7 @@ app.post('/user_log_in',(req, res) => {
 app.post('/user_sign_up',(req, res, next) => {
     console.log(req.body);
 })
-app.post('/orders', (req, res) => {
+app.post('/user_orders', (req, res) => {
     console.log(req.body);
 })
 app.post('/restaurant', (req, res) => {

@@ -39,6 +39,7 @@ async function sellerLogInCheck(req){
         .then((user) => {
             if (user) { //If the e-mail is valid
                 if (user.password === req.body.password) { // If the password is valid
+
                     user.isSeller().then((bool) =>{
                         if (bool) {
                             console.log("The User is logged in");
