@@ -9,15 +9,13 @@ const userSchema = new Schema({
     orders   : { type : [ String ],                   required : false }
 })
 
-const userModel = mongoose.model('User', userSchema);
 
 /*
     Checks if the userId is registered as the admin to at least a restaurant.
     userId (String)  : the string of the user admin.
  */
-userSchema.statics.isSeller = function (userId) {
-    if (typeof userId !== "string") throw "The userId given is n't a string";
-    restaurantModel.findOne({ admin : userId }).then((rest) => {
+userSchema.methods.isSeller = function () {
+    restaurantModel.findOne({ admin : this._id }).then((rest) => {
         return !!rest;
     });
 }
@@ -29,16 +27,14 @@ userSchema.statics.isSeller = function (userId) {
     authKey (String) : the authentication key in the restaurant
  */
 
-userSchema.statics.getSellerRestaurant = function (userId, authKey){
-    if (typeof userId  !== "string") throw  "The userId given is not a string";
+userSchema.methods.getSellerRestaurant = function (authKey){
     if (typeof authKey !== "string") throw "The authKey given is not a string";
-    restaurantModel.findOne({ admin : userId, authKey : authKey }).then((rest) => {
+    restaurantModel.findOne({ admin : this._id, authKey : authKey }).then((rest) => {
         return rest;
     });
 }
 
-// TODO isSeller method
-// TODO getSellerRestaurant method
+const userModel = mongoose.model('User', userSchema, 'users');
 
 const groupModel = mongoose.model('Group', Schema({
     name          : { type : String,            required : true },

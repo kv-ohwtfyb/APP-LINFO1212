@@ -113,10 +113,7 @@ app.post('/seller_login_submitted', function (req, res) {
     //TODO check if already logged In
     //if so, just ask the authKey only
     //else ask the whole page
-
     postSellerlogin(app,req, res);
-
-
 });
 
 /************ CUSTOMER GET Request PART ************/

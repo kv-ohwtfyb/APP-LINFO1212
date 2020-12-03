@@ -2,8 +2,9 @@ const {userModel, restaurantModel} = require('./../general/schemas');
 
 function sellerLogin(app, req, res){
 
-    sellerLogginCheck(req)
+    sellerLogInCheck(req)
         .then((check) => {
+            // Check contains the status of the process, and the msg in case of the a problem
             if (check.status) {
                 res.redirect('/');
             } else {
@@ -32,18 +33,16 @@ exports.postSellerlogin = sellerLogin;
  * @param req => email, password and the authentification key enterred. 
  */
 
-async function sellerLogginCheck(req){
+async function sellerLogInCheck(req){
     const toReturn = this;
     await userModel.findOne({email:req.body.mail})
         .then((user) => {
             if (user) { //If the e-mail is valid
                 if (user.password === req.body.password) { // If the password is valid
-                    const checkAdmin = user;
-                    
-                    if (checkAdmin.IsSeller(user._id)) {
-
+                    if (user.isSeller()) {
+                        console.log("The User is logged in");
                     } else {
-                        this.msg = "Access Denied";
+                        this.msg = "Your account is not Admin to any restaurant.";
                         this.status = false;
                     }
                 } else {
@@ -52,12 +51,16 @@ async function sellerLogginCheck(req){
                 }
                 
             } else {
-                this.msg = "E-mail Invalid";
+                this.msg = "E-mail Invalid. \n Pay attention to capital letters at the begin of your e-mail.";
                 this.status = false;
             }
+        })
+        .catch((err) => {
+            this.msg = err;
+            this.status = false;
         });
     return toReturn;
-};
+}
 
 /**
  * Check if the user is admin of any restaurant
