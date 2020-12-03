@@ -24,11 +24,16 @@ const {
     getOrders,
     getPaymentsPage,
     getTheStorePage,
-    getSellerLoginPage } = require('./private/js/Seller/GET');
+    getSellerLoginPage } = require('./private/js/seller/GET');
 
-const {postUserLoggedIn} = require('./private/js/Seller/POST');
+const {
+    postUserLoggedIn,
+    } = require('./private/js/seller/POST');
 
-const cons = require('consolidate');
+const {
+    postPhoneNumberVerification,
+    postcodeCheck
+} = require('./private/js/customer/POST');
 
 app.use(bodyParser.urlencoded({ extended :true, limit: '50mb' }));
 
@@ -125,7 +130,7 @@ app.get('/check_out',(req,res) =>{
     getCheckOutPage(app,req,res);
 })
 
-app.get('/sign_up_verification',(req, res) => {
+app.get('/signup_verification',(req, res) => {
     getSignUpVerificationNumber(app,req,res);
 })
 app.get('/sign_up_giveNumber', (req, res) => {
@@ -159,16 +164,16 @@ app.post('/checkout', (req, res) => {
     console.log(req.body);
 })
 app.post('/signup_verification',(req, res) => {
-    console.log(req.body);
+    postPhoneNumberVerification(app, req, res);
 })
 app.post('/signup_giveNumber', (req, res) => {
-    console.log(req.body);
+    res.send(req.body)
 })
 app.post('/stripe', (req, res) => {
     console.log(req.body);
 })
-app.post('/signUpComplete', (req, res) => {
-    console.log(req.body);
+app.post('/message', (req, res) => {
+    postcodeCheck(app,req,res);
 })
 
 app.use(bodyParser.urlencoded({ extended :true, limit: '50mb' }));

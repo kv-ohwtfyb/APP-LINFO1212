@@ -16,7 +16,15 @@
 
     </div>
     <div class="announcement column-display">
-        <h1>Place an order and get a chance to have a <span class="color-orange">FREE <br> MEAL </span>the next day …</h1>
+        <h1>
+            {{#orderMessage}}
+                Place an order and get a chance to have a <span class="color-orange">FREE <br> MEAL </span>the next day …
+            {{/orderMessage}}
+
+            {{#registerMessage}}
+                Thank you for <span class="color-orange">REGISTERING <br> ENJOY </span>the experience on our website …
+            {{/registerMessage}}
+        </h1>
         <button type="submit" class="bg-color-black color-white border-less">Next page</button>
     </div>
 
