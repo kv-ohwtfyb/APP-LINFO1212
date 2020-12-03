@@ -51,7 +51,7 @@ app.use(session({
     cookie: {path: '/', httpOnly: true, limit: 30 * 60 * 1000}
 }));
 
-/************ SELLER GET Request PART ************/ 
+/************ SELLER GET Request PART ************/
 
 app.get('/add_group', (req, res) => {
     getAddOrModifyGroup(app, req, res);
@@ -130,7 +130,7 @@ app.get('/orders_page',(req,res) =>{
 })
 app.get('/user_login',(req,res) => {
     if (req.session.user) { req.redirect("/"); }
-    else { getUserLoginPage(app, req, res); }  
+    else { getUserLoginPage(app, req, res); }
 })
 app.get('/user_signup',(req,res) =>{
     getUserSignUpPage(app,req,res);
