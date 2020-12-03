@@ -75,7 +75,7 @@ function phoneNumberVerification(app, req, res){
         if (err){
             console.error(err);
         }else {
-            verifyRequestId = result.request_id;
+            const verifyRequestId = result.request_id;
             console.log('request_id', verifyRequestId);
             res.render('./customer/SignUpVerificationNumberPage.html');
         }
@@ -86,7 +86,7 @@ function phoneNumberVerification(app, req, res){
 
 function codeCheck(app, req, res) {
     nexmo.verify.check({
-        request_id: verifyRequestId,
+        request_id: this.request_id,
         code: req.body.codeNumber
     }, (err, result) => {
         if (err){
