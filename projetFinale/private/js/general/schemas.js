@@ -12,6 +12,7 @@ const userSchema = new Schema({
 
 /**
     Checks if the userId is registered as the admin to at least one restaurant.
+    Returns a promise that returns a bool if the user is admin.
  */
 userSchema.methods.isSeller = function () {
     return restaurantModel.findOne({ admin : this._id }).then((rest) => {

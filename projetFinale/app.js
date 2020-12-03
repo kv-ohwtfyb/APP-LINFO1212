@@ -25,11 +25,8 @@ const {
     getOrders,
     getPaymentsPage,
     getTheStorePage,
-    getSellerLoginPage } = require('./private/js/seller/GET');
-
-const {
-    postUserLoggedIn,
-    } = require('./private/js/seller/POST');
+    getSellerLoginPage
+} = require('./private/js/seller/GET');
 
 const {
     postPhoneNumberVerification,
@@ -37,11 +34,8 @@ const {
 } = require('./private/js/customer/POST');
 
 const {
-    postUserLoggedIn
-} = require('./private/js/customer/POST');
-
-const {
-    postSellerlogin
+    postSellerlogin,
+    postUserLoggedIn,
 } = require('./private/js/seller/POST');
 
 
