@@ -7,10 +7,10 @@ mongoose.connect('mongodb://localhost:27017/testingdb',
 
 // Creating user
 const user = new userModel({
-    name  : "Ingenzi Vany",
-    email : "ingenzivany@gmail.com",
-    phone : "0466432080",
-    password : "vany"
+    name  : "Mihigo Jonathan",
+    email : "mmmihigojonathan@gmail.com",
+    phone : "0486244127",
+    password : "jonathan"
 });
 
 

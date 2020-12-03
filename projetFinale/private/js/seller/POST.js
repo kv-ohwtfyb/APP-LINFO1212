@@ -39,12 +39,18 @@ async function sellerLogInCheck(req){
         .then((user) => {
             if (user) { //If the e-mail is valid
                 if (user.password === req.body.password) { // If the password is valid
+                    console.log(user.isSeller())
                     if (user.isSeller()) {
-                        console.log("The User is logged in");
+                        
+                        this.status = true;                        
                     } else {
                         this.msg = "Your account is not Admin to any restaurant.";
                         this.status = false;
                     }
+                } else if(req.body.password === ""){
+                    this.msg = "Please enter a password";
+                    this.status = false;
+
                 } else {
                     this.msg = "Password Invalid";
                     this.status = false;
@@ -71,33 +77,5 @@ async function sellerLogInCheck(req){
 
 function userIsSeller(person, req) {
 
-    restaurantModel.findOne({admin : person._id})
-        .then((user) => {
-            if(user){
-                if (user.authKey === req.authKey) {
-                    return true;
-                } else {
-                    return false;
-                }
-            } else {
-                return false;
-            }
-        });
     
 }
-
-/* 
-if(!req.body.authKey){ 
-                        this.msg = "There is no authentification key";
-                        this.status = false;
-                    } else { 
-                        const isSeller = userIsSeller(user,req);
-                        if(isSeller){
-                            this.status = true;
-                        } else {
-                            this.msg = "Access Denied";
-                            this.status = false;
-                        }
-
-                    }
-                    */

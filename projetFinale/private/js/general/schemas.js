@@ -15,7 +15,7 @@ const userSchema = new Schema({
     userId (String)  : the string of the user admin.
  */
 userSchema.methods.isSeller = function () {
-    restaurantModel.findOne({ admin : this._id }).then((rest) => {
+    return restaurantModel.findOne({ admin : this._id }).then((rest) => {
         return !!rest;
     });
 }
@@ -272,8 +272,10 @@ function checkItemsOfGroup(restaurant, items){
 
  */
 function checkIfAdminExist(adminId) {
+    
     userModel.findById(adminId).then((rest) => {
-    return !!rest;
+        console.log(rest);
+        return !!rest;
     });
 }
 
