@@ -26,8 +26,6 @@ exports.postSellerlogin = sellerLogin;
 
 
 
-
-
 /**
  * check if what the user enterred is valid or not
  * @param req => email, password and the authentification key enterred. 
@@ -39,18 +37,13 @@ async function sellerLogInCheck(req){
         .then((user) => {
             if (user) { //If the e-mail is valid
                 if (user.password === req.body.password) { // If the password is valid
-                    console.log(user.isSeller())
-                    if (user.isSeller()) {
-                        
-                        this.status = true;                        
-                    } else {
-                        this.msg = "Your account is not Admin to any restaurant.";
-                        this.status = false;
-                    }
-                } else if(req.body.password === ""){
-                    this.msg = "Please enter a password";
-                    this.status = false;
-
+                    user.isSeller().then((bool) =>{
+                        if (bool) {
+                            console.log("The User is logged in");
+                        } else {
+                            this.msg = "Your account is not Admin to any restaurant.";
+                            this.status = false;
+                        }})
                 } else {
                     this.msg = "Password Invalid";
                     this.status = false;
@@ -66,16 +59,4 @@ async function sellerLogInCheck(req){
             this.status = false;
         });
     return toReturn;
-}
-
-/**
- * Check if the user is admin of any restaurant
- * then check the aunthentification key
- * @param  person => the user's JSON doc.
- * @param  req => help us to get the authKey enterred
- */
-
-function userIsSeller(person, req) {
-
-    
 }

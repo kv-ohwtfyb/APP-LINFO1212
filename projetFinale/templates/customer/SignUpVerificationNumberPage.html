@@ -13,10 +13,10 @@
             <h4>|</h4>
             <h3>UCLouvain</h3>
         </div>
-        <form class="round-border" method="GET">
+        <form class="round-border" method="POST" action="/message">
             <p>{{VerificationError}}</p>
             <label for="number"></label>
-            <input type="number" id="number" placeholder="Enter the 4-digit code you received ..." minlength="4" maxlength="4">
+            <input type="number" id="number" name="codeNumber" placeholder="Enter the 4-digit code you received ..." minlength="4" maxlength="4">
             <input type="submit" value="Send" class="bg-color-black">
         </form>
 

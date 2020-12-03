@@ -6,6 +6,7 @@ mongoose.connect('mongodb://localhost:27017/testingdb',
 );
 
 // Creating user
+/*
 const user = new userModel({
     name  : "Mihigo Jonathan",
     email : "mmmihigojonathan@gmail.com",
@@ -19,12 +20,15 @@ user.save(function (err, user) {
     else     { console.log(`Saved ${ user.name } to the database.`);}
 });
 
+ */
+
 //Finding user
-/*
-const UserId = mongoose.connection.collection('users').findOne();
 
-UserId.then((rest) => { console.log(rest); } );
+console.log(checkIfAdminExist("5fc9190e2505090504522265"));
 
-const user = userModel.find({email : "ingenzivany@gmail.com",
-    password : "vany" });
-*/
+function checkIfAdminExist(adminId) {
+    userModel.findById(adminId).then((rest) => {
+        if (rest) { return true;  }
+        else      { return false; }
+    });
+}
