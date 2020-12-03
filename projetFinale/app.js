@@ -28,15 +28,8 @@ const {
     getSellerLoginPage } = require('./private/js/seller/GET');
 
 const {
-    postUserLoggedIn,
-    } = require('./private/js/seller/POST');
-
-const {
     postPhoneNumberVerification,
-    postcodeCheck
-} = require('./private/js/customer/POST');
-
-const {
+    postcodeCheck,
     postUserLoggedIn
 } = require('./private/js/customer/POST');
 
