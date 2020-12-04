@@ -260,7 +260,8 @@ const orderSchema = new Schema({
                                                             id : String,
                                                             selected : [ String ]
                                                         }],
-                                            total : Number
+                                            unityPrice : Number,
+                                            quantity : Number,
                                         }],
                                 total : Number
                             }],                         required : true  },

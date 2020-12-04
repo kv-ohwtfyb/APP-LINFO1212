@@ -15,7 +15,8 @@ const {
     getSignUpVerificationNumber,
     getSignUpGiveNumber,
     getStripe,
-    getUserSignUpComplete
+    getUserSignUpComplete,
+
 } = require('./private/js/customer/GET');
 
 const {
@@ -32,7 +33,8 @@ const {
 const {
     postPhoneNumberVerification,
     postcodeCheck,
-    postUserLoggedIn
+    postUserLoggedIn,
+    addItemToBasket
 } = require('./private/js/customer/POST');
 
 const {
@@ -52,6 +54,7 @@ app.use(session({
     cookie: {path: '/', httpOnly: true, limit: 30 * 60 * 1000}
 }));
 
+//Initiating the basket in the app session
 
 
 /************ SELLER GET Request PART ************/
@@ -130,6 +133,19 @@ app.post('/seller_login_submitted', function (req, res) {
 /************ CUSTOMER GET Request PART ************/
 
 app.get('/', function (req, res) {
+    req.session.basket = {
+        restaurants : [{
+            restaurant : "Burger King",
+            items      : [{
+                            name : "Double Whooper",
+                            groupSets : [],
+                            unityPrice : 23.8,
+                            quantity : 4
+                            }]
+                        }],
+        totalItems  : 1,
+        totalAmount : 99.99
+    }
     getHomePage(app, req, res);
 });
 
@@ -198,5 +214,7 @@ app.post('/stripe', (req, res) => {
 app.post('/message', (req, res) => {
     postcodeCheck(app,req,res);
 })
-
+app.post('/add_item', (req, res) => {
+    addItemToBasket(app,req,res);
+})
 module.exports = app;

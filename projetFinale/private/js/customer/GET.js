@@ -2,9 +2,12 @@ const { restaurantModel } = require('./../general/schemas');
 
 function homePage(app, req, res){
     restaurantModel.arrayOfRestaurantsForDisplay().then((array) => {
-        res.render('./customer/Homepage.html', { restaurants : array ,
-                                                 loggedIn : req.session.user || null
-                    });
+        res.render('./customer/Homepage.html', {
+            restaurants : array ,
+            loggedIn : req.session.user || null,
+            basket : (req.session.basket.restaurants.length === 0) ? null : req.session.basket
+                                                }
+        );
     });
 }
 function ordersPage(app,req,res){
@@ -37,6 +40,7 @@ function stripe(app,req,res){
 function userSignUpComplete(app,req,res){
     res.render('./customer/MessagePage.html')
 }
+
 exports.getHomePage = homePage;
 exports.getOrdersPage = ordersPage;
 exports.getUserLoginPage = logInPage;

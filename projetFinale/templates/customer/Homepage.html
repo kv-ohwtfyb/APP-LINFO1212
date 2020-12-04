@@ -39,7 +39,7 @@
             <h4>|</h4>
             <h3>UCLouvain</h3>
         </div>
-        <form>
+        <form action="search">
             <input type="search" name="search" id="searchInput" placeholder="De quoi avez vous envie de savourer :) …">
             <input type="submit" value=" ">
         </form>
@@ -47,69 +47,56 @@
             <img>
             <p>2</p>
         </div>
-        <!-- When clicked on the plate -->
         <div class="popup-plate full-height-section bg-color-white" id="popup_plate_header">
             <button class="bg-color-white border-less left" id="popup_plate_close">X</button>
             <h2>PLATE</h2>
+            {{#basket}}
             <ul>
+                {{#restaurants}}
                 <li>
-                    <h2>Burger King</h2>
+                    <h2>{{restaurant}}</h2>
                     <hr class="bg-color-black">
                     <ul>
+                        {{#items}}
                         <li>
-                            <input type="number" min="0" max="20" value="1" class="bg-color-black border-less">
-                            <p class="text-align-left">Item example</p>
-                            <p class="text-align-right">9,65€</p>
+                            <input type="number" min="0" max="20" value="{{quantity}}" class="bg-color-black border-less" name="{{name}}">
+                            <p class="text-align-left">{{name}}</p>
+                            <p class="text-align-right">{{unityPrice}}€</p>
                         </li>
-                        <li>
-                            <input type="number" min="0" max="20" value="2" class="bg-color-black border-less">
-                            <p class="text-align-left">Item example</p>
-                            <p class="text-align-right">9,65€</p>
-                        </li>
+                        {{/items}}
                     </ul>
                 </li>
-                <li>
-                    <h2>O'Tacos</h2>
-                    <hr class="bg-color-black">
-                    <ul>
-                        <li>
-                            <input type="number" min="0" max="20" value="1" class="bg-color-black border-less">
-                            <p class="text-align-left">Item example</p>
-                            <p class="text-align-right">9,65€</p>
-                        </li>
-                        <li>
-                            <input type="number" min="0" max="20" value="2" class="bg-color-black border-less">
-                            <p class="text-align-left">Item example</p>
-                            <p class="text-align-right">9,65€</p>
-                        </li>
-                    </ul>
-                </li>
+                {{/restaurants}}
             </ul>
             <div class="bg-color-black bottom-of-container">
-                <p class="text-align-left">5</p>
+                <p class="text-align-left">{{totalItems}}</p>
                 <p>Total</p>
-                <p class="text-align-right">24,98€</p>
+                <p class="text-align-right">{{totalAmount}}</p>
             </div>
+            {{/basket}}
+            {{^basket}}
+                <h1> It seems like your basket is empty try adding some items :)</h1>
+            {{/basket}}
         </div>
     </header>
     <section class="emojis-section">
-        <a>
+        <a href="/search?search=pasta">
             <img src="./images/pasta.png">
             <p>Pasta</p>
         </a>
-        <a>
+        <a href="/search?search=sandwich">
             <img src="./images/sandwich.png">
             <p>Sandwich</p>
         </a>
-        <a>
+        <a href="/search?search=burger">
             <img src="./images/burger.png">
             <p>Burger</p>
         </a>
-        <a>
+        <a href="/search?search=vegan">
             <img src="./images/vegan.png">
             <p>Vegan</p>
         </a>
-        <a>
+        <a href="/search?search=sushi">
             <img src="./images/sushi.png">
             <p>Sushi</p>
         </a>
@@ -167,7 +154,7 @@
         <ul class="list-of-restaurants three-gridded-layout">
             {{#restaurants}}
             <li>
-                <a>
+                <a href="/restaurant_view?id={{name}}">
                     <div>
                         {{#frontImage}}
                             <img src={{imgSrc}} alt="The Incident Image wasn't provided">
@@ -176,7 +163,7 @@
                             <img src="./images/No-Photo-Available.jpg">
                         {{/frontImage}}
                     </div>
-                    <section><h1>{{name}}</h1><p>{{avgPrice}}€</p></section>
+                    <section class="color-black"><h1>{{name}}</h1><p>{{avgPrice}}€</p></section>
                 </a>
             </li>
             {{/restaurants}}

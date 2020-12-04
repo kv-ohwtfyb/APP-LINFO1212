@@ -98,6 +98,11 @@ function codeCheck(app, req, res) {
     })
 }
 
+
+function addItemToBasket(app, req, res){
+}
 exports.postUserLoggedIn = userLogIn;
 exports.postPhoneNumberVerification = phoneNumberVerification;
 exports.postcodeCheck = codeCheck;
+exports.addItemToBasket = addItemToBasket
+
