@@ -326,8 +326,11 @@ header form input[type=submit]:active{
     margin: auto;
     color: white;
     display: grid;
-    grid-template-columns: auto auto auto;
     justify-items: center;
+}
+.popup-plate button[type=submit]{
+    display: none;
+    height: 40px;
 }
 .popup-plate .bottom-of-container{
     bottom: 10%;

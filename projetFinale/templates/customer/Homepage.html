@@ -54,13 +54,13 @@
             <ul>
                 {{#restaurants}}
                 <li>
-                    <h2>{{restaurant}}</h2>
+                    <h2 >{{restaurant}}</h2>
                     <hr class="bg-color-black">
                     <ul>
                         {{#items}}
-                        <li>
-                            <input type="number" min="0" max="20" value="{{quantity}}" class="bg-color-black border-less" name="{{name}}">
-                            <p class="text-align-left">{{name}}</p>
+                        <li class="item">
+                            <input type="number" min="0" max="20" value="{{quantity}}" class="bg-color-black border-less" name="{{restaurant}}|{{name}}">
+                            <p class="name text-align-left" id="name">{{name}}</p>
                             <p class="text-align-right">{{unityPrice}}€</p>
                         </li>
                         {{/items}}
@@ -68,7 +68,7 @@
                 </li>
                 {{/restaurants}}
             </ul>
-            <div class="bg-color-black bottom-of-container">
+            <div class="bg-color-black bottom-of-container three-gridded-layout">
                 <p class="text-align-left">{{totalItems}}</p>
                 <p>Total</p>
                 <p class="text-align-right">{{totalAmount}}</p>

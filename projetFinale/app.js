@@ -34,7 +34,8 @@ const {
     postPhoneNumberVerification,
     postcodeCheck,
     postUserLoggedIn,
-    addItemToBasket
+    addItemToBasket,
+    modifyAnItemOfTheBasket
 } = require('./private/js/customer/POST');
 
 const {
@@ -53,6 +54,8 @@ app.use(session({
     saveUninitialized: true,
     cookie: {path: '/', httpOnly: true, limit: 30 * 60 * 1000}
 }));
+
+
 
 //Initiating the basket in the app session
 
@@ -133,19 +136,7 @@ app.post('/seller_login_submitted', function (req, res) {
 /************ CUSTOMER GET Request PART ************/
 
 app.get('/', function (req, res) {
-    req.session.basket = {
-        restaurants : [{
-            restaurant : "Burger King",
-            items      : [{
-                            name : "Double Whooper",
-                            groupSets : [],
-                            unityPrice : 23.8,
-                            quantity : 4
-                            }]
-                        }],
-        totalItems  : 1,
-        totalAmount : 99.99
-    }
+    console.log(req.session.basket)
     getHomePage(app, req, res);
 });
 
@@ -153,7 +144,7 @@ app.get('/orders_page',(req,res) =>{
     getOrdersPage(app,req,res);
 })
 app.get('/user_login',(req,res) => {
-    if (req.session.user) { req.redirect("/"); }
+    if (req.session.user) { res.redirect("/"); }
     else { getUserLoginPage(app, req, res); }
 })
 app.get('/user_signup',(req,res) =>{
@@ -163,6 +154,29 @@ app.get('/restaurant_view',(req,res) =>{
     getRestaurantsPage(app,req,res);
 })
 app.get('/search',(req,res) => {
+    req.session.basket = {
+        restaurants : [{
+            restaurant : "Burger King",
+            items      : [{
+                            name : "Double Whooper",
+                            groupSets : [],
+                            unityPrice : 23.8,
+                            quantity : 4
+                            }]
+                        },
+                        {
+            restaurant : "O'Tacos",
+            items      : [{
+                            name : "XL Tacos",
+                            groupSets : [],
+                            unityPrice : 13.5,
+                            quantity : 1
+                            }]
+                        }
+        ],
+        totalItems  : 1,
+        totalAmount : 99.99
+    }
     getSearchRestaurants(app,req,res);
 })
 app.get('/check_out',(req,res) =>{
@@ -216,5 +230,8 @@ app.post('/message', (req, res) => {
 })
 app.post('/add_item', (req, res) => {
     addItemToBasket(app,req,res);
+})
+app.post('/modify_item',(req, res) =>{
+    modifyAnItemOfTheBasket(app, req, res);
 })
 module.exports = app;

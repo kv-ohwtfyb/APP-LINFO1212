@@ -18,15 +18,35 @@ $(document).ready(function () {
         platePopUpInHeader.css("width", "0px");
     })
 
-    //When the input is changed
-    $("#popup_plate_header :input").change ( () => {
-        $(document.body).css('pointer-events','none');
-        alert("Inactive");
-        sleep(10000).then(() =>{
-            $(document.body).css('pointer-events','auto');
-            alert("Active");
-        });
-    })
+    //When on input is changed
+    $("#popup_plate_header :input").on('change',(event) =>{
+        const input = $(event.target).closest(":input");
+        const nameSplit = input.attr("name").split("|");
+        const data = {
+            restaurant : nameSplit[0], itemName : nameSplit[1],
+            quantity : input.val()
+        }
+        // Sends request to server.
+        $.ajax('/modify_item',
+            {   method : 'post',
+                        data   :  data,
+                        success : function (response) {
+                            console.log(response);
+                            if (response.status){
+                                if (input.val() === 0){
+                                    const theItem = $(event.target).closest(".item");
+                                    theItem.remove();
+                                }else {
+                                    input.attr("value", input.val());
+                                }
+                            } else {
+                                alert(response.msg);
+                                input.val(input.attr("value"));
+                            }
+                        }
+                    }
+            );
+    });
 });
 
 

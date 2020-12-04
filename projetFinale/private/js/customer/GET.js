@@ -5,7 +5,7 @@ function homePage(app, req, res){
         res.render('./customer/Homepage.html', {
             restaurants : array ,
             loggedIn : req.session.user || null,
-            basket : (req.session.basket.restaurants.length === 0) ? null : req.session.basket
+            basket : req.session.basket
                                                 }
         );
     });
