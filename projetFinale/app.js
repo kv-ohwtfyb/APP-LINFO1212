@@ -28,9 +28,9 @@ const {
     getSellerLoginPage } = require('./private/js/seller/GET');
 
 const {
-    postPhoneNumberVerification,
-    postcodeCheck,
-    postUserLoggedIn
+    postPhoneNumberCheck,
+    postUserLoggedIn,
+    postMessageSignUpComplete
 } = require('./private/js/customer/POST');
 
 const {
@@ -129,7 +129,8 @@ app.get('/orders_page',(req,res) =>{
 })
 app.get('/user_login',(req,res) => {
     if (req.session.user) { req.redirect("/"); }
-    else { getUserLoginPage(app, req, res); }  
+    else { getUserLoginPage(app, req, res); }
+
 })
 app.get('/user_signup',(req,res) =>{
     getUserSignUpPage(app,req,res);
@@ -178,16 +179,17 @@ app.post('/checkout', (req, res) => {
     console.log(req.body);
 })
 app.post('/signup_verification',(req, res) => {
-    postPhoneNumberVerification(app, req, res);
+    console.log(req.body);
 })
 app.post('/signup_giveNumber', (req, res) => {
-    res.send(req.body)
+    postPhoneNumberCheck(app, req, res);
+
 })
 app.post('/stripe', (req, res) => {
     console.log(req.body);
 })
 app.post('/message', (req, res) => {
-    postcodeCheck(app,req,res);
+    postMessageSignUpComplete(app,req,res);
 })
 
 module.exports = app;

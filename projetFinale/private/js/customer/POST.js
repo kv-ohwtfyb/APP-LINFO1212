@@ -1,4 +1,4 @@
-
+/*
 const Vonage = require('@vonage/server-sdk');
 const vonage = new Vonage({
     apiKey:'a3692c76',
@@ -14,6 +14,7 @@ const nexmo = new Nexmo({
 }, {
     debug: true
 });
+*/
 const {userModel} = require("./../general/schemas");
 
 function userLogIn(app, req, res){
@@ -24,10 +25,10 @@ function userLogIn(app, req, res){
                 res.redirect('/');
             } else {
                 res.render('./customer/UserLoginPage.html', {loginError: check.msg});
-            }  
+            }
     });
 }
-exports.postUserLoggedIn = userLogIn;
+
 
 
 
@@ -66,6 +67,7 @@ async function userLoggingCheck(req){
     });
     return toReturn;
 }
+/* Checking the code sent by message
 
 function phoneNumberVerification(app, req, res){
     nexmo.verify.request({
@@ -75,9 +77,10 @@ function phoneNumberVerification(app, req, res){
         if (err){
             console.error(err);
         }else {
-            const verifyRequestId = result.request_id;
+            verifyRequestId = result.request_id;
             console.log('request_id', verifyRequestId);
             res.render('./customer/SignUpVerificationNumberPage.html');
+
         }
 
     });
@@ -86,7 +89,7 @@ function phoneNumberVerification(app, req, res){
 
 function codeCheck(app, req, res) {
     nexmo.verify.check({
-        request_id: this.request_id,
+        request_id: verifyRequestId,
         code: req.body.codeNumber
     }, (err, result) => {
         if (err){
@@ -98,6 +101,27 @@ function codeCheck(app, req, res) {
     })
 }
 
+ */
+function phoneNumberCheck(app,req,res){
+    const phone_input = req.body.phoneNumber;
+    if (phone_input[0] === "0" && phone_input[1] === "4"){
+        if(phone_input.length === 10){
+            session.currentPhoneNumber = phone_input;
+            res.render('/user_signup', session.currentPhoneNumber);
+        }else {
+            res.render('./customer/SignUpGiveNumberPage.html', {phoneNumberError: "Please a valide number"});
+        }
+    }else {
+        res.render('./customer/SignUpGiveNumberPage.html', {phoneNumberError: "Please start with 04..."});
+    }
+
+}
+
+function postMessageSignUpComplete(app, req, res){
+    res.render('./customer/MessagePage.html',{"signUpComplete" : true})
+}
 exports.postUserLoggedIn = userLogIn;
-exports.postPhoneNumberVerification = phoneNumberVerification;
-exports.postcodeCheck = codeCheck;
+exports.postUserLoggedIn = userLogIn;
+exports.postPhoneNumberCheck = phoneNumberCheck;
+exports.postMessageSignUpComplete = postMessageSignUpComplete;
+

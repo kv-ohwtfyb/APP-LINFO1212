@@ -6,7 +6,7 @@ mongoose.connect('mongodb://localhost:27017/testingdb',
 );
 
 // Creating user
-/*
+
 const user = new userModel({
     name  : "Ingenzi Vany",
     email : "ingenzivany@gmail.com",
@@ -20,7 +20,7 @@ user.save(function (err, user) {
     else     { console.log(`Saved ${ user.name } to the database.`);}
 });
 
- */
+
 
 //Finding user
 
