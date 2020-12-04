@@ -15,8 +15,14 @@
         </div>
     </div>
     <div class="announcement column-display">
+        {{#signUpComplete}}
+        <h1>Thank You for trusting us . Please place an order and get a chance to have a <span class="color-orange">FREE <br> MEAL </span>the next day …</h1>
+        {{/signUpComplete}}
 
+        {{^otherMessage}}
         <h1>Place an order and get a chance to have a <span class="color-orange">FREE <br> MEAL </span>the next day …</h1>
+        {{/otherMessage}}
+
         <button type="button" onclick="location.href='/'"class="bg-color-black color-white border-less">Next page</button>
     </div>
 </body>

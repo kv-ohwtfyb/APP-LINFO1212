@@ -1,5 +1,11 @@
+const { restaurantModel } = require('./../general/schemas');
+
 function homePage(app, req, res){
-    res.render('./customer/Homepage.html');
+    restaurantModel.arrayOfRestaurantsForDisplay().then((array) => {
+        res.render('./customer/Homepage.html', { restaurants : array ,
+                                                 loggedIn : req.session.user || null
+                    });
+    });
 }
 function ordersPage(app,req,res){
     res.render('./customer/OrdersPage.html');
