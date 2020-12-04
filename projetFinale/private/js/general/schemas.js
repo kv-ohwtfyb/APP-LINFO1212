@@ -27,8 +27,9 @@ userSchema.methods.isSeller = function () {
  */
 userSchema.methods.getSellerRestaurant = function (authKey){
     if (typeof authKey !== "string") throw "The authKey given is not a string";
-    restaurantModel.findOne({ admin : this._id, authKey : authKey }).then((rest) => {
-        return rest;
+    return restaurantModel.findOne({ admin : this._id, authKey : authKey }).then((rest) => {
+        if (rest) { return true; }
+        else      { return false; }
     });
 }
 
