@@ -4,7 +4,8 @@ const app = express ();
 const bodyParser = require('body-parser');
 const session = require('express-session');
 
-const { getHomePage,
+const {
+    getHomePage,
     getOrdersPage,
     getUserLoginPage,
     getUserSignUpPage,
@@ -25,7 +26,9 @@ const {
     getOrders,
     getPaymentsPage,
     getTheStorePage,
-    getSellerLoginPage } = require('./private/js/seller/GET');
+    getSellerLoginPage,
+    getAfterCreateRestoMessage
+} = require('./private/js/seller/GET');
 
 const {
     postPhoneNumberCheck,
@@ -34,7 +37,7 @@ const {
 } = require('./private/js/customer/POST');
 
 const {
-    postSellerlogin
+    postSellerlogin,
 } = require('./private/js/seller/POST');
 
 
@@ -50,7 +53,9 @@ app.use(session({
     cookie: {path: '/', httpOnly: true, limit: 30 * 60 * 1000}
 }));
 
-/************ SELLER GET Request PART ************/ 
+
+
+/************ SELLER GET Request PART ************/
 
 app.get('/add_group', (req, res) => {
     getAddOrModifyGroup(app, req, res);
@@ -93,6 +98,11 @@ app.get('/seller_login', (req, res) =>{
     getSellerLoginPage(app, req, res);
 });
 
+app.get('/logout', (req,res ) => {
+   req.session.user = null;
+   res.redirect('/');
+});
+
 /************ Seller POST Request PART ************/
 
 app.post('/add-group', function (req, res) {
@@ -130,7 +140,6 @@ app.get('/orders_page',(req,res) =>{
 app.get('/user_login',(req,res) => {
     if (req.session.user) { req.redirect("/"); }
     else { getUserLoginPage(app, req, res); }
-
 })
 app.get('/user_signup',(req,res) =>{
     getUserSignUpPage(app,req,res);
@@ -166,7 +175,7 @@ app.post('/user_log_in',(req, res) => {
 app.post('/user_sign_up',(req, res, next) => {
     console.log(req.body);
 })
-app.post('/orders', (req, res) => {
+app.post('/user_orders', (req, res) => {
     console.log(req.body);
 })
 app.post('/restaurant', (req, res) => {

@@ -2,14 +2,14 @@ const { userModel } = require('./schemas');
 const mongoose = require('mongoose');
 
 mongoose.connect('mongodb://localhost:27017/testingdb',
-    {useNewUrlParser: true, useUnifiedTopology: true }
+    { useNewUrlParser: true, useUnifiedTopology: true }
 );
 
 // Creating user
 
 const user = new userModel({
     name  : "Ingenzi Vany",
-    email : "ingenzivany@gmail.com",
+    email : "Ingenzivany@gmail.com",
     phone : "0466432080",
     password : "vany"
 });
