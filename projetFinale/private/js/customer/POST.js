@@ -1,4 +1,4 @@
-
+/*
 const Vonage = require('@vonage/server-sdk');
 const vonage = new Vonage({
     apiKey:'a3692c76',
@@ -14,6 +14,7 @@ const nexmo = new Nexmo({
 }, {
     debug: true
 });
+*/
 const {userModel} = require("./../general/schemas");
 
 function userLogIn(app, req, res){
@@ -24,10 +25,10 @@ function userLogIn(app, req, res){
                 res.redirect('/');
             } else {
                 res.render('./customer/UserLoginPage.html', {loginError: check.msg});
-            }  
+            }
     });
 }
-exports.postUserLoggedIn = userLogIn;
+
 
 
 
@@ -52,12 +53,12 @@ async function userLoggingCheck(req){
         .then((user) => {
             if (user) {
                 if (user.password === req.body.password) {
-                    toReturn.status = true; 
+                    toReturn.status = true;
                     req.session.user = user;
 
                 } else {
                     toReturn.msg = "Password Invalid";
-                    toReturn.status = false;        
+                    toReturn.status = false;
                 }
             } else{
                 toReturn.msg = "E-mail Invalid";
@@ -66,6 +67,7 @@ async function userLoggingCheck(req){
     });
     return toReturn;
 }
+/* Checking the code sent by message
 
 function phoneNumberVerification(app, req, res){
     nexmo.verify.request({
@@ -75,9 +77,10 @@ function phoneNumberVerification(app, req, res){
         if (err){
             console.error(err);
         }else {
-            const verifyRequestId = result.request_id;
+            verifyRequestId = result.request_id;
             console.log('request_id', verifyRequestId);
             res.render('./customer/SignUpVerificationNumberPage.html');
+
         }
 
     });
@@ -86,7 +89,7 @@ function phoneNumberVerification(app, req, res){
 
 function codeCheck(app, req, res) {
     nexmo.verify.check({
-        request_id: this.request_id,
+        request_id: verifyRequestId,
         code: req.body.codeNumber
     }, (err, result) => {
         if (err){

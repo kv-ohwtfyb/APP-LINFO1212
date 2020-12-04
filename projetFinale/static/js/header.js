@@ -20,32 +20,8 @@ $(document).ready(function () {
 
     //When on input is changed
     $("#popup_plate_header :input").on('change',(event) =>{
-        const input = $(event.target).closest(":input");
-        const nameSplit = input.attr("name").split("|");
-        const data = {
-            restaurant : nameSplit[0], itemName : nameSplit[1],
-            quantity : input.val()
-        }
+        sendModifyingRequest(event);
         // Sends request to server.
-        $.ajax('/modify_item',
-            {   method : 'post',
-                        data   :  data,
-                        success : function (response) {
-                            console.log(response);
-                            if (response.status){
-                                if (input.val() === 0){
-                                    const theItem = $(event.target).closest(".item");
-                                    theItem.remove();
-                                }else {
-                                    input.attr("value", input.val());
-                                }
-                            } else {
-                                alert(response.msg);
-                                input.val(input.attr("value"));
-                            }
-                        }
-                    }
-            );
     });
 });
 
@@ -53,4 +29,34 @@ $(document).ready(function () {
 // sleep time expects milliseconds
 function sleep (time) {
   return new Promise((resolve) => setTimeout(resolve, time));
+}
+
+function sendModifyingRequest(event){
+    const input = $(event.target).closest(":input");
+    const nameSplit = input.attr("name").split("|");
+    const data = {
+        restaurant : nameSplit[0], itemName : nameSplit[1],
+        quantity : input.val()
+    }
+    $.ajax('/modify_item',
+    {   method : 'post',
+                data   :  data,
+                success : function (response) { treatResponseForModifyingItem(response, input); }
+            }
+    );
+}
+
+function treatResponseForModifyingItem(response, input) {
+    console.log(response);
+    if (response.status){
+        if (input.val() === 0){
+            const theItem = $(event.target).closest(".item");
+            theItem.remove();
+        }else {
+            input.attr("value", input.val());
+        }
+    } else {
+        alert(response.msg);
+        input.val(input.attr("value"));
+    }
 }

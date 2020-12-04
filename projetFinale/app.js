@@ -27,7 +27,8 @@ const {
     getOrders,
     getPaymentsPage,
     getTheStorePage,
-    getSellerLoginPage
+    getSellerLoginPage,
+    getAfterCreateRestoMessage
 } = require('./private/js/seller/GET');
 
 const {
@@ -217,16 +218,17 @@ app.post('/checkout', (req, res) => {
     console.log(req.body);
 })
 app.post('/signup_verification',(req, res) => {
-    postPhoneNumberVerification(app, req, res);
+    console.log(req.body);
 })
 app.post('/signup_giveNumber', (req, res) => {
-    res.send(req.body)
+    postPhoneNumberCheck(app, req, res);
+
 })
 app.post('/stripe', (req, res) => {
     console.log(req.body);
 })
 app.post('/message', (req, res) => {
-    postcodeCheck(app,req,res);
+    postMessageSignUpComplete(app,req,res);
 })
 app.post('/add_item', (req, res) => {
     addItemToBasket(app,req,res);

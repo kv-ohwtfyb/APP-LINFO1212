@@ -13,7 +13,8 @@
             <h4>|</h4>
             <h3>UCLouvain</h3>
         </div>
-        <form class="round-border" method="POST" action="/signup_verification">
+        <form class="round-border" method="POST" action="/signup_giveNumber">
+            <p class="msg" >{{phoneNumberError}}</p>
             <label for="number"></label>
             <input type="tel" name="phoneNumber" placeholder="Phone Number ..." id="number">
             <input type="submit" value="Send" class="bg-color-black">
