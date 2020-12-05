@@ -13,15 +13,16 @@
             <h4>|</h4>
             <h3>UCLouvain</h3>
         </div>
+        {{userRegisterError}}
         <form class="round-border" action="/message" method="post">
             <label for="name"></label>
-            <input type="text" placeholder="Name" id="name">
+            <input type="text" placeholder="Name" id="name" required>
             <label for="email"></label>
-            <input type="email" placeholder="Email" id="email">
+            <input type="email" placeholder="Email" id="email" required>
             <label for="password"></label>
-            <input type="password" placeholder="Password" id="password">
+            <input type="password" placeholder="Password" id="password" required>
             <label for="confirmPassword"></label>
-            <input type="password" placeholder="Confirm Password" id="confirmPassword">
+            <input type="password" placeholder="Confirm Password" id="confirmPassword" required>
             <input type="submit" class="bg-color-black" value="Sign Up">
         </form>
     </div>

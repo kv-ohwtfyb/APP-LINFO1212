@@ -33,7 +33,8 @@ const {
 const {
     postPhoneNumberCheck,
     postUserLoggedIn,
-    postMessageSignUpComplete
+    postMessageSignUpComplete,
+    postUserRegister
 } = require('./private/js/customer/POST');
 
 const {
@@ -173,7 +174,7 @@ app.post('/user_log_in',(req, res) => {
     postUserLoggedIn(app,req, res);
 })
 app.post('/user_sign_up',(req, res, next) => {
-    console.log(req.body);
+    postUserRegister(app, req, res).then(r  => {return r});
 })
 app.post('/user_orders', (req, res) => {
     console.log(req.body);

@@ -1,4 +1,5 @@
 const {userModel} = require("./../general/schemas");
+const bcrypt = require('bcrypt');
 
 function userLogIn(app, req, res){
 
@@ -49,27 +50,55 @@ async function userLoggingCheck(req){
         }
     });
     return toReturn;
+
 }
-function phoneNumberCheck(app,req,res){
-    const phone_input = req.body.phoneNumber;
-    if (phone_input[0] === "0" && phone_input[1] === "4"){
-        if(phone_input.length === 10){
-            session.currentPhoneNumber = phone_input;
-            res.render('/user_signup', session.currentPhoneNumber);
-        }else {
-            res.render('./customer/SignUpGiveNumberPage.html', {phoneNumberError: "Please a valide number"});
-        }
-    }else {
+
+/**
+ * Check if the phone Number is already used
+ * @param phoneNumberString
+ * @returns {Promise|PromiseLike<phoneNumberAlreadyUsed>|Promise<phoneNumberAlreadyUsed>}
+ */
+
+function phoneNumberAlreadyUsed(phoneNumberString) {
+    return userModel.findOne({ phone : phoneNumberString })
+        .then((user) => {
+            if (user) {
+                this.msg = phoneNumberString + " number is already used";
+                this.status = true;
+            }else{
+                this.status = false;
+            }
+            return this;
+        });
+}
+
+/**
+ * Verify the number then continues
+ * @param app
+ * @param req
+ * @param res
+ */
+
+function phoneNumberCheck (app, req, res){
+    if (req.body.phoneNumber[0] !== '0' || req.body.phoneNumber[1] !=='4'){
         res.render('./customer/SignUpGiveNumberPage.html', {phoneNumberError: "Please start with 04..."});
+    }else{
+        if (req.body.phoneNumber.length !== 10){
+            res.render('./customer/SignUpGiveNumberPage.html', {phoneNumberError: "Please a valid number"});
+        }else{
+            phoneNumberAlreadyUsed(req.body.phoneNumber)
+                .then((check) => {
+                    if (check.status){
+                        res.render('./customer/SignUpGiveNumberPage.html', {phoneNumberError: check.msg})
+                    }else{
+                        res.redirect('/user_signup');
+                    }
+                })
+        }
     }
 
 }
 
-function postMessageSignUpComplete(app, req, res){
-    res.render('./customer/MessagePage.html',{"signUpComplete" : true})
-}
-exports.postUserLoggedIn = userLogIn;
 exports.postUserLoggedIn = userLogIn;
 exports.postPhoneNumberCheck = phoneNumberCheck;
-exports.postMessageSignUpComplete = postMessageSignUpComplete;
 
