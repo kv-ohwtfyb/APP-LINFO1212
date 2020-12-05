@@ -35,6 +35,7 @@ const {
     postPhoneNumberVerification,
     postcodeCheck,
     postUserLoggedIn,
+    postOrdersOfUser,
     addItemToBasket,
     modifyAnItemOfTheBasket
 } = require('./private/js/customer/POST');
@@ -141,18 +142,23 @@ app.get('/', function (req, res) {
 });
 
 app.get('/orders_page',(req,res) =>{
-    getOrdersPage(app,req,res);
+    if(req.session.user){ postOrdersOfUser(app,req,res); } 
+    else { res.redirect('/'); }    
 })
+
 app.get('/user_login',(req,res) => {
     if (req.session.user) { res.redirect("/"); }
     else { getUserLoginPage(app, req, res); }
 })
+
 app.get('/user_signup',(req,res) =>{
     getUserSignUpPage(app,req,res);
 })
+
 app.get('/restaurant_view',(req,res) =>{
     getRestaurantsPage(app,req,res);
 })
+
 app.get('/search',(req,res) => {
     req.session.basket = {
         restaurants : [{

@@ -4,73 +4,79 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ORDERS</title>
+    <!--    CSS Imports-->
     <link rel="stylesheet" href="./css/main.css">
+    <!--    JavaScript Imports-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script type="text/javascript" src="js/header.js"></script>
+    <script type="text/javascript" src="js/filter.js"></script>
 </head>
 <body>
     <header>
-        <div>≡
-        <!-- This is the pop up nav bar section the user is not yet logged in-->
-            <span id="NavBar-NotLoggedin">
-                <button type="submit" name ="logIn">LOG IN</button>
-                <p>
+        <button id="navbar_open" type="button" class="border-less">≡
+        </button>
+        <div class="navbar bg-color-white" id="navbar_header">
+                <button id="navbar_close" class="border-less bg-color-black color-white">X</button>
+                {{#loggedIn}}
                 <ul>
-                    <li><a href="">SIGN UP</a></li>
-                    <li><a href="">ADD YOUR RESTAURANT</a></li>
-                    <li><a href="">LOG IN AS A SELLER</a></li>
-                </ul>
-                </p>
-            </span>
-            <!-- This is the pop up nav bar section the user is logged in || Maybe use Mustache??!!-->
-            <span id="NavBar-Loggedin">
-                <img src ="" alt="User_Avatar" class="UserAvatar">
-                <div class="user-name">Client Lambda</div>
+                    <li><a class="login border-less bg-color-black" href="/logout"><h2>Log out</h2></a></li>
+                    <li>
+                        <h3 class="user-name text-align-left">Hello, {{name}}</h3>
+                    </li>
+                    <li><a href="/orders_page">Orders</a></li>
+                {{/loggedIn}}
+                {{^loggedIn}}
                 <ul>
-                    <li><a href="">ODERS</a></li>
-                    <li><a href="">ADD YOUR RESTAURANT</a></li>
-                    <li><a href="">LOG IN AS A SELLER</a></li>
+                    <li><a class="login border-less bg-color-black" href="/user_login"><h2>Log in</h2></a></li>
+                    <li><a href="/sign_up_giveNumber">Sign Up</a></li>
+                {{/loggedIn}}
+                    <li><a href="/restaurant_speci">Add your restaurant</a></li>
+                    <li><a href="/seller_login">Log in as a seller</a></li>
                 </ul>
-                </p>
-            </span>
         </div>
         <div class="name-logo">
             <h2>GIQ</h2>
             <h4>|</h4>
             <h3>UCLouvain</h3>
         </div>
-        <form>
-            <input type="search" name="search" id="searchInput" placeholder="Quoi avez vous envie de savourer :) …">
-            <input type="submit" value="">
+        <form action="search">
+            <input type="search" name="search" id="searchInput" placeholder="De quoi avez vous envie de savourer :) …">
+            <input type="submit" value=" ">
         </form>
-        <div class="plate round-border">
+        <div class="plate round-border" id="popup_plate_open">
             <img>
-            <p>2</p>
         </div>
-        <!-- When clicked on the plate -->
-        <span class="popup-plate">
+        <div class="popup-plate full-height-section bg-color-white" id="popup_plate_header">
+            <button class="bg-color-white border-less left" id="popup_plate_close">X</button>
             <h2>PLATE</h2>
-            <table class="commandes">
-                <tr>
-                    <th>O'TACOS</th>
-                </tr>
-                {{#commande}}
-                <tr class="commande-restaurant">
-                    <td>
-                        <form action="">
-                            <input type="number" id="quantity" name="quantity" min="1" max="20">
-                        </form>
-                    </td>
-                    <td>
-                        O'TACOS XL & sauce Andalouse
-                    </td>
-                    <td>
-                        7,80€
-                    </td>
-                </tr>
-                {{/commande}}
-            </table>
-
-            <button type="submit" class="order-button">ORDER {{total}}</button>
-        </span>
+            {{#basket}}
+            <ul>
+                {{#restaurants}}
+                <li>
+                    <h2>{{restaurant}}</h2>
+                    <hr class="bg-color-black">
+                    <ul>
+                        {{#items}}
+                        <li class="item">
+                            <input type="number" min="0" max="20" value="{{quantity}}" class="bg-color-black border-less" name="{{restaurant}}|{{name}}">
+                            <p class="name text-align-left" id="name">{{name}}</p>
+                            <p class="text-align-right">{{unityPrice}}€</p>
+                        </li>
+                        {{/items}}
+                    </ul>
+                </li>
+                {{/restaurants}}
+            </ul>
+            <div class="bg-color-black bottom-of-container three-gridded-layout">
+                <p class="text-align-left" id="totalItems">{{totalItems}}</p>
+                <p>Total</p>
+                <p class="text-align-right" id="totalAmount">{{totalAmount}}€</p>
+            </div>
+            {{/basket}}
+            {{^basket}}
+                <h1> It seems like your basket is empty try adding some items :)</h1>
+            {{/basket}}
+        </div>
     </header>
     <section class="list-orders">
         <h1>All of Your Orders</h1>
