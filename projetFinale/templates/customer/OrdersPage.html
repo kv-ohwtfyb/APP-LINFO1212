@@ -80,8 +80,8 @@
     </header>
     <section class="list-orders">
         <h1>All of Your Orders</h1>
-        <table id="table-Of-Orders">
-            <tr>
+        <table class="table-of-customer-orders table-of-payments table-of-orders">
+            <tr class="header-row">
                 <th>Order</th>
                 <th>Date</th>
                 <th>Batiment</th>
@@ -89,55 +89,51 @@
                 <th>Total</th>
                 <th>Action</th>
             </tr>
-            {{#order}}
-            <tr class="tableRow">
+            <tr class="shadow paid">
                 <td class="orderId">#i896eh6983h</td >
                 <td class="date">
-                    <li><Date>25 Feb 2020</Date></li>
-                    <li>11:09</li>
+                    <Date>25 Feb 2020</Date>
+                    <p>11:09</p>
                 </td>
                 <td class="batiment">Batiment Reamur</td>
                 <td class="status">Delivered</td>
                 <td class="total">29,78€</td>
                 <td class="action">
-                    <div class="reorder">Reorder
-                        <span class="popup-reoder">
-                            <h2>ORDER</h2>
-                            <ul>
-                                <li>Order ID :{{orderId}}</li>
-                                <li>Date     :{{date}}</li>
-                                <li>Batiment :{{batiment}}</li>
-                                <li>Status   :{{status}}</li>
-
-                            </ul>
-                            <table class="commandes">
-                                <tr>
-                                    <th>O'TACOS</th>
-                                </tr>
-                                {{#commande}}
-                                <tr class="commande-restaurant">
-                                    <td>
-                                        <form action="">
-                                            <input type="number" name="quantity" min="1" max="20">
-                                        </form>
-                                    </td>
-                                    <td>
-                                        O'TACOS XL & sauce Andalouse
-                                    </td>
-                                    <td>
-                                        7,80€
-                                    </td>
-                                </tr>
-                                {{/commande}}
-                            </table>
-
-                            <button type="submit" class="reorder-button">REORDER {{total}}</button>
-                        </span>
-                    </div>
+                    <button>Reorder</button>
                 </td>
             </tr>
-            {{/order}}
         </table>
     </section>
+    <div class="popup-reoder" style="display: none">
+        <h2>ORDER</h2>
+        <ul>
+            <li>Order ID :{{orderId}}</li>
+            <li>Date     :{{date}}</li>
+            <li>Batiment :{{batiment}}</li>
+            <li>Status   :{{status}}</li>
+
+        </ul>
+        <table class="commandes">
+            <tr>
+                <th>O'TACOS</th>
+            </tr>
+            {{#commande}}
+            <tr class="commande-restaurant">
+                <td>
+                    <form action="">
+                        <input type="number" name="quantity" min="1" max="20">
+                    </form>
+                </td>
+                <td>
+                    O'TACOS XL & sauce Andalouse
+                </td>
+                <td>
+                    7,80€
+                </td>
+            </tr>
+            {{/commande}}
+        </table>
+        <button type="submit" class="reorder-button">REORDER {{total}}</button>
+    </div>
 </body>
 </html>

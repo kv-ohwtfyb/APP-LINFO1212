@@ -20,7 +20,8 @@ function userLogIn(app, req, res){
  * Then render a page with a list of orders the use has ever ordered or an empty list if the user hasn't ordered anything.
  * */
 function UserAllOrders(app, req, res){
-    res.render('./customer/OrdersPage.html', {order: req.session.user.orders});
+    res.render('./customer/OrdersPage.html', {order: req.session.user.orders,
+                                            });
 }
 
 /********* Function called by userLogIn(...) *******************/
