@@ -12,17 +12,7 @@ function userLogIn(app, req, res){
     });
 }
 
-/********* For returning a list of orders of a user *******************/
 
-/**
- * Call a function that check all orders of a certain user.
- * 
- * Then render a page with a list of orders the use has ever ordered or an empty list if the user hasn't ordered anything.
- * */
-function UserAllOrders(app, req, res){
-    res.render('./customer/OrdersPage.html', {order: req.session.user.orders,
-                                            });
-}
 
 /********* Function called by userLogIn(...) *******************/
 
@@ -105,7 +95,6 @@ function modifyAnItemOfTheBasket(app, req, res){
 }
 
 exports.postUserLoggedIn = userLogIn;
-exports.postOrdersOfUser= UserAllOrders;
 exports.addItemToBasket = addItemToBasket;
 exports.modifyAnItemOfTheBasket = modifyAnItemOfTheBasket;
 

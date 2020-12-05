@@ -142,8 +142,8 @@ app.get('/', function (req, res) {
 });
 
 app.get('/orders_page',(req,res) =>{
-    if(req.session.user){ postOrdersOfUser(app,req,res); } 
-    else { res.redirect('/'); }    
+    getOrdersPage(app,req,res);
+  
 })
 
 app.get('/user_login',(req,res) => {
