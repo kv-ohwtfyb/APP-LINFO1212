@@ -84,7 +84,7 @@ const restaurantSchema = new Schema({
                                 data : Buffer,
                                 type : String,
                     },                                  required : false, },
-    avgPrice    : { type : Number,                      required : false, }
+    avgPrice    : { type : Number,                      required : false,               default : 0}
 }, { autoIndex: false });
 
 //TODO try to create a group and see the behaviour
@@ -220,12 +220,12 @@ restaurantSchema.statics.arrayOfRestaurantsForDisplay = function ( array ){
             if (resto.value != null){
                 setImageSrc(resto);
             }
-            resto.avgPrice = 99.99;
             delete resto.value;
         })
         return array;
     }else{
         const Mapper = {
+            // https://docs.mongodb.com/manual/tutorial/map-reduce-examples/
             map : function () { emit ( this.name, this.image) }
             };
         return restaurantModel.mapReduce(Mapper).then((result) => {
@@ -358,10 +358,10 @@ function checkIfAdminExist(adminId) {
     });
 }
 
-/*
-    Throws an typeError if an a group with the given group name of the group is not available in the restaurant items collection.
-    restaurant (restaurantModel) : The model to which we using.
-    name (String) : The group on which we checking on.
+/**
+ *  Throws an typeError if an a group with the given group name of the group is not available in the restaurant items collection.
+ *  @param restaurant (restaurantModel) : The model to which we using.
+ *  @param name (String) : The group on which we checking on.
  */
 function checkIfGroupWithNameExist(restaurant, name) {
     restaurant.groups.forEach(function (group){

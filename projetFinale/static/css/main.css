@@ -552,6 +552,7 @@ footer{
     display: grid;
     grid-template-columns: auto 300px 300px;
     color: white;
+    bottom: 0;
 }
 
 footer div{

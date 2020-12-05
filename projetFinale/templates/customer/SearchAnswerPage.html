@@ -9,7 +9,7 @@
     <!--    JavaScript Imports-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script type="text/javascript" src="js/header.js"></script>
-
+    <script type="text/javascript" src="js/filter.js"></script>
 </head>
 <body>
     <header>
@@ -97,30 +97,37 @@
             </li>
             {{/restaurants}}
             {{^restaurants}}
-                <h1>
+                <h2>
                     There were no restaurant that's satisfies your search sorry. Contact us if
                     you think your search can improve the customer experience.
-                </h1>
+                </h2>
             {{/restaurants}}
         </ul>
     </section>
-    <div class="filter-button bg-color-green round-border">
-        <p>TRIER</p>
+    <div class="filter-button bg-color-green round-border" id="filter_open">
+        <p id="filter">TRIER</p>
     </div>
-    <div class="filter-bar text-align-left">
+    <div class="filter-bar text-align-left" id="filter_bar">
         <div>
-            <h2>Filtré par</h2>
-            <form>
-                <label>Prix:<input type="range" name="budget"></label>
-                    <p>Regime : </p>
-                    <input type="radio" name="regime" value="vegetarien">
-                    <label>Végétarien</label><br>
-                    <input type="radio" name="regime" value="Halal">
-                    <label>Halal</label><br>
-                    <input type="radio" name="regime" value="vegan">
-                    <label>Vegan</label><br>
-                    <input type="radio" name="regime" value="sans-gluten">
-                    <label>Sans gluten</label><br>
+            <section>
+                <button id="filter_close" class="right margin-left-right bg-color-black color-white border-less">x</button>
+                <h2>Filtré par</h2>
+            </section>
+            <form action="/search" method="GET">
+                <section class="row-display margin-top-bottom">
+                    <label for="budgetSlider">Prix:</label>
+                    <input type="range" name="budget" id="budgetSlider">
+                    <p id="rangeValue">0.00€</p>
+                </section>
+                <p>Regime : </p>
+                <input type="radio" name="regime" value="vegetarien" id="vegetarian">
+                <label for="vegetarian">Végétarien</label><br>
+                <input type="radio" name="regime" value="Halal" id="halal">
+                <label for="halal">Halal</label><br>
+                <input type="radio" name="regime" value="vegan" id="vegan">
+                <label for="vegan">Vegan</label><br>
+                <input type="radio" name="regime" value="sans-gluten" id="sans-gluten">
+                <label for="sans-gluten">Sans gluten</label><br>
                 <input type="submit" value="Submit" class="bg-color-black border-less">
             </form>
         </div>
