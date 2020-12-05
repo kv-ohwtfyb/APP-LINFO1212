@@ -7,6 +7,7 @@ mongoose.connect('mongodb://localhost:27017/testingdb',
 
 // Creating user
 
+/*
 const user = new userModel({
     name  : "Ingenzi Vany",
     email : "Ingenzivany@gmail.com",
@@ -20,15 +21,12 @@ user.save(function (err, user) {
     else     { console.log(`Saved ${ user.name } to the database.`);}
 });
 
-
+ */
 
 //Finding user
-
-console.log(checkIfAdminExist("5fc9190e2505090504522265"));
-
-function checkIfAdminExist(adminId) {
-    userModel.findById(adminId).then((rest) => {
-        if (rest) { return true;  }
-        else      { return false; }
-    });
-}
+userModel.findById("5fc9190e2505090504522265")
+    .then((user) => {
+        user.getSellerRestaurant('exki').then((res) => {
+            console.log(res);
+        });
+});

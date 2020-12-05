@@ -12,9 +12,6 @@ function userLogIn(app, req, res){
     });
 }
 
-
-
-
 /**
  Check if the user is in our database( with the email entered).
 
@@ -25,10 +22,8 @@ function userLogIn(app, req, res){
  if we didn't find the email or password
   - we return a message
 
-  req.body.email = mail the user enterred
-  req.body.password = password the user enterred
-
-
+  req.body.email = mail the user entered
+  req.body.password = password the user entered
 */
 async function userLoggingCheck(req){
     const toReturn = this;
@@ -50,18 +45,19 @@ async function userLoggingCheck(req){
     });
     return toReturn;
 }
-function phoneNumberCheck(app,req,res){
+function phoneNumberCheck(app,req,res) {
     const phone_input = req.body.phoneNumber;
-    if (phone_input[0] === "0" && phone_input[1] === "4"){
-        if(phone_input.length === 10){
+    if (phone_input[0] === "0" && phone_input[1] === "4") {
+        if (phone_input.length === 10) {
             session.currentPhoneNumber = phone_input;
             res.render('/user_signup', session.currentPhoneNumber);
-        }else {
+        } else {
             res.render('./customer/SignUpGiveNumberPage.html', {phoneNumberError: "Please a valide number"});
         }
-    }else {
+    } else {
         res.render('./customer/SignUpGiveNumberPage.html', {phoneNumberError: "Please start with 04..."});
     }
+}
 
 function addItemToBasket(app, req, res){
 }
@@ -76,21 +72,19 @@ function addItemToBasket(app, req, res){
 function modifyAnItemOfTheBasket(app, req, res){
     checkTheInputs(req.body)
         .then(() =>{
-            res.json({ status : modifyItem(req) });
+            res.json({ status : modifyItem(req),
+                        totalAmount : req.session.basket.totalAmount,
+                        totalItems : req.session.basket.totalItems,
+            });
         })
         .catch(err =>{
             res.json({ status : false, msg : err.message});
         })
 }
 
-
-
 exports.postUserLoggedIn = userLogIn;
-exports.postPhoneNumberVerification = phoneNumberVerification;
-exports.postcodeCheck = codeCheck;
 exports.addItemToBasket = addItemToBasket
 exports.modifyAnItemOfTheBasket = modifyAnItemOfTheBasket
-
 
 /**
  * Checks the body of the request
@@ -113,9 +107,16 @@ async function checkTheInputs(body){
 function modifyItem(req){
     const restaurant = req.session.basket.restaurants.find( restaurant => restaurant.restaurant === req.body.restaurant );
     if(restaurant){
-        const item = restaurant.items.find(item => item.name === req.body.itemName);
+        let item = restaurant.items.find(item => item.name === req.body.itemName);
         if (item){
-            item.quantity = req.body.quantity;
+            const quantityDifference = (item.quantity - parseInt(req.body.quantity));
+            req.session.basket.totalItems = req.session.basket.totalItems - quantityDifference;
+            req.session.basket.totalAmount = req.session.basket.totalAmount - (quantityDifference * item.unityPrice);
+            item.quantity = parseInt(req.body.quantity);
+            if (item.quantity === 0){
+                restaurant.items = restaurant.items.filter( value => value.name !== item.name );
+                req.session.basket.restaurants = req.session.basket.restaurants.filter(value => value.items.length > 0);
+            }
             return true;
         }else {
             throw `No such item as ${req.body.itemName}`;

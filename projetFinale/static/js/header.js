@@ -20,8 +20,8 @@ $(document).ready(function () {
 
     //When on input is changed
     $("#popup_plate_header :input").on('change',(event) =>{
+        $(document.body).css("pointer-event", "none");
         sendModifyingRequest(event);
-        // Sends request to server.
     });
 });
 
@@ -31,6 +31,11 @@ function sleep (time) {
   return new Promise((resolve) => setTimeout(resolve, time));
 }
 
+/**
+ * Sends the modify item of the basket request to the server, and freezes
+ * every pther pointer events till the response from the server.
+ * @param event
+ */
 function sendModifyingRequest(event){
     const input = $(event.target).closest(":input");
     const nameSplit = input.attr("name").split("|");
@@ -39,24 +44,33 @@ function sendModifyingRequest(event){
         quantity : input.val()
     }
     $.ajax('/modify_item',
-    {   method : 'post',
-                data   :  data,
-                success : function (response) { treatResponseForModifyingItem(response, input); }
+    {   method  : 'post',
+                data    :  data,
+                success : function (response) { treatResponseForModifyingItem(response, input, event); }
             }
     );
 }
 
-function treatResponseForModifyingItem(response, input) {
+/**
+ * Treats with the response from the server unfreeze pointer events in the body.
+ * @param response
+ * @param input
+ * @param event
+ */
+function treatResponseForModifyingItem(response, input, event) {
     console.log(response);
     if (response.status){
-        if (input.val() === 0){
+        input.attr("value", input.val());
+        if (parseInt(input.val()) === 0){
             const theItem = $(event.target).closest(".item");
             theItem.remove();
-        }else {
-            input.attr("value", input.val());
         }
+        $("#totalItems").html(response.totalItems);
+        $("#totalAmount").html(response.totalAmount.toString() + "€");
+
     } else {
         alert(response.msg);
         input.val(input.attr("value"));
     }
+    $(document.body).css("pointer-event", "auto");
 }

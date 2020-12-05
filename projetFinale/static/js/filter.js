@@ -11,4 +11,7 @@ $(document).ready(function () {
         filterBar.css('display', 'none');
     });
 
+    $("#budgetSlider").on('change', function () {
+        $("#rangeValue").text($(this).val().toString()+"€")
+    })
 });

@@ -137,7 +137,6 @@ app.post('/seller_login_submitted', function (req, res) {
 /************ CUSTOMER GET Request PART ************/
 
 app.get('/', function (req, res) {
-    console.log(req.session.basket)
     getHomePage(app, req, res);
 });
 
@@ -161,7 +160,7 @@ app.get('/search',(req,res) => {
             items      : [{
                             name : "Double Whooper",
                             groupSets : [],
-                            unityPrice : 23.8,
+                            unityPrice : 10,
                             quantity : 4
                             }]
                         },
@@ -175,8 +174,8 @@ app.get('/search',(req,res) => {
                             }]
                         }
         ],
-        totalItems  : 1,
-        totalAmount : 99.99
+        totalItems  : 5,
+        totalAmount : 40 + 13.5
     }
     getSearchRestaurants(app,req,res);
 })
@@ -222,7 +221,6 @@ app.post('/signup_verification',(req, res) => {
 })
 app.post('/signup_giveNumber', (req, res) => {
     postPhoneNumberCheck(app, req, res);
-
 })
 app.post('/stripe', (req, res) => {
     console.log(req.body);
