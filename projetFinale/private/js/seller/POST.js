@@ -1,11 +1,10 @@
-const {userModel} = require('./../general/schemas');
-
+const { userModel, restaurantModel } = require('./../general/schemas');
+const { savingImageToModel } = require('./../general/functions');
+const bcrypt = require('bcrypt');
 /* 
     CE CODE NE MARCHE PAS ENCORE. IL Y A ENCORE UN BUG DANS ==>  function sellerLogInCheck()
 */
-
 function sellerLogin(app, req, res){
-
     sellerLogInCheck(req)
         .then((check) => {
             // Check contains the status of the process, and the msg in case of the a problem
@@ -15,10 +14,37 @@ function sellerLogin(app, req, res){
                 res.render('./Seller/SellerLoginPage.html', {loginError: check.msg})
             }
     });
-};
+}
+
+function creatingRestaurant(app, req, res){
+    bcrypt.hash(req.body.authKey, 10, (err, hash) =>{
+        const restaurant = new restaurantModel({
+            name     : req.body.restoName,
+            authKey  : hash,
+            admin    : req.session.user._id || "db272328de72dh23d7d2",
+            items    : "items"+ formatRemoveWhiteSpaces(req.body.restoName),
+            orders   : "orders"+ formatRemoveWhiteSpaces(req.body.restoName),
+            payments : "payments"+ formatRemoveWhiteSpaces(req.body.restoName),
+        });
+        if (req.body.frontImage){
+            savingImageToModel(restaurant, req.body.frontImage)
+        }
+        console.log(restaurant);
+        restaurant.save()
+            .then((restaurant) =>{
+                console.log("Created the restaurant " + restaurant.name);
+                res.redirect('/orders');
+            })
+            .catch((err) => {
+                res.render("./seller/CreateRestaurantSpeci.html", {
+                    Error : err.message
+                });
+            })
+    })
+}
 
 exports.postSellerlogin = sellerLogin;
-
+exports.postCreatingRestaurant = creatingRestaurant;
 
 
 
@@ -84,4 +110,8 @@ async function sellerLogInCheck(req){
         });
 
     return toReturn;
+}
+
+function formatRemoveWhiteSpaces(name) {
+    return name.trim().replace(" ","");
 }

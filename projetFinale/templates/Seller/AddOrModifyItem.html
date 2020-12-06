@@ -50,7 +50,7 @@
             <a href="/payments_list">Payments</a>
         </div>
     </header>
-    <form class="add-item" action="/add_item" method="POST">
+    <form id="form" class="add-item" action="/add_item" method="POST">
         <section class="image-text-item">
             <div class="image-container bg-color-white shadow">
                 <input type="file" name="image" class="filepond">
@@ -98,7 +98,7 @@
     <section class="buttons margin-top-bottom margin-top-bottom">
             <button class="bg-color-red color-white border-less margin-top-bottom"> Delete </button>
             <button class="bg-color-black color-white border-less margin-top-bottom"> Cancel </button>
-            <button class="bg-color-green border-less margin-top-bottom"> Save </button>
+            <button class="bg-color-green border-less margin-top-bottom" type="submit" form="form"> Save </button>
     </section>
     <footer class="full-width-section text-align-left">
         <div>

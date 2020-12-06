@@ -23,7 +23,7 @@ const {
     getAddOrModifyGroup,
     getAddOrModifyItem,
     getAddOrModifyCategory,
-    getCreateRestaurantSpeci,
+    getCreateRestaurant,
     getOrders,
     getPaymentsPage,
     getTheStorePage,
@@ -42,6 +42,7 @@ const {
 
 const {
     postSellerlogin,
+    postCreatingRestaurant
 } = require('./private/js/seller/POST');
 
 
@@ -85,8 +86,14 @@ app.get('/message', (req, res) => {
     getAfterCreateRestoMessage(app, req, res);
 });
 
-app.get('/restaurant_speci', function (req, res){
-    getCreateRestaurantSpeci(app, req, res);
+app.get('/creating_restaurant', function (req, res){
+    if (req.session.user){
+        getCreateRestaurant(app, req, res);
+    }else {
+        res.render("./customer/UserLoginPage.html", {
+            loginError : "To create a restaurant you must first login or create an account."
+        });
+    }
 });
 
 app.get('/orders', function (req, res) {
@@ -116,7 +123,7 @@ app.post('/add-group', function (req, res) {
     console.log(req.body);
 });
 
-app.post('/add-item', function(req, res){
+app.post('/add_item', function(req, res){
     console.log(req.body);
 });
 
@@ -125,7 +132,13 @@ app.post('/menu', function (req, res){
 });
 
 app.post('/creating_restaurant', function (req, res){
-    console.log(req.body);
+    if (req.session.user){
+        postCreatingRestaurant(app, req, res);
+    }else {
+        res.render("./customer/UserLoginPage.html", {
+            loginError : "To create a restaurant you must first login or create an account."
+        });
+    }
 });
 
 app.post('/seller_login_submitted', function (req, res) {
@@ -234,10 +247,10 @@ app.post('/stripe', (req, res) => {
 app.post('/message', (req, res) => {
     postMessageSignUpComplete(app,req,res);
 })
-app.post('/add_item', (req, res) => {
+app.post('/basket_add', (req, res) => {
     addItemToBasket(app,req,res);
 })
-app.post('/modify_item',(req, res) =>{
+app.post('/basket_modify',(req, res) =>{
     modifyAnItemOfTheBasket(app, req, res);
 })
 module.exports = app;

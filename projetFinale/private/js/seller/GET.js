@@ -14,7 +14,7 @@ function createRestoFinishedMessage(app, req, res){
     res.render('./Seller/CreateRestaurantFinished.html')
 }
 
-function createRestoSpeci(app,req, res){
+function createResto(app,req, res){
     res.render('./Seller/CreateRestaurantSpeci.html');
 }
 
@@ -47,7 +47,7 @@ exports.getAddOrModifyCategory = addOrModifyMenu;
 
 exports.getAfterCreateRestoMessage = createRestoFinishedMessage;
 
-exports.getCreateRestaurantSpeci = createRestoSpeci;
+exports.getCreateRestaurant = createResto;
 
 exports.getOrders = listOfOrders;
 

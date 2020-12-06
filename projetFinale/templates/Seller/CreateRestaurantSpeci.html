@@ -4,30 +4,40 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GIQ | Restaurant Creation page</title>
+    <!--    CSS Imports-->
     <link rel="stylesheet" href="./css/main.css">
+    <link href="https://unpkg.com/filepond/dist/filepond.css" rel="stylesheet">
+    <link href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css" rel="stylesheet">
+    <!--    JavaScript Imports-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.js"></script>
+    <script src="https://unpkg.com/filepond-plugin-file-encode/dist/filepond-plugin-file-encode.js"></script>
+    <script src="https://unpkg.com/filepond-plugin-image-resize/dist/filepond-plugin-image-resize.js"></script>
+    <script src="https://unpkg.com/filepond/dist/filepond.min.js"></script>
+    <script type="text/javascript" src="js/imageUpload.js"></script>
+    <script type="text/javascript" src="js/createRestaurant.js"></script>
 </head>
 <body class="input-page">
     <div>
         <div class="name-logo">
-          <h2>GIQ</h2>
-          <h4>|</h4>
-          <h3>UCLouvain</h3>
+            <h2>GIQ</h2>
+            <h4>|</h4>
+            <h3>UCLouvain</h3>
         </div>
-      <form action="/creatingRestaurant" method="POST" class="round-border">
-        <div>
-            <input type="text" placeholder="Restaurant name..." name="restoName">
-            <input type="number" placeholder="TVA Number" name="TVA">
-            <input type="text" placeholder="Address" name="address">
-            <input type="text" placeholder="Compte bancaire" name="Compte">
-            <input type="text" placeholder="Restaurant authentifical key" name="authKey">
-            <input type="file" name="document"  placeholder="Necessary Documents">
-            <input type="file" name="document"  placeholder="Necessary Documents">
-        </div>
-            <input type="submit" class="color-white bg-color-black">
-      </form>
+            <form id="MyForm" action="/creating_restaurant" method="POST" class="create-restaurant round-border">
+                <p>{{Error}}</p>
+                <div>
+                    <input type="text" placeholder="Restaurant name..." name="restoName" required>
+                    <input type="number" placeholder="TVA Number" name="TVA">
+                    <input type="text" placeholder="Address" name="address">
+                    <input type="text" placeholder="Compte bancaire" name="Compte">
+                    <input type="text" minlength="4" placeholder="Restaurant authentication  key" name="authKey" required>
+                </div>
+                <input type="submit" class="color-white bg-color-black">
+            </form>
     </div>
-    <div class="announcement">
-      <h1>Documents à propos de votre restaurant. </h1>
+    <div class="announcement shadow bg-color-green">
+        <input id="frontImage" type="file" accept="image/*" name="frontImage" class="filepond margin-top-bottom" required>
     </div>
 </body>
 </html>

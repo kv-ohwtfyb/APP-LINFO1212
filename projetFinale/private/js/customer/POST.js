@@ -49,8 +49,6 @@ async function userLoggingCheck(req){
                     if (user.password === req.body.password) {
                         toReturn.status = true;
                         req.session.user = user;
-                        console.log(req.session.user);
-
                     } else {
                         toReturn.msg = "Password Invalid";
                         toReturn.status = false;

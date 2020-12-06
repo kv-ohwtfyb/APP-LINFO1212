@@ -43,7 +43,7 @@ function sendModifyingRequest(event){
         restaurant : nameSplit[0], itemName : nameSplit[1],
         quantity : input.val()
     }
-    $.ajax('/modify_item',
+    $.ajax('/basket_modify',
     {   method  : 'post',
                 data    :  data,
                 success : function (response) { treatResponseForModifyingItem(response, input, event); }

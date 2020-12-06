@@ -1,4 +1,5 @@
 const { restaurantModel } = require('./../general/schemas');
+const { setVirtualImageSrc } = require('./../general/functions');
 
 function homePage(app, req, res){
     restaurantModel.arrayOfRestaurantsForDisplay().then((array) => {
