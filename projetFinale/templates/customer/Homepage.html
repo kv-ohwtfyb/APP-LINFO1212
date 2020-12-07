@@ -10,6 +10,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script type="text/javascript" src="js/header.js"></script>
     <script type="text/javascript" src="js/filter.js"></script>
+    <script type="text/javascript" src="js/animateBubbles.js"></script>
 </head>
 <body>
     <header>
@@ -39,94 +40,80 @@
             <h4>|</h4>
             <h3>UCLouvain</h3>
         </div>
-        <form>
+        <form action="search">
             <input type="search" name="search" id="searchInput" placeholder="De quoi avez vous envie de savourer :) …">
             <input type="submit" value=" ">
         </form>
         <div class="plate round-border" id="popup_plate_open">
             <img>
-            <p>2</p>
         </div>
-        <!-- When clicked on the plate -->
         <div class="popup-plate full-height-section bg-color-white" id="popup_plate_header">
             <button class="bg-color-white border-less left" id="popup_plate_close">X</button>
             <h2>PLATE</h2>
+            {{#basket}}
             <ul>
+                {{#restaurants}}
                 <li>
-                    <h2>Burger King</h2>
+                    <h2>{{restaurant}}</h2>
                     <hr class="bg-color-black">
                     <ul>
-                        <li>
-                            <input type="number" min="0" max="20" value="1" class="bg-color-black border-less">
-                            <p class="text-align-left">Item example</p>
-                            <p class="text-align-right">9,65€</p>
+                        {{#items}}
+                        <li class="item">
+                            <input type="number" min="0" max="20" value="{{quantity}}" class="bg-color-black border-less" name="{{restaurant}}|{{name}}">
+                            <p class="name text-align-left" id="name">{{name}}</p>
+                            <p class="text-align-right">{{unityPrice}}€</p>
                         </li>
-                        <li>
-                            <input type="number" min="0" max="20" value="2" class="bg-color-black border-less">
-                            <p class="text-align-left">Item example</p>
-                            <p class="text-align-right">9,65€</p>
-                        </li>
+                        {{/items}}
                     </ul>
                 </li>
-                <li>
-                    <h2>O'Tacos</h2>
-                    <hr class="bg-color-black">
-                    <ul>
-                        <li>
-                            <input type="number" min="0" max="20" value="1" class="bg-color-black border-less">
-                            <p class="text-align-left">Item example</p>
-                            <p class="text-align-right">9,65€</p>
-                        </li>
-                        <li>
-                            <input type="number" min="0" max="20" value="2" class="bg-color-black border-less">
-                            <p class="text-align-left">Item example</p>
-                            <p class="text-align-right">9,65€</p>
-                        </li>
-                    </ul>
-                </li>
+                {{/restaurants}}
             </ul>
-            <div class="bg-color-black bottom-of-container">
-                <p class="text-align-left">5</p>
+            <div class="bg-color-black bottom-of-container three-gridded-layout">
+                <p class="text-align-left" id="totalItems">{{totalItems}}</p>
                 <p>Total</p>
-                <p class="text-align-right">24,98€</p>
+                <p class="text-align-right" id="totalAmount">{{totalAmount}}€</p>
             </div>
+            {{/basket}}
+            {{^basket}}
+                <h1> It seems like your basket is empty try adding some items :)</h1>
+            {{/basket}}
         </div>
     </header>
     <section class="emojis-section">
-        <a>
+        <a href="/search?search=pasta">
             <img src="./images/pasta.png">
             <p>Pasta</p>
         </a>
-        <a>
+        <a href="/search?search=sandwich">
             <img src="./images/sandwich.png">
             <p>Sandwich</p>
         </a>
-        <a>
+        <a href="/search?search=burger">
             <img src="./images/burger.png">
             <p>Burger</p>
         </a>
-        <a>
+        <a href="/search?search=vegan">
             <img src="./images/vegan.png">
             <p>Vegan</p>
         </a>
-        <a>
+        <a href="/search?search=sushi">
             <img src="./images/sushi.png">
             <p>Sushi</p>
         </a>
     </section>
     <section class="popular-section full-width-section">
         <h1>Populaires</h1>
-        <section>
-            <a class="bg-color-black">
+        <section class="bubbles-container">
+            <a class="bg-color-black bubble">
                 <img src="./images/quickLogo.png">
             </a>
-            <a class="bg-color-orange">
+            <a class="bg-color-orange bubble">
                 <img src="./images/burgerKingLogo.png">
             </a>
-            <a class="bg-color-red">
+            <a class="bg-color-red bubble">
                 <img src="./images/Otacos/OtacosLogo.png">
             </a>
-            <a class="bg-color-white">
+            <a class="bg-color-white bubble">
                 <img src="./images/image.gif">
             </a>
         </section>
@@ -167,7 +154,7 @@
         <ul class="list-of-restaurants three-gridded-layout">
             {{#restaurants}}
             <li>
-                <a>
+                <a href="/restaurant_view?id={{name}}">
                     <div>
                         {{#frontImage}}
                             <img src={{imgSrc}} alt="The Incident Image wasn't provided">
@@ -176,7 +163,7 @@
                             <img src="./images/No-Photo-Available.jpg">
                         {{/frontImage}}
                     </div>
-                    <section><h1>{{name}}</h1><p>{{avgPrice}}€</p></section>
+                    <section class="color-black"><h1>{{name}}</h1><p>{{avgPrice}}€</p></section>
                 </a>
             </li>
             {{/restaurants}}
@@ -187,18 +174,25 @@
     </div>
     <div class="filter-bar text-align-left" id="filter_bar">
         <div>
-            <pre> <h2>Filtré par                 <span id="filter_close">x</span></h2></pre>
+            <section>
+                <button id="filter_close" class="right margin-left-right bg-color-black color-white border-less">x</button>
+                <h2>Filtré par</h2>
+            </section>
             <form action="" method="post">
-                <label>Prix:<input type="range" name="budget"></label>
-                    <p>Regime : </p>
-                    <input type="radio" name="regime" value="vegetarien">
-                    <label>Végétarien</label><br>
-                    <input type="radio" name="regime" value="Halal">
-                    <label>Halal</label><br>
-                    <input type="radio" name="regime" value="vegan">
-                    <label>Vegan</label><br>
-                    <input type="radio" name="regime" value="sans-gluten">
-                    <label>Sans gluten</label><br>
+                <section class="row-display margin-top-bottom">
+                    <label for="budgetSlider">Prix:</label>
+                    <input type="range" name="budget" id="budgetSlider">
+                    <p id="rangeValue">0.00€</p>
+                </section>
+                <p>Regime : </p>
+                <input type="radio" name="regime" value="vegetarien" id="vegetarian">
+                <label for="vegetarian">Végétarien</label><br>
+                <input type="radio" name="regime" value="Halal" id="halal">
+                <label for="halal">Halal</label><br>
+                <input type="radio" name="regime" value="vegan" id="vegan">
+                <label for="vegan">Vegan</label><br>
+                <input type="radio" name="regime" value="sans-gluten" id="sans-gluten">
+                <label for="sans-gluten">Sans gluten</label><br>
                 <input type="submit" value="Submit" class="bg-color-black border-less">
             </form>
         </div>

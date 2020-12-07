@@ -4,6 +4,7 @@ const app = express ();
 const bodyParser = require('body-parser');
 const session = require('express-session');
 
+
 const {
     getHomePage,
     getOrdersPage,
@@ -15,7 +16,8 @@ const {
     getSignUpVerificationNumber,
     getSignUpGiveNumber,
     getStripe,
-    getUserSignUpComplete
+    getUserSignUpComplete,
+
 } = require('./private/js/customer/GET');
 
 const {
@@ -31,17 +33,17 @@ const {
 } = require('./private/js/seller/GET');
 
 const {
-    postPhoneNumberCheck,
     postUserLoggedIn,
-    postMessageSignUpComplete,
-    postUserRegister
+    postPhoneNumberCheck,
+    postUserRegister,
+    addItemToBasket,
+    modifyAnItemOfTheBasket
+
 } = require('./private/js/customer/POST');
 
 const {
     postSellerlogin,
 } = require('./private/js/seller/POST');
-
-
 
 app.use(bodyParser.urlencoded({ extended :true, limit: '50mb' }));
 app.engine('html', consolidate.hogan);
@@ -54,6 +56,9 @@ app.use(session({
     cookie: {path: '/', httpOnly: true, limit: 30 * 60 * 1000}
 }));
 
+
+
+//Initiating the basket in the app session
 
 
 /************ SELLER GET Request PART ************/
@@ -139,7 +144,7 @@ app.get('/orders_page',(req,res) =>{
     getOrdersPage(app,req,res);
 })
 app.get('/user_login',(req,res) => {
-    if (req.session.user) { req.redirect("/"); }
+    if (req.session.user) { res.redirect("/"); }
     else { getUserLoginPage(app, req, res); }
 })
 app.get('/user_signup',(req,res) =>{
@@ -149,6 +154,29 @@ app.get('/restaurant_view',(req,res) =>{
     getRestaurantsPage(app,req,res);
 })
 app.get('/search',(req,res) => {
+    req.session.basket = {
+        restaurants : [{
+            restaurant : "Burger King",
+            items      : [{
+                            name : "Double Whooper",
+                            groupSets : [],
+                            unityPrice : 10,
+                            quantity : 4
+                            }]
+                        },
+                        {
+            restaurant : "O'Tacos",
+            items      : [{
+                            name : "XL Tacos",
+                            groupSets : [],
+                            unityPrice : 13.5,
+                            quantity : 1
+                            }]
+                        }
+        ],
+        totalItems  : 5,
+        totalAmount : 40 + 13.5
+    }
     getSearchRestaurants(app,req,res);
 })
 app.get('/check_out',(req,res) =>{
@@ -174,7 +202,7 @@ app.post('/user_log_in',(req, res) => {
     postUserLoggedIn(app,req, res);
 })
 app.post('/user_sign_up',(req, res, next) => {
-    postUserRegister(app, req, res).then(r  => {return r});
+    postUserRegister(app, req, res);
 })
 app.post('/user_orders', (req, res) => {
     console.log(req.body);
@@ -193,13 +221,17 @@ app.post('/signup_verification',(req, res) => {
 })
 app.post('/signup_giveNumber', (req, res) => {
     postPhoneNumberCheck(app, req, res);
-
 })
 app.post('/stripe', (req, res) => {
     console.log(req.body);
 })
 app.post('/message', (req, res) => {
-    postMessageSignUpComplete(app,req,res);
+    res.render('./customer/MessagePage.html')
 })
-
+app.post('/add_item', (req, res) => {
+    addItemToBasket(app,req,res);
+})
+app.post('/modify_item',(req, res) =>{
+    modifyAnItemOfTheBasket(app, req, res);
+})
 module.exports = app;

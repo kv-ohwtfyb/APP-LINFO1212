@@ -111,8 +111,6 @@ header form input[type=submit]:active{
     width: 50px;
     height: 30px;
     margin: auto;
-    display: flex;
-    flex-direction: row;
     background-color: black;
     color: #FFFFFF;
     align-items: center;
@@ -120,8 +118,8 @@ header form input[type=submit]:active{
 }
 .plate img{
     content: url("./../images/plate.png");
-    width: 20px;
-    height: 20px;
+    width: 30px;
+    height: 30px;
     margin-left: auto;
     margin-right: 0;
 }
@@ -144,6 +142,8 @@ header form input[type=submit]:active{
     display: flex;
     flex-direction: column;
     align-items: center;
+    color: black;
+    text-decoration: none;
 }
 .emojis-section a img{
     height: 25px;
@@ -154,27 +154,32 @@ header form input[type=submit]:active{
 }
 
 .popular-section{
-    height: 180px;
+    height: 200px;
     background-color: var(--green);
     text-align: center;
+    position: relative;
 }
 .popular-section h1{
     color: white;
     margin: 0;
     left: 50%;
+    z-index : 2;
+    top: 0;
 }
 .popular-section section{
     z-index: 2;
-    display: flex;
-    flex-direction: row;
+    position: absolute;
+    height: 100%; width: 100%;
+    top: 0;
 }
 .popular-section a{
+    position: absolute;
+    margin: 0;
     width: 105px;
     height: 105px;
     display: flex;
     border-radius: 100%;
     align-items: center;
-    margin: auto;
 }
 .popular-section a img{
 
@@ -195,6 +200,7 @@ header form input[type=submit]:active{
     height: 200px;
     margin: auto;
     justify-items: center;
+    text-decoration: none;
 }
 .list-of-restaurants li a div{
     width: 400px;
@@ -229,7 +235,7 @@ header form input[type=submit]:active{
     height: 100%;
     width: 0;
     position: fixed;
-    z-index: 1;
+    z-index: 5;
     top: 0;
     left: 0;
     background-color: #111;
@@ -281,7 +287,7 @@ header form input[type=submit]:active{
 .popup-plate{
     width: 0;
     position: fixed;
-    z-index: 1;
+    z-index: 4;
     top: 0;
     right: 0;
     overflow: auto;
@@ -323,8 +329,11 @@ header form input[type=submit]:active{
     margin: auto;
     color: white;
     display: grid;
-    grid-template-columns: auto auto auto;
     justify-items: center;
+}
+.popup-plate button[type=submit]{
+    display: none;
+    height: 40px;
 }
 .popup-plate .bottom-of-container{
     bottom: 10%;
@@ -337,7 +346,7 @@ header form input[type=submit]:active{
     float: left;
     left: 1%;
     top: 40%;
-    z-index: 1;
+    z-index: 3;
     width: fit-content;
     height: fit-content;
     color: white;
@@ -348,12 +357,13 @@ header form input[type=submit]:active{
     writing-mode: vertical-rl;
     text-orientation: upright;
     margin: 20px 5px;
+    pointer-events: none;
 }
 
 .filter-bar{
     width: 0;
     height: 530px;
-    z-index: 3;
+    z-index: 4;
     position: fixed;
     float: left;
     left: 0;
@@ -402,7 +412,15 @@ header form input[type=submit]:active{
     margin-left: 30px;
     margin-bottom: 10px;
 }
-
+.filter-bar .right{
+    right: 20%;
+}
+.filter-bar section{
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+    vertical-align: center;
+}
 .restaurant-info{
     width: 100%;
     min-height: fit-content;

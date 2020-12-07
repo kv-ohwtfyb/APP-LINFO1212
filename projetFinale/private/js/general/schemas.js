@@ -8,12 +8,12 @@ const userSchema = new Schema({
     phone    : { type : String,                       required : true,               unique : true },
     password : { type : String,                       required : true  },
     orders   : { type : [ String ],                   required : false }
-})
+}, { autoIndex: false });
 
 
 /**
-    Checks if the userId is registered as the admin to at least one restaurant.
-    Returns a promise that returns a bool if the user is admin.
+ * Checks if the userId is registered as the admin to at least one restaurant.
+ * @return {Promise|PromiseLike<T>|Promise<T>}
  */
 userSchema.methods.isSeller = function () {
     return restaurantModel.findOne({ admin : this._id }).then((rest) => {
@@ -29,29 +29,33 @@ userSchema.methods.isSeller = function () {
  */
 userSchema.methods.getSellerRestaurant = function (authKey){
     if (typeof authKey !== "string") throw "The authKey given is not a string";
-    restaurantModel.findOne({ admin : this._id, authKey : authKey }).then((rest) => {
+    return restaurantModel.findOne({ admin : this._id, authKey : authKey }).then((rest) => {
         return rest;
     });
 }
 
 const userModel = mongoose.model('User', userSchema, 'users');
 
-const groupModel = mongoose.model('Group', Schema({
-    name          : { type : String,            required : true },
+const groupSchema = new Schema({
+    name          : { type : String,               required : true },
     items         : { type : [{
                                 name   : String,
                                 charge : Number,
-                            }],                 required : true },
-    maxSelection  : { type : Number,            required : true },
-    minSelection  : { type : Number,            required : true }
-}));
+                            }],                   required : true },
+    maxSelection  : { type : Number,              required : true },
+    minSelection  : { type : Number,              required : true },
+    description   : { type : String,              required : false }
+}, {_id : false, autoIndex: false});
 
-const categoryModel = mongoose.model('Category', Schema({
+const groupModel = new mongoose.model('Group', groupSchema);
+
+const categorySchema = new Schema({
     name          : { type : String,            required : true },
     items         : { type : [{
                                 name : String,
                              }],                required : true },
-}));
+    description   : { type : String,              required : false }
+});
 
 const itemSchema = new Schema ({
     name        : { type : String,                      required : true,           unique : true },
@@ -64,30 +68,26 @@ const itemSchema = new Schema ({
             data : Buffer,
             type : String,
         },                                              required : false },
+    description : { type : String,                      required : false }
 });
 
 const restaurantSchema = new Schema({
-    name        : { type : String,                     required : true,              unique : true },
-    authKey     : { type : String,                     required : true,              unique : true },
-    payments    : { type : String,                     required : true },
-    items       : { type : String,                     required : true },
-    categories  : { type : [ String ],                 required : false },
-    groups      : { type : [{
-                            id    : String,
-                            items : [{
-                                        id : String,
-                                        charged : Number
-                                    }],
-                            maxSelections : Number,
-                            minSelections : Number
-                        }],                           required : false },
-    admin       : { type : String,          required : true  },
-    orders      : { type : String,                     required : true },
+    name        : { type : String,                      required : true,              unique : true },
+    authKey     : { type : String,                      required : true,              unique : true },
+    payments    : { type : String,                      required : true },
+    items       : { type : String,                      required : true },
+    categories  : { type : [ categorySchema ],          required : false },
+    groups      : { type : [ groupSchema ],             required : false },
+    admin       : { type : String,                      required : true  },
+    orders      : { type : String,                      required : true  },
     image       : { type : {
                                 data : Buffer,
                                 type : String,
-                            },                                              required : false },
-});
+                    },                                  required : false, },
+    avgPrice    : { type : Number,                      required : false, }
+}, { autoIndex: false });
+
+//TODO try to create a group and see the behaviour
 
 restaurantSchema.pre('save',async function (next) {
     await checkIfAdminExist(this.admin).then((bool) => {
@@ -137,7 +137,8 @@ restaurantSchema.methods.findGroupIndex = function(name){
 }
 
 /**
-    Returns an array of the names of all the groups.
+ * Returns an array of the names of all the groups.
+ * @return {[ String ]}
  */
 restaurantSchema.methods.listOfGroupNames = function (){
     const toReturn = [];
@@ -160,14 +161,19 @@ restaurantSchema.methods.addGroup = function (theGroup) {
         checkIfGroupWithNameExist(this, theGroup.name);
         this.groups.push(theGroup);
         this.groups.sort(function (a, b) { return format(a.name).localeCompare(format(b.name), 'fr', { sensitivity: 'base' }); });
+        restaurantModel.update({ _id : this._id}, { groups : this.groups }).then((res)=>{
+            if (res.nModified >=1 ){
+                console.log("Added the group")
+            }
+        });
     }else {
       throw TypeError("The group given doesn't use the group Model.");
     }
 }
 
-/*
-    Removes the group from the restaurant list of groups.
-    name (group name) : the name of the group to delete.
+/**
+ * Removes the group from the restaurant list of groups.
+ * @param name (String) : the name of the group to delete.
  */
 restaurantSchema.methods.removeGroup = function (name) {
     this.groups = this.groups.filter((group) =>{
@@ -176,10 +182,10 @@ restaurantSchema.methods.removeGroup = function (name) {
 }
 
 /**
-    Update a group from the list.
-    name (String) : name of the group to update.
-    spec (JSON Object) : the elements to change and their values. Ex :
+ * @param name (String) : name of the group to update.
+ * @param spec (JSON Object) : the elements to change and their values. Ex :
     { "name" : "Boisons Froide" }.
+ * @throws TypeError if the group doesn't exist.
  */
 restaurantSchema.methods.updateGroup = function (name, spec) {
     const index = this.findGroupIndex(name);
@@ -195,44 +201,68 @@ restaurantSchema.methods.updateGroup = function (name, spec) {
 }
 
 /**
-  Returns an array of the restaurant identities used for the homepage. ex :
-     {
-        name : ...,
-        avgPrice : ...,
-        imgSrc : ...,
-        imgType : ...
-     }
+ *  Returns an array of the restaurant identities used for the homepage. Can take an array
+ *  and format it to look like the expected array.
+ *  ex :
+ *    {
+ *       name : ...,
+ *       avgPrice : ...,
+ *       imgSrc : ...,
+ *       imgType : ...
+ *    }
+ * @param array : Array oof restaurants
+ * @return {Promise<*>}
  */
-restaurantSchema.statics.arrayOfRestaurantsForDisplay = function (){
-    const Mapper = {
-        map : function () { emit ( this.name, this.image) }
-        };
-    return restaurantModel.mapReduce(Mapper).then((result) => {
-        result.results.forEach(function (resto){
-            resto.name = resto._id; delete resto._id;
+restaurantSchema.statics.arrayOfRestaurantsForDisplay = function ( array ){
+    if (array){
+        array.forEach(function (resto) {
+            resto._id; delete resto._id;
             if (resto.value != null){
                 setImageSrc(resto);
             }
             resto.avgPrice = 99.99;
             delete resto.value;
-
+        })
+        return array;
+    }else{
+        const Mapper = {
+            map : function () { emit ( this.name, this.image) }
+            };
+        return restaurantModel.mapReduce(Mapper).then((result) => {
+            result.results.forEach(function (resto){
+                resto.name = resto._id; delete resto._id;
+                if (resto.value != null){
+                    setImageSrc(resto);
+                }
+                resto.avgPrice = 99.99;
+                delete resto.value;
+            });
+            return result.results;
         });
-        return result.results;
-    });
+    }
 }
+
+
 // TODO Method add Item
 // TODO Method update Item
 // TODO Method remove Item
 
-/*
-    Adds a Category to the restaurant's categories nested document.
-
- */
 // TODO Method add Category
 // TODO Method update Category
 // TODO Method remove Category
 
+restaurantSchema.index({'groups.description' : 'text',
+                        'groups.items.name' : 'text',
+                        'categories.description' : 'text',
+                        'categories.items.name' : 'text',
+                        'name' : 'text'
+                        });
+
 const restaurantModel = mongoose.model('Restaurant', restaurantSchema, 'restaurants');
+
+restaurantModel.createIndexes(function (err) {
+    if (err) console.log(`Error ensuring indexes.`);
+});
 
 const restaurantOrderSchema = new Schema({
     date : { type : {
@@ -260,7 +290,8 @@ const orderSchema = new Schema({
                                                             id : String,
                                                             selected : [ String ]
                                                         }],
-                                            total : Number
+                                            unityPrice : Number,
+                                            quantity : Number,
                                         }],
                                 total : Number
                             }],                         required : true  },
@@ -308,7 +339,7 @@ function format(text) {
  */
 function checkItemsOfGroup(restaurant, items){
     items.forEach(function (item) {
-        const res = mongoose.connection.collection(restaurant.items).findOne({ name : item.name});
+        const res = mongoose.connection.collection(restaurant.items.toString()).findOne({ name : item.name});
         if (!res){
             throw TypeError(`The item ${item.name} doesn't exist in the ${restaurant.name} restaurant.`);
         }
