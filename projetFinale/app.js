@@ -4,6 +4,7 @@ const app = express ();
 const bodyParser = require('body-parser');
 const session = require('express-session');
 
+
 const {
     getHomePage,
     getOrdersPage,
@@ -32,20 +33,19 @@ const {
 } = require('./private/js/seller/GET');
 
 const {
-    postPhoneNumberVerification,
-    postcodeCheck,
     postUserLoggedIn,
+    postPhoneNumberCheck,
+    postUserRegister,
     postOrdersOfUser,
     addItemToBasket,
     modifyAnItemOfTheBasket
+
 } = require('./private/js/customer/POST');
 
 const {
     postSellerlogin,
     postCreatingRestaurant
 } = require('./private/js/seller/POST');
-
-
 
 app.use(bodyParser.urlencoded({ extended :true, limit: '50mb' }));
 app.engine('html', consolidate.hogan);
@@ -155,8 +155,8 @@ app.get('/', function (req, res) {
 });
 
 app.get('/orders_page',(req,res) =>{
-    if(req.session.user){ postOrdersOfUser(app,req,res); } 
-    else { res.redirect('/'); }    
+    getOrdersPage(app,req,res);
+  
 })
 
 app.get('/user_login',(req,res) => {
@@ -221,7 +221,7 @@ app.post('/user_log_in',(req, res) => {
     postUserLoggedIn(app,req, res);
 })
 app.post('/user_sign_up',(req, res, next) => {
-    console.log(req.body);
+    postUserRegister(app, req, res);
 })
 app.post('/user_orders', (req, res) => {
     console.log(req.body);
@@ -245,7 +245,7 @@ app.post('/stripe', (req, res) => {
     console.log(req.body);
 })
 app.post('/message', (req, res) => {
-    postMessageSignUpComplete(app,req,res);
+    res.render('./customer/MessagePage.html')
 })
 app.post('/basket_add', (req, res) => {
     addItemToBasket(app,req,res);

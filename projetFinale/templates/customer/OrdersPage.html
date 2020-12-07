@@ -16,23 +16,21 @@
         <button id="navbar_open" type="button" class="border-less">≡
         </button>
         <div class="navbar bg-color-white" id="navbar_header">
-            <button id="navbar_close" class="border-less bg-color-black color-white">X</button>
-            {{#loggedIn}}
-            <ul>
-                <li><a class="login border-less bg-color-black" href="/logout"><h2>Log out</h2></a></li>
-                <li>
-                    <h3 class="user-name text-align-left">Hello, {{name}}</h3>
-                </li>
-                <li><a href="/orders_page">Orders</a></li>
-            {{/loggedIn}}
-            {{^loggedIn}}
-            <ul>
-                <li><a class="login border-less bg-color-black" href="/user_login"><h2>Log in</h2></a></li>
-                <li><a href="/sign_up_giveNumber">Sign Up</a></li>
-            {{/loggedIn}}
-                <li><a href="/restaurant_speci">Add your restaurant</a></li>
-                <li><a href="/seller_login">Log in as a seller</a></li>
-            </ul>
+                <button id="navbar_close" class="border-less bg-color-black color-white">X</button>
+                {{#loggedIn}}
+                <ul>
+                    <li><a class="login border-less bg-color-black" href="/logout"><h2>Log out</h2></a></li>
+                    <li>
+                        <h3 class="user-name text-align-left">Hello, {{name}}</h3>
+                    </li>
+                    <li><a href="/">HomePage</a></li>
+                {{/loggedIn}}
+                {{^loggedIn}}
+                <ul>
+                    <li><a class="login border-less bg-color-black" href="/user_login"><h2>Log in</h2></a></li>
+                    <li><a href="/sign_up_giveNumber">Sign Up</a></li>
+                {{/loggedIn}}
+                </ul>
         </div>
         <div class="name-logo">
             <h2>GIQ</h2>

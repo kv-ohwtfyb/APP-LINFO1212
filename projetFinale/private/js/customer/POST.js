@@ -1,4 +1,5 @@
 const {userModel} = require("./../general/schemas");
+const bcrypt = require('bcrypt');
 
 function userLogIn(app, req, res){
 
@@ -12,17 +13,7 @@ function userLogIn(app, req, res){
     });
 }
 
-/********* For returning a list of orders of a user *******************/
 
-/**
- * Call a function that check all orders of a certain user.
- * 
- * Then render a page with a list of orders the use has ever ordered or an empty list if the user hasn't ordered anything.
- * */
-function UserAllOrders(app, req, res){
-    res.render('./customer/OrdersPage.html', {order: req.session.user.orders,
-                                            });
-}
 
 /********* Function called by userLogIn(...) *******************/
 
@@ -46,7 +37,7 @@ async function userLoggingCheck(req){
         await userModel.findOne({email: req.body.mail})
             .then((user) => {
                 if (user) {
-                    if (user.password === req.body.password) {
+                    if (bcrypt.compare(req.body.password, user.password)){
                         toReturn.status = true;
                         req.session.user = user;
                     } else {
@@ -64,23 +55,151 @@ async function userLoggingCheck(req){
     }
     
     return toReturn;
+
 }
-function phoneNumberCheck(app,req,res) {
-    const phone_input = req.body.phoneNumber;
-    if (phone_input[0] === "0" && phone_input[1] === "4") {
-        if (phone_input.length === 10) {
-            session.currentPhoneNumber = phone_input;
-            res.render('/user_signup', session.currentPhoneNumber);
-        } else {
-            res.render('./customer/SignUpGiveNumberPage.html', {phoneNumberError: "Please a valide number"});
-        }
-    } else {
+
+
+/**
+ * Check if the phone Number is already used
+ * @param phoneNumberString
+ * @returns {Promise|PromiseLike<phoneNumberAlreadyUsed>|Promise<phoneNumberAlreadyUsed>}
+ */
+
+function phoneNumberAlreadyUsed(phoneNumberString) {
+    return userModel.findOne({ phone : phoneNumberString })
+        .then((user) => {
+            if (user) {
+                this.msg = phoneNumberString + " number is already used";
+                this.status = true;
+            }else{
+                this.status = false;
+            }
+            return this;
+        });
+}
+
+/**
+ * Verify the number then goes to the sign up completing Page if the number is in a correct form
+ * @param app
+ * @param req
+ * @param res
+ */
+
+function phoneNumberCheck (app, req, res){
+    if (req.body.phoneNumber[0] !== '0' || req.body.phoneNumber[1] !=='4'){
         res.render('./customer/SignUpGiveNumberPage.html', {phoneNumberError: "Please start with 04..."});
+    }else{
+        if (req.body.phoneNumber.length !== 10){
+            res.render('./customer/SignUpGiveNumberPage.html', {phoneNumberError: "Please a valid number"});
+        }else{
+            phoneNumberAlreadyUsed(req.body.phoneNumber)
+                .then((check) => {
+                    if (check.status){
+                        res.render('./customer/SignUpGiveNumberPage.html', {phoneNumberError: check.msg})
+                    }else{
+                        req.session.phoneNumber = req.body.phoneNumber;
+                        res.redirect('/user_signup');
+                    }
+                })
+        }
     }
+}
+
+/**
+ * Checks if the number is already used in the db
+ * @param emailString
+ * @returns {Promise|PromiseLike<emailAlreadyUsed>|Promise<emailAlreadyUsed>}
+ */
+
+function emailAlreadyUsed(emailString){
+    return userModel.findOne({ email : emailString })
+        .then((user) => {
+            if (user) {
+                this.msg = emailString + " is already used";
+                this.status = true;
+            }else{
+                this.status = false;
+            }
+            return this;
+        });
+}
+
+/**
+ * Check the email and return false if the email is not used
+ * @param app
+ * @param req
+ * @param res
+ * @return false or render the page with an error
+ */
+function emailCheck(app,req,res){
+    emailAlreadyUsed(req.body.email)
+        .then((check) => {
+            if(check.status){
+                res.render('./customer/UserSignUpCompletingPage.html', {userRegisterError: check.msg});
+            }else{
+                return false;
+            }
+        })
+        .catch(err => {
+            console.log(err);
+        })
+}
+
+/**
+ * Checks if the confirm password is the same as the inital one
+ * @param app
+ * @param req
+ * @param res
+ * @return {boolean}
+ */
+function confirmPasswordCheck(app,req,res){
+    if (req.body.confirmPassword !== req.body.password){
+        res.render('./customer/UserSignUpCompletingPage.html', {userRegisterError: "Your passwords don't match"});
+    }else {
+        return true;
+    }
+}
+
+/**
+ * Register the user if everything is ok!
+ * @param app
+ * @param req
+ * @param res
+ */
+
+function userRegister(app,req,res){
+    const userName = req.body.name;
+    //Checking if the email is already used
+    let userEmail;
+    if(!emailCheck(app,req,res)) {
+        userEmail = req.body.email;
+    }
+    const userPassword = req.body.password;
+    const saltRounds = 10;
+    //hashed password + adding the user in the db
+    if (confirmPasswordCheck(app,req,res)){
+        bcrypt.hash(userPassword, saltRounds, (err, hash) => {
+            //add the user in the database
+            const user = userModel({
+                name : userName,
+                email : req.body.email,
+                phone : req.session.phoneNumber,
+                password : hash
+            });
+            user.save(function (err,user){
+                if(err){res.render('./customer/UserSignUpCompletingPage.html', {userRegisterError: err});}
+                else {res.render('./customer/HomePage.html', {loggedIn : true , name: user.name});
+                req.session.user = user;}
+            });
+        });
+    }
+
+
 }
 
 function addItemToBasket(app, req, res){
 }
+
 
 /**
  * Modifies the current basket in the session. Responds to the request with an object
@@ -102,10 +221,11 @@ function modifyAnItemOfTheBasket(app, req, res){
         })
 }
 
+
 exports.postUserLoggedIn = userLogIn;
-exports.postOrdersOfUser= UserAllOrders;
 exports.addItemToBasket = addItemToBasket;
 exports.modifyAnItemOfTheBasket = modifyAnItemOfTheBasket;
+
 
 /**
  * Checks the body of the request
@@ -146,3 +266,10 @@ function modifyItem(req){
         throw `No restaurant as ${req.body.restaurant}`;
     }
 }
+
+exports.postUserLoggedIn = userLogIn;
+exports.addItemToBasket = addItemToBasket;
+exports.modifyAnItemOfTheBasket = modifyAnItemOfTheBasket;
+exports.postUserLoggedIn = userLogIn;
+exports.postPhoneNumberCheck = phoneNumberCheck;
+exports.postUserRegister = userRegister;

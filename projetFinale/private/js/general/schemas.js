@@ -242,7 +242,6 @@ restaurantSchema.statics.arrayOfRestaurantsForDisplay = function ( array = null)
     }
 }
 
-
 // TODO Method add Item
 // TODO Method update Item
 // TODO Method remove Item

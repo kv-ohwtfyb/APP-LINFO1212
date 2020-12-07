@@ -2,7 +2,6 @@ const { userModel, restaurantModel } = require('./../general/schemas');
 const { savingImageToModel } = require('./../general/functions');
 const bcrypt = require('bcrypt');
 /* 
-    CE CODE NE MARCHE PAS ENCORE. IL Y A ENCORE UN BUG DANS ==>  function sellerLogInCheck()
 */
 function sellerLogin(app, req, res){
     sellerLogInCheck(req)
