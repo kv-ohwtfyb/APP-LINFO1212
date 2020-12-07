@@ -37,15 +37,23 @@ async function userLoggingCheck(req){
         await userModel.findOne({email: req.body.mail})
             .then((user) => {
                 if (user) {
-                    if (user.password === req.body.password) {
-                        toReturn.status = true;
-                        req.session.user = user;
-                        console.log(req.session.user);
+                    // as the password kept in db is hashed , we have to hash it before comparing it
+                    //The problem here is the new hashed password isn't the same as the initial
+                    const saltRounds = 10;
+                    bcrypt.hash(req.body.password, saltRounds, (err, hash) => {
+                        console.log(user.password);
+                        console.log("hashed one :")
+                        console.log(hash);
+                        if (user.password === hash) {
+                            toReturn.status = true;
+                            req.session.user = user;
+                            console.log(req.session.user);
 
-                    } else {
-                        toReturn.msg = "Password Invalid";
-                        toReturn.status = false;
-                    }
+                        } else {
+                            toReturn.msg = "Password Invalid";
+                            toReturn.status = false;
+                        }
+                    });
                 } else{
                     toReturn.msg = "E-mail Invalid";
                     toReturn.status = false;

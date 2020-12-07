@@ -23,6 +23,7 @@
                 <div class="user-name">Client Lambda</div>
                 <ul>
                     <li><a href="/ord">ORDERS</a></li>
+                </ul>
                 {{/loggedIn}}
                 {{^loggedIn}}
                 <ul>
@@ -38,7 +39,7 @@
             <h4>|</h4>
             <h3>UCLouvain</h3>
         </div>
-        <form>
+        <form action="search">
             <input type="search" name="search" id="searchInput" placeholder="De quoi avez vous envie de savourer :) …">
             <input type="submit" value=" ">
         </form>
