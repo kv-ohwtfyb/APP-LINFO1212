@@ -36,6 +36,7 @@ const {
     postUserLoggedIn,
     postPhoneNumberCheck,
     postUserRegister,
+    postOrdersOfUser,
     addItemToBasket,
     modifyAnItemOfTheBasket
 
@@ -142,17 +143,22 @@ app.get('/', function (req, res) {
 
 app.get('/orders_page',(req,res) =>{
     getOrdersPage(app,req,res);
+  
 })
+
 app.get('/user_login',(req,res) => {
     if (req.session.user) { res.redirect("/"); }
     else { getUserLoginPage(app, req, res); }
 })
+
 app.get('/user_signup',(req,res) =>{
     getUserSignUpPage(app,req,res);
 })
+
 app.get('/restaurant_view',(req,res) =>{
     getRestaurantsPage(app,req,res);
 })
+
 app.get('/search',(req,res) => {
     req.session.basket = {
         restaurants : [{

@@ -552,6 +552,7 @@ footer{
     display: grid;
     grid-template-columns: auto 300px 300px;
     color: white;
+    bottom: 0;
 }
 
 footer div{
@@ -803,6 +804,10 @@ footer p,a{
     background-color: black;
     color: #FFFFFF;
 }
+.table-of-payments .cancelled{
+    background-color: var(--red);
+    color: #FFFFFF;
+}
 
 .new-item{
     position: fixed;
@@ -907,7 +912,12 @@ footer p,a{
 .filepond--credits{
     display: none;
 }
-
+.table-of-customer-orders tr{
+    grid-template-columns: 100px 200px 300px 50px 100px auto;
+}
+.table-of-customer-orders tr td button{
+    width: 100%;
+}
 
 /* Special attributes classes these classes possess only special attributes and
 are used as secondary classes in html*/

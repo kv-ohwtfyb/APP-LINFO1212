@@ -8,10 +8,11 @@ mongoose.connect('mongodb://localhost:27017/testingdb',
 const rest = new restaurantModel({
     name     : "Exki",
     authKey  : "exki",
-    admin    : "5fc921cf4c35662bd70db2b3",
+    admin    : "5fc9190e2505090504522265",
     items    : "items"+ formatRemoveWhiteSpaces("Exki"),
     orders   : "orders"+ formatRemoveWhiteSpaces("Exki"),
     payments : "payments"+ formatRemoveWhiteSpaces("Exki"),
+    avgPrice : 10
 });
 
 rest.save(function (err, res) {

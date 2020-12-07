@@ -10,9 +10,18 @@ function homePage(app, req, res){
         );
     });
 }
+/********* For returning a list of orders of a user *******************/
+
+/**
+ * Call a function that check all orders of a certain user.
+ * 
+ * Then render a page with a list of orders the use has ever ordered or an empty list if the user hasn't ordered anything.
+ * */
 function ordersPage(app,req,res){
-    res.render('./customer/OrdersPage.html');
+    const user = req.session.user;
+    res.render('./customer/OrdersPage.html', {loggedIn: true,name: user.name, order: user.orders});
 }
+
 function logInPage(app,req,res){
     res.render('./customer/UserLoginPage.html');
 }
@@ -23,26 +32,35 @@ function restaurantsPage(app,req,res){
     res.render('./customer/RestaurantViewPage.html');
 }
 function searchRestaurants(app,req,res){
-    const searchString = req.query.search
-    if (!stringContainNumbers(searchString)){
-        const dbSearch = restaurantModel.find({ $text: { $search: searchString }},
+    const searchString = req.query.search || req.query.regime; //Checks if there's some text to search
+    let dbSearch;
+    if (searchString){ // If there's the text then
+        dbSearch = restaurantModel.find({ $text: { $search: searchString }},
                                             { score: { $meta: "textScore" }})
                                       .sort({ score: { $meta: "textScore" } });
-        dbSearch.then((result) => {
-            if (result){
-                const formattedResults = restaurantModel.arrayOfRestaurantsForDisplay(result);
-                res.render('./customer/SearchAnswerPage.html', {
-                    search : req.query.search, loggedIn : req.session.user || null,
-                    basket : req.session.basket, restaurants : formattedResults
-                                            });
-            }else{
-                res.render('./customer/SearchAnswerPage.html', {
-                    search : req.query.search, loggedIn : req.session.user || null,
-                    basket : req.session.basket,
-                });
-            }
-        });
+    }else{ //Else that means the user triggered the website with a budget
+        dbSearch = restaurantModel.find();
     }
+    dbSearch.then((result) => {
+        if (req.query.budget){// There's a budget constraint then we sort the result according to the constraint
+            const budget = parseFloat(req.query.budget);
+            if (parseFloat(req.query.budget) > 0 ){
+                result.sort((a, b) => Math.abs(a.avgPrice - budget) -  Math.abs(b.avgPrice - budget));
+            }
+        }
+        if (result){
+            const formattedResults = restaurantModel.arrayOfRestaurantsForDisplay(result);
+            res.render('./customer/SearchAnswerPage.html', {
+                search : req.query.search, loggedIn : req.session.user || null,
+                basket : req.session.basket, restaurants : formattedResults
+                                        });
+        }else{
+            res.render('./customer/SearchAnswerPage.html', {
+                search : req.query.search, loggedIn : req.session.user || null,
+                basket : req.session.basket,
+            });
+        }
+    });
 }
 function checkOut(app,req,res){
     res.render('./customer/CheckOutPage.html');
@@ -71,13 +89,3 @@ exports.getSignUpVerificationNumber = signUpVerificationNumber;
 exports.getSignUpGiveNumber = signUpGiveNumber;
 exports.getStripe = stripe;
 exports.getUserSignUpComplete = userSignUpComplete;
-
-/**
- * Tests if the given string has numbers in it.
- * @param string (String)
- * @return {boolean}
- */
-function stringContainNumbers(string){
-    const regex = /\d/g;
-    return regex.test(string);
-}

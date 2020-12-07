@@ -13,6 +13,11 @@ function userLogIn(app, req, res){
     });
 }
 
+
+
+/********* Function called by userLogIn(...) *******************/
+
+
 /**
  Check if the user is in our database( with the email entered).
 
@@ -28,22 +33,29 @@ function userLogIn(app, req, res){
 */
 async function userLoggingCheck(req){
     const toReturn = this;
-    await userModel.findOne({email: req.body.mail})
-        .then((user) => {
-            if (user) {
-                if (user.password === req.body.password) {
-                    toReturn.status = true;
-                    req.session.user = user;
+    if(req.body.mail){
+        await userModel.findOne({email: req.body.mail})
+            .then((user) => {
+                if (user) {
+                    if (user.password === req.body.password) {
+                        toReturn.status = true;
+                        req.session.user = user;
+                        console.log(req.session.user);
 
-                } else {
-                    toReturn.msg = "Password Invalid";
+                    } else {
+                        toReturn.msg = "Password Invalid";
+                        toReturn.status = false;
+                    }
+                } else{
+                    toReturn.msg = "E-mail Invalid";
                     toReturn.status = false;
-                }
-            } else{
-                toReturn.msg = "E-mail Invalid";
-                toReturn.status = false;
-        }
-    });
+            }
+        });
+    } else {
+        toReturn.msg = "Complete the form, Please";
+        toReturn.status = false;
+    }
+    
     return toReturn;
 
 }
@@ -211,6 +223,11 @@ function modifyAnItemOfTheBasket(app, req, res){
             res.json({ status : false, msg : err.message});
         })
 }
+
+
+exports.postUserLoggedIn = userLogIn;
+exports.addItemToBasket = addItemToBasket;
+exports.modifyAnItemOfTheBasket = modifyAnItemOfTheBasket;
 
 
 /**
