@@ -27,16 +27,14 @@ function paymentsList(app, req, res){
 }
 
 function loggingIn(app, req, res){
-    res.render('./Seller/SellerLoginPage.html')
+    res.render('./Seller/SellerLoginPage.html',
+        { loggedIn : req.session.user });
 }
 
 function sellerStore(app,req, res){
     res.render('./Seller/StorePage.html')
 }
 
-function userLoggingIn(app, req, res){
-    res.render('./Seller/UserLoginPage.html')
-}
 
 
 exports.getAddOrModifyGroup = addOrModifyGroup;
@@ -54,7 +52,5 @@ exports.getOrders = listOfOrders;
 exports.getPaymentsPage = paymentsList;
 
 exports.getTheStorePage = sellerStore;
-
-exports.getUserLoginPage = userLoggingIn;
 
 exports.getSellerLoginPage = loggingIn;

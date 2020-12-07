@@ -156,12 +156,12 @@
             <li>
                 <a href="/restaurant_view?id={{name}}">
                     <div>
-                        {{#frontImage}}
+                        {{#imgSrc}}
                             <img src={{imgSrc}} alt="The Incident Image wasn't provided">
-                        {{/frontImage}}
-                        {{^frontImage}}
+                        {{/imgSrc}}
+                        {{^imgSrc}}
                             <img src="./images/No-Photo-Available.jpg">
-                        {{/frontImage}}
+                        {{/imgSrc}}
                     </div>
                     <section class="color-black"><h1>{{name}}</h1><p>{{avgPrice}}€</p></section>
                 </a>

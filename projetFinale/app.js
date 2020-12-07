@@ -43,7 +43,7 @@ const {
 } = require('./private/js/customer/POST');
 
 const {
-    postSellerlogin,
+    postSellerLogin,
     postCreatingRestaurant
 } = require('./private/js/seller/POST');
 
@@ -77,11 +77,6 @@ app.get('/add_category', ((req, res) => {
     getAddOrModifyCategory(app, req, res);
 }));
 
-// "/menu" A CHANGER
-app.get('/menu', (req, res) => {
-    getAddOrModifyCategory(app, req, res);
-});
-
 app.get('/message', (req, res) => {
     getAfterCreateRestoMessage(app, req, res);
 });
@@ -96,7 +91,7 @@ app.get('/creating_restaurant', function (req, res){
     }
 });
 
-app.get('/orders', function (req, res) {
+app.get('/dashboard', function (req, res) {
     getOrders(app, req, res);
 });
 
@@ -141,11 +136,8 @@ app.post('/creating_restaurant', function (req, res){
     }
 });
 
-app.post('/seller_login_submitted', function (req, res) {
-    //TODO check if already logged In
-    //if so, just ask the authKey only
-    //else ask the whole page
-    postSellerlogin(app,req, res);
+app.post('/seller_login', function (req, res) {
+    postSellerLogin(app,req, res);
 });
 
 /************ CUSTOMER GET Request PART ************/

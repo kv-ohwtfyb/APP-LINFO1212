@@ -2,7 +2,6 @@ const {userModel} = require("./../general/schemas");
 const bcrypt = require('bcrypt');
 
 function userLogIn(app, req, res){
-
     userLoggingCheck(req)
         .then((check) => {
             if (check.status) {
@@ -53,9 +52,7 @@ async function userLoggingCheck(req){
         toReturn.msg = "Complete the form, Please";
         toReturn.status = false;
     }
-    
     return toReturn;
-
 }
 
 
@@ -273,3 +270,4 @@ exports.modifyAnItemOfTheBasket = modifyAnItemOfTheBasket;
 exports.postUserLoggedIn = userLogIn;
 exports.postPhoneNumberCheck = phoneNumberCheck;
 exports.postUserRegister = userRegister;
+exports.userLoggingCheck = userLoggingCheck;
