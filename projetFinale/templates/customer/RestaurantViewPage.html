@@ -13,16 +13,17 @@
 </head>
 <body>
     <header>
-        <div id="navbar_open">≡
-            <!-- This is the pop up nav bar section the user is not yet logged in-->
-        </div>
-        <div class="navbar bg-color-white" id="navbar_header" >
-                <h4 id="navbar_close">X</h4>
+        <button id="navbar_open" type="button" class="border-less">≡
+        </button>
+        <div class="navbar bg-color-white" id="navbar_header">
+                <button id="navbar_close" class="border-less bg-color-black color-white">X</button>
                 {{#loggedIn}}
-                <img src ="" alt="User_Avatar" class="UserAvatar">
-                <div class="user-name">Client Lambda</div>
                 <ul>
-                    <li><a href="/ord">ORDERS</a></li>
+                    <li><a class="login border-less bg-color-black" href="/logout"><h2>Log out</h2></a></li>
+                    <li>
+                        <h3 class="user-name text-align-left">Hello, {{name}}</h3>
+                    </li>
+                    <li><a href="/orders_page">Orders</a></li>
                 {{/loggedIn}}
                 {{^loggedIn}}
                 <ul>
@@ -32,63 +33,49 @@
                     <li><a href="/restaurant_speci">Add your restaurant</a></li>
                     <li><a href="/seller_login">Log in as a seller</a></li>
                 </ul>
-            </div>
+        </div>
         <div class="name-logo">
             <h2>GIQ</h2>
             <h4>|</h4>
             <h3>UCLouvain</h3>
         </div>
-        <form>
+        <form action="search">
             <input type="search" name="search" id="searchInput" placeholder="De quoi avez vous envie de savourer :) …">
             <input type="submit" value=" ">
         </form>
         <div class="plate round-border" id="popup_plate_open">
             <img>
-            <p>2</p>
         </div>
-        <!-- When clicked on the plate -->
         <div class="popup-plate full-height-section bg-color-white" id="popup_plate_header">
             <button class="bg-color-white border-less left" id="popup_plate_close">X</button>
             <h2>PLATE</h2>
+            {{#basket}}
             <ul>
+                {{#restaurants}}
                 <li>
-                    <h2>Burger King</h2>
+                    <h2>{{restaurant}}</h2>
                     <hr class="bg-color-black">
                     <ul>
-                        <li>
-                            <input type="number" min="0" max="20" value="1" class="bg-color-black border-less">
-                            <p class="text-align-left">Item example</p>
-                            <p class="text-align-right">9,65€</p>
+                        {{#items}}
+                        <li class="item">
+                            <input type="number" min="0" max="20" value="{{quantity}}" class="bg-color-black border-less" name="{{restaurant}}|{{name}}">
+                            <p class="name text-align-left" id="name">{{name}}</p>
+                            <p class="text-align-right">{{unityPrice}}€</p>
                         </li>
-                        <li>
-                            <input type="number" min="0" max="20" value="2" class="bg-color-black border-less">
-                            <p class="text-align-left">Item example</p>
-                            <p class="text-align-right">9,65€</p>
-                        </li>
+                        {{/items}}
                     </ul>
                 </li>
-                <li>
-                    <h2>O'Tacos</h2>
-                    <hr class="bg-color-black">
-                    <ul>
-                        <li>
-                            <input type="number" min="0" max="20" value="1" class="bg-color-black border-less">
-                            <p class="text-align-left">Item example</p>
-                            <p class="text-align-right">9,65€</p>
-                        </li>
-                        <li>
-                            <input type="number" min="0" max="20" value="2" class="bg-color-black border-less">
-                            <p class="text-align-left">Item example</p>
-                            <p class="text-align-right">9,65€</p>
-                        </li>
-                    </ul>
-                </li>
+                {{/restaurants}}
             </ul>
-            <div class="bg-color-black bottom-of-container">
-                <p class="text-align-left">5</p>
+            <div class="bg-color-black bottom-of-container three-gridded-layout">
+                <p class="text-align-left" id="totalItems">{{totalItems}}</p>
                 <p>Total</p>
-                <p class="text-align-right">24,98€</p>
+                <p class="text-align-right" id="totalAmount">{{totalAmount}}€</p>
             </div>
+            {{/basket}}
+            {{^basket}}
+                <h1> It seems like your basket is empty try adding some items :)</h1>
+            {{/basket}}
         </div>
     </header>
     <section class="restaurant-info bg-color-green">

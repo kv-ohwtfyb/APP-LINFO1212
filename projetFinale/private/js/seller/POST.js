@@ -1,87 +1,76 @@
-const {userModel} = require('./../general/schemas');
+const { userModel, restaurantModel } = require('./../general/schemas');
+const { savingImageToModel } = require('./../general/functions');
+const { userLoggingCheck } = require('./../customer/POST');
+const bcrypt = require('bcrypt');
 
-/* 
-    CE CODE NE MARCHE PAS ENCORE. IL Y A ENCORE UN BUG DANS ==>  function sellerLogInCheck()
-*/
 
 function sellerLogin(app, req, res){
-
-    sellerLogInCheck(req)
-        .then((check) => {
-            // Check contains the status of the process, and the msg in case of the a problem
-            if (check.status) {
-                res.redirect('/');
-            } else {
-                res.render('./Seller/SellerLoginPage.html', {loginError: check.msg})
-            }
-    });
-};
-
-exports.postSellerlogin = sellerLogin;
-
-
-
-
-
-
-/**
- * check if what the user enterred is valid or not
- * @param req : email, password and the authentification key enterred. 
- * @var user: Containing the seller's JSON doc
- * @constant toReturn : object of the function. containing { msg, status}
- * @returns toReturn, containing msg and status(either true or false)
- 
-*/
-
-async function sellerLogInCheck(req){
-    const toReturn = this;
-    let user;
-
-    await userModel.findOne({email:req.body.mail})
-
-        .then((res1) => {
-            if(res1){
-                return res1;
-            }else{
-                this.msg = 'E-mail Invalid. \n Pay attention to capital letters at the begin of your e-mail.';
-                this.status = false;
-            }
-
-        })
-        .then((res2) => {
-            if(res2.password === req.body.password){
-                user = res2;
-                console.log(user);
-                return res2.isSeller();
-            }else{
-                this.msg = "Password Invalid";
-                this.status = false;
-            }
-        })
-        .then((res3) => {
-            if(res3){
-                console.log(res3);
-                return user.getSellerRestaurant(req.body.authKey);
-            } else {
-                this.msg = "Your account is not Admin to any restaurant.";
-                this.status = false;
-            }
-        })
-        .then((res4) => {
-            if(res4){
-                this.status = true;
-            } else {
-                this.msg = "Invalid Authentification Key";
-                this.status = false;
-            }
-
-            return this; 
-        })
-        
-        .catch((err) => {
-            this.msg = err;
-            this.status = false;
+    if (!(req.session.user)){ //If not logged in
+        userLoggingCheck(req)
+            .then((result) =>{
+                if (result.status){
+                    sellerLogInCheck(req.session.user, req)
+                        .then((check) => {
+                            res.redirect('/dashboard');
+                        })
+                        .catch((error) => {
+                            res.render('./seller/SellerLoginPage.html',
+                                { loginError: error.message, loggedIn : req.session.user });
+                        });
+                }else {
+                    res.render('./seller/SellerLoginPage.html',
+                        { loginError: result.msg, loggedIn : req.session.user });
+                }
         });
+    }else{
+        sellerLogInCheck(req.session.user, req)
+            .then((check) => {
+                res.redirect('/dashboard');
+            })
+            .catch((error) => {
+                console.log(error);
+                res.render('./seller/SellerLoginPage.html',
+                    { loginError: error.message, loggedIn : req.session.user });
+            });
+    }
+}
 
-    return toReturn;
+function creatingRestaurant(app, req, res){
+    bcrypt.hash(req.body.authKey, 10, (err, hash) =>{
+        const restaurant = new restaurantModel({
+            name     : req.body.restoName,
+            authKey  : hash,
+            admin    : req.session.user._id,
+            items    : "items"+ formatRemoveWhiteSpaces(req.body.restoName),
+            orders   : "orders"+ formatRemoveWhiteSpaces(req.body.restoName),
+            payments : "payments"+ formatRemoveWhiteSpaces(req.body.restoName),
+        });
+        if (req.body.frontImage){
+            savingImageToModel(restaurant, req.body.frontImage)
+        }
+        restaurant.save()
+            .then((restaurant) =>{
+                console.log("Created the restaurant " + restaurant.name);
+                req.session.restaurant = restaurant;
+                res.redirect('/dashboard');
+            });
+    })
+}
+
+
+exports.postSellerLogin = sellerLogin;
+exports.postCreatingRestaurant = creatingRestaurant;
+
+
+async function sellerLogInCheck(user, req){
+    let User = await userModel.findById(req.session.user._id).exec();
+    return User.getSellerRestaurant(req.body.authKey)
+        .then((restaurant) => {
+            if (restaurant) req.session.restaurant = restaurant;
+        })
+        .catch((error) => {throw error;});
+}
+
+function formatRemoveWhiteSpaces(name) {
+    return name.trim().replace(" ","");
 }

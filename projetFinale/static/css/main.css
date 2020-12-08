@@ -654,6 +654,7 @@ footer p,a{
     display: flex;
     justify-content: center;
     text-align: center;
+    vertical-align: center;
     margin: auto 50px;
 }
 .input-page .announcement h1{
@@ -929,9 +930,14 @@ footer p,a{
 .table-of-customer-orders tr td button{
     width: 100%;
 }
+.input-page .filepond{
+    width: 380px;
+    height: 380px;
+    justify-self: center;
+}
 
 /* Special attributes classes these classes possess only special attributes and
-are used as secondary classes in html*/
+are used as secondary classes in html. */
 
 .round-border{
     border-radius: max(20px, 4%);
@@ -1018,4 +1024,10 @@ are used as secondary classes in html*/
 }
 .block{
     display: block;
+}
+
+.align-center{
+    align-content: center;
+    display: inline-flex;
+    alignment: center;
 }

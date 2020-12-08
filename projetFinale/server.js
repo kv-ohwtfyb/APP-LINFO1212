@@ -4,7 +4,7 @@ const app = require('./app');
 const mongoose = require('mongoose');
 
 mongoose.connect('mongodb://localhost:27017/testingdb',
-    {useNewUrlParser: true, useUnifiedTopology: true }
+    {useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true }
 );
 
 mongoose.connection.on('connected', (err, res) => {

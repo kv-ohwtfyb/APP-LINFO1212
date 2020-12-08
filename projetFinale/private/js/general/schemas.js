@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const { setImageSrc } = require('./functions');
+const { setVirtualImageSrc } = require('./functions');
+const bcrypt = require('bcrypt');
 
 const userSchema = new Schema({
     name     : { type : String,                       required : true },
@@ -22,15 +23,22 @@ userSchema.methods.isSeller = function () {
 }
 
 /**
-    Returns the restaurant where this._id is admin and the authKey is the
-    correspond. If there's not then it returns none.
-    @param authKey (String) : the authentication key in the restaurant
-    @return restaurant (restaurantModel) : the restaurant.
+ *  Returns the restaurant where this._id is admin and the authKey is the
+ *  correspond. If there's not then it returns throws an error.
+ *  @param authKey (String) : the authentication key in the restaurant
+ *  @return restaurant (restaurantModel) : the restaurant.
+ *  @return {Promise|PromiseLike<T>|Promise<T>}
+ *  @throws Error.
  */
 userSchema.methods.getSellerRestaurant = function (authKey){
-    if (typeof authKey !== "string") throw "The authKey given is not a string";
-    return restaurantModel.findOne({ admin : this._id, authKey : authKey }).then((rest) => {
-        return rest;
+    if (authKey instanceof String) throw Error("The authKey given is not a string");
+    return restaurantModel.findOne({ admin : this._id }).then((rest) => {
+        if (!(rest)){ throw Error("No restaurant found under your email. You should try create a restaurant first."); }
+        if (bcrypt.compare(authKey, rest.authKey)){
+            return rest;
+        }else {
+            throw Error("The authentication key didn't match the authentication key on " + rest.name + ".");
+        }
     });
 }
 
@@ -80,10 +88,8 @@ const restaurantSchema = new Schema({
     groups      : { type : [ groupSchema ],             required : false },
     admin       : { type : String,                      required : true  },
     orders      : { type : String,                      required : true  },
-    image       : { type : {
-                                data : Buffer,
-                                type : String,
-                    },                                  required : false, },
+    image       : { type : Buffer,                      required : false },
+    imageType   : { type : String,                      required : false },
     avgPrice    : { type : Number,                      required : false,               default : 0}
 }, { autoIndex: false });
 
@@ -93,6 +99,9 @@ restaurantSchema.pre('save',async function (next) {
     await checkIfAdminExist(this.admin).then((bool) => {
         if (!bool) throw "Admin doesn't exist";
     });
+    await checkForSimilarName(this.name)
+        .then(() =>{})
+        .catch((err) => {if (err) throw Error(err.message); })
     await Promise.all([
         mongoose.connection.createCollection(this.items)
         .then(()   => {console.log(this.items + " collection created.");})
@@ -103,6 +112,7 @@ restaurantSchema.pre('save',async function (next) {
         mongoose.connection.createCollection(this.orders)
         .then(()   => {console.log("orders"+ this.orders + " collection created.");})
         .catch(err => console.log(`When creating orders collection ${err}`)),
+
     ]).then(() => {
        next();
     });
@@ -210,38 +220,40 @@ restaurantSchema.methods.updateGroup = function (name, spec) {
  *       imgSrc : ...,
  *       imgType : ...
  *    }
- * @param array : Array oof restaurants
- * @return {Promise<*>}
+ * @param array : Array of restaurants
+ * @return {{avgPrice: *, name: *, imgSrc }[]}
  */
-restaurantSchema.statics.arrayOfRestaurantsForDisplay = function ( array ){
+restaurantSchema.statics.arrayOfRestaurantsForDisplay = function ( array = null){
     if (array){
-        array.forEach(function (resto) {
-            resto._id; delete resto._id;
-            if (resto.value != null){
-                setImageSrc(resto);
-            }
-            delete resto.value;
-        })
-        return array;
-    }else{
-        const Mapper = {
-            // https://docs.mongodb.com/manual/tutorial/map-reduce-examples/
-            map : function () { emit ( this.name, this.image) }
-            };
-        return restaurantModel.mapReduce(Mapper).then((result) => {
-            result.results.forEach(function (resto){
-                resto.name = resto._id; delete resto._id;
-                if (resto.value != null){
-                    setImageSrc(resto);
+        return array.map((item) =>{
+                const object = {
+                    name : item.name,
+                    avgPrice : item.avgPrice,
+                };
+                if (item.image){
+                    object.image = item.image;
+                    object.imageType = item.imageType;
+                    setVirtualImageSrc(object);
                 }
-                resto.avgPrice = 99.99;
-                delete resto.value;
+                return object;
             });
-            return result.results;
+    }else{
+        return restaurantModel.find().then((result) => {
+            return result.map((item) =>{
+                const object = {
+                    name : item.name,
+                    avgPrice : item.avgPrice,
+                };
+                if (item.image){
+                    object.image = item.image;
+                    object.imageType = item.imageType;
+                    setVirtualImageSrc(object);
+                }
+                return object;
+            })
         });
     }
 }
-
 
 // TODO Method add Item
 // TODO Method update Item
@@ -368,5 +380,21 @@ function checkIfGroupWithNameExist(restaurant, name) {
         if (formatRemoveWhiteSpaces(group.name).localeCompare(formatRemoveWhiteSpaces(name), 'fr', { sensitivity: 'base' }) === 0){
             throw `The group name already exists ${group.name} which is similar to ${name}. Try with different name`;
         }
+    })
+}
+
+/**
+ * Checks if there's not a restaurant with a similar name.
+ * @param name (String).
+ * @return {Promise|PromiseLike<void>|Promise<void>}
+ * @throws Error if there's a restaurant with a similar name.
+ */
+function checkForSimilarName(name){
+    return restaurantModel.find().then((restaurants) => {
+        restaurants.forEach(function (restaurant){
+            if (formatRemoveWhiteSpaces(restaurant.name).localeCompare(formatRemoveWhiteSpaces(name), 'fr', { sensitivity: 'base' }) === 0){
+                throw Error(`A restaurant named ${restaurant.name}, which is similar to ${name}. Please try with different name`);
+            }
+        });
     })
 }

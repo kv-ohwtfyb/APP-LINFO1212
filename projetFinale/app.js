@@ -4,6 +4,7 @@ const app = express ();
 const bodyParser = require('body-parser');
 const session = require('express-session');
 
+
 const {
     getHomePage,
     getOrdersPage,
@@ -23,7 +24,7 @@ const {
     getAddOrModifyGroup,
     getAddOrModifyItem,
     getAddOrModifyCategory,
-    getCreateRestaurantSpeci,
+    getCreateRestaurant,
     getOrders,
     getPaymentsPage,
     getTheStorePage,
@@ -32,19 +33,19 @@ const {
 } = require('./private/js/seller/GET');
 
 const {
-    postPhoneNumberVerification,
-    postcodeCheck,
     postUserLoggedIn,
+    postPhoneNumberCheck,
+    postUserRegister,
     postOrdersOfUser,
     addItemToBasket,
     modifyAnItemOfTheBasket
+
 } = require('./private/js/customer/POST');
 
 const {
-    postSellerlogin,
+    postSellerLogin,
+    postCreatingRestaurant
 } = require('./private/js/seller/POST');
-
-
 
 app.use(bodyParser.urlencoded({ extended :true, limit: '50mb' }));
 app.engine('html', consolidate.hogan);
@@ -76,20 +77,21 @@ app.get('/add_category', ((req, res) => {
     getAddOrModifyCategory(app, req, res);
 }));
 
-// "/menu" A CHANGER
-app.get('/menu', (req, res) => {
-    getAddOrModifyCategory(app, req, res);
-});
-
 app.get('/message', (req, res) => {
     getAfterCreateRestoMessage(app, req, res);
 });
 
-app.get('/restaurant_speci', function (req, res){
-    getCreateRestaurantSpeci(app, req, res);
+app.get('/creating_restaurant', function (req, res){
+    if (req.session.user){
+        getCreateRestaurant(app, req, res);
+    }else {
+        res.render("./customer/UserLoginPage.html", {
+            loginError : "To create a restaurant you must first login or create an account."
+        });
+    }
 });
 
-app.get('/orders', function (req, res) {
+app.get('/dashboard', function (req, res) {
     getOrders(app, req, res);
 });
 
@@ -116,7 +118,7 @@ app.post('/add-group', function (req, res) {
     console.log(req.body);
 });
 
-app.post('/add-item', function(req, res){
+app.post('/add_item', function(req, res){
     console.log(req.body);
 });
 
@@ -125,14 +127,17 @@ app.post('/menu', function (req, res){
 });
 
 app.post('/creating_restaurant', function (req, res){
-    console.log(req.body);
+    if (req.session.user){
+        postCreatingRestaurant(app, req, res);
+    }else {
+        res.render("./customer/UserLoginPage.html", {
+            loginError : "To create a restaurant you must first login or create an account."
+        });
+    }
 });
 
-app.post('/seller_login_submitted', function (req, res) {
-    //TODO check if already logged In
-    //if so, just ask the authKey only
-    //else ask the whole page
-    postSellerlogin(app,req, res);
+app.post('/seller_login', function (req, res) {
+    postSellerLogin(app,req, res);
 });
 
 /************ CUSTOMER GET Request PART ************/
@@ -208,7 +213,7 @@ app.post('/user_log_in',(req, res) => {
     postUserLoggedIn(app,req, res);
 })
 app.post('/user_sign_up',(req, res, next) => {
-    console.log(req.body);
+    postUserRegister(app, req, res);
 })
 app.post('/user_orders', (req, res) => {
     console.log(req.body);
@@ -232,12 +237,12 @@ app.post('/stripe', (req, res) => {
     console.log(req.body);
 })
 app.post('/message', (req, res) => {
-    postMessageSignUpComplete(app,req,res);
+    res.render('./customer/MessagePage.html')
 })
-app.post('/add_item', (req, res) => {
+app.post('/basket_add', (req, res) => {
     addItemToBasket(app,req,res);
 })
-app.post('/modify_item',(req, res) =>{
+app.post('/basket_modify',(req, res) =>{
     modifyAnItemOfTheBasket(app, req, res);
 })
 module.exports = app;

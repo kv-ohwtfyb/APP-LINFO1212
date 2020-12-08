@@ -1,4 +1,5 @@
 const { restaurantModel } = require('./../general/schemas');
+const { setVirtualImageSrc } = require('./../general/functions');
 
 function homePage(app, req, res){
     restaurantModel.arrayOfRestaurantsForDisplay().then((array) => {
@@ -14,7 +15,7 @@ function homePage(app, req, res){
 
 /**
  * Call a function that check all orders of a certain user.
- * 
+ *
  * Then render a page with a list of orders the use has ever ordered or an empty list if the user hasn't ordered anything.
  * */
 function ordersPage(app,req,res){
@@ -37,7 +38,7 @@ function searchRestaurants(app,req,res){
     if (searchString){ // If there's the text then
         dbSearch = restaurantModel.find({ $text: { $search: searchString }},
                                             { score: { $meta: "textScore" }})
-                                      .sort({ score: { $meta: "textScore" } });
+                                      .sort({ score: { $meta: "textScore" }});
     }else{ //Else that means the user triggered the website with a budget
         dbSearch = restaurantModel.find();
     }

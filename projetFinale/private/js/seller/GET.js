@@ -14,7 +14,7 @@ function createRestoFinishedMessage(app, req, res){
     res.render('./Seller/CreateRestaurantFinished.html')
 }
 
-function createRestoSpeci(app,req, res){
+function createResto(app,req, res){
     res.render('./Seller/CreateRestaurantSpeci.html');
 }
 
@@ -27,16 +27,14 @@ function paymentsList(app, req, res){
 }
 
 function loggingIn(app, req, res){
-    res.render('./Seller/SellerLoginPage.html')
+    res.render('./Seller/SellerLoginPage.html',
+        { loggedIn : req.session.user });
 }
 
 function sellerStore(app,req, res){
     res.render('./Seller/StorePage.html')
 }
 
-function userLoggingIn(app, req, res){
-    res.render('./Seller/UserLoginPage.html')
-}
 
 
 exports.getAddOrModifyGroup = addOrModifyGroup;
@@ -47,14 +45,12 @@ exports.getAddOrModifyCategory = addOrModifyMenu;
 
 exports.getAfterCreateRestoMessage = createRestoFinishedMessage;
 
-exports.getCreateRestaurantSpeci = createRestoSpeci;
+exports.getCreateRestaurant = createResto;
 
 exports.getOrders = listOfOrders;
 
 exports.getPaymentsPage = paymentsList;
 
 exports.getTheStorePage = sellerStore;
-
-exports.getUserLoginPage = userLoggingIn;
 
 exports.getSellerLoginPage = loggingIn;
