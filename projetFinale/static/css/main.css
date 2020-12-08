@@ -331,6 +331,10 @@ header form input[type=submit]:active{
     display: grid;
     justify-items: center;
 }
+.popup-plate section{
+    width: 95%;
+    
+}
 .popup-plate button[type=submit]{
     display: none;
     height: 40px;
@@ -765,6 +769,12 @@ footer p,a{
     text-align: left;
 }
 
+.order-view-text-align-left{
+    list-style-type: none ;
+    margin-left: 0;
+    padding: 0;
+
+}
 .order-view .bottom-of-container{
     display: grid;
     grid-template-rows: 50% 50%;
@@ -783,6 +793,7 @@ footer p,a{
     height: 100%;
     border-width: 0;
 }
+
 .seller-page button{
     width: 100px;
     height: 40px;

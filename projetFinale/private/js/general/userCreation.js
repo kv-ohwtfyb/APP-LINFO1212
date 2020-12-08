@@ -1,5 +1,6 @@
 const { userModel } = require('./schemas');
 const mongoose = require('mongoose');
+const { ObjectId } = require('mongodb');
 
 mongoose.connect('mongodb://localhost:27017/testingdb',
     { useNewUrlParser: true, useUnifiedTopology: true }
@@ -7,12 +8,13 @@ mongoose.connect('mongodb://localhost:27017/testingdb',
 
 // Creating user
 
-/*
+
 const user = new userModel({
-    name  : "Ingenzi Vany",
-    email : "Ingenzivany@gmail.com",
-    phone : "0466432080",
-    password : "vany"
+    name     : "Hirwa Heri",
+    email    : "mmihigojonathan@gmail.com",
+    phone    : "0486244197",
+    password : "heri",
+    orders   :  ["12,95", "Quick", "paid", "6 Dec 2020", "", ObjectId]
 });
 
 
@@ -21,8 +23,7 @@ user.save(function (err, user) {
     else     { console.log(`Saved ${ user.name } to the database.`);}
 });
 
- */
-
+/*
 //Finding user
 userModel.findById("5fc9190e2505090504522265")
     .then((user) => {
@@ -30,3 +31,4 @@ userModel.findById("5fc9190e2505090504522265")
             console.log(res);
         });
 });
+*/

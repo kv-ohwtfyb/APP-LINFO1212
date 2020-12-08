@@ -102,36 +102,40 @@
             </tr>
         </table>
     </section>
-    <div class="popup-reoder" style="display: none">
+    <dialog class=" popup-plate popup-item-specifications  text-align-left" id="popup_item">
         <h2>ORDER</h2>
-        <ul>
-            <li>Order ID :{{orderId}}</li>
-            <li>Date     :{{date}}</li>
-            <li>Batiment :{{batiment}}</li>
-            <li>Status   :{{status}}</li>
 
-        </ul>
-        <table class="commandes">
-            <tr>
-                <th>O'TACOS</th>
-            </tr>
-            {{#commande}}
-            <tr class="commande-restaurant">
-                <td>
-                    <form action="">
-                        <input type="number" name="quantity" min="1" max="20">
-                    </form>
-                </td>
-                <td>
-                    O'TACOS XL & sauce Andalouse
-                </td>
-                <td>
-                    7,80€
-                </td>
-            </tr>
-            {{/commande}}
-        </table>
-        <button type="submit" class="reorder-button">REORDER {{total}}</button>
-    </div>
+        <section >
+            <ul class="order-view-text-align-left" >
+                <li>Order ID :{{orderId}}#i896eh6983h</li>
+                <li>Date     :{{date}}25 Feb 2020</li>
+                <li>Batiment :{{batiment}}Batiment Reamur</li>
+                <li>Status   :{{status}}Delivered</li>            
+            </ul>
+        </section>  
+
+        <form method="dialog">
+            <ul class="full-width-section order-view-text-align-left">
+                
+                <li>
+                    <h2>O'TACOS</h2>
+                    <hr class="bg-color-black">
+                    <ul>
+                        <li class="item">
+                            <input type="number" min="1" max="20" value="1" class="bg-color-black border-less" name="{{restaurant}}|{{name}}">
+                            <p class="name text-align-left" id="name">O'TACOS XL Andalouse</p>
+                            <p class="text-align-right">7,80€</p>
+                        </li>
+                        
+                    </ul>
+                </li>
+                
+            </ul>
+        </form>
+        <section class="buttons">
+            <button type="submit" class="bg-color-black color-white" value="cancel" id="close_popup">Annuler</button>
+            <button type="submit" class="bg-color-green">REORDER {{total}}</button>
+        </section>
+    </dialog>
 </body>
 </html>
