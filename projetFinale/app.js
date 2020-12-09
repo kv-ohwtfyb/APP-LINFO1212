@@ -29,7 +29,8 @@ const {
     getPaymentsPage,
     getTheStorePage,
     getSellerLoginPage,
-    getAfterCreateRestoMessage
+    getAfterCreateRestoMessage,
+    getListOfGroupNames
 } = require('./private/js/seller/GET');
 
 const {
@@ -65,7 +66,7 @@ app.use(session({
 
 /************ SELLER GET Request PART ************/
 
-app.get('/add_group', (req, res) => {
+app.get('/group', (req, res) => {
     getAddOrModifyGroup(app, req, res);
 });
 
@@ -73,7 +74,7 @@ app.get('/item', (req, res) => {
     getAddOrModifyItem(app, req, res);
 });
 
-app.get('/add_category', ((req, res) => {
+app.get('/category', ((req, res) => {
     getAddOrModifyCategory(app, req, res);
 }));
 
@@ -112,14 +113,22 @@ app.get('/logout', (req,res ) => {
    res.redirect('/');
 });
 
+app.get('/getGroups', function (req, res){
+    if (req.session.restaurant){
+        getListOfGroupNames(app, req, res);
+    }else {
+        res.json({ status : false, msg :"First login as a restaurant seller."});
+    }
+});
 /************ Seller POST Request PART ************/
 
-app.post('/add-group', function (req, res) {
+app.post('/group', function (req, res) {
     console.log(req.body);
 });
 
 app.post('/item', function(req, res){
     console.log(req.body);
+    res.render('./Seller/AddOrModifyItem.html');
 });
 
 app.post('/menu', function (req, res){

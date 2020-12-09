@@ -264,6 +264,10 @@ function modifyItem(req){
     }
 }
 
+function restaurantView(app,req,res){
+
+}
+
 exports.postUserLoggedIn = userLogIn;
 exports.addItemToBasket = addItemToBasket;
 exports.modifyAnItemOfTheBasket = modifyAnItemOfTheBasket;

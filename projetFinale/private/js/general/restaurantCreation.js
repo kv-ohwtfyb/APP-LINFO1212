@@ -8,7 +8,7 @@ mongoose.connect('mongodb://localhost:27017/testingdb',
 const rest = new restaurantModel({
     name     : "Exki",
     authKey  : "exki",
-    admin    : "5fc9190e2505090504522265",
+    admin    : "5fcd7bfc4cc4ec1b3c97575b",
     items    : "items"+ formatRemoveWhiteSpaces("Exki"),
     orders   : "orders"+ formatRemoveWhiteSpaces("Exki"),
     payments : "payments"+ formatRemoveWhiteSpaces("Exki"),
