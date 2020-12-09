@@ -53,7 +53,7 @@ const groupSchema = new Schema({
     maxSelection  : { type : Number,              required : true },
     minSelection  : { type : Number,              required : true },
     description   : { type : String,              required : false }
-}, {_id : false, autoIndex: false});
+}, { _id : false, autoIndex: false });
 
 const groupModel = new mongoose.model('Group', groupSchema);
 

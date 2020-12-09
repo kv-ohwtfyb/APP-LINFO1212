@@ -69,7 +69,7 @@ app.get('/add_group', (req, res) => {
     getAddOrModifyGroup(app, req, res);
 });
 
-app.get('/add_item', (req, res) => {
+app.get('/item', (req, res) => {
     getAddOrModifyItem(app, req, res);
 });
 
@@ -118,7 +118,7 @@ app.post('/add-group', function (req, res) {
     console.log(req.body);
 });
 
-app.post('/add_item', function(req, res){
+app.post('/item', function(req, res){
     console.log(req.body);
 });
 
@@ -139,6 +139,13 @@ app.post('/creating_restaurant', function (req, res){
 app.post('/seller_login', function (req, res) {
     postSellerLogin(app,req, res);
 });
+
+/************ SELLER   DELETE Request Routers *********/
+
+app.delete('/item', function (req, res) {
+    console.log(req.query);
+    console.log(req.body);
+})
 
 /************ CUSTOMER GET Request PART ************/
 
