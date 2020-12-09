@@ -31,5 +31,24 @@ function setImageSrc(obj){
     }else { obj["imgSrc"] = "";}
 }
 
+
+/*
+    Return a the text in lowerCase and remove all the blank spaces.
+    text (String ) : the text to format.
+ */
+function formatText(text) {
+    return formatRemoveWhiteSpaces(text).toLowerCase();
+}
+
+/*
+    Return the text without blank spaces.
+    text (String ) : the text to format.
+ */
+function formatRemoveWhiteSpaces(name) {
+    return name.trim().replace(/\s/g, "");
+}
+
 exports.savingImageToModel = savingImage;
-exports.setVirtualImageSrc = setImageSrc;
+exports.setVirtualImageSrc = setImageSrc
+exports.formatText = formatText;
+exports.formatRemoveWhiteSpaces = formatRemoveWhiteSpaces;

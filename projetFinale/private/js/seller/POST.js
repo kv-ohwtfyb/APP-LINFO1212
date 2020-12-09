@@ -28,7 +28,6 @@ function sellerLogin(app, req, res){
                 res.redirect('/dashboard');
             })
             .catch((error) => {
-                console.log(error);
                 res.render('./seller/SellerLoginPage.html',
                     { loginError: error.message, loggedIn : req.session.user });
             });
@@ -71,10 +70,11 @@ async function sellerLogInCheck(user, req){
     return User.getSellerRestaurant(req.body.authKey)
         .then((restaurant) => {
             if (restaurant) req.session.restaurant = restaurant;
+            console.log(restaurant);
         })
         .catch((error) => {throw error;});
 }
 
 function formatRemoveWhiteSpaces(name) {
-    return name.trim().replace(" ","");
+    return name.trim().replace(/\s/g, "");
 }

@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const { setVirtualImageSrc } = require('./functions');
+const { setVirtualImageSrc, formatRemoveWhiteSpaces, formatText  } = require('./functions');
 const bcrypt = require('bcrypt');
 
 const userSchema = new Schema({
@@ -32,13 +32,18 @@ userSchema.methods.isSeller = function () {
  */
 userSchema.methods.getSellerRestaurant = function (authKey){
     if (authKey instanceof String) throw Error("The authKey given is not a string");
-    return restaurantModel.findOne({ admin : this._id }).then((rest) => {
+    return restaurantModel.find({ admin : this._id }).then((results) => {
+        let restaurant;
         if (!(rest)){ throw Error("No restaurant found under your email. You should try create a restaurant first."); }
-        if (bcrypt.compare(authKey, rest.authKey)){
-            return rest;
-        }else {
-            throw Error("The authentication key didn't match the authentication key on " + rest.name + ".");
-        }
+        results.find((rest) => {
+                return bcrypt.compare(authKey, rest.authKey).then((result) => {
+                if (result){
+                    return rest;
+                }
+            })
+        })
+        if (restaurant) return restaurant;
+        throw Error("The authentication key didn't match any of your restaurants.");
     });
 }
 
@@ -151,7 +156,7 @@ restaurantSchema.methods.findGroupIndex = function(name){
  * @return {[ String ]}
  */
 restaurantSchema.methods.listOfGroupNames = function (){
-    const toReturn = [];
+    const toReturn = []; console.log(this.groups);
     this.groups.forEach(function (group) {
         toReturn.push(group.name);
     });
@@ -170,7 +175,7 @@ restaurantSchema.methods.addGroup = function (theGroup) {
         checkItemsOfGroup(this, theGroup.items);
         checkIfGroupWithNameExist(this, theGroup.name);
         this.groups.push(theGroup);
-        this.groups.sort(function (a, b) { return format(a.name).localeCompare(format(b.name), 'fr', { sensitivity: 'base' }); });
+        this.groups.sort(function (a, b) { return formatText(a.name).localeCompare(formatText(b.name), 'fr', { sensitivity: 'base' }); });
         restaurantModel.update({ _id : this._id}, { groups : this.groups }).then((res)=>{
             if (res.nModified >=1 ){
                 console.log("Added the group")
@@ -187,7 +192,7 @@ restaurantSchema.methods.addGroup = function (theGroup) {
  */
 restaurantSchema.methods.removeGroup = function (name) {
     this.groups = this.groups.filter((group) =>{
-        return format(group.name) !== format(name);
+        return formatText(group.name) !== formatText(name);
     });
 }
 
@@ -326,22 +331,8 @@ exports.itemSchema = itemSchema;
 exports.paymentModel = paymentModel;
 exports.restaurantModel = restaurantModel;
 exports.groupModel = groupModel;
+exports.formatText
 
-/*
-    Return the text without blank spaces.
-    text (String ) : the text to format.
- */
-function formatRemoveWhiteSpaces(name) {
-    return name.trim().replace(" ","");
-}
-
-/*
-    Return a the text in lowerCase and remove all the blank spaces.
-    text (String ) : the text to format.
- */
-function format(text) {
-    return formatRemoveWhiteSpaces(text).toLowerCase();
-}
 
 /*
     Throws an typeError if an item with the given name of the group is not available in the restaurant items collection.
