@@ -78,37 +78,38 @@
             {{/basket}}
         </div>
     </header>
+    {{#restaurant}}
     <section class="restaurant-info bg-color-green">
         <div class="text-align-right">
-            <h1>O'TACOS |</h1>
+            <h1>{{name}} |</h1>
         </div>
         <div class="text-align-left">
             <p>Ouvert 8H - 9H | +3271352463</p>
             <p>Rue des savoureux 45, 1348 Louvain-La-Neuve</p>
             <p class="prix-moyen-restaurant">
-            Prix moyen dépensé : 7,83€
+            Prix moyen dépensé : {{avgPrice}}€
             </p>
         </div>
         <div class="image-container">
-            <img src="./images/Otacos/otacos-tacos.jpg">
+            <img src={{imgSrc}}>
         </div>
     </section>
     <div class="categories-tab round-border bg-color-white color-black">
-        <a href="#menus">Menus</a>
-        <a href="#tacos">O'Tacos</a>
-        <a href="#frites">Frites</a>
-        <a href="#boissons">Boissons</a>
+        <a href="#{{category}}">{{category}}</a>
+        <a href="#{{category}}">{{category}}</a>
+        <a href="#{{category}}">{{category}}</a>
+        <a href="#{{category}}">{{category}}</a>
     </div>
     <section>
-        <section id="menus" class="margin-top-bottom">
-            <h2>Menus</h2>
+        <section id="{{category}}" class="margin-top-bottom">
+            <h2>{{category}}</h2>
             <ul class="list-of-items three-gridded-layout">
                 <li>
                     <div>
                         <section>
-                            <h1>Menu étudiant</h1>
+                            <h1>{{item}}</h1>
                             <p>Choisissez la viande et une boisson.</p>
-                            <p>23.40€</p>
+                            <p>{{avgPrice}}€</p>
                         </section>
                         <div>
                             <img src="images/Otacos/otacos-tacos.jpg">
@@ -118,9 +119,9 @@
                 <li>
                     <div>
                         <section>
-                            <h1>Menu enfant</h1>
+                            <h1>{{item}}</h1>
                             <p>Did you know you need to be a user in order to create/ add a restaurant</p>
-                            <p class="bottom-of-container">23.40€</p>
+                            <p class="bottom-of-container">{{avgPrice}}€</p>
                         </section>
                         <div>
                             <img src="images/Burger King/burger.jpg">
@@ -130,9 +131,9 @@
                 <li>
                     <div>
                         <section>
-                            <h1>Menu étudiant</h1>
+                            <h1>{{item}}</h1>
                             <p>Did you know you need to be a user in order to create/ add a restaurant</p>
-                            <p>9.40€</p>
+                            <p>{{avgPrice}}€</p>
                         </section>
                         <div>
                             <img src="images/Otacos/otacos-tacos.jpg">
@@ -142,14 +143,14 @@
             </ul>
         </section>
         <section id="tacos" class="margin-top-bottom">
-            <h2>O'Tacos</h2>
+            <h2>{{category}}</h2>
             <ul class="list-of-items three-gridded-layout">
                 <li>
                     <div>
                         <section>
-                            <h1>O'Tacos L</h1>
+                            <h1>{{item}}</h1>
                             <p>Choisissez la viande et une boisson.</p>
-                            <p>23.40€</p>
+                            <p>{{avgPrice}}€</p>
                         </section>
                         <div>
                             <img src="images/Otacos/otacos-tacos.jpg">
@@ -159,9 +160,9 @@
                 <li>
                     <div>
                         <section>
-                            <h1>O'Tacos M</h1>
+                            <h1>{{item}}</h1>
                             <p>Did you know you need to be a user in order to create/ add a restaurant</p>
-                            <p>23.4€</p>
+                            <p>{{avgPrice}}€</p>
                         </section>
                         <div>
                             <img src="images/Otacos/otacos-tacos.jpg">
@@ -171,9 +172,9 @@
                 <li>
                     <div>
                         <section>
-                            <h1>O'Tacos XL</h1>
+                            <h1>{{item}}</h1>
                             <p>Did you know you need to be a user in order to create/ add a restaurant</p>
-                            <p>9.40€</p>
+                            <p>{{avgPrice}}€</p>
                         </section>
                         <div>
                             <img src="images/Otacos/otacos-tacos.jpg">
@@ -183,14 +184,14 @@
             </ul>
         </section>
         <section id="frites" class="margin-top-bottom">
-            <h2>Frites</h2>
+            <h2>{{category}}</h2>
             <ul class="list-of-items three-gridded-layout">
                 <li>
                     <div>
                         <section>
-                            <h1>Frites L</h1>
+                            <h1>{{item}}</h1>
                             <p>Choisissez la viande et une boisson.</p>
-                            <p>23.4€</p>
+                            <p>{{avgPrice}}€</p>
                         </section>
                         <div>
                             <img src="images/Otacos/otacos-tacos.jpg">
@@ -200,9 +201,9 @@
                 <li>
                     <div>
                         <section>
-                            <h1>Frites M</h1>
+                            <h1>{{item}}</h1>
                             <p>Did you know you need to be a user in order to create/ add a restaurant</p>
-                            <p>23.4€</p>
+                            <p>{{avgPrice}}€</p>
                         </section>
                         <div>
                             <img src="images/Otacos/otacos-tacos.jpg">
@@ -212,9 +213,9 @@
                 <li>
                     <div>
                         <section>
-                            <h1>Frites XL</h1>
+                            <h1>{{item}}</h1>
                             <p>Did you know you need to be a user in order to create/ add a restaurant</p>
-                            <p>9.40€</p>
+                            <p>{{avgPrice}}€</p>
                         </section>
                         <div>
                             <img src="images/Otacos/otacos-tacos.jpg">
@@ -224,14 +225,14 @@
             </ul>
         </section>
         <section id="boissons" class="margin-top-bottom">
-            <h2>Boissons</h2>
+            <h2>{{category}}</h2>
             <ul class="list-of-items three-gridded-layout">
                 <li>
                     <div>
                         <section>
-                            <h1>Coca</h1>
+                            <h1>{{item}}</h1>
                             <p>Choisissez la viande et une boisson.</p>
-                            <p>23.4€</p>
+                            <p>{{avgPrice}}€</p>
                         </section>
                         <div>
                             <img src="images/Otacos/otacos-tacos.jpg">
@@ -241,9 +242,9 @@
                 <li>
                     <div>
                         <section>
-                            <h1>Fanta</h1>
+                            <h1>{{item}}</h1>
                             <p>Did you know you need to be a user in order to create/ add a restaurant</p>
-                            <p>23.4€</p>
+                            <p>{{avgPrice}}€</p>
                         </section>
                         <div>
                             <img src="images/Otacos/otacos-tacos.jpg">
@@ -253,9 +254,9 @@
                 <li>
                     <div>
                         <section>
-                            <h1>Sprite</h1>
+                            <h1>{{item}}</h1>
                             <p>Did you know you need to be a user in order to create/ add a restaurant</p>
-                            <p>9.40€</p>
+                            <p>{{avgPrice}}€</p>
                         </section>
                         <div>
                             <img src="images/Otacos/otacos-tacos.jpg">
@@ -265,10 +266,11 @@
             </ul>
         </section>
     </section>
+    {{/restaurant}}
     <dialog class="popup-item-specifications bg-color-white text-align-left" id="popup_item">
-        <h3 id="item_name">Menu étudiant</h3>
+        <h3 id="item_name">{{groupname}}</h3>
         <div class="image-container">
-            <img src="images/Otacos/otacos-tacos.jpg">
+            <img src={{imgSrc}}>
         </div>
         <form method="dialog">
                 <p>Choisissez des légumes : </p>

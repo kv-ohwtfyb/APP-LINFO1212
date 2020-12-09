@@ -30,7 +30,9 @@
                 <ul>
                     <li><a class="login border-less bg-color-black" href="/user_login"><h2>Log in</h2></a></li>
                     <li><a href="/sign_up_giveNumber">Sign Up</a></li>
+                </ul>
                 {{/loggedIn}}
+                <ul>
                     <li><a href="/creating_restaurant">Add your restaurant</a></li>
                     <li><a href="/seller_login">Log in as a seller</a></li>
                 </ul>
@@ -157,7 +159,7 @@
                 <a href="/restaurant_view?id={{name}}">
                     <div>
                         {{#imgSrc}}
-                            <img src={{imgSrc}} alt="The Incident Image wasn't provided">
+                            <img src={{imgSrc}} alt="The Restaurant Image wasn't provided">
                         {{/imgSrc}}
                         {{^imgSrc}}
                             <img src="./images/No-Photo-Available.jpg">
