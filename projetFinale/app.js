@@ -43,7 +43,7 @@ const {
 } = require('./private/js/customer/POST');
 
 const {
-    postSellerlogin,
+    postSellerLogin,
     postCreatingRestaurant
 } = require('./private/js/seller/POST');
 
@@ -69,18 +69,13 @@ app.get('/add_group', (req, res) => {
     getAddOrModifyGroup(app, req, res);
 });
 
-app.get('/add_item', (req, res) => {
+app.get('/item', (req, res) => {
     getAddOrModifyItem(app, req, res);
 });
 
 app.get('/add_category', ((req, res) => {
     getAddOrModifyCategory(app, req, res);
 }));
-
-// "/menu" A CHANGER
-app.get('/menu', (req, res) => {
-    getAddOrModifyCategory(app, req, res);
-});
 
 app.get('/message', (req, res) => {
     getAfterCreateRestoMessage(app, req, res);
@@ -96,7 +91,7 @@ app.get('/creating_restaurant', function (req, res){
     }
 });
 
-app.get('/orders', function (req, res) {
+app.get('/dashboard', function (req, res) {
     getOrders(app, req, res);
 });
 
@@ -123,7 +118,7 @@ app.post('/add-group', function (req, res) {
     console.log(req.body);
 });
 
-app.post('/add_item', function(req, res){
+app.post('/item', function(req, res){
     console.log(req.body);
 });
 
@@ -141,12 +136,16 @@ app.post('/creating_restaurant', function (req, res){
     }
 });
 
-app.post('/seller_login_submitted', function (req, res) {
-    //TODO check if already logged In
-    //if so, just ask the authKey only
-    //else ask the whole page
-    postSellerlogin(app,req, res);
+app.post('/seller_login', function (req, res) {
+    postSellerLogin(app,req, res);
 });
+
+/************ SELLER   DELETE Request Routers *********/
+
+app.delete('/item', function (req, res) {
+    console.log(req.query);
+    console.log(req.body);
+})
 
 /************ CUSTOMER GET Request PART ************/
 

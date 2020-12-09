@@ -38,7 +38,7 @@ function searchRestaurants(app,req,res){
     if (searchString){ // If there's the text then
         dbSearch = restaurantModel.find({ $text: { $search: searchString }},
                                             { score: { $meta: "textScore" }})
-                                      .sort({ score: { $meta: "textScore" } });
+                                      .sort({ score: { $meta: "textScore" }});
     }else{ //Else that means the user triggered the website with a budget
         dbSearch = restaurantModel.find();
     }

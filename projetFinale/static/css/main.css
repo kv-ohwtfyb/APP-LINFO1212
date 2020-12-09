@@ -882,7 +882,7 @@ footer p,a{
     margin-left: 0;
 }
 .add-item section ul li .item{
-    width: 396px;
+    width: 360px;
     height: 20px;
     text-align: left;
     padding: 6px;
@@ -899,6 +899,7 @@ footer p,a{
     right: 15px;
     position: absolute;
 }
+
 .filepond{
     width: 100%;
     height: 100%;
@@ -919,11 +920,12 @@ footer p,a{
 .table-of-customer-orders tr td button{
     width: 100%;
 }
-.input-page .filepond{
+.input-page .announcement .filepond{
     width: 380px;
     height: 380px;
     justify-self: center;
 }
+
 
 /* Special attributes classes these classes possess only special attributes and
 are used as secondary classes in html. */
@@ -1013,4 +1015,10 @@ are used as secondary classes in html. */
 }
 .block{
     display: block;
+}
+
+.align-center{
+    align-content: center;
+    display: inline-flex;
+    alignment: center;
 }

@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const { setVirtualImageSrc } = require('./functions');
+const bcrypt = require('bcrypt');
 
 const userSchema = new Schema({
     name     : { type : String,                       required : true },
@@ -22,15 +23,22 @@ userSchema.methods.isSeller = function () {
 }
 
 /**
-    Returns the restaurant where this._id is admin and the authKey is the
-    correspond. If there's not then it returns none.
-    @param authKey (String) : the authentication key in the restaurant
-    @return restaurant (restaurantModel) : the restaurant.
+ *  Returns the restaurant where this._id is admin and the authKey is the
+ *  correspond. If there's not then it returns throws an error.
+ *  @param authKey (String) : the authentication key in the restaurant
+ *  @return restaurant (restaurantModel) : the restaurant.
+ *  @return {Promise|PromiseLike<T>|Promise<T>}
+ *  @throws Error.
  */
 userSchema.methods.getSellerRestaurant = function (authKey){
-    if (typeof authKey !== "string") throw "The authKey given is not a string";
-    return restaurantModel.findOne({ admin : this._id, authKey : authKey }).then((rest) => {
-        return rest;
+    if (authKey instanceof String) throw Error("The authKey given is not a string");
+    return restaurantModel.findOne({ admin : this._id }).then((rest) => {
+        if (!(rest)){ throw Error("No restaurant found under your email. You should try create a restaurant first."); }
+        if (bcrypt.compare(authKey, rest.authKey)){
+            return rest;
+        }else {
+            throw Error("The authentication key didn't match the authentication key on " + rest.name + ".");
+        }
     });
 }
 
@@ -45,7 +53,7 @@ const groupSchema = new Schema({
     maxSelection  : { type : Number,              required : true },
     minSelection  : { type : Number,              required : true },
     description   : { type : String,              required : false }
-}, {_id : false, autoIndex: false});
+}, { _id : false, autoIndex: false });
 
 const groupModel = new mongoose.model('Group', groupSchema);
 
@@ -212,32 +220,37 @@ restaurantSchema.methods.updateGroup = function (name, spec) {
  *       imgSrc : ...,
  *       imgType : ...
  *    }
- * @param array : Array oof restaurants
- * @return {Promise<*>}
+ * @param array : Array of restaurants
+ * @return {{avgPrice: *, name: *, imgSrc }[]}
  */
 restaurantSchema.statics.arrayOfRestaurantsForDisplay = function ( array = null){
     if (array){
-        array.forEach(function (resto) {
-            resto._id; delete resto._id;
-            if (resto.image){
-                setVirtualImageSrc(resto);
-            }
-            delete resto.authKey; delete resto.admin;
-            delete resto.groups; delete resto.orders;
-            delete resto.items; delete resto.payments;
-        });
-        return array;
+        return array.map((item) =>{
+                const object = {
+                    name : item.name,
+                    avgPrice : item.avgPrice,
+                };
+                if (item.image){
+                    object.image = item.image;
+                    object.imageType = item.imageType;
+                    setVirtualImageSrc(object);
+                }
+                return object;
+            });
     }else{
         return restaurantModel.find().then((result) => {
-            result = result.map(resto => {
-                resto.msg = "here";
-                delete resto.authKey; delete resto.admin;
-                delete resto.groups; delete resto.orders;
-                delete resto.items; delete resto.payments;
-                return resto;
-            });
-            console.log(Array.isArray(result));
-            return result;
+            return result.map((item) =>{
+                const object = {
+                    name : item.name,
+                    avgPrice : item.avgPrice,
+                };
+                if (item.image){
+                    object.image = item.image;
+                    object.imageType = item.imageType;
+                    setVirtualImageSrc(object);
+                }
+                return object;
+            })
         });
     }
 }

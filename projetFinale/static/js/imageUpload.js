@@ -9,8 +9,8 @@ document.addEventListener('DOMContentLoaded', ()=>{
                             FilePondPluginImageResize);
     FilePond.setOptions({
       stylePanelAspectRatio: 1,
-      imageResizeTargetHeight: 200,
-      imageResizeTargetWidth: 200,
+      imageResizeTargetHeight: 400,
+      imageResizeTargetWidth: 400,
     });
     FilePond.parse(document.body)
 });

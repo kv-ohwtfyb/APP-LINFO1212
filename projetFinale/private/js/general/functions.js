@@ -26,9 +26,9 @@ function savingImage(model, imgEncoded) {
     @param obj (Object) : An object that will be containing the imgSrc
  */
 function setImageSrc(obj){
-    if (obj.image != null){
+    if (obj.image){
         obj["imgSrc"] = `data:${obj.imageType};charset=utf-8;base64,${obj.image.toString('base64')}`;
-    }else { obj["imgSrc"] = "" }
+    }else { obj["imgSrc"] = "";}
 }
 
 exports.savingImageToModel = savingImage;
