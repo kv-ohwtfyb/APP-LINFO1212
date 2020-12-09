@@ -32,7 +32,7 @@ function creatingRestaurant(app, req, res){
         restaurant.save()
             .then((restaurant) =>{
                 console.log("Created the restaurant " + restaurant.name);
-                res.redirect('/orders');
+                res.redirect('/');
             })
             .catch((err) => {
                 res.render("./seller/CreateRestaurantSpeci.html", {
