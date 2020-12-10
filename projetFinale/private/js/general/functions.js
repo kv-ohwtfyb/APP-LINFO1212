@@ -1,5 +1,6 @@
 const { restaurantModel, itemSchema } = require('./schemas');
 const mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
 
 /**
     Saves the encoded image to a model. The schema must have an image key that takes a
@@ -40,15 +41,45 @@ function formatText(text) {
     return formatRemoveWhiteSpaces(text).toLowerCase();
 }
 
-/*
-    Return the text without blank spaces.
-    text (String ) : the text to format.
+
+/**
+ * Returns a tring with all white spaces removed.
+ * @param string
+ * @return {string}
  */
-function formatRemoveWhiteSpaces(name) {
-    return name.trim().replace(/\s/g, "");
+function formatRemoveWhiteSpaces(string) {
+    return string.trim().replace(/\s/g, "");
 }
 
+/**
+ * Checks if a hashed string content is equal to a string
+ * @param hashedString
+ * @param string
+ * @return Promise<Boolean>
+ */
+async function compareHashStringToARegularString(string, hashedString){
+    return await bcrypt.compare(string, hashedString).then((result) => {
+        return result;
+    });
+}
+
+/**
+ * Returns the 1st element in the array that when passed to the predicate the, predicate result
+ * is true.
+ * @param array []
+ * @param predicate Promise<Boolean>
+ * @return Object
+ */
+async function findInAnArrayWithASyncPredicate(array, predicate){
+    for (let i = 0; i < array.length; i++) {
+        if (await predicate(array[i])){
+            return array[i]
+        }
+    }
+}
 exports.savingImageToModel = savingImage;
 exports.setVirtualImageSrc = setImageSrc
 exports.formatText = formatText;
 exports.formatRemoveWhiteSpaces = formatRemoveWhiteSpaces;
+exports.hashComparing = compareHashStringToARegularString;
+exports.findWithPromise = findInAnArrayWithASyncPredicate;

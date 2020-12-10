@@ -1,5 +1,5 @@
 const { userModel, restaurantModel } = require('./../general/schemas');
-const { savingImageToModel } = require('./../general/functions');
+const { savingImageToModel, setVirtualImageSrc } = require('./../general/functions');
 const { userLoggingCheck } = require('./../customer/POST');
 const bcrypt = require('bcrypt');
 
@@ -7,26 +7,21 @@ const bcrypt = require('bcrypt');
 function sellerLogin(app, req, res){
     if (!(req.session.user)){ //If not logged in
         userLoggingCheck(req)
-            .then((result) =>{
-                if (result.status){
+            .then(() => {
                     sellerLogInCheck(req.session.user, req)
-                        .then((check) => {
-                            res.redirect('/dashboard');
-                        })
+                        .then(() => { res.redirect('/dashboard'); })
                         .catch((error) => {
                             res.render('./seller/SellerLoginPage.html',
                                 { loginError: error.message, loggedIn : req.session.user });
                         });
-                }else {
+                })
+            .catch((error) =>{
                     res.render('./seller/SellerLoginPage.html',
-                        { loginError: result.msg, loggedIn : req.session.user });
-                }
-        });
+                        { loginError: error.msg, loggedIn : req.session.user });
+                });
     }else{
         sellerLogInCheck(req.session.user, req)
-            .then((check) => {
-                res.redirect('/dashboard');
-            })
+            .then(() => { res.redirect('/dashboard'); })
             .catch((error) => {
                 res.render('./seller/SellerLoginPage.html',
                     { loginError: error.message, loggedIn : req.session.user });
@@ -60,17 +55,36 @@ function creatingRestaurant(app, req, res){
     })
 }
 
+function addItem(app, res, req){
+    restaurantModel.findById(req.session.restaurant._id).then((restaurant) => {
+        if (restaurant){
+            const itemSpec = req.body; itemSpec.soldAlone = itemSpec.soldAlone === 'on';
+            if (req.body.image) savingImageToModel(itemSpec, req.body.image);
+            console.log(req.body);
+            restaurant.addItem(itemSpec)
+                .then(() => {res.redirect('/dashboard')})
+                .catch((error) => {
+                    itemSpec["Error"] = error.message;
+                    res.render('./seller/AddOrModifyItem.html',
+                        itemSpec );
+                });
+        }else{
+            res.render('./seller/SellerLoginPage.html',
+                { Error : "Your restaurant seems to no longer exist in pur database. Contact us"});
+        }
+    })
+}
+
 
 exports.postSellerLogin = sellerLogin;
 exports.postCreatingRestaurant = creatingRestaurant;
-
+exports.postAddItem = addItem;
 
 async function sellerLogInCheck(user, req){
     let User = await userModel.findById(req.session.user._id).exec();
     return User.getSellerRestaurant(req.body.authKey)
         .then((restaurant) => {
             if (restaurant) req.session.restaurant = restaurant;
-            console.log(restaurant);
         })
         .catch((error) => {throw error;});
 }

@@ -1,4 +1,5 @@
-const { restaurantModel } = require('./../general/schemas')
+const { restaurantModel } = require('./../general/schemas');
+const { formatText } = require('./../general/functions')
 
 function addOrModifyGroup(app, req, res){
     res.render('./Seller/AddOrModifyGroup.html');
@@ -38,11 +39,22 @@ function sellerStore(app,req, res){
 }
 
 function sendListOfGroups(app, req, res){
-    console.log(req.session.restaurant);
     restaurantModel.findById(req.session.restaurant._id).then((restaurant) => {
         if (restaurant){
             res.json({ status : true,
-                       result : groupNameArrayMapToMatchString(restaurant.listOfGroupNames(), req.query.search)
+                       result : elementsNameArrayMapToMatchString(restaurant.listOfGroupNames(), req.query.search)
+                    })
+        }else{
+            res.json({ status : false, msg :"First login as a restaurant seller."});
+        }
+    })
+}
+
+function sendListOfCategories(app, req, res){
+    restaurantModel.findById(req.session.restaurant._id).then((restaurant) => {
+        if (restaurant){
+            res.json({ status : true,
+                       result : elementsNameArrayMapToMatchString(restaurant.listOfCategoriesNames(), req.query.search)
                     })
         }else{
             res.json({ status : false, msg :"First login as a restaurant seller."});
@@ -52,27 +64,19 @@ function sendListOfGroups(app, req, res){
 
 
 exports.getAddOrModifyGroup = addOrModifyGroup;
-
 exports.getAddOrModifyItem = addOrModifyItem;
-
 exports.getAddOrModifyCategory = addOrModifyMenu;
-
 exports.getAfterCreateRestoMessage = createRestoFinishedMessage;
-
 exports.getCreateRestaurant = createResto;
-
 exports.getOrders = listOfOrders;
-
 exports.getPaymentsPage = paymentsList;
-
 exports.getTheStorePage = sellerStore;
-
 exports.getSellerLoginPage = loggingIn;
-
 exports.getListOfGroupNames = sendListOfGroups;
+exports.getListOfCategories = sendListOfCategories;
 
 
-function groupNameArrayMapToMatchString(array, text) {
+function elementsNameArrayMapToMatchString(array, text) {
     return array.filter((name) => {
         if (text.length > name.length ){
             return false

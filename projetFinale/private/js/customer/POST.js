@@ -3,22 +3,15 @@ const bcrypt = require('bcrypt');
 
 function userLogIn(app, req, res){
     userLoggingCheck(req)
-        .then((check) => {
-            if (check.status) {
-                res.redirect('/');
-            } else {
-                res.render('./customer/UserLoginPage.html', {loginError: check.msg});
-            }
-    });
+        .then(() => { res.redirect('/'); })
+        .catch((err) => { res.render('./customer/UserLoginPage.html', {loginError: err.message}) });
 }
-
-
 
 /********* Function called by userLogIn(...) *******************/
 
 
 /**
- Check if the user is in our database( with the email entered).
+ * Check if the user is in our database( with the email entered).
 
  if we found the email in the database.
   - we take the whole Json of the user (== parameter 'user').
@@ -29,30 +22,28 @@ function userLogIn(app, req, res){
 
   req.body.email = mail the user entered
   req.body.password = password the user entered
-*/
-async function userLoggingCheck(req){
-    const toReturn = this;
-    if(req.body.mail){
-        await userModel.findOne({email: req.body.mail})
-            .then((user) => {
-                if (user) {
-                    if (bcrypt.compare(req.body.password, user.password)){
-                        toReturn.status = true;
-                        req.session.user = user;
-                    } else {
-                        toReturn.msg = "Password Invalid";
-                        toReturn.status = false;
-                    }
-                } else{
-                    toReturn.msg = "E-mail Invalid";
-                    toReturn.status = false;
+ * @param req
+ * @return {Promise|PromiseLike<void>|Promise<Object>}
+ * @throws Errors if the email is not registered, or the passwords don't match.
+ */
+function userLoggingCheck(req){
+    return userModel.findOne({ email: req.body.mail })
+        .then((user) => {
+            if (user) {
+                 return bcrypt.compare(req.body.password, user.password)
+                     .then((result) => {
+                        if(result){
+                            req.session.user = user;
+                        } else {
+                            throw Error("Password Invalid");
+                        }
+                    })
+                    .catch((err) => { throw err });
+            } else {
+                throw Error("E-mail Invalid");
             }
-        });
-    } else {
-        toReturn.msg = "Complete the form, Please";
-        toReturn.status = false;
-    }
-    return toReturn;
+        })
+        .catch((err) => { throw err ;});
 }
 
 

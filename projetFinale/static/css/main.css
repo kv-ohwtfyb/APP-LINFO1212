@@ -899,6 +899,16 @@ footer p,a{
     right: 15px;
     position: absolute;
 }
+.add-item .hoverMenu{
+    margin: 0;
+    display: none;
+    animation: 1s ease-in-out;
+}
+.add-item .hoverMenu li{
+    font-size: 12px;
+    padding-left: 2px;
+    cursor: default;
+}
 
 .filepond{
     width: 100%;
