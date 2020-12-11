@@ -50,6 +50,9 @@ const {
     postAddItem
 } = require('./private/js/seller/POST');
 
+const { updateItem } = require('./private/js/seller/PUT');
+const { deleteItem } = require('./private/js/seller/DELETE');
+
 app.use(bodyParser.urlencoded({ extended :true, limit: '50mb' }));
 app.engine('html', consolidate.hogan);
 app.set('views', 'templates');
@@ -125,21 +128,6 @@ app.get('/logout', (req,res ) => {
    res.redirect('/');
 });
 
-app.get('/getGroups', function (req, res){
-    if (req.session.restaurant){
-        getListOfGroupNames(app, req, res);
-    }else {
-        res.json({ status : false, msg :"First login as a restaurant seller."});
-    }
-});
-
-app.get('/getCategories', ((req, res) => {
-    if (req.session.restaurant){
-        getListOfCategories(app, req, res);
-    }else {
-        res.json({ status : false, msg :"First login as a restaurant seller."});
-    }
-}))
 /************ Seller POST Request PART ************/
 
 app.post('/group', function (req, res) {
@@ -176,8 +164,15 @@ app.post('/seller_login', function (req, res) {
 /************ SELLER   DELETE Request Routers *********/
 
 app.delete('/item', function (req, res) {
-    console.log(req.body);
+    deleteItem(app, req, res);
 })
+
+/************ SELLER   DELETE Request Routers *********/
+
+app.put('/item', function (req, res) {
+    updateItem(app, req, res);
+})
+
 
 /************ CUSTOMER GET Request PART ************/
 

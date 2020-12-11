@@ -18,7 +18,7 @@ function savingImage(model, imgEncoded) {
   const img = JSON.parse(imgEncoded);
   if (img != null && ["image/jpeg", "image/png", "images/gif", "image/jpg"].includes(img.type)) {
     model.image = new Buffer.from(img.data, "base64");
-    model.imageType = img.type
+    model.imageType = img.type;
   }
 }
 
@@ -77,9 +77,21 @@ async function findInAnArrayWithASyncPredicate(array, predicate){
         }
     }
 }
+
+function itemAddOrUpdateBodyParser(reqBody){
+    const toReturn = Object.assign({},reqBody);
+    toReturn.soldAlone = toReturn.soldAlone === 'on';
+    if (reqBody.image) { savingImage(toReturn, reqBody.image);}
+    else                { delete toReturn.image; }
+    if (reqBody.groups.length > 0 ) toReturn.groups = toReturn.groups.split("|").slice(0,-1);
+    delete toReturn.categories;
+    return toReturn
+}
+
 exports.savingImageToModel = savingImage;
 exports.setVirtualImageSrc = setImageSrc
 exports.formatText = formatText;
 exports.formatRemoveWhiteSpaces = formatRemoveWhiteSpaces;
 exports.hashComparing = compareHashStringToARegularString;
 exports.findWithPromise = findInAnArrayWithASyncPredicate;
+exports.getItemSpecFromReqBody = itemAddOrUpdateBodyParser;

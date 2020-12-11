@@ -1,36 +1,59 @@
+const {setVirtualImageSrc} = require("../general/functions");
 const { restaurantModel } = require('./../general/schemas');
 const { formatText } = require('./../general/functions')
 
 function addOrModifyGroup(app, req, res){
-    res.render('./Seller/AddOrModifyGroup.html');
+    res.render('./seller/AddOrModifyGroup.html');
 }
 
 function addOrModifyItem(app, req, res){
-    res.render('./Seller/AddOrModifyItem.html');
+    restaurantModel.findById(req.session.restaurant._id).then(async (restaurant) => {
+        const listOfGroups = await restaurant.listOfGroupNames();
+        const listOfCategories = await restaurant.listOfCategoriesNames();
+        if (req.query.name){
+            const item = await restaurant.getItem(req.query.name);
+            if (item){
+                if (item.image) await setVirtualImageSrc(item);
+            }
+            const options = await Object.assign(
+                    {
+                                listOfCategories : listOfCategories,
+                                listOfGroups : listOfGroups,
+                                itemExist : item !== null,
+                            }, item);
+            res.render('./seller/AddOrModifyItem.html', options);
+        }else{
+            res.render('./seller/AddOrModifyItem.html', {
+                                listOfCategories : listOfCategories,
+                                listOfGroups : listOfGroups
+                            });
+        }
+
+    })
 }
 
 function addOrModifyMenu(app, req, res){
-    res.render('./Seller/AddOrModifyCategory.html')
+    res.render('./seller/AddOrModifyCategory.html')
 }
 
 function createRestoFinishedMessage(app, req, res){
-    res.render('./Seller/CreateRestaurantFinished.html')
+    res.render('./seller/CreateRestaurantFinished.html')
 }
 
 function createResto(app,req, res){
-    res.render('./Seller/CreateRestaurantSpeci.html');
+    res.render('./seller/CreateRestaurantSpeci.html');
 }
 
 function listOfOrders(app, req, res){
-    res.render('./Seller/DashboardPage.html');
+    res.render('./seller/DashboardPage.html');
 }
 
 function paymentsList(app, req, res){
-    res.render('./Seller/PaymentsPage.html');
+    res.render('./seller/PaymentsPage.html');
 }
 
 function loggingIn(app, req, res){
-    res.render('./Seller/SellerLoginPage.html',
+    res.render('./seller/SellerLoginPage.html',
         { loggedIn : req.session.user });
 }
 
@@ -38,29 +61,6 @@ function sellerStore(app,req, res){
     res.render('./Seller/StorePage.html')
 }
 
-function sendListOfGroups(app, req, res){
-    restaurantModel.findById(req.session.restaurant._id).then((restaurant) => {
-        if (restaurant){
-            res.json({ status : true,
-                       result : elementsNameArrayMapToMatchString(restaurant.listOfGroupNames(), req.query.search)
-                    })
-        }else{
-            res.json({ status : false, msg :"First login as a restaurant seller."});
-        }
-    })
-}
-
-function sendListOfCategories(app, req, res){
-    restaurantModel.findById(req.session.restaurant._id).then((restaurant) => {
-        if (restaurant){
-            res.json({ status : true,
-                       result : elementsNameArrayMapToMatchString(restaurant.listOfCategoriesNames(), req.query.search)
-                    })
-        }else{
-            res.json({ status : false, msg :"First login as a restaurant seller."});
-        }
-    })
-}
 
 
 exports.getAddOrModifyGroup = addOrModifyGroup;
@@ -72,8 +72,6 @@ exports.getOrders = listOfOrders;
 exports.getPaymentsPage = paymentsList;
 exports.getTheStorePage = sellerStore;
 exports.getSellerLoginPage = loggingIn;
-exports.getListOfGroupNames = sendListOfGroups;
-exports.getListOfCategories = sendListOfCategories;
 
 
 function elementsNameArrayMapToMatchString(array, text) {
