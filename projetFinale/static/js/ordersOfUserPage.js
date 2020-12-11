@@ -7,17 +7,14 @@ $(document).ready(function (){
         $('#msg').show(() => { setTimeout( () => { $('#msg').hide()} ,5000); });
         
     });
-
-    $("#submit_popup").on('click', function () {
-        dialog.hide(function () {
-
-            alert("Value rendered : " + dialog.val() );
-
-        });
+    
+    $("#submit_popup").click(function () {
+        alert("Button clicked and data : " + dialog.val());
     });
+    
 
     $("#close_popup").on('click', function () {
-        dialog.hide(995);
+        dialog.hide(500);
     });
 
 });

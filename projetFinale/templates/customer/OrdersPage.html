@@ -78,6 +78,7 @@
     </header>
     <section class="list-orders">
         <h1>All of Your Orders</h1>
+        {{#orders}}
         <table class="table-of-customer-orders table-of-payments table-of-orders">
             <tr class="header-row">
                 <th>Order</th>
@@ -88,9 +89,9 @@
                 <th>Action</th>
             </tr>
             <tr class="shadow paid">
-                <td class="orderId">{{orderId}}</td >
+                <td class="orderId">{{_id}}</td >
                 <td class="date">{{date}}</td>
-                <td class="batiment">{{batiment}} </td>
+                <td class="batiment">{{building}} </td>
                 <td class="status">{{status}}</td>
                 <td class="total">{{total}}</td>
                 <td class="action">
@@ -98,32 +99,37 @@
                 </td>
             </tr>
         </table>
+        {{/orders}}
+        {{^orders}}
+            <h1> You have any orders yet</h1>
+        {{/orders}}
+
     </section>
     <dialog class=" popup-plate popup-item-specifications  text-align-left" id="popup_item">
         <h2>ORDER</h2>
 
         <section >
             <ul class="order-view-text-align-left" >
-                <li>Order ID : {{orderId}} <!--#i896eh6983h --></li>
+                <li>Order ID : {{_id}} <!--#i896eh6983h --></li>
                 <li>Date     : {{date}} <!--25 Feb 2020--></li>
-                <li>Batiment : {{batiment}} <!--Batiment Reamur--></li>
+                <li>Batiment : {{building}} <!--Batiment Reamur--></li>
                 <li>Status   : {{status}} <!--Delivered--></li>            
             </ul>
         </section>  
         <p id="msg">{{msg}}</p>
-        <form method="dialog" action="/userReOrder">
+        <form method="dialog" action="/userReOrder" method="GET">
         
             <ul class="full-width-section order-view-text-align-left">
                 {{#restaurants}}
                 <li>
-                    <h2 >{{restaurant}}</h2>
+                    <h2 name ="RestoName" >{{restaurant}}</h2>
                     <hr class="bg-color-black">
                     <ul>
                         {{#items}}
                         <li class="item">
-                            <input type="number" value="{{quantity}}" class="bg-color-black border-less" name="{{restaurant}}|{{name}}" disabled>
-                            <p class="name text-align-left" id="name">{{name}}</p>
-                            <p class="text-align-right">{{unityPrice}}€</p>
+                            <input type="number" value="{{quantity}}" class="bg-color-black border-less" name="{{restaurant}}|{{name}}">
+                            <p class="name text-align-left" id="name" name ="itemName" >{{name}}</p>
+                            <p class="text-align-right" name ="unityPrice" >{{unityPrice}}€</p>
                         </li>
                         {{/items}}
                     </ul>
@@ -131,11 +137,9 @@
                 {{/restaurants}}
                 
             </ul>
-        </form>
-        <section class="buttons">
             <button value="cancel" class="bg-color-black color-white" id="close_popup" >Annuler</button>
-            <button value="default" class="bg-color-green" id="submit_popup" type="submit" form="dialog">REORDER {{total}}</button>
-        </section>
+            <button value="default" class="bg-color-green" id="submit_popup" type="submit"ç!>REORDER {{total}}</button>
+        </form>        
     </dialog>
 </body>
 </html>

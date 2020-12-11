@@ -8,10 +8,6 @@ mongoose.connect('mongodb://localhost:27017/testingdb',
 
 // Creating user
 
-<<<<<<< HEAD
-
-=======
->>>>>>> refs/remotes/origin/master
 const user = new userModel({
     name     : "Hirwa Heri",
     email    : "mmihigojonathan@gmail.com",
@@ -26,10 +22,6 @@ user.save(function (err, user) {
     else     { console.log(`Saved ${ user.name } to the database.`);}
 });
 
-<<<<<<< HEAD
-/*
-=======
->>>>>>> refs/remotes/origin/master
 //Finding user
 userModel.findById("5fc9190e2505090504522265")
     .then((user) => {
@@ -37,4 +29,3 @@ userModel.findById("5fc9190e2505090504522265")
             console.log(res);
         });
 });
-*/

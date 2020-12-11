@@ -1,4 +1,4 @@
-const { restaurantModel } = require('./../general/schemas');
+const { userModel, restaurantModel } = require('./../general/schemas');
 const { setVirtualImageSrc } = require('./../general/functions');
 
 function homePage(app, req, res){
@@ -19,14 +19,32 @@ function homePage(app, req, res){
  * Then render a page with a list of orders the use has ever ordered or an empty list if the user hasn't ordered anything.
  * */
 function ordersPage(app,req,res){
+    /*
+    const user = req.session.user;
+    userModel.find({name: user.name}, function (err, doc) {
+        if(err){
+            res.json(err);
+        } else {
+            res.render('./customer/OrdersPage.html', { 
+                loggedIn: true,
+                name: user.name,
+                orders: user.orders,
+                restaurants: user.orders.restaurant
+            });
+        }
+    })
+    .catch((err) => { console.log(`Caught by .catch ${err}`);});
+    */
+    
     const user = req.session.user;
     if(user){
         res.render('./customer/OrdersPage.html', {
             loggedIn: true,
             name: user.name,
-            orderId : '#hfj12f5f1f145',
+            orders: true,
+            _id : '#hfj12f5f1f145',
             date : "Dec 08 2020",
-            batiment: "Batiment Mihigo",
+            building: "Batiment Mihigo",
             status: "delivered",
             total: "2.80 €",
             msg: "This is where message of refuse will go",
@@ -50,6 +68,7 @@ function ordersPage(app,req,res){
     } else {
         res.redirect('/');
     }
+    
     
 }
 
