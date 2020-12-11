@@ -8,22 +8,23 @@ mongoose.connect('mongodb://localhost:27017/testingdb',
 restaurantModel.findOne({ name : "Exki" }).then((theRestaurant) => {
     restaurantModel.findById(theRestaurant._id).then((rest) => {
         rest.addGroup(new groupModel({
-            id : "Hot drink choice",
+            name : "Cold Sandwiches",
             items : [{
-                        name : "Italian coffee",
+                        name : "Club Viennese",
                         charge : 2.05,
                     },
                     {
-                        name : "Cappuccino",
+                        name : "Cheese",
                         charge : 3.45,
+                    },
+                    {
+                        name : "Meatballs",
+                        charge : 5.45,
                     }
                     ],
             maxSelection : 1,
             minSelection : 0,
-            description : "This group gives the choice between hot drinks."
+            description : "This group gives the choice contains sandwiches."
         }));
-    });
-    restaurantModel.findById(theRestaurant._id).then((rest) => {
-        console.log(rest)
     });
 });

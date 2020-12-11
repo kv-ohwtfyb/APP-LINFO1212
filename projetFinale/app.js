@@ -29,7 +29,9 @@ const {
     getPaymentsPage,
     getTheStorePage,
     getSellerLoginPage,
-    getAfterCreateRestoMessage
+    getAfterCreateRestoMessage,
+    getListOfGroupNames,
+    getListOfCategories
 } = require('./private/js/seller/GET');
 
 const {
@@ -44,7 +46,8 @@ const {
 
 const {
     postSellerLogin,
-    postCreatingRestaurant
+    postCreatingRestaurant,
+    postAddItem
 } = require('./private/js/seller/POST');
 
 app.use(bodyParser.urlencoded({ extended :true, limit: '50mb' }));
@@ -65,16 +68,26 @@ app.use(session({
 
 /************ SELLER GET Request PART ************/
 
-app.get('/add_group', (req, res) => {
+app.get('/group', (req, res) => {
     getAddOrModifyGroup(app, req, res);
 });
 
-app.get('/add_item', (req, res) => {
-    getAddOrModifyItem(app, req, res);
+app.get('/item', (req, res) => {
+    if (req.session.user){
+        getAddOrModifyItem(app, req, res);
+    }else {
+        res.render('./seller/SellerLoginPage.html',
+            { loginError : "To access the item modification page you have to login as a seller."});
+    }
 });
 
-app.get('/add_category', ((req, res) => {
-    getAddOrModifyCategory(app, req, res);
+app.get('/category', ((req, res) => {
+    if (req.session.user){
+        getAddOrModifyCategory(app, req, res);
+    }else {
+        res.render('./seller/SellerLoginPage.html',
+            { loginError : "To access the item modification page you have to login as a seller."});
+    }
 }));
 
 app.get('/message', (req, res) => {
@@ -112,14 +125,34 @@ app.get('/logout', (req,res ) => {
    res.redirect('/');
 });
 
+app.get('/getGroups', function (req, res){
+    if (req.session.restaurant){
+        getListOfGroupNames(app, req, res);
+    }else {
+        res.json({ status : false, msg :"First login as a restaurant seller."});
+    }
+});
+
+app.get('/getCategories', ((req, res) => {
+    if (req.session.restaurant){
+        getListOfCategories(app, req, res);
+    }else {
+        res.json({ status : false, msg :"First login as a restaurant seller."});
+    }
+}))
 /************ Seller POST Request PART ************/
 
-app.post('/add-group', function (req, res) {
+app.post('/group', function (req, res) {
     console.log(req.body);
 });
 
-app.post('/add_item', function(req, res){
-    console.log(req.body);
+app.post('/item', function(req, res){
+    if (req.session.restaurant){
+        postAddItem(app, res, req);
+    }else{
+        res.render('./seller/SellerLoginPage.html',
+            { Error : "To access the item modification page you have to login as a seller."});
+    }
 });
 
 app.post('/menu', function (req, res){
@@ -139,9 +172,13 @@ app.post('/creating_restaurant', function (req, res){
 app.post('/seller_login', function (req, res) {
     postSellerLogin(app,req, res);
 });
-app.post('/userReOrder', function (req, res){
+
+/************ SELLER   DELETE Request Routers *********/
+
+app.delete('/item', function (req, res) {
     console.log(req.body);
 })
+
 /************ CUSTOMER GET Request PART ************/
 
 app.get('/', function (req, res) {
@@ -167,29 +204,6 @@ app.get('/restaurant_view',(req,res) =>{
 })
 
 app.get('/search',(req,res) => {
-    req.session.basket = {
-        restaurants : [{
-            restaurant : "Burger King",
-            items      : [{
-                            name : "Double Whooper",
-                            groupSets : [],
-                            unityPrice : 10,
-                            quantity : 4
-                            }]
-                        },
-                        {
-            restaurant : "O'Tacos",
-            items      : [{
-                            name : "XL Tacos",
-                            groupSets : [],
-                            unityPrice : 13.5,
-                            quantity : 1
-                            }]
-                        }
-        ],
-        totalItems  : 5,
-        totalAmount : 40 + 13.5
-    }
     getSearchRestaurants(app,req,res);
 })
 app.get('/check_out',(req,res) =>{

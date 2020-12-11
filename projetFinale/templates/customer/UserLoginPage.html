@@ -16,9 +16,9 @@
         <form action="/user_log_in" class="round-border" method="POST">
             <p class="msg" >{{loginError}}</p>
             <label for="email"></label>
-            <input type="email" name="mail" placeholder="Email..." id="email">
+            <input type="email" name="mail" placeholder="Email..." id="email" required>
             <label for="password"></label>
-            <input type="password" name="password" placeholder="Password..." id="password">
+            <input type="password" name="password" placeholder="Password..." id="password" required>
             <input type="submit" value="Log in" class="bg-color-black">
         </form>
         <a href="">Forgot password?</a>
