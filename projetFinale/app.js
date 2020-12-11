@@ -139,7 +139,9 @@ app.post('/creating_restaurant', function (req, res){
 app.post('/seller_login', function (req, res) {
     postSellerLogin(app,req, res);
 });
-
+app.post('/userReOrder', function (req, res){
+    console.log(req.body);
+})
 /************ CUSTOMER GET Request PART ************/
 
 app.get('/', function (req, res) {

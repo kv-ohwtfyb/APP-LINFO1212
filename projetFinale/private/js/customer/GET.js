@@ -20,7 +20,37 @@ function homePage(app, req, res){
  * */
 function ordersPage(app,req,res){
     const user = req.session.user;
-    res.render('./customer/OrdersPage.html', {loggedIn: true,name: user.name, order: user.orders});
+    if(user){
+        res.render('./customer/OrdersPage.html', {
+            loggedIn: true,
+            name: user.name,
+            orderId : '#hfj12f5f1f145',
+            date : "Dec 08 2020",
+            batiment: "Batiment Mihigo",
+            status: "delivered",
+            total: "2.80 €",
+            msg: "This is where message of refuse will go",
+            restaurants: [{
+                restaurant : 'Quick',
+                items: [{
+                    name: "Durum",
+                    unityPrice : 2.30,
+                    quantity : 2
+                }]
+            }, 
+            {
+                restaurant : 'Mihigo',
+                items: [{
+                    name: "Chicken Wings",
+                    unityPrice : 0.50,
+                    quantity : 3
+                }]
+            }],
+            });
+    } else {
+        res.redirect('/');
+    }
+    
 }
 
 function logInPage(app,req,res){

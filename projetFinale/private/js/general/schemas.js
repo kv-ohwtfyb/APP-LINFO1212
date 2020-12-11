@@ -308,6 +308,7 @@ const orderSchema = new Schema({
                                 total : Number
                             }],                         required : true  },
     status      : { type : String,                      required : true  },
+    building    : { type : String,                      required : true  },
     date        : { type : Object,                      required : true,            default: new Date() },
     cancelRest  : { type : String,                      required : false },
     user        : { type : mongoose.ObjectId,           required : true  }

@@ -335,10 +335,7 @@ header form input[type=submit]:active{
     width: 95%;
     
 }
-.popup-plate button[type=submit]{
-    display: none;
-    height: 40px;
-}
+
 .popup-plate .bottom-of-container{
     bottom: 10%;
     position: absolute;
@@ -1024,6 +1021,14 @@ are used as secondary classes in html. */
 }
 .block{
     display: block;
+}
+
+#msg{
+    width: 100%;
+    background-color: #ff0000;
+    color: #ffffff;
+    text-align: center;
+
 }
 
 .align-center{

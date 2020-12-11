@@ -9,7 +9,7 @@
     <!--    JavaScript Imports-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script type="text/javascript" src="js/header.js"></script>
-    <script type="text/javascript" src="js/filter.js"></script>
+    <script type='text/javascript' src="js/ordersOfUserPage.js"></script>
 </head>
 <body>
     <header>
@@ -88,16 +88,13 @@
                 <th>Action</th>
             </tr>
             <tr class="shadow paid">
-                <td class="orderId">#i896eh6983h</td >
-                <td class="date">
-                    <Date>25 Feb 2020</Date>
-                    <p>11:09</p>
-                </td>
-                <td class="batiment">Batiment Reamur</td>
-                <td class="status">Delivered</td>
-                <td class="total">29,78€</td>
+                <td class="orderId">{{orderId}}</td >
+                <td class="date">{{date}}</td>
+                <td class="batiment">{{batiment}} </td>
+                <td class="status">{{status}}</td>
+                <td class="total">{{total}}</td>
                 <td class="action">
-                    <button>Reorder</button>
+                    <button id="reOrder_btn"> Details </button>
                 </td>
             </tr>
         </table>
@@ -107,34 +104,37 @@
 
         <section >
             <ul class="order-view-text-align-left" >
-                <li>Order ID :{{orderId}}#i896eh6983h</li>
-                <li>Date     :{{date}}25 Feb 2020</li>
-                <li>Batiment :{{batiment}}Batiment Reamur</li>
-                <li>Status   :{{status}}Delivered</li>            
+                <li>Order ID : {{orderId}} <!--#i896eh6983h --></li>
+                <li>Date     : {{date}} <!--25 Feb 2020--></li>
+                <li>Batiment : {{batiment}} <!--Batiment Reamur--></li>
+                <li>Status   : {{status}} <!--Delivered--></li>            
             </ul>
         </section>  
-
-        <form method="dialog">
+        <p id="msg">{{msg}}</p>
+        <form method="dialog" action="/userReOrder">
+        
             <ul class="full-width-section order-view-text-align-left">
-                
+                {{#restaurants}}
                 <li>
-                    <h2>O'TACOS</h2>
+                    <h2 >{{restaurant}}</h2>
                     <hr class="bg-color-black">
                     <ul>
+                        {{#items}}
                         <li class="item">
-                            <input type="number" min="1" max="20" value="1" class="bg-color-black border-less" name="{{restaurant}}|{{name}}">
-                            <p class="name text-align-left" id="name">O'TACOS XL Andalouse</p>
-                            <p class="text-align-right">7,80€</p>
+                            <input type="number" value="{{quantity}}" class="bg-color-black border-less" name="{{restaurant}}|{{name}}" disabled>
+                            <p class="name text-align-left" id="name">{{name}}</p>
+                            <p class="text-align-right">{{unityPrice}}€</p>
                         </li>
-                        
+                        {{/items}}
                     </ul>
                 </li>
+                {{/restaurants}}
                 
             </ul>
         </form>
         <section class="buttons">
-            <button type="submit" class="bg-color-black color-white" value="cancel" id="close_popup">Annuler</button>
-            <button type="submit" class="bg-color-green">REORDER {{total}}</button>
+            <button value="cancel" class="bg-color-black color-white" id="close_popup" >Annuler</button>
+            <button value="default" class="bg-color-green" id="submit_popup" type="submit" form="dialog">REORDER {{total}}</button>
         </section>
     </dialog>
 </body>
