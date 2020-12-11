@@ -109,7 +109,7 @@
         <h2>ORDER</h2>
 
         <section >
-            <ul class="order-view-text-align-left" >
+            <ul class="order-view-text-align-left" id="detailsList">
                 <li>Order ID : {{_id}} <!--#i896eh6983h --></li>
                 <li>Date     : {{date}} <!--25 Feb 2020--></li>
                 <li>Batiment : {{building}} <!--Batiment Reamur--></li>
@@ -119,7 +119,7 @@
         <p id="msg">{{msg}}</p>
         <form method="dialog" action="/userReOrder" method="GET">
         
-            <ul class="full-width-section order-view-text-align-left">
+            <ul class="full-width-section order-view-text-align-left" id="orderList">
                 {{#restaurants}}
                 <li>
                     <h2 name ="RestoName" >{{restaurant}}</h2>
