@@ -1,5 +1,5 @@
 const { userModel, restaurantModel } = require('./../general/schemas');
-const { savingImageToModel, setVirtualImageSrc } = require('./../general/functions');
+const { savingImageToModel, getItemSpecFromReqBody } = require('./../general/functions');
 const { userLoggingCheck } = require('./../customer/POST');
 const bcrypt = require('bcrypt');
 
@@ -58,15 +58,29 @@ function creatingRestaurant(app, req, res){
 function addItem(app, res, req){
     restaurantModel.findById(req.session.restaurant._id).then((restaurant) => {
         if (restaurant){
-            const itemSpec = req.body; itemSpec.soldAlone = itemSpec.soldAlone === 'on';
-            if (req.body.image) savingImageToModel(itemSpec, req.body.image);
-            console.log(req.body);
+            const itemSpec = getItemSpecFromReqBody(req.body);
             restaurant.addItem(itemSpec)
-                .then(() => {res.redirect('/dashboard')})
-                .catch((error) => {
-                    itemSpec["Error"] = error.message;
-                    res.render('./seller/AddOrModifyItem.html',
-                        itemSpec );
+                .then(() => {
+                    if (req.body.categories.length > 0 ) {
+                        const categories = req.body.categories.split("|").slice(0,-1);
+                        if (categories){
+                            categories.forEach((name) =>{
+                                restaurant.addItemToCategory(name, itemSpec.name);
+                            })
+                        }
+                    }
+                    res.redirect('/dashboard');
+                })
+                .catch(async (error) => {
+                    const listOfGroups = await restaurant.listOfGroupNames();
+                    const listOfCategories = await restaurant.listOfCategoriesNames();
+                    const options = await Object.assign({
+                            Error : error.message,
+                            listOfCategories : listOfCategories,
+                            listOfGroups : listOfGroups,
+                            categories : req.body.categories.split("|").slice(0,-1)
+                            },itemSpec);
+                    res.render('./seller/AddOrModifyItem.html', options);
                 });
         }else{
             res.render('./seller/SellerLoginPage.html',

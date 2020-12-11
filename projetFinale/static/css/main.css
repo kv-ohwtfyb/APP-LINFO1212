@@ -873,7 +873,7 @@ footer p,a{
     grid-template-columns: 400px auto;
 }
 
-.add-item input[type=text],input[type=number],input[type=search]{
+.add-item input[type=text],input[type=number],input[type=search], .input{
     height: 30px;
 }
 .add-item input{
@@ -907,15 +907,23 @@ footer p,a{
     right: 15px;
     position: absolute;
 }
-.add-item .hoverMenu{
+.add-item datalist{
     margin: 0;
     display: none;
     animation: 1s ease-in-out;
+    background-color: #FFFFFF;
 }
-.add-item .hoverMenu li{
-    font-size: 12px;
-    padding-left: 2px;
-    cursor: default;
+
+.add-item .hover-img {
+    width: 100%;
+    pointer-events: auto;
+}
+.add-item label{
+    min-width: fit-content;
+}
+
+.add-item .error{
+    color: #E71D36;
 }
 
 .filepond{

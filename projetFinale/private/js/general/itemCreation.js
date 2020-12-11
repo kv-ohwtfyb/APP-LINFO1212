@@ -5,6 +5,7 @@ mongoose.connect('mongodb://localhost:27017/testingdb',
     { useNewUrlParser: true, useUnifiedTopology: true }
 );
 
+/*
 restaurantModel.findOne({ name : "Exki" }).then((theRestaurant) => {
     restaurantModel.findById(theRestaurant._id)
         .then((restaurant) => {
@@ -18,4 +19,13 @@ restaurantModel.findOne({ name : "Exki" }).then((theRestaurant) => {
             })
     })
     .catch((err) => console.log(err.message));
+});
+
+ */
+
+restaurantModel.findOne({ name : "Exki" }).then((theRestaurant) => {
+    restaurantModel.findById(theRestaurant._id).then(async (rest) => {
+        const item = await rest.deleteItem({ name : "" });
+        console.log(item);
+    });
 });
