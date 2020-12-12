@@ -724,6 +724,10 @@ footer p,a{
     height: 30px;
 }
 
+.seller-page .buttons button{
+    width: 160px;
+}
+
 .table-of-orders{
     width: 90%;
     align-items: center;
@@ -825,11 +829,13 @@ footer p,a{
     width: 100%;
     height: 100%;
     overflow: hidden;
+    padding: 0;
 }
-.table-of-items .image-container .image{
-    height: fit-content;
-    image-resolution: inherit;
+.table-of-items .image-container img{
+    height: 100%;
+    align-self: center;
 }
+
 .table-of-items .out-of-stock{
     background-color: var(--red);
 }
@@ -912,10 +918,30 @@ footer p,a{
 }
 .add-item label{
     min-width: fit-content;
+    align-self: center;
 }
 
 .add-item .error{
     color: #E71D36;
+}
+
+.table-of-groups{
+    grid-template-columns: auto auto auto;
+}
+.table-of-groups tr{
+    grid-template-columns: auto auto auto;
+}
+.table-of-groups .header-row{
+    grid-template-columns: auto auto auto;
+}
+
+.table-of-categories{
+    grid-template-columns: auto auto;
+    justify-content: space-evenly;
+
+}
+.table-of-categories .header-row{
+    grid-template-columns: auto auto;
 }
 
 .filepond{

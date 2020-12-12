@@ -18,4 +18,30 @@ function deleteAnItemFromARestaurant(app, req, res){
     })
 }
 
+function deleteAGroupFromARestaurant(app, req, res){
+    restaurantModel.findById(req.session.restaurant._id).then((restaurant) => {
+        restaurant.removeGroup(req.body.name)
+            .then(() => {
+                res.json({ status : true })
+            })
+            .catch((err) => {
+                res.json({ status : false, msg : err.message });
+            })
+    })
+}
+
+function deleteACategoryFromRestaurant(app, req, res){
+    restaurantModel.findById(req.session.restaurant._id).then((restaurant) => {
+        restaurant.removeCategory(req.body.name)
+            .then(() => {
+                res.json({ status : true })
+            })
+            .catch((err) => {
+                res.json({ status : false, msg : err.message });
+            })
+    })
+}
+
 exports.deleteItem = deleteAnItemFromARestaurant;
+exports.deleteGroup = deleteAGroupFromARestaurant;
+exports.deleteCategory = deleteACategoryFromRestaurant;

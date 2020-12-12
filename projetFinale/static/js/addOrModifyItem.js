@@ -78,7 +78,7 @@ function roundTo2Decimals(num) {
 }
 
 /**
- * Adds the selected groupName of the hoverProposeMenu
+ * Adds the selected groupName
  * to the list pf the selected groups
  * @param event (JQuery event)
  * @param groupSearchInput
@@ -100,7 +100,7 @@ function updateSelectedGroups(event, groupSearchInput){
 }
 
 /**
- * Adds the selected groupName of the hoverProposeMenu
+ * Adds the selected groupName
  * to the list pf the selected groups
  * @param event (JQuery event)
  * @param categorySearchInput
@@ -178,7 +178,7 @@ function sendPutRequest(form){
 
 function handleAPIResponse(response) {
     if(response.status){
-        window.open('/','_parent')
+        window.open('/dashboard','_parent')
     } else {
         alert(response.msg);
     }
