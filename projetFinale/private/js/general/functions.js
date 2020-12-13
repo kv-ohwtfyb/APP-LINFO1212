@@ -14,12 +14,12 @@ const bcrypt = require('bcrypt');
     @param imgEncoded (Object)     : encoded image by filepond from the web app.
  */
 function savingImage(model, imgEncoded) {
-  if (imgEncoded == null) return;
-  const img = JSON.parse(imgEncoded);
-  if (img != null && ["image/jpeg", "image/png", "images/gif", "image/jpg"].includes(img.type)) {
-    model.image = new Buffer.from(img.data, "base64");
-    model.imageType = img.type;
-  }
+    if (imgEncoded == null) return;
+    const img = JSON.parse(imgEncoded);
+    if (img != null && ["image/jpeg", "image/png", "images/gif", "image/jpg"].includes(img.type)) {
+        model.image = new Buffer.from(img.data, "base64");
+        model.imageType = img.type;
+    }
 }
 
 /**
@@ -88,6 +88,19 @@ function itemAddOrUpdateBodyParser(reqBody){
     return toReturn
 }
 
+function groupAddOrUpdateBodyParser(reqBody){
+    const toReturn = Object.assign({}, reqBody);
+    toReturn.minSelection = parseInt(toReturn.minSelection);
+    toReturn.maxSelection = parseInt(toReturn.maxSelection);
+    toReturn.items = JSON.parse(toReturn.items);
+    toReturn.items = toReturn.items.map((item) =>{
+        item = JSON.parse(item);
+        item.charge = (item.charge !== null) ? parseFloat(item.charge) : 0;
+        return item;
+    })
+    return toReturn;
+}
+
 exports.savingImageToModel = savingImage;
 exports.setVirtualImageSrc = setImageSrc
 exports.formatText = formatText;
@@ -95,3 +108,4 @@ exports.formatRemoveWhiteSpaces = formatRemoveWhiteSpaces;
 exports.hashComparing = compareHashStringToARegularString;
 exports.findWithPromise = findInAnArrayWithASyncPredicate;
 exports.getItemSpecFromReqBody = itemAddOrUpdateBodyParser;
+exports.getGroupSpecFromReqBody = groupAddOrUpdateBodyParser;

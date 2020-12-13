@@ -58,7 +58,7 @@ const groupModel = new mongoose.model('Group', groupSchema);
 
 const categorySchema = new Schema({
     name          : { type : String,            required : true },
-    items         : { type : [ String ],        required : true },
+    items         : { type : [ String ],        required : false,                  default : [] },
     description   : { type : String,            required : false }
 }, { _id : false, autoIndex: false });
 
@@ -122,11 +122,12 @@ restaurantSchema.pre('save',async function (next) {
     @return group (groupModel) : the group.
  */
 restaurantSchema.methods.findGroup = function(name){
-    this.groups.forEach(function (group) {
+    for (let i = 0; i < this.groups.length; i++) {
+        const group = this.groups[i];
         if (formatRemoveWhiteSpaces(group.name).localeCompare(formatRemoveWhiteSpaces(name), 'fr', { sensitivity: 'base' }) === 0){
-            return group;
+            return group.toObject();
         }
-    });
+    }
 }
 
 /**
@@ -135,11 +136,12 @@ restaurantSchema.methods.findGroup = function(name){
     @return group (Object) : the category.
  */
 restaurantSchema.methods.findCategory = function(name){
-    this.categories.forEach(function (category) {
+    for (let i = 0; i < this.categories.length; i++) {
+        const category = this.categories[i];
         if (formatRemoveWhiteSpaces(category.name).localeCompare(formatRemoveWhiteSpaces(name), 'fr', { sensitivity: 'base' }) === 0){
-            return category;
+            return category.toObject();
         }
-    });
+    }
 }
 
 
@@ -155,7 +157,7 @@ restaurantSchema.methods.findGroupIndex = function(name){
             return i
         }
     }
-    return null;
+    return -1;
 }
 
 
@@ -171,7 +173,7 @@ restaurantSchema.methods.findCategoryIndex = function(name){
             return i
         }
     }
-    return null;
+    return -1;
 }
 
 /**
@@ -199,21 +201,29 @@ restaurantSchema.methods.listOfCategoriesNames = function (){
     Throws a TypeError if a group with the name already exist, if the argument is n't group model instance,
     and if one of the elements doesn't exist.
     @param theGroup (groupModel) : Group Model.
-    @throws TypeError : if the group doesn't exist.
+    @throws Error if there's a problem.
  */
 restaurantSchema.methods.addGroup = function (theGroup) {
-    if (theGroup instanceof groupModel){
-        checkIfItemsExists(this, theGroup.items);
-        checkIfGroupOrCategoryWithNameExist('groups', this, theGroup.name);
-        this.groups.push(theGroup);
-        this.groups.sort(function (a, b) { return formatText(a.name).localeCompare(formatText(b.name), 'fr', { sensitivity: 'base' }); });
-        restaurantModel.updateOne({ _id : this._id}, { groups : this.groups }).then((res)=>{
-            if (res.nModified >=1 ){
-                console.log("Added the group")
-            }
-        });
+    if (theGroup instanceof groupModel) {
+        return theGroup.validate().then(() => {
+            return checkIfItemsExists(this, theGroup.items).then(() => {
+                return checkIfGroupOrCategoryWithNameExist('groups', this, theGroup.name)
+                    .then(() => {
+                        this.groups.push(theGroup);
+                        this.groups.sort(function (a, b) {
+                            return formatText(a.name).localeCompare(formatText(b.name), 'fr', {sensitivity: 'base'});
+                        });
+                        return restaurantModel.updateOne({_id: this._id}, {groups: this.groups})
+                            .then((res) => {
+                                if (res.nModified >= 1) {
+                                    console.log("Added the group");
+                                }
+                            });
+                    })
+                })
+            })
     }else {
-      throw TypeError("The group given doesn't use the group Model.");
+        throw Error("The group given doesn't use the group Model.");
     }
 }
 
@@ -225,18 +235,26 @@ restaurantSchema.methods.addGroup = function (theGroup) {
     @throws TypeError : if the group doesn't exist.
  */
 restaurantSchema.methods.addCategory = function (theCategory) {
-    if (theCategory instanceof categoryModel){
-        checkIfItemsExists(this, theCategory.items);
-        checkIfGroupOrCategoryWithNameExist('categories', this, theCategory.name);
-        this.categories.push(theCategory);
-        this.categories.sort(sorter);
-        restaurantModel.updateOne({ _id : this._id}, { categories : this.categories }).then((res)=>{
-            if (res.nModified >=1 ){
-                console.log("Added the category")
-            }
-        });
+    if (theCategory instanceof categoryModel) {
+        return theCategory.validate().then(() => {
+            return checkIfItemsExistsForGroup(this, theCategory.items).then(() => {
+                return checkIfGroupOrCategoryWithNameExist('groups', this, theCategory.name)
+                    .then(() => {
+                        this.categories.push(theCategory);
+                        this.categories.sort(function (a, b) {
+                            return formatText(a.name).localeCompare(formatText(b.name), 'fr', {sensitivity: 'base'});
+                        });
+                        return restaurantModel.updateOne({_id: this._id}, {categories: this.categories})
+                            .then((res) => {
+                                if (res.nModified >= 1) {
+                                    console.log("Added the category");
+                                }
+                            });
+                    })
+                })
+            })
     }else {
-      throw TypeError("The group given doesn't use the category Model.");
+        throw Error("The category given doesn't use the category Model.");
     }
 }
 
@@ -248,35 +266,58 @@ restaurantSchema.methods.removeGroup = function (name) {
     this.groups = this.groups.filter((group) =>{
         return formatText(group.name) !== formatText(name);
     });
+    return restaurantModel.updateOne({ _id : this._id}, { groups : this.groups })
+        .then((res)=>{
+                if (res.nModified >=1 ){
+                    console.log("Removed the group")
+                }
+        });
 }
 
 /**
  * Removes the category from the restaurant list of categories.
  * @param name (String) : the name of the category to delete.
+ * @returns Promise.
  */
 restaurantSchema.methods.removeCategory = function (name) {
     this.categories = this.categories.filter((category) =>{
         return formatText(category.name) !== formatText(name);
     });
+    return restaurantModel.updateOne({_id: this._id}, {categories: this.categories})
+        .then((res) => {
+            if (res.nModified >= 1) {
+                console.log("Removed the category");
+            }
+        });
 }
 
 /**
  * @param name (String) : name of the group to update.
  * @param spec (JSON Object) : the elements to change and their values. Ex :
     { "name" : "Boisons Froide" }.
- * @throws TypeError if the group doesn't exist.
+ * @throws TypeError if the group doesn't exist. and other erros if the items don't exist.
+ * @returns Promise<>
  */
 restaurantSchema.methods.updateGroup = function (name, spec) {
-    const index = this.findGroupIndex(name);
-    if (index) {
-        if (spec.hasOwnProperty("name"))  { checkIfGroupOrCategoryWithNameExist('groups',this, spec.name); }
-        if (spec.hasOwnProperty("items")) { checkIfItemsExists(this, spec.items); }
-        for (let specKey in spec) {
-            this.groups[index].specKey = spec.specKey;
+    return new Promise(((resolve, reject) => {
+        const index = this.findGroupIndex(name);
+        if (index >= 0 ) {
+            return checkIfItemsExists(this, spec.items).then(() => {
+                for (let specKey in spec) {
+                    this.groups[index][specKey] = spec[specKey];
+                }
+                return restaurantModel.updateOne({ _id : this._id}, { groups : this.groups })
+                    .then((res)=>{
+                            if (res.nModified >=1 ){
+                                console.log("Modified the group")
+                            }
+                            return resolve();
+                });
+            }).catch((err) => { reject(err); })
+        } else {
+            throw Error(`A group with such ${name} doesn't exist, in ${this.name} groups.`);
         }
-    } else {
-        throw TypeError(`A group with such ${name} doesn't exist, in ${this.name} groups. `);
-    }
+    }))
 }
 
 /**
@@ -284,18 +325,28 @@ restaurantSchema.methods.updateGroup = function (name, spec) {
  * @param spec (JSON Object) : the elements to change and their values. Ex :
     { "name" : "Boissons Froide" }.
  * @throws TypeError if the group doesn't exist.
+ * @returns Promise
  */
 restaurantSchema.methods.updateCategory = function (name, spec) {
-    const index = this.findCategoryIndex(name);
-    if (index) {
-        if (spec.hasOwnProperty("name"))  { checkIfGroupOrCategoryWithNameExist('categories',this, spec.name); }
-        if (spec.hasOwnProperty("items")) { checkIfItemsExists(this, spec.items); }
-        for (let specKey in spec) {
-            this.categories[index].specKey = spec.specKey;
+    return new Promise(((resolve, reject) => {
+        const index = this.findCategoryIndex(name);
+        if (index >= 0 ) {
+            return checkIfItemsExistsForGroup(this, spec.items).then(() => {
+                for (let specKey in spec) {
+                    this.categories[index][specKey] = spec[specKey];
+                }
+                return restaurantModel.updateOne({ _id : this._id}, { categories : this.categories })
+                    .then((res)=>{
+                        if (res.nModified >=1 ){
+                            console.log("Modified the category");
+                        }
+                        return resolve();
+                });
+            }).catch((err) => { reject(err); })
+        } else {
+            throw Error(`A category with such ${name} doesn't exist, in ${this.name} categories.`);
         }
-    } else {
-        throw TypeError(`A group with such ${name} doesn't exist, in ${this.name} categories. `);
-    }
+    }))
 }
 
 /**
@@ -449,6 +500,30 @@ restaurantSchema.methods.getItem = function (name){
             return item;
         });
 }
+
+/**
+ * Returns an array.
+ * @returns {Promise|PromiseLike<any>|Promise<any>}
+ */
+restaurantSchema.methods.getArrayOfItemsName = function(){
+    const thisRestaurantItemModel = mongoose.model('Item', itemSchema, this.items.toString());
+    return thisRestaurantItemModel.find().then((response) =>{
+        return response.map((item) => item.name);
+    })
+}
+
+restaurantSchema.methods.getArrayOfItemsDisplayForStore = function(){
+    const thisRestaurantItemModel = mongoose.model('Item', itemSchema, this.items.toString());
+    return thisRestaurantItemModel.find().then((response) =>{
+        return response.map((item) => {
+            const obj = Object.assign({}, item.toObject());
+            setVirtualImageSrc(obj);
+            if (obj.quantity === 0 ) obj.soldOut = true;
+            return obj
+        });
+    })
+}
+
 /**
  * Creates the text indexes which will be used for customer search.
  */
@@ -525,18 +600,32 @@ exports.categoryModel = categoryModel;
  * [{ name : "Fanta", ... }, { name : "Coca"} ].
  * @param restaurant
  * @param items
+ * @returns Promise<Function>
  * @throws Error if the item don't exist.
  */
 function checkIfItemsExists(restaurant, items){
     const thisRestaurantItemModel = mongoose.model('Item', itemSchema, restaurant.items.toString());
-    items.forEach(function (item) {
-        const res = thisRestaurantItemModel.exists({ name : item.name})
-            .then((res) => {
-                if (!res){
-                    throw TypeError(`The item ${item.name} doesn't exist in the ${restaurant.name} restaurant.`);
-                }
-            })
-    });
+    return new Promise((async (resolve, reject) => {
+        for (let i = 0; i < items.length; i++) {
+            if (!(await thisRestaurantItemModel.exists({ name : items[i].name}))){
+                return reject(`The item ${items[i].name} doesn't exist in the ${restaurant.name} restaurant.`);
+            }
+        }
+        return resolve();
+    }))
+}
+
+function checkIfItemsExistsForGroup(restaurant, items){
+    return new Promise((async (resolve, reject) => {
+        if (items === undefined ) return resolve();
+        const thisRestaurantItemModel = await mongoose.model('Item', itemSchema, restaurant.items.toString());
+        for (let i = 0; i < items.length; i++) {
+            if (!(await thisRestaurantItemModel.exists({ name : items[i]}))){
+                return reject(`The item ${items[i]} doesn't exist in the ${restaurant.name} restaurant.`);
+            }
+        }
+        return resolve();
+    }))
 }
 
 /**
@@ -555,10 +644,14 @@ function checkIfAdminExist(adminId) {
  *  @param name (String) : The group on which we checking on.
  */
 function checkIfGroupOrCategoryWithNameExist(key, restaurant, name) {
-    restaurant[key].forEach(function (item){
-        if (formatRemoveWhiteSpaces(item.name).localeCompare(formatRemoveWhiteSpaces(name), 'fr', { sensitivity: 'base' }) === 0){
-            throw `The group name already exists ${item.name} which is similar to ${name}. Try with different name`;
+    return new Promise(async (resolve, reject) => {
+        for (let i = 0; i < restaurant[key].length; i++) {
+            let object = restaurant[key][i];
+            if (formatRemoveWhiteSpaces(object.name).localeCompare(formatRemoveWhiteSpaces(name), 'fr', { sensitivity: 'base' }) === 0){
+                reject(`A ${key} with a similar name already exists: '${object.name}' which is similar to the given name '${name}'. Try with different name`);
+            }
         }
+        return resolve();
     })
 }
 

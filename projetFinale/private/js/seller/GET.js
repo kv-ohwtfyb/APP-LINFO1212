@@ -3,8 +3,26 @@ const { restaurantModel } = require('./../general/schemas');
 const { formatText } = require('./../general/functions')
 
 function addOrModifyGroup(app, req, res){
-    res.render('./seller/AddOrModifyGroup.html');
-}
+    restaurantModel.findById(req.session.restaurant._id)
+        .then(async (restaurant) => {
+            const listOfItems = await restaurant.getArrayOfItemsName();
+            if (req.query.group){
+                const group = await restaurant.findGroup(req.query.group);
+                const options = await Object.assign(
+                    {
+                                listOfItems : listOfItems,
+                                groupExist : group,
+                            }, group);
+                res.render('./seller/AddOrModifyGroup.html', options);
+            }else{
+               res.render('./seller/AddOrModifyGroup.html',
+                    {
+                        listOfItems : listOfItems
+                    }
+                );
+            }
+        })
+    }
 
 function addOrModifyItem(app, req, res){
     restaurantModel.findById(req.session.restaurant._id).then(async (restaurant) => {
@@ -32,8 +50,16 @@ function addOrModifyItem(app, req, res){
     })
 }
 
-function addOrModifyMenu(app, req, res){
-    res.render('./seller/AddOrModifyCategory.html')
+function addOrModifyCategory(app, req, res){
+    restaurantModel.findById(req.session.restaurant._id).then(async (restaurant) => {
+        if (req.query.category){
+            const category = await restaurant.findCategory(req.query.category);
+            const options = await Object.assign({ Exist : category }, category);
+            res.render('./seller/AddOrModifyCategory.html', options);
+        }else {
+            res.render('./seller/AddOrModifyCategory.html');
+        }
+    })
 }
 
 function createRestoFinishedMessage(app, req, res){
@@ -58,14 +84,19 @@ function loggingIn(app, req, res){
 }
 
 function sellerStore(app,req, res){
-    res.render('./Seller/StorePage.html')
+    restaurantModel.findOne({ name : "Exki" }).then(async (restaurant) => {
+        let options = { name : restaurant.name };
+        options.listOfItems = await restaurant.getArrayOfItemsDisplayForStore();
+        options.listOfGroups = await restaurant.groups;
+        res.render('./seller/StorePage.html', options);
+    });
 }
 
 
 
 exports.getAddOrModifyGroup = addOrModifyGroup;
 exports.getAddOrModifyItem = addOrModifyItem;
-exports.getAddOrModifyCategory = addOrModifyMenu;
+exports.getAddOrModifyCategory = addOrModifyCategory;
 exports.getAfterCreateRestoMessage = createRestoFinishedMessage;
 exports.getCreateRestaurant = createResto;
 exports.getOrders = listOfOrders;

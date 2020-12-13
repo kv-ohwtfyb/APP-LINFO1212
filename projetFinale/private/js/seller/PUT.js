@@ -1,5 +1,5 @@
 const { restaurantModel } = require('./../general/schemas');
-const {  getItemSpecFromReqBody } = require('./../general/functions');
+const {  getItemSpecFromReqBody, getGroupSpecFromReqBody } = require('./../general/functions');
 
 /**
  * Updates an Item in the restaurant
@@ -30,4 +30,33 @@ function updateItem(app, req, res){
     })
 }
 
+function updateGroup(app, req, res){
+    restaurantModel.findById(req.session.restaurant._id).then((restaurant) => {
+        const group = getGroupSpecFromReqBody(req.body);
+        restaurant.updateGroup(req.body.name, group)
+            .then(() => {
+                res.json({ status : true });
+            })
+            .catch(async (err) => {
+                const errorMessage = (err instanceof Object) ? err.message : err;
+                res.json({ status : false, msg : errorMessage});
+        });
+    });
+}
+
+function updateCategory(app, req, res){
+    restaurantModel.findById(req.session.restaurant._id).then((restaurant) => {
+        restaurant.updateCategory("Drinks", { description : "Testing test." })
+            .then(() =>{
+                res.json({ status : true });
+            })
+            .catch((err) =>{
+                const errorMessage = (err instanceof Object) ? err.message : err;
+                res.json({ status : false, msg : errorMessage});
+        })
+    });
+}
+
 exports.updateItem = updateItem;
+exports.updateGroup = updateGroup;
+exports.updateCategory = updateCategory;
