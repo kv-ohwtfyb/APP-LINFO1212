@@ -30,7 +30,7 @@ function signUp(app,req,res){
     res.render('./customer/UserSignUpCompletingPage.html');
 }
 function restaurantsPage(app,req,res){
-    res.render('./customer/RestaurantViewPage.html',{restaurant : restaurant});
+    res.render('./customer/RestaurantViewPage.html',{restaurant : req.body.restaurant, loggedIn: true,name: req.body.name,});
 }
 function searchRestaurants(app,req,res){
     const searchString = req.query.search || req.query.regime; //Checks if there's some text to search
