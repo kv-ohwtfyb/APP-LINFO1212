@@ -93,6 +93,9 @@ const restaurantSchema = new Schema({
 
 restaurantSchema.plugin(uniqueValidator);
 
+/**
+ * Ensures the restaurant has their items, orders, payments respectively collections.
+ */
 restaurantSchema.pre('save',async function (next) {
     await checkIfAdminExist(this.admin).then((bool) => {
         if (!bool) throw "Admin doesn't exist";
@@ -512,6 +515,10 @@ restaurantSchema.methods.getArrayOfItemsName = function(){
     })
 }
 
+/**
+ * Returns the list of items to display on the store items.
+ * @returns {Promise|PromiseLike<any>|Promise<any>}
+ */
 restaurantSchema.methods.getArrayOfItemsDisplayForStore = function(){
     const thisRestaurantItemModel = mongoose.model('Item', itemSchema, this.items.toString());
     return thisRestaurantItemModel.find().then((response) =>{
@@ -544,7 +551,7 @@ const restaurantOrderSchema = new Schema({
     date : { type : {
                         date   : Object,
                         orders : [ String ]
-                    },                      required : true }
+                    },                                  required : true }
 });
 
 const paymentModel = mongoose.model('Payment', Schema({
