@@ -84,7 +84,7 @@ function loggingIn(app, req, res){
 }
 
 function sellerStore(app,req, res){
-    restaurantModel.findOne({ name : "Exki" }).then(async (restaurant) => {
+    restaurantModel.findById(req.session.restaurant._id).then(async (restaurant) => {
         let options = { name : restaurant.name };
         options.listOfItems = await restaurant.getArrayOfItemsDisplayForStore();
         options.listOfGroups = await restaurant.groups;
@@ -103,14 +103,3 @@ exports.getOrders = listOfOrders;
 exports.getPaymentsPage = paymentsList;
 exports.getTheStorePage = sellerStore;
 exports.getSellerLoginPage = loggingIn;
-
-
-function elementsNameArrayMapToMatchString(array, text) {
-    return array.filter((name) => {
-        if (text.length > name.length ){
-            return false
-        }else{
-            return formatText(name.substring(0, text.length)).localeCompare(formatText(text), 'fr', { sensitivity: 'base' }) === 0;
-        }
-    })
-}
