@@ -3,16 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GIQ | Group Modification page</title>
+    <title>GiQ | Group {{name}}</title>
     <!--    CSS Imports       -->
     <link rel="stylesheet" href="./css/main.css">
     <!--    JavaScript Imports-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
     <script type="text/javascript" src="js/header.js"></script>
+    <script type="text/javascript" src="js/addOrModifyGroup.js"></script>
 </head>
 <body class="seller-page">
     <header class="bg-color-white">
-        <div id="navbar_open">≡</div>
+        <div></div>
         <div class="navbar bg-color-white" id="navbar_header">
                 <h4 id="navbar_close">X</h4>
                 {{#loggedIn}}
@@ -42,63 +44,71 @@
             <a href="/payments_list">Payments</a>
         </div>
     </header>
-    <form action="/add-group" method="POST" class="add-item">
+    <p class="color-orange">{{Error}}</p>
+    <form action="/group" method="POST" class="add-item" id="form">
         <section>
-            <input type="text" class="group-name shadow border-less " name="group-name" placeholder="Group Name">
+            <input type="text" class="group-name shadow border-less" name="name" placeholder="Group Name" value="{{name}}"required>
         </section>
         <section>
-            <textarea class="description-Area full-width-section shadow border-less" name="group-description" placeholder="Description..."></textarea>
+            <textarea class="description-Area full-width-section shadow border-less" name="description" placeholder="Description...">{{description}}</textarea>
         </section>
         <section class="bg-color-green shadow column-display">
             <div class="row-display">
-                <label for="product_search_input"> Produits: </label>
-                <input type="search" id="product_search_input"  name="productSearch" placeholder="Rechercher des produits"class="margin-left-right round-border border-less">
+                <label for="choose-items"> Items: </label>
+                <input class="input round-border border-less margin-left-right" list="list-of-items" id="choose-items" placeholder="Research Items here ...">
+                <datalist id="list-of-items">
+                {{#listOfItems}}
+                    <option value="{{.}}"></option>
+                {{/listOfItems}}
+                </datalist>
             </div>
-            <ul class="column-display">
-                <li class="row-display">
-                    <div class="row-display item bg-color-black color-white round-border">
-                        <p>Coca-cola</p>
-                        <button class="bg-color-black color-white border-less" type="button">X</button>
-                    </div>
-                    <label for="price-input-1">Extra charge</label>
-                    <input type="number" id="price-input-1" name="price-input" class="margin-left-right round-border border-less" placeholder="0.00€">
-                </li>
-                <li class="row-display">
-                    <div class="row-display item bg-color-black color-white round-border">
-                        <p>Fanta</p>
-                        <button class="bg-color-black color-white border-less" type="button">X</button>
-                    </div>
-                    <label for="price-input-2">Extra charge</label>
-                    <input type="number" id="price-input-2" name="price-input" class="numberInput margin-left-right round-border border-less " min="0" placeholder="0.00€">
-                </li>
-            </ul>
+            <div>
+                <ul class="column-display" id="selectedGroups">
+                    {{#items}}
+                        <li class="row-display margin-top-bottom">
+                            <div class="item row-display bg-color-black color-white round-border">
+                                <p>{{name}}</p>
+                                <button class="itemRemove bg-color-black color-white border-less" type="button">X</button>
+                            </div>
+                            <div class="row-display align-center">
+                                <label for="extra-charge-{{name}}" class="margin-left-right">Extra charge</label>
+                                <input id="extra-charge-{{name}}" value="{{charge}}" min="0" placeholder="Charger 00.00€" class="round-border border-less" type="number" step="0.01">
+                            </div>
+                        </li>
+                    {{/items}}
+                </ul>
+            </div>
         </section>
         <section class="bg-color-green shadow column-display">
-            <p>Régles: </p>
-            <div class="column-display">
+            <p>Rules: </p>
+            <div class="column-display margin-top-bottom">
                 <div class="row-display">
-                    <input type="radio" id="max-selection">
                     <div class="row-display margin-left-right">
-                        <label for="limit-number-selection">Limites des selections</label>
-                        <input type="number" id="limit-number-selection" name="min-selection" class="round-border border-less"><br>
+                        <label for="limit-number-selection">Maximum number of selections</label>
+                        <input type="number" id="limit-number-selection" name="maxSelection" class="round-border border-less margin-left-right" value="{{maxSelection}}" min="0" required>
                     </div>
                 </div>
             </div>
-            <div class="column-display">
+            <div class="column-display margin-top-bottom">
                 <div class="row-display">
-                    <input type="radio" id="min-selection">
                     <div class="row-display margin-left-right">
-                        <label for="min-number-selection">Limites des selections</label>
-                        <input type="number" id="min-number-selection" name="min-selection" class="round-border border-less"><br>
+                        <label for="min-number-selection">Minimum number of selections</label>
+                        <input type="number" id="min-number-selection" name="minSelection" class="round-border border-less margin-left-right" value="{{minSelection}}" min="0" required>
                     </div>
                 </div>
             </div>
         </section>
+        <input name="items" type="hidden" value="">
     </form>
     <section class="buttons margin-top-bottom margin-top-bottom">
-        <button class="bg-color-red color-white border-less margin-top-bottom"> Delete </button>
-        <button class="bg-color-black color-white border-less margin-top-bottom"> Cancel </button>
-        <button class="bg-color-green border-less margin-top-bottom"> Save </button>
+        <button class="bg-color-red color-white border-less margin-top-bottom" type="button" id="deleteButton"> Delete </button>
+        <button class="bg-color-black color-white border-less margin-top-bottom" onclick="window.open('/my_store', '_parent')"> Cancel </button>
+        {{#groupExist}}
+            <button class="bg-color-green border-less margin-top-bottom" type="button" id="update-group"> Update Group </button>
+        {{/groupExist}}
+        {{^groupExist}}
+            <button class="bg-color-green border-less margin-top-bottom" type="submit" form="form"> Add Group </button>
+        {{/groupExist}}
     </section>
     <footer class="full-width-section text-align-left">
         <div>

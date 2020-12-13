@@ -3,33 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GIQ | Category</title>
+    <title>GIQ | Category {{name}}</title>
     <!--    CSS Imports-->
     <link rel="stylesheet" href="./css/main.css">
     <!--    JavaScript Imports-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
     <script type="text/javascript" src="js/header.js"></script>
+    <script type="text/javascript" src="js/addOrModifyCategory.js"></script>
 </head>
 <body class="seller-page">
     <header class="bg-color-white">
-        <div id="navbar_open">≡
-        </div>
-        <div class="navbar bg-color-white" id="navbar_header">
-                <h4 id="navbar_close">X</h4>
-                {{#loggedIn}}
-                <img src ="" alt="User_Avatar" class="UserAvatar">
-                <div class="user-name">Client Lambda</div>
-                <ul>
-                    <li><a href="/ord">ORDERS</a></li>
-                {{/loggedIn}}
-                {{^loggedIn}}
-                <ul>
-                    <li><a class="login border-less bg-color-black" href="/user_login"><h2>Log in</h2></a></li>
-                    <li><a href="/sign_up_giveNumber">Sign Up</a></li>
-                {{/loggedIn}}
-                    <li><a href="/restaurant_speci">Add your restaurant</a></li>
-                    <li><a href="/seller_login">Log in as a seller</a></li>
-                </ul>
-            </div>
+        <div></div>
         <div class="name-logo">
             <h2>GIQ</h2>
             <h4>|</h4>
@@ -42,23 +27,26 @@
             <a href="/payments_list">Payments</a>
         </div>
     </header>
-    <form action="/menu" class="add-item" method="POST">
+    <p class="color-orange">{{Error}}</p>
+    <form action="/category" class="add-item" method="POST" id="form">
         <section>
-            <input type="text" class="category-name" name="CategoryName" placeholder="Category Name">
+            <label for="name"></label>
+            <input type="text" class="category-name" id="name" name="name" placeholder="Category Name" value="{{name}}" required>
         </section>
         <section>
-            <textarea class="description-Area" name="CategoryDescri" placeholder="Description..."></textarea>
-        </section>
-        <section class="trueFalse">
-            <label> Visible aux clients : </label>
-            <input type="radio" name="trueFalse"> Oui
-            <input type="radio" name="trueFalse"> Non
+            <label for="description"></label>
+            <textarea class="description-Area" id="description" name="description" placeholder="Description...">{{description}}</textarea>
         </section>
     </form>
     <section class="buttons margin-top-bottom margin-top-bottom">
-        <button class="bg-color-red color-white border-less margin-top-bottom"> Delete </button>
-        <button class="bg-color-black color-white border-less margin-top-bottom"> Cancel </button>
-        <button class="bg-color-green border-less margin-top-bottom"> Save </button>
+        <button class="bg-color-red color-white border-less margin-top-bottom" id="deleteButton"> Delete </button>
+        <button class="bg-color-black color-white border-less margin-top-bottom" onclick="window.open('/my_store', '_parent')"> Cancel </button>
+        {{#Exist}}
+            <button class="bg-color-green border-less margin-top-bottom" id="update-category"> Update Category </button>
+        {{/Exist}}
+        {{^Exist}}
+            <button class="bg-color-green border-less margin-top-bottom" type="submit" form="form"> Add Category </button>
+        {{/Exist}}
     </section>
     <footer class="full-width-section text-align-left">
         <div>

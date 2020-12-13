@@ -2,26 +2,18 @@ $(document).ready(function () {
 
     const priceInput = $("#item-price");
     const promoPercentage = $("#promotion");
-    const form = $('#form');
+    const form = $('#form'); form.validate();
     const categorySearchInput = $('#choose-category');
     const groupSearchInput = $('#choose-group');
-    const groupHoverMenu = $('#groupHoverDropDownMenu');
-    const categoryHoverMenu = $('#categoryHoverDropDownMenu');
 
     updateFinalPrice(priceInput, promoPercentage);
 
-    categorySearchInput.keypress(() => {
-        getListOfCategories(categorySearchInput.val());
-    })
-    categorySearchInput.on('focus', () =>{
-        categoryHoverMenu.show(1000);
-    })
-    categorySearchInput.on('focusout', () =>{
-        categoryHoverMenu.hide(1000);
-    })
-    categoryHoverMenu.on('click', (event) =>{
-        clickedOnCategoryProposeItem(event);
-    })
+    categorySearchInput.on('change', (event) => {
+        updateSelectedCategories(event, categorySearchInput);
+    });
+    categorySearchInput.on('focusout', (event) => {
+        updateSelectedCategories(event, categorySearchInput);
+    });
 
     priceInput.change(()=>{
         updateFinalPrice(priceInput, promoPercentage);
@@ -30,18 +22,16 @@ $(document).ready(function () {
         updateFinalPrice(priceInput, promoPercentage);
     });
 
-    groupSearchInput.keypress(() => {
-        getListOfGroups(groupSearchInput.val())
+
+    groupSearchInput.on('change', (event) => {
+        updateSelectedGroups(event, groupSearchInput);
     })
-    groupSearchInput.on('focus', () => {
-        groupHoverMenu.show(1000);
-    })
-    groupSearchInput.on('focusout', () => {
-        groupHoverMenu.hide(1000);
+    groupSearchInput.on('focusout', (event) => {
+        updateSelectedGroups(event, groupSearchInput);
     })
 
-    groupHoverMenu.on('click', (event) =>{
-        clickedOnGroupProposeItem(event);
+    $('#list-of-groups').on('click', (event) =>{
+        updateSelectedGroups(event);
     })
 
     /* This is the event for removing a selected item but I had to bind the vent to the parent cause the
@@ -56,43 +46,27 @@ $(document).ready(function () {
     })
 
     form.on('submit', () => {
-        $('<input>').attr({
-            name : 'categories',
-            value : $("#selectedCategories").serializeArray(),
-            type : hidden,
-        }).appendTo(form);
-        $('<input>').attr({
-            name : 'groups',
-            value : $("#selectedGroups").serializeArray(),
-            type : hidden,
-        }).appendTo(form);
+        addTheSelectedGroupsAndCategories();
     })
 
+    $(".hover-img").hover(() =>{
+        $(".hover-img").hide(1000);
+    })
+
+    if(("img").length >= 0){
+        $(".filepond--drop-label label").text("IF YOU WANT TO CHANGE THE DISPLAYED IMAGE..." +
+        "DRAG & DROP YOUR NEW PHOTO");
+    }
+
+    $("#update-item").on('click', () =>{
+        if(!($(':radio').valid())) { alert("Please precise if sold alone or not"); }
+        else{
+            addTheSelectedGroupsAndCategories();
+            sendPutRequest(form);
+        }
+    })
 });
 
-/**
- * Adds the array of names to the group search hover proposal menu for the user to select from.
- * @param array [(String)]
- */
-function updateGroupSearch(array){
-    const HoverMenu = $("#groupHoverDropDownMenu");
-    HoverMenu.html("");
-    array.forEach((groupName) =>{
-        HoverMenu.append(`<li>${groupName}</li>`);
-    });
-}
-
-/**
- * Adds the array of names to the category search hover proposal menu for the user to select from.
- * @param array [(String)]
- */
-function updateCategorySearch(array){
-    const HoverMenu = $("#categoryHoverDropDownMenu");
-    HoverMenu.html("");
-    array.forEach((categoryName) =>{
-        HoverMenu.append(`<li>${categoryName}</li>`);
-    });
-}
 
 /**
  * Rounds a float to 2 decimals after the point.
@@ -104,39 +78,47 @@ function roundTo2Decimals(num) {
 }
 
 /**
- * Adds the selected groupName of the hoverProposeMenu
+ * Adds the selected groupName
  * to the list pf the selected groups
  * @param event (JQuery event)
+ * @param groupSearchInput
  */
-function clickedOnGroupProposeItem(event){
-    const groupName = $(event.target).closest("li").text();
-    let listItemGeneric = `
-        <li class="row-display margin-top-bottom">
-            <div class="item row-display bg-color-black color-white round-border">
-                <p>${groupName}</p>
-                <button class="itemRemove bg-color-black color-white border-less" type="button">X</button>
-            </div>
-        </li>
-    `
-    $('#selectedGroups').append(listItemGeneric);
+function updateSelectedGroups(event, groupSearchInput){
+    const validation = dataListContainsOption(document.getElementById('list-of-categories'), groupSearchInput.val());
+    if (validation) {
+        let listItemGeneric = `
+            <li class="row-display margin-top-bottom">
+                <div class="item row-display bg-color-black color-white round-border">
+                    <p>${groupSearchInput.val()}</p>
+                    <button class="itemRemove bg-color-black color-white border-less" type="button">X</button>
+                </div>
+            </li>
+        `
+        $('#selectedGroups').append(listItemGeneric);
+    }
+    groupSearchInput.val("");
 }
 
 /**
- * Adds the selected groupName of the hoverProposeMenu
+ * Adds the selected groupName
  * to the list pf the selected groups
  * @param event (JQuery event)
+ * @param categorySearchInput
  */
-function clickedOnCategoryProposeItem(event){
-    const categoryName = $(event.target).closest("li").text();
-    let listItemGeneric = `
-        <li class="row-display margin-top-bottom">
-            <div class="item row-display bg-color-black color-white round-border">
-                <p>${categoryName}</p>
-                <button class="itemRemove bg-color-black color-white border-less" type="button">X</button>
-            </div>
-        </li>
-    `
-    $('#selectedCategories').append(listItemGeneric);
+function updateSelectedCategories(event, categorySearchInput){
+    const validation = dataListContainsOption(document.getElementById('list-of-categories'), categorySearchInput.val());
+    if (validation){
+        let listItemGeneric = `
+            <li class="row-display margin-top-bottom">
+                <div class="item row-display bg-color-black color-white round-border">
+                    <p>${categorySearchInput.val()}</p>
+                    <button class="itemRemove bg-color-black color-white border-less" type="button">X</button>
+                </div>
+            </li>
+        `
+        $('#selectedCategories').append(listItemGeneric);
+    }
+    categorySearchInput.val("");
 }
 
 /**
@@ -160,35 +142,44 @@ function updateFinalPrice(priceInput, promoPercentage){
 
 function deleteItem(form){
     $.ajax('/item',
-    {   method  : 'delete',
+    {   method  : 'DELETE',
                 data    : form.serialize(),
-                success : function (response) {
-                    console.log(response);
-                }
+                success : handleAPIResponse
             }
         );
 }
 
-function getListOfGroups(string){
-    $.ajax('/getGroups',
-        {   method: 'GET',
-            data : { search : string },
-            success : function (response) {
-                if (response.status){ updateGroupSearch(response.result); }
-                else { alert(response.msg); }
-            }
+function dataListContainsOption(datalist, potentialOption){
+    for (let i = 0; i < datalist.options.length; i++) {
+        if (datalist.options[i].value === potentialOption){
+            return true;
         }
-    )
+    }
 }
 
-function getListOfCategories(string){
-    $.ajax('/getCategories',
-        {   method: 'GET',
-            data : { search : string },
-            success : function (response) {
-                if (response.status){ updateCategorySearch(response.result); }
-                else { alert(response.msg); }
-            }
-        }
-    )
+function addTheSelectedGroupsAndCategories() {
+    $('[name=groups]').val($('#selectedGroups').map((idx, el) => {
+        if ($(el).find('p').text().length > 0) return $(el).find('p').text()+"|";
+        else return "";
+    }).get())
+    $('[name=categories]').val($('#selectedCategories').map((idx, el) => {
+        if ($(el).find('p').text().length > 0) return $(el).find('p').text()+"|";
+        else return ";"
+    }).get())
+}
+
+function sendPutRequest(form){
+    $.ajax('/item',
+{ method: 'PUT',
+         data : form.serializeArray(),
+        success : handleAPIResponse,
+    })
+}
+
+function handleAPIResponse(response) {
+    if(response.status){
+        window.open('/dashboard','_parent')
+    } else {
+        alert(response.msg);
+    }
 }

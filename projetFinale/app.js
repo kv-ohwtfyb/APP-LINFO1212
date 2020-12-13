@@ -4,7 +4,6 @@ const app = express ();
 const bodyParser = require('body-parser');
 const session = require('express-session');
 
-
 const {
     getHomePage,
     getOrdersPage,
@@ -47,8 +46,13 @@ const {
 const {
     postSellerLogin,
     postCreatingRestaurant,
-    postAddItem
+    postAddItem,
+    postAddGroup,
+    postAddCategory
 } = require('./private/js/seller/POST');
+
+const { updateItem, updateGroup, updateCategory } = require('./private/js/seller/PUT');
+const { deleteItem, deleteGroup, deleteCategory } = require('./private/js/seller/DELETE');
 
 app.use(bodyParser.urlencoded({ extended :true, limit: '50mb' }));
 app.engine('html', consolidate.hogan);
@@ -69,7 +73,12 @@ app.use(session({
 /************ SELLER GET Request PART ************/
 
 app.get('/group', (req, res) => {
-    getAddOrModifyGroup(app, req, res);
+    if (req.session.user){
+        getAddOrModifyGroup(app, req, res);
+    }else {
+        res.render('./seller/SellerLoginPage.html',
+            { loginError : "To access the item modification page you have to login as a seller."});
+    }
 });
 
 app.get('/item', (req, res) => {
@@ -82,11 +91,11 @@ app.get('/item', (req, res) => {
 });
 
 app.get('/category', ((req, res) => {
-    if (req.session.user){
+    if (req.session.restaurant){
         getAddOrModifyCategory(app, req, res);
     }else {
         res.render('./seller/SellerLoginPage.html',
-            { loginError : "To access the item modification page you have to login as a seller."});
+            { loginError : "To access the category modification page you have to login as a seller."});
     }
 }));
 
@@ -113,7 +122,12 @@ app.get('/payments_list', function (req, res) {
 });
 
 app.get('/my_store', function (req, res){
-    getTheStorePage(app, req, res);
+    if (req.session.restaurant){
+        getTheStorePage(app, req, res);
+    }else {
+        res.render('./seller/SellerLoginPage.html',
+        { loginError : "To access the category modification page you have to login as a seller."});
+    }
 });
 
 app.get('/seller_login', (req, res) =>{
@@ -125,38 +139,33 @@ app.get('/logout', (req,res ) => {
    res.redirect('/');
 });
 
-app.get('/getGroups', function (req, res){
-    if (req.session.restaurant){
-        getListOfGroupNames(app, req, res);
-    }else {
-        res.json({ status : false, msg :"First login as a restaurant seller."});
-    }
-});
-
-app.get('/getCategories', ((req, res) => {
-    if (req.session.restaurant){
-        getListOfCategories(app, req, res);
-    }else {
-        res.json({ status : false, msg :"First login as a restaurant seller."});
-    }
-}))
 /************ Seller POST Request PART ************/
 
 app.post('/group', function (req, res) {
-    console.log(req.body);
+    if (req.session.restaurant){
+        postAddGroup(app, req, res);
+    }else{
+        res.render('./seller/SellerLoginPage.html',
+            { Error : "To access the group modification page you have to login as a seller."});
+    }
 });
 
 app.post('/item', function(req, res){
     if (req.session.restaurant){
-        postAddItem(app, res, req);
+        postAddItem(app, req, res);
     }else{
         res.render('./seller/SellerLoginPage.html',
             { Error : "To access the item modification page you have to login as a seller."});
     }
 });
 
-app.post('/menu', function (req, res){
-    console.log(req.body);
+app.post('/category', function (req, res){
+    if (req.session.restaurant){
+        postAddCategory(app, req, res);
+    }else {
+        res.render('./seller/SellerLoginPage.html',
+            { loginError : "To access the category modification page you have to login as a seller."});
+    }
 });
 
 app.post('/creating_restaurant', function (req, res){
@@ -176,8 +185,30 @@ app.post('/seller_login', function (req, res) {
 /************ SELLER   DELETE Request Routers *********/
 
 app.delete('/item', function (req, res) {
-    console.log(req.body);
+    deleteItem(app, req, res);
 })
+
+app.delete('/group', ((req, res) => {
+    deleteGroup(app, req, res);
+}))
+
+app.delete('/category', ((req, res) => {
+    deleteCategory(app, req, res);
+}))
+
+/************ SELLER   PUT Request Routers *********/
+
+app.put('/item', function (req, res) {
+    updateItem(app, req, res);
+})
+
+app.put('/group', ((req, res) => {
+    updateGroup(app, req, res);
+}))
+
+app.put('/category', ((req, res) => {
+    updateCategory(app, req, res);
+}))
 
 /************ CUSTOMER GET Request PART ************/
 

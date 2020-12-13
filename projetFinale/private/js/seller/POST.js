@@ -1,8 +1,7 @@
-const { userModel, restaurantModel } = require('./../general/schemas');
-const { savingImageToModel, setVirtualImageSrc } = require('./../general/functions');
+const { userModel, restaurantModel, groupModel, categoryModel } = require('./../general/schemas');
+const { savingImageToModel, getItemSpecFromReqBody, getGroupSpecFromReqBody } = require('./../general/functions');
 const { userLoggingCheck } = require('./../customer/POST');
 const bcrypt = require('bcrypt');
-
 
 function sellerLogin(app, req, res){
     if (!(req.session.user)){ //If not logged in
@@ -55,18 +54,33 @@ function creatingRestaurant(app, req, res){
     })
 }
 
-function addItem(app, res, req){
+
+function addItem(app, req, res){
     restaurantModel.findById(req.session.restaurant._id).then((restaurant) => {
         if (restaurant){
-            const itemSpec = req.body; itemSpec.soldAlone = itemSpec.soldAlone === 'on';
-            if (req.body.image) savingImageToModel(itemSpec, req.body.image);
-            console.log(req.body);
+            const itemSpec = getItemSpecFromReqBody(req.body);
             restaurant.addItem(itemSpec)
-                .then(() => {res.redirect('/dashboard')})
-                .catch((error) => {
-                    itemSpec["Error"] = error.message;
-                    res.render('./seller/AddOrModifyItem.html',
-                        itemSpec );
+                .then(() => {
+                    if (req.body.categories.length > 0 ) {
+                        const categories = req.body.categories.split("|").slice(0,-1);
+                        if (categories){
+                            categories.forEach((name) =>{
+                                restaurant.addItemToCategory(name, itemSpec.name);
+                            })
+                        }
+                    }
+                    res.redirect('/dashboard');
+                })
+                .catch(async (error) => {
+                    const listOfGroups = await restaurant.listOfGroupNames();
+                    const listOfCategories = await restaurant.listOfCategoriesNames();
+                    const options = await Object.assign({
+                            Error : error.message,
+                            listOfCategories : listOfCategories,
+                            listOfGroups : listOfGroups,
+                            categories : req.body.categories.split("|").slice(0,-1)
+                            },itemSpec);
+                    res.render('./seller/AddOrModifyItem.html', options);
                 });
         }else{
             res.render('./seller/SellerLoginPage.html',
@@ -75,10 +89,46 @@ function addItem(app, res, req){
     })
 }
 
+function addGroup(app, req, res){
+    restaurantModel.findById(req.session.restaurant._id).then((restaurant) => {
+        const group = getGroupSpecFromReqBody(req.body);
+        restaurant.addGroup(new groupModel(group))
+            .then(() => {
+                res.redirect('/my_store');
+            })
+            .catch(async (err) => {
+                const errorMessage = (err instanceof Object) ? err.message : err;
+                const listOfItems = await restaurant.getArrayOfItemsName();
+                const options = await Object.assign(
+                    {
+                                Error : errorMessage,
+                                listOfItems : listOfItems,
+                            },group)
+                res.render('./seller/AddOrModifyGroup.html', options);
+        });
+    })
+}
+
+function addCategory(app, req, res){
+    restaurantModel.findById(req.session.restaurant._id)
+        .then((restaurant) => {
+        restaurant.addCategory(new categoryModel(req.body))
+            .then(() => {
+                res.redirect('/my_store');
+            })
+            .catch((err) =>{
+                const errorMessage = (err instanceof Object) ? err.message : err;
+                const options  = Object.assign({Error : errorMessage}, req.body);
+                res.render('./seller/AddOrModifyGroup.html', options);
+        })
+    })
+}
 
 exports.postSellerLogin = sellerLogin;
 exports.postCreatingRestaurant = creatingRestaurant;
 exports.postAddItem = addItem;
+exports.postAddGroup = addGroup;
+exports.postAddCategory = addCategory;
 
 async function sellerLogInCheck(user, req){
     let User = await userModel.findById(req.session.user._id).exec();
