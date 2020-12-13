@@ -122,7 +122,7 @@
             <ul class="full-width-section order-view-text-align-left" id="orderList">
                 {{#restaurants}}
                 <li>
-                    <h2 class ="RestoName" >{{restaurant}}</h2>
+                    <h2 id ="RestoName" >{{restaurant}}</h2>
                     <hr class="bg-color-black">
                     <ul>
                         {{#items}}
@@ -137,9 +137,12 @@
                 {{/restaurants}}
                 
             </ul>
+            
+        </form> 
+        <section class="buttons">
             <button value="cancel" class="bg-color-black color-white" id="close_popup" >Annuler</button>
-            <button value="default" class="bg-color-green" id="submit_popup" type="submit"ç!>REORDER {{total}}</button>
-        </form>        
+            <button value="default" class="bg-color-green" id="submit_popup" type="submit">REORDER {{total}}</button>
+        </section>       
     </dialog>
 </body>
 </html>

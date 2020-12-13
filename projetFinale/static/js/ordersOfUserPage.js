@@ -3,7 +3,6 @@ $(document).ready(function (){
     dialog.hide();
 
     $("#reOrder_btn").on('click', function(event){
-        displayDialog(event, dialog)
         dialog.show();
 
         $('#msg').show(() => { setTimeout( () => { $('#msg').hide()} ,5000); });
@@ -11,8 +10,12 @@ $(document).ready(function (){
     });
     
     $("#submit_popup").click(function () {
-
-        console.log("Button clicked for " + $(".RestoName").text() );
+        $("#orderList").each(function (){
+            console.log($("#RestoName").text());
+            console.log($("#name").text());
+            
+            
+        });
     });
     
 
@@ -28,7 +31,17 @@ $(document).ready(function (){
      * @param {*} theId : the Id of the dialog. (Where we want to show the order).
      */
 
-    function displayDialog(event, theId) {
+    function displayBasket(event, theId) {
+        let inBasket = `
+        <ul>
+            <li>
+                <h2>${theId.val()}</h2>
+                
+            </li>
+            
+        </ul>`
+
+        $("#popup_plate_header").append(inBasket);
 
     }
 
