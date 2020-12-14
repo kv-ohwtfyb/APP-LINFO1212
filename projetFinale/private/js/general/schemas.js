@@ -9,7 +9,7 @@ const userSchema = new Schema({
     email    : { type : String,                       required : true,               unique : true },
     phone    : { type : String,                       required : true,               unique : true },
     password : { type : String,                       required : true  },
-    orders   : { type : [ String ],                   required : false }
+    orders   : { type : [ { type : Schema.Types.ObjectId,  ref : 'Order' } ],        required : false }
 }, { autoIndex: false });
 
 
@@ -39,6 +39,20 @@ userSchema.methods.getSellerRestaurant = function (inputAuthKey){
         if (restaurant) return restaurant
         throw Error(`The authentication key didn't match any of your ${results.length} restaurants.`);
     });
+}
+
+/**
+ * Returns an array of order documents for this user.
+ * @returns Promise<{*[]}>
+ */
+userSchema.methods.getArrayOfOrders = function () {
+    return this.orders.map((refId) => orderModel.findById(refId).toObject());
+}
+
+userSchema.methods.addOrder = function (refId) {
+    if (!(refId instanceof String)) throw Error("The ref Id has to be a string");
+    this.orders.push(refId);
+    userModel.updateOne({ _id : this._id }, { orders : this.orders } );
 }
 
 const userModel = mongoose.model('User', userSchema, 'users');
@@ -549,7 +563,7 @@ restaurantModel.createIndexes(function (err) {
 
 const restaurantOrderSchema = new Schema({
     date : { type : {
-                        date   : Object,
+                        date   : Date,
                         orders : [ String ]
                     },                                  required : true }
 });
@@ -582,12 +596,12 @@ const orderSchema = new Schema({
     building    : { type : String,                      required : true  },
     date        : { type : Object,                      required : true,            default: new Date() },
     cancelRest  : { type : String,                      required : false },
-    user        : { type : mongoose.ObjectId,           required : true  }
+    user        : { type : String,                      required : true  }
 });
 
-orderSchema.pre('save', function () {
-    // TODO Add the reference to the restaurants orders and the users orders
-    console.log(this);
+orderSchema.post('save', async function (order) {
+    //TODO to finish;
+    userModel.findById(order.user).then((user) => {user.addOrder(order._id)});
 });
 
 const orderModel = mongoose.model('Orders', orderSchema, 'orders');

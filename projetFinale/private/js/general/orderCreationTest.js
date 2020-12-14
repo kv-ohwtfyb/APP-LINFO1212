@@ -1,4 +1,4 @@
-const { orderModel } = require('./schemas');
+const { orderModel, userModel } = require('./schemas');
 const mongoose = require('mongoose');
 
 mongoose.connect('mongodb://localhost:27017/testingdb',
@@ -6,11 +6,7 @@ mongoose.connect('mongodb://localhost:27017/testingdb',
 );
 
 const rest = new orderModel({
-    total       : 25.65,
-    restaurants : {
-                    restaurant: "quick",
-                    items
-                    }
+
 });
 
 rest.save(function (err, product) {
