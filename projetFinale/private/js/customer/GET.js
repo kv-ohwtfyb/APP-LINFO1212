@@ -46,8 +46,7 @@ function ordersPage(app,req,res){
             date : "Dec 08 2020",
             building: "Batiment Mihigo",
             status: "delivered",
-            total: "2.80 €",
-            msg: "This is where message of refuse will go",
+            total: 2.80 ,
             restaurants: [{
                 restaurant : 'Quick',
                 items: [{
@@ -63,8 +62,8 @@ function ordersPage(app,req,res){
                     unityPrice : 0.50,
                     quantity : 3
                 }]
-            }],
-            });
+            }]
+        });
     } else {
         res.redirect('/');
     }

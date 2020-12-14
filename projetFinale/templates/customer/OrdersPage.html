@@ -47,38 +47,13 @@
         <div class="popup-plate full-height-section bg-color-white" id="popup_plate_header">
             <button class="bg-color-white border-less left" id="popup_plate_close">X</button>
             <h2>PLATE</h2>
-            {{#basket}}
-            <ul>
-                {{#restaurants}}
-                <li>
-                    <h2>{{restaurant}}</h2>
-                    <hr class="bg-color-black">
-                    <ul>
-                        {{#items}}
-                        <li class="item">
-                            <input type="number" min="0" max="20" value="{{quantity}}" class="bg-color-black border-less" name="{{restaurant}}|{{name}}">
-                            <p class="name text-align-left" id="name">{{name}}</p>
-                            <p class="text-align-right">{{unityPrice}}€</p>
-                        </li>
-                        {{/items}}
-                    </ul>
-                </li>
-                {{/restaurants}}
-            </ul>
-            <div class="bg-color-black bottom-of-container three-gridded-layout">
-                <p class="text-align-left" id="totalItems">{{totalItems}}</p>
-                <p>Total</p>
-                <p class="text-align-right" id="totalAmount">{{totalAmount}}€</p>
-            </div>
-            {{/basket}}
-            {{^basket}}
-                <h1> It seems like your basket is empty try adding some items :)</h1>
-            {{/basket}}
+            <h1 id="basketText"> It seems like your basket is empty try adding some items :)</h1>
+            <p id="p"> </p>
         </div>
     </header>
     <section class="list-orders">
         <h1>All of Your Orders</h1>
-        {{#orders}}
+        
         <table class="table-of-customer-orders table-of-payments table-of-orders">
             <tr class="header-row">
                 <th>Order</th>
@@ -88,22 +63,24 @@
                 <th>Total</th>
                 <th>Action</th>
             </tr>
+            {{#orders}}
             <tr class="shadow paid">
                 <td class="orderId">{{_id}}</td >
                 <td class="date">{{date}}</td>
                 <td class="batiment">{{building}} </td>
                 <td class="status">{{status}}</td>
-                <td class="total">{{total}}</td>
+                <td class="total">{{total}}€</td>
                 <td class="action">
                     <button id="reOrder_btn"> Details </button>
                 </td>
             </tr>
-        </table>
-        {{/orders}}
-        {{^orders}}
-            <h1> You have any orders yet</h1>
-        {{/orders}}
+            {{/orders}}
+            {{^orders}}
+                <h1> You have any orders yet</h1>
+            {{/orders}}
 
+        </table>
+        
     </section>
     <dialog class=" popup-plate popup-item-specifications  text-align-left" id="popup_item">
         <h2>ORDER</h2>
@@ -121,15 +98,15 @@
         
             <ul class="full-width-section order-view-text-align-left" id="orderList">
                 {{#restaurants}}
-                <li>
-                    <h2 id ="RestoName" >{{restaurant}}</h2>
+                <li >
+                    <h2 class ="RestoName" >{{restaurant}}</h2>
                     <hr class="bg-color-black">
                     <ul>
                         {{#items}}
                         <li class="item">
-                            <input type="number" value="{{quantity}}" class="bg-color-black border-less" name="{{restaurant}}|{{name}}">
-                            <p class="name text-align-left" id="name" name ="itemName" >{{name}}</p>
-                            <p class="text-align-right" name ="unityPrice" >{{unityPrice}}€</p>
+                            <input type="number"  value="{{quantity}}" class="bg-color-black border-less" id="itemQuantity" name="{{restaurant}}|{{name}}">
+                            <p class="name text-align-left" class="name" name ="itemName" >{{name}}</p>
+                            <p class="text-align-right" id="itemUnityPrice" name ="unityPrice" >{{unityPrice}}€</p>
                         </li>
                         {{/items}}
                     </ul>
@@ -141,7 +118,7 @@
         </form> 
         <section class="buttons">
             <button value="cancel" class="bg-color-black color-white" id="close_popup" >Annuler</button>
-            <button value="default" class="bg-color-green" id="submit_popup" type="submit">REORDER {{total}}</button>
+            <button value="default" class="bg-color-green" id="submit_popup" type="submit">REORDER {{total}}€</button>
         </section>       
     </dialog>
 </body>
