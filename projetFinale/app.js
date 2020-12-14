@@ -65,8 +65,6 @@ app.use(session({
     cookie: {path: '/', httpOnly: true, limit: 30 * 60 * 1000}
 }));
 
-
-
 //Initiating the basket in the app session
 
 
