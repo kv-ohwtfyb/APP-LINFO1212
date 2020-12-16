@@ -13,7 +13,7 @@ const userSchema = new Schema({
     email    : { type : String,                       required : true,               unique : true },
     phone    : { type : String,                       required : true,               unique : true },
     password : { type : String,                       required : true  },
-    orders   : { type : [ String ],                   required : false }
+    orders   : { type : [ String ],        required : false }
 }, { autoIndex: false });
 
 
@@ -43,6 +43,28 @@ userSchema.methods.getSellerRestaurant = function (inputAuthKey){
         if (restaurant) return restaurant;
         throw Error(`The authentication key didn't match any of your ${results.length} restaurants.`);
     });
+}
+
+/**
+ * Returns an array of order documents for this user.
+ * @returns Promise<{*[]}>
+ */
+userSchema.methods.getArrayOfOrders = async function () {
+    this.orders.forEach(async (refId, idx, array) => {
+        array[idx] = await orderModel.findById(refId);
+    });
+    return this.orders;
+}
+
+userSchema.methods.addOrder = function (refId) {
+    if (!(typeof refId === "string")) throw Error("The ref Id has to be a string");
+    this.orders.push(refId);
+    userModel.updateOne({ _id : this._id }, { orders : this.orders } )
+        .then((stat) => {
+            if (stat.nModified >=1 ){
+                console.log(`Added the order in ${this.name} orders.`)
+            }
+        } );
 }
 
 const userModel = mongoose.model('User', userSchema, 'users');
@@ -546,6 +568,53 @@ restaurantSchema.methods.getArrayOfItemsDisplayForStore = function(){
     })
 }
 
+restaurantSchema.methods.getArrayOfOrders = async function(){
+    const thisRestaurantOrderModel = await mongoose.model('Restaurant Order', restaurantOrderSchema, this.orders.toString());
+    const dates = await thisRestaurantOrderModel.find();
+    // await dates.forEach((date, idx, array) => {
+    //     array[idx].orders = array[idx].orders.map((orderId) => orderModel.find({ _id : orderId }));
+    // });
+    return dates
+}
+/**
+ * Adds the reference Id into the restaurant orders collection.
+ * @param refId (String) : the id to the parent order
+ * @param givenDate (Date) : A Date object on when the order is placed.
+ * @param orderItems
+ * @returns {Promise<void>}
+ */
+restaurantSchema.methods.addOrder = async function(refId){
+    if (!( typeof refId === "string")) throw new Error("The refId has to be a string");
+    const thisRestaurantOrdersModel = await mongoose.model("Orders", restaurantOrderSchema, this.orders.toString())
+    const todayOrderDocument = await thisRestaurantOrdersModel.findOne({
+        $where : function (){
+            const dateToCompare = new Date(this.date);
+            const today = new Date();
+            return dateToCompare.getDate() === today.getDate() && dateToCompare.getMonth() === today.getMonth() && dateToCompare.getFullYear() === today.getFullYear();
+        }
+    });
+    if (todayOrderDocument){
+        todayOrderDocument.orders.push(refId);
+        thisRestaurantOrdersModel.updateOne({ _id : todayOrderDocument._id }, { orders : todayOrderDocument.orders })
+            .then((stats) => {
+                if (stats.nModified >=1 ){
+                    console.log(`Added the order in ${this.name} orders.`)
+                }
+            });
+    }else{
+        const createTodayDocument = new thisRestaurantOrdersModel(
+                {
+                    date : new Date(),
+                    orders : [ refId ]
+                }
+            );
+        createTodayDocument.save().then(() => {
+            console.log(`Inserted Today in ${this.name} orders.`);
+        });
+    }
+
+}
+
 /**
  * Creates the text indexes which will be used for customer search.
  */
@@ -563,10 +632,8 @@ restaurantModel.createIndexes(function (err) {
 });
 
 const restaurantOrderSchema = new Schema({
-    date : { type : {
-                        date   : Object,
-                        orders : [ String ]
-                    },                                  required : true }
+    date   : { type : Date,             default : new Date() },
+    orders : { type : [ String ],       required : false     },
 });
 
 const paymentModel = mongoose.model('Payment', Schema({
@@ -585,7 +652,7 @@ const orderSchema = new Schema({
                                 items : [{
                                             name : String,
                                             groupSets : [{
-                                                            id : String,
+                                                            name : String,
                                                             selected : [ String ]
                                                         }],
                                             unityPrice : Number,
@@ -594,17 +661,24 @@ const orderSchema = new Schema({
                                 total : Number
                             }],                         required : true  },
     status      : { type : String,                      required : true  },
+    building    : { type : String,                      required : true  },
     date        : { type : Object,                      required : true,            default: new Date() },
     cancelRest  : { type : String,                      required : false },
-    user        : { type : mongoose.ObjectId,           required : true  }
+    user        : { type : String,                      required : true  }
 });
 
-orderSchema.pre('save', function () {
-    // TODO Add the reference to the restaurants orders and the users orders
-    console.log(this);
+orderSchema.post('save', async function (order) {
+    await userModel.findById(order.user).then((user) => {user.addOrder(order._id.toString())});
+    await order.restaurants.forEach((object) => {
+        restaurantModel.findOne( { name : object.restaurant } ).then((rest) => {
+            restaurantModel.findById(rest._id).then((restaurant) =>{
+                restaurant.addOrder(order._id.toString());
+            })
+        })
+    })
 });
 
-const orderModel = mongoose.model('Orders', orderSchema, 'orders');
+const orderModel = mongoose.model('Order', orderSchema, 'orders');
 
 exports.userModel = userModel;
 exports.orderModel = orderModel;
@@ -701,4 +775,3 @@ function checkForSimilarName(name){
 function sorter(a, b) {
     return functions.formatText(a.name).localeCompare(functions.formatText(b.name), 'fr', { sensitivity: 'base' });
 }
-

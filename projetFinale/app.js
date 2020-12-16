@@ -53,6 +53,7 @@ const {
 
 const { updateItem, updateGroup, updateCategory } = require('./private/js/seller/PUT');
 const { deleteItem, deleteGroup, deleteCategory } = require('./private/js/seller/DELETE');
+const { orderModel } = require('./private/js/general/schemas');
 
 app.use(bodyParser.urlencoded({ extended :true, limit: '50mb' }));
 app.engine('html', consolidate.hogan);
@@ -64,8 +65,6 @@ app.use(session({
     saveUninitialized: true,
     cookie: {path: '/', httpOnly: true, limit: 30 * 60 * 1000}
 }));
-
-
 
 //Initiating the basket in the app session
 
@@ -148,6 +147,16 @@ app.get('/logout', (req,res ) => {
    req.session.user = null;
    res.redirect('/');
 });
+/* I AM HEREEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE */
+app.get('/getFullOrders', (req, res) => {
+    orderModel.findById(req.query)
+        .then((result) => {
+            res.json({status: true, data : result});
+        })
+        .catch((error) => {
+            res.json({status: false, data : error.message});
+        })
+})
 
 /************ Seller POST Request PART ************/
 
@@ -227,7 +236,12 @@ app.get('/', function (req, res) {
 });
 
 app.get('/orders_page',(req,res) =>{
-    getOrdersPage(app,req,res);
+    if(req.session.user){
+        getOrdersPage(app,req,res);
+    } else {
+        res.redirect('/');
+    }
+    
   
 })
 
@@ -301,5 +315,8 @@ app.post('/basket_add', (req, res) => {
 })
 app.post('/basket_modify',(req, res) =>{
     modifyAnItemOfTheBasket(app, req, res);
+})
+app.post('/userReOrder', (req, res) => {
+    console.log(req.body);
 })
 module.exports = app;

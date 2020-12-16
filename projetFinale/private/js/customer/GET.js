@@ -1,5 +1,9 @@
+<<<<<<< HEAD
 const {getItemSpecFromReqBody} = require("../general/functions");
 const { restaurantModel } = require('./../general/schemas');
+=======
+const { userModel, restaurantModel } = require('./../general/schemas');
+>>>>>>> 50f534c416bdb66635d8bed69d90b350e5ac0e9f
 const { setVirtualImageSrc } = require('./../general/functions');
 
 function homePage(app, req, res){
@@ -21,8 +25,36 @@ function homePage(app, req, res){
  * Then render a page with a list of orders the use has ever ordered or an empty list if the user hasn't ordered anything.
  * */
 function ordersPage(app,req,res){
+    /*
     const user = req.session.user;
-    res.render('./customer/OrdersPage.html', {loggedIn: true,name: user.name, order: user.orders});
+    userModel.find({name: user.name}, function (err, doc) {
+        if(err){
+            res.json(err);
+        } else {
+            res.render('./customer/OrdersPage.html', { 
+                loggedIn: true,
+                name: user.name,
+                orders: user.orders,
+                restaurants: user.orders.restaurant
+            });
+        }
+    })
+    .catch((err) => { console.log(`Caught by .catch ${err}`);});
+    */
+    
+    userModel.findById(req.session.user._id).then((user) => {
+        user.getArrayOfOrders().then( (array) => {
+            res.render('./customer/OrdersPage.html', { 
+                loggedIn: user,
+                orderList : array
+            })
+        })
+    })
+        .catch((err) => {
+            console.log(`Caught by .catch ${err}`);
+        });
+    
+    
 }
 
 function logInPage(app,req,res){
