@@ -88,6 +88,7 @@ function sellerStore(app,req, res){
         let options = { name : restaurant.name };
         options.listOfItems = await restaurant.getArrayOfItemsDisplayForStore();
         options.listOfGroups = await restaurant.groups;
+        options.listOfCategories = await restaurant.categories;
         res.render('./seller/StorePage.html', options);
     });
 }

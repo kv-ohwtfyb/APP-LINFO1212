@@ -545,6 +545,13 @@ restaurantSchema.methods.getArrayOfItemsDisplayForStore = function(){
     })
 }
 
+restaurantSchema.methods.addOrder = async function(refId, date){
+    const thisOrderModel = mongoose.model('Order', restaurantOrderSchema, this.orders.toString());
+    const todayExist = thisOrderModel.findByOne({ $where : function () { return true}
+    })
+    //TODO Complete the $where function
+}
+
 /**
  * Creates the text indexes which will be used for customer search.
  */

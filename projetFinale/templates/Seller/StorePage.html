@@ -112,7 +112,15 @@
         {{#listOfGroups}}
         <tr>
             <td class="name">{{name}}</td>
-            <td>{{items}}</td>
+            <td>
+                <ul>
+                {{#items}}
+                    <li>
+                        {{name}}
+                    </li>
+                {{/items}}
+                </ul>
+            </td>
             <td>{{description}}</td>
         </tr>
         {{/listOfGroups}}
@@ -120,13 +128,13 @@
     <h2>Categories</h2>
     <table class="table-of-categories table-of-items table-of-orders" id="categories-table">
         <tr class="bg-color-white header-row">
-            <th>Name</th>
-            <th>Description</th>
+            <th class="bg-color-white">Name</th>
+            <th class="bg-color-white">Description</th>
         </tr>
         {{#listOfCategories}}
-        <tr>
-            <th>{{name}}</th>
-            <th>{{description}}</th>
+        <tr class="bg-color-green">
+            <td class="name">{{name}}</td>
+            <td>{{description}}</td>
         </tr>
         {{/listOfCategories}}
     </table>

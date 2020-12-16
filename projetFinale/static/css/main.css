@@ -939,6 +939,10 @@ footer p,a{
 .table-of-groups tr{
     grid-template-columns: auto auto auto;
 }
+
+.table-of-groups tr td {
+    overflow: auto;
+}
 .table-of-groups .header-row{
     grid-template-columns: auto auto auto;
 }
@@ -946,9 +950,9 @@ footer p,a{
 .table-of-categories{
     grid-template-columns: auto auto;
     justify-content: space-evenly;
-
 }
-.table-of-categories .header-row{
+
+.table-of-categories tr{
     grid-template-columns: auto auto;
 }
 
