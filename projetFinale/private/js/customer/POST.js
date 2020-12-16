@@ -210,10 +210,6 @@ function modifyAnItemOfTheBasket(app, req, res){
 }
 
 
-exports.postUserLoggedIn = userLogIn;
-exports.addItemToBasket = addItemToBasket;
-exports.modifyAnItemOfTheBasket = modifyAnItemOfTheBasket;
-
 
 /**
  * Checks the body of the request
@@ -266,3 +262,7 @@ exports.postUserLoggedIn = userLogIn;
 exports.postPhoneNumberCheck = phoneNumberCheck;
 exports.postUserRegister = userRegister;
 exports.userLoggingCheck = userLoggingCheck;
+exports.postUserLoggedIn = userLogIn;
+exports.addItemToBasket = addItemToBasket;
+exports.modifyAnItemOfTheBasket = modifyAnItemOfTheBasket;
+

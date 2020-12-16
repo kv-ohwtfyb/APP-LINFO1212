@@ -9,7 +9,7 @@
     <!--    JavaScript Imports-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script type="text/javascript" src="js/header.js"></script>
-    <script type="text/javascript" src="js/filter.js"></script>
+    <script type='text/javascript' src="js/ordersOfUserPage.js"></script>
 </head>
 <body>
     <header>
@@ -47,37 +47,13 @@
         <div class="popup-plate full-height-section bg-color-white" id="popup_plate_header">
             <button class="bg-color-white border-less left" id="popup_plate_close">X</button>
             <h2>PLATE</h2>
-            {{#basket}}
-            <ul>
-                {{#restaurants}}
-                <li>
-                    <h2>{{restaurant}}</h2>
-                    <hr class="bg-color-black">
-                    <ul>
-                        {{#items}}
-                        <li class="item">
-                            <input type="number" min="0" max="20" value="{{quantity}}" class="bg-color-black border-less" name="{{restaurant}}|{{name}}">
-                            <p class="name text-align-left" id="name">{{name}}</p>
-                            <p class="text-align-right">{{unityPrice}}€</p>
-                        </li>
-                        {{/items}}
-                    </ul>
-                </li>
-                {{/restaurants}}
-            </ul>
-            <div class="bg-color-black bottom-of-container three-gridded-layout">
-                <p class="text-align-left" id="totalItems">{{totalItems}}</p>
-                <p>Total</p>
-                <p class="text-align-right" id="totalAmount">{{totalAmount}}€</p>
-            </div>
-            {{/basket}}
-            {{^basket}}
-                <h1> It seems like your basket is empty try adding some items :)</h1>
-            {{/basket}}
+            <h1 id="basketText"> It seems like your basket is empty try adding some items :)</h1>
+            <p id="p"> </p>
         </div>
     </header>
     <section class="list-orders">
         <h1>All of Your Orders</h1>
+        
         <table class="table-of-customer-orders table-of-payments table-of-orders">
             <tr class="header-row">
                 <th>Order</th>
@@ -87,50 +63,33 @@
                 <th>Total</th>
                 <th>Action</th>
             </tr>
+            {{#orderList}}
             <tr class="shadow paid">
-                <td class="orderId">#i896eh6983h</td >
-                <td class="date">
-                    <Date>25 Feb 2020</Date>
-                    <p>11:09</p>
-                </td>
-                <td class="batiment">Batiment Reamur</td>
-                <td class="status">Delivered</td>
-                <td class="total">29,78€</td>
+                <td class="orderId">{{_id}}</td >
+                <td class="date">{{date}}</td>
+                <td class="building">{{building}} </td>
+                <td class="status">{{status}}</td>
+                <td class="total">{{total}}</td>
                 <td class="action">
-                    <button>Reorder</button>
+                    <button class ="reOrder_btn"> Details </button>
                 </td>
             </tr>
-        </table>
-    </section>
-    <div class="popup-reoder" style="display: none">
-        <h2>ORDER</h2>
-        <ul>
-            <li>Order ID :{{orderId}}</li>
-            <li>Date     :{{date}}</li>
-            <li>Batiment :{{batiment}}</li>
-            <li>Status   :{{status}}</li>
-        </ul>
-        <table class="commandes">
+            {{/orderList}}
+            {{^orderList}}
             <tr>
-                <th>O'TACOS</th>
+                <td><h1> You have any orders yet</h1></td>
             </tr>
-            {{#commande}}
-            <tr class="commande-restaurant">
-                <td>
-                    <form action="">
-                        <input type="number" name="quantity" min="1" max="20">
-                    </form>
-                </td>
-                <td>
-                    O'TACOS XL & sauce Andalouse
-                </td>
-                <td>
-                    7,80€
-                </td>
-            </tr>
-            {{/commande}}
+            {{/orderList}}
+
         </table>
-        <button type="submit" class="reorder-button">REORDER {{total}}</button>
-    </div>
+        
+    </section>
+    <dialog class=" popup-plate popup-item-specifications  text-align-left" id="popup_item">
+         
+        <section class="buttons">
+            <button value="cancel" class="bg-color-black color-white" id="close_popup" >Annuler</button>
+            <button value="default" class="bg-color-green" id="submit_popup" type="submit">REORDER {{total}}€</button>
+        </section>       
+    </dialog>
 </body>
 </html>
