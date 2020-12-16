@@ -1,10 +1,11 @@
+const {getItemSpecFromReqBody} = require("../general/functions");
 const { restaurantModel } = require('./../general/schemas');
 const { setVirtualImageSrc } = require('./../general/functions');
 
 function homePage(app, req, res){
     restaurantModel.arrayOfRestaurantsForDisplay().then((array) => {
         res.render('./customer/Homepage.html', {
-            restaurants : array ,
+            restaurants : array,
             loggedIn : req.session.user || null,
             basket : req.session.basket
             }
@@ -14,6 +15,7 @@ function homePage(app, req, res){
 /********* For returning a list of orders of a user *******************/
 
 /**
+ * !!!!!!!!!!!! a retravailler
  * Call a function that check all orders of a certain user.
  *
  * Then render a page with a list of orders the use has ever ordered or an empty list if the user hasn't ordered anything.
@@ -30,8 +32,19 @@ function signUp(app,req,res){
     res.render('./customer/UserSignUpCompletingPage.html');
 }
 function restaurantsPage(app,req,res){
-    res.render('./customer/RestaurantViewPage.html',{restaurant : req.body.restaurant, loggedIn: true,name: req.body.name,});
+    restaurantModel.findOne({ name : req.query.name }).then((rest) => {
+        restaurantModel.findById(rest._id).then(async (restaurant) => {
+            const restaurantObject = await restaurant.getRestaurantView();
+            restaurantObject.items.price = (1 - (restaurantObject.items.promo / restaurantObject.items.price));
+            console.log(restaurantObject);
+            res.render('./customer/RestaurantViewPage.html', {
+                restaurant : restaurantObject,
+                basket : req.session.basket,
+            });
+        })
+    })
 }
+
 function searchRestaurants(app,req,res){
     const searchString = req.query.search || req.query.regime; //Checks if there's some text to search
     let dbSearch;

@@ -119,7 +119,7 @@ function addCategory(app, req, res){
             .catch((err) =>{
                 const errorMessage = (err instanceof Object) ? err.message : err;
                 const options  = Object.assign({Error : errorMessage}, req.body);
-                res.render('./seller/AddOrModifyGroup.html', options);
+                res.render('./seller/AddOrModifyCategory.html', options);
         })
     })
 }
@@ -136,7 +136,10 @@ async function sellerLogInCheck(user, req){
         .then((restaurant) => {
             if (restaurant) req.session.restaurant = restaurant;
         })
-        .catch((error) => {throw error;});
+        .catch((error) => {
+            console.log(error);
+            throw error;
+        });
 }
 
 function formatRemoveWhiteSpaces(name) {

@@ -25,6 +25,7 @@
                         <h3 class="user-name text-align-left">Hello, {{name}}</h3>
                     </li>
                     <li><a href="/orders_page">Orders</a></li>
+                </ul>
                 {{/loggedIn}}
                 {{^loggedIn}}
                 <ul>
@@ -156,7 +157,7 @@
         <ul class="list-of-restaurants three-gridded-layout">
             {{#restaurants}}
             <li>
-                <a href="/restaurant_view?id={{name}}">
+                <a href="/restaurant_view?name={{name}}">
                     <div>
                         {{#imgSrc}}
                             <img src={{imgSrc}} alt="The Restaurant Image wasn't provided">

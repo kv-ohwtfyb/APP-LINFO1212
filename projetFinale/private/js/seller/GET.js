@@ -54,6 +54,7 @@ function addOrModifyCategory(app, req, res){
     restaurantModel.findById(req.session.restaurant._id).then(async (restaurant) => {
         if (req.query.category){
             const category = await restaurant.findCategory(req.query.category);
+            console.log(category);
             const options = await Object.assign({ Exist : category }, category);
             res.render('./seller/AddOrModifyCategory.html', options);
         }else {
@@ -71,11 +72,13 @@ function createResto(app,req, res){
 }
 
 function listOfOrders(app, req, res){
-    res.render('./seller/DashboardPage.html');
+    const restaurant = req.session.restaurant;
+    res.render('./seller/DashboardPage.html',{loggedIn : true, name : restaurant.name });
 }
 
 function paymentsList(app, req, res){
-    res.render('./seller/PaymentsPage.html');
+    const restaurant = req.session.restaurant;
+    res.render('./seller/PaymentsPage.html',{loggedIn : true, name : restaurant.name });
 }
 
 function loggingIn(app, req, res){
@@ -88,6 +91,8 @@ function sellerStore(app,req, res){
         let options = { name : restaurant.name };
         options.listOfItems = await restaurant.getArrayOfItemsDisplayForStore();
         options.listOfGroups = await restaurant.groups;
+        options.loggedIn = true;
+        options.user = req.session.user;
         res.render('./seller/StorePage.html', options);
     });
 }

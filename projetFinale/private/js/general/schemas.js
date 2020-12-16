@@ -1,8 +1,12 @@
 const mongoose = require('mongoose');
 const uniqueValidator = require('mongoose-unique-validator');
 const Schema = mongoose.Schema;
-const { setVirtualImageSrc, formatRemoveWhiteSpaces, formatText  } = require('./functions');
-const { hashComparing, findWithPromise} = require('./functions');
+
+const functions = require('./functions');
+const {setVirtualImageSrc} = require("./functions");
+const {formatText} = require("./functions");
+const {formatRemoveWhiteSpaces} = require("./functions");
+
 
 const userSchema = new Schema({
     name     : { type : String,                       required : true },
@@ -35,8 +39,8 @@ userSchema.methods.getSellerRestaurant = function (inputAuthKey){
     if (inputAuthKey instanceof String) throw Error("The inputAuthKey given is not a string");
     return restaurantModel.find({ admin : this._id }).then(async (results) => {
         if (!(results)) throw Error("No restaurant found under your email. You should try create a restaurant first.");
-        const restaurant = await findWithPromise(results,  ({authKey}) => { return hashComparing(inputAuthKey, authKey); });
-        if (restaurant) return restaurant
+        const restaurant = await functions.findWithPromise(results,  ({authKey}) => { return functions.hashComparing(inputAuthKey, authKey); });
+        if (restaurant) return restaurant;
         throw Error(`The authentication key didn't match any of your ${results.length} restaurants.`);
     });
 }
@@ -127,7 +131,7 @@ restaurantSchema.pre('save',async function (next) {
 restaurantSchema.methods.findGroup = function(name){
     for (let i = 0; i < this.groups.length; i++) {
         const group = this.groups[i];
-        if (formatRemoveWhiteSpaces(group.name).localeCompare(formatRemoveWhiteSpaces(name), 'fr', { sensitivity: 'base' }) === 0){
+        if (functions.formatRemoveWhiteSpaces(group.name).localeCompare(functions.formatRemoveWhiteSpaces(name), 'fr', { sensitivity: 'base' }) === 0){
             return group.toObject();
         }
     }
@@ -141,7 +145,7 @@ restaurantSchema.methods.findGroup = function(name){
 restaurantSchema.methods.findCategory = function(name){
     for (let i = 0; i < this.categories.length; i++) {
         const category = this.categories[i];
-        if (formatRemoveWhiteSpaces(category.name).localeCompare(formatRemoveWhiteSpaces(name), 'fr', { sensitivity: 'base' }) === 0){
+        if (functions.formatRemoveWhiteSpaces(category.name).localeCompare(functions.formatRemoveWhiteSpaces(name), 'fr', { sensitivity: 'base' }) === 0){
             return category.toObject();
         }
     }
@@ -156,7 +160,7 @@ restaurantSchema.methods.findCategory = function(name){
  */
 restaurantSchema.methods.findGroupIndex = function(name){
     for (let i = 0; i < this.groups.length; i++) {
-        if (formatRemoveWhiteSpaces(this.groups[i].name).localeCompare(formatRemoveWhiteSpaces(name), 'fr', { sensitivity: 'base' }) === 0) {
+        if (functions.formatRemoveWhiteSpaces(this.groups[i].name).localeCompare(functions.formatRemoveWhiteSpaces(name), 'fr', { sensitivity: 'base' }) === 0) {
             return i
         }
     }
@@ -172,7 +176,7 @@ restaurantSchema.methods.findGroupIndex = function(name){
  */
 restaurantSchema.methods.findCategoryIndex = function(name){
     for (let i = 0; i < this.categories.length; i++) {
-        if (formatRemoveWhiteSpaces(this.categories[i].name).localeCompare(formatRemoveWhiteSpaces(name), 'fr', { sensitivity: 'base' }) === 0) {
+        if (functions.formatRemoveWhiteSpaces(this.categories[i].name).localeCompare(functions.formatRemoveWhiteSpaces(name), 'fr', { sensitivity: 'base' }) === 0) {
             return i
         }
     }
@@ -214,7 +218,7 @@ restaurantSchema.methods.addGroup = function (theGroup) {
                     .then(() => {
                         this.groups.push(theGroup);
                         this.groups.sort(function (a, b) {
-                            return formatText(a.name).localeCompare(formatText(b.name), 'fr', {sensitivity: 'base'});
+                            return functions.formatText(a.name).localeCompare(functions.formatText(b.name), 'fr', {sensitivity: 'base'});
                         });
                         return restaurantModel.updateOne({_id: this._id}, {groups: this.groups})
                             .then((res) => {
@@ -245,7 +249,7 @@ restaurantSchema.methods.addCategory = function (theCategory) {
                     .then(() => {
                         this.categories.push(theCategory);
                         this.categories.sort(function (a, b) {
-                            return formatText(a.name).localeCompare(formatText(b.name), 'fr', {sensitivity: 'base'});
+                            return functions.formatText(a.name).localeCompare(functions.formatText(b.name), 'fr', {sensitivity: 'base'});
                         });
                         return restaurantModel.updateOne({_id: this._id}, {categories: this.categories})
                             .then((res) => {
@@ -374,6 +378,18 @@ restaurantSchema.methods.addItemToCategory = function (categoryName, itemName) {
     }
 }
 
+restaurantSchema.methods.getRestaurantView = async function(){
+    const thisRestaurantItemModel = mongoose.model('Item', itemSchema, this.items.toString());
+    const allItems = await thisRestaurantItemModel.find();
+    for (const category of this.categories) {
+        for (let i = 0; i < category.items.length; i++) {
+            category.items[i] = await functions.findWithPromise(allItems, ({name}) => { return category.items[i]===name; });
+            functions.setVirtualImageSrc(category.items[i]);
+        }
+    }
+    return this;
+}
+
 /**
  *  Returns an array of the restaurant identities used for the homepage. Can take an array
  *  and format it to look like the expected array.
@@ -411,14 +427,13 @@ restaurantSchema.statics.arrayOfRestaurantsForDisplay = function ( array = null)
                 if (item.image){
                     object.image = item.image;
                     object.imageType = item.imageType;
-                    setVirtualImageSrc(object);
+                    functions.setVirtualImageSrc(object);
                 }
                 return object;
             })
         });
     }
 }
-
 /**
  * Adds an Item from the restaurant's items collection
  * @param itemSpec (Object) : contain all the infos for the item.
@@ -524,7 +539,7 @@ restaurantSchema.methods.getArrayOfItemsDisplayForStore = function(){
     return thisRestaurantItemModel.find().then((response) =>{
         return response.map((item) => {
             const obj = Object.assign({}, item.toObject());
-            setVirtualImageSrc(obj);
+            functions.setVirtualImageSrc(obj);
             if (obj.quantity === 0 ) obj.soldOut = true;
             return obj
         });
@@ -653,7 +668,7 @@ function checkIfGroupOrCategoryWithNameExist(key, restaurant, name) {
     return new Promise(async (resolve, reject) => {
         for (let i = 0; i < restaurant[key].length; i++) {
             let object = restaurant[key][i];
-            if (formatRemoveWhiteSpaces(object.name).localeCompare(formatRemoveWhiteSpaces(name), 'fr', { sensitivity: 'base' }) === 0){
+            if (functions.formatRemoveWhiteSpaces(object.name).localeCompare(functions.formatRemoveWhiteSpaces(name), 'fr', { sensitivity: 'base' }) === 0){
                 reject(`A ${key} with a similar name already exists: '${object.name}' which is similar to the given name '${name}'. Try with different name`);
             }
         }
@@ -670,7 +685,7 @@ function checkIfGroupOrCategoryWithNameExist(key, restaurant, name) {
 function checkForSimilarName(name){
     return restaurantModel.find().then((restaurants) => {
         restaurants.forEach(function (restaurant){
-            if (formatRemoveWhiteSpaces(restaurant.name).localeCompare(formatRemoveWhiteSpaces(name), 'fr', { sensitivity: 'base' }) === 0){
+            if (functions.formatRemoveWhiteSpaces(restaurant.name).localeCompare(functions.formatRemoveWhiteSpaces(name), 'fr', { sensitivity: 'base' }) === 0){
                 throw Error(`A restaurant named ${restaurant.name}, which is similar to ${name}. Please try with different name`);
             }
         });
@@ -684,6 +699,6 @@ function checkForSimilarName(name){
  * @return {number}
  */
 function sorter(a, b) {
-    return formatText(a.name).localeCompare(formatText(b.name), 'fr', { sensitivity: 'base' });
+    return functions.formatText(a.name).localeCompare(functions.formatText(b.name), 'fr', { sensitivity: 'base' });
 }
 

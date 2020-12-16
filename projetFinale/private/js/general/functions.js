@@ -76,6 +76,7 @@ async function findInAnArrayWithASyncPredicate(array, predicate){
             return array[i]
         }
     }
+    return null;
 }
 
 function itemAddOrUpdateBodyParser(reqBody){
@@ -102,7 +103,7 @@ function groupAddOrUpdateBodyParser(reqBody){
 }
 
 exports.savingImageToModel = savingImage;
-exports.setVirtualImageSrc = setImageSrc
+exports.setVirtualImageSrc = setImageSrc;
 exports.formatText = formatText;
 exports.formatRemoveWhiteSpaces = formatRemoveWhiteSpaces;
 exports.hashComparing = compareHashStringToARegularString;

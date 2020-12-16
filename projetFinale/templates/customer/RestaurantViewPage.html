@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>dialog
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GiQ | Restaurant</title>
+    {{#restaurant}}
+        <title>GiQ | {{name}}</title>
+    {{/restaurant}}
     <!--    CSS Imports-->
     <link rel="stylesheet" href="./css/main.css">
     <!--    JavaScript Imports-->
@@ -85,7 +87,7 @@
             <h1>{{name}} |</h1>
         </div>
         <div class="text-align-left">
-            <p>Ouvert {{horaire}} | {{phone}}</p>
+            <p>Ouvert 8H - 9H | +32489457886</p>
             <p>{{address}}</p>
             <p class="prix-moyen-restaurant">
             Prix moyen dépensé : {{avgPrice}}€
@@ -95,203 +97,57 @@
             <img src={{imgSrc}}>
         </div>
     </section>
-    <div class="categories-tab round-border bg-color-white color-black">
-        <a href="#{{category}}">{{category}}</a>
-        <a href="#{{category}}">{{category}}</a>
-        <a href="#{{category}}">{{category}}</a>
-        <a href="#{{category}}">{{category}}</a>
-    </div>
-    <section>
-        <section id="{{category}}" class="margin-top-bottom">
-            <h2>{{category}}</h2>
-            <ul class="list-of-items three-gridded-layout">
-                <li>
+    {{#categories}}
+    <section id="category" class="margin-top-bottom">
+        <h2>{{name}}</h2>
+        <ul class="list-of-items three-gridded-layout">
+            {{#items}}
+            <li>
+                <div>
+                    <section>
+                        <h1>{{name}}</h1>
+                        <p>{{description}}</p>
+                        <p>{{price}}€</p>
+                    </section>
                     <div>
-                        <section>
-                            <h1>{{item}}</h1>
-                            <p>Choisissez la viande et une boisson.</p>
-                            <p>{{avgPrice}}€</p>
-                        </section>
-                        <div>
-                            <img src="images/Otacos/otacos-tacos.jpg">
-                        </div>
+                        <img src={{imgSrc}}>
                     </div>
-                </li>
-                <li>
-                    <div>
-                        <section>
-                            <h1>{{item}}</h1>
-                            <p>Did you know you need to be a user in order to create/ add a restaurant</p>
-                            <p class="bottom-of-container">{{avgPrice}}€</p>
-                        </section>
-                        <div>
-                            <img src="images/Burger King/burger.jpg">
-                        </div>
-                    </div>
-                </li>
-                <li>
-                    <div>
-                        <section>
-                            <h1>{{item}}</h1>
-                            <p>Did you know you need to be a user in order to create/ add a restaurant</p>
-                            <p>{{avgPrice}}€</p>
-                        </section>
-                        <div>
-                            <img src="images/Otacos/otacos-tacos.jpg">
-                        </div>
-                    </div>
-                </li>
-            </ul>
-        </section>
-        <section id="tacos" class="margin-top-bottom">
-            <h2>{{category}}</h2>
-            <ul class="list-of-items three-gridded-layout">
-                <li>
-                    <div>
-                        <section>
-                            <h1>{{item}}</h1>
-                            <p>Choisissez la viande et une boisson.</p>
-                            <p>{{avgPrice}}€</p>
-                        </section>
-                        <div>
-                            <img src="images/Otacos/otacos-tacos.jpg">
-                        </div>
-                    </div>
-                </li>
-                <li>
-                    <div>
-                        <section>
-                            <h1>{{item}}</h1>
-                            <p>Did you know you need to be a user in order to create/ add a restaurant</p>
-                            <p>{{avgPrice}}€</p>
-                        </section>
-                        <div>
-                            <img src="images/Otacos/otacos-tacos.jpg">
-                        </div>
-                    </div>
-                </li>
-                <li>
-                    <div>
-                        <section>
-                            <h1>{{item}}</h1>
-                            <p>Did you know you need to be a user in order to create/ add a restaurant</p>
-                            <p>{{avgPrice}}€</p>
-                        </section>
-                        <div>
-                            <img src="images/Otacos/otacos-tacos.jpg">
-                        </div>
-                    </div>
-                </li>
-            </ul>
-        </section>
-        <section id="frites" class="margin-top-bottom">
-            <h2>{{category}}</h2>
-            <ul class="list-of-items three-gridded-layout">
-                <li>
-                    <div>
-                        <section>
-                            <h1>{{item}}</h1>
-                            <p>Choisissez la viande et une boisson.</p>
-                            <p>{{avgPrice}}€</p>
-                        </section>
-                        <div>
-                            <img src="images/Otacos/otacos-tacos.jpg">
-                        </div>
-                    </div>
-                </li>
-                <li>
-                    <div>
-                        <section>
-                            <h1>{{item}}</h1>
-                            <p>Did you know you need to be a user in order to create/ add a restaurant</p>
-                            <p>{{avgPrice}}€</p>
-                        </section>
-                        <div>
-                            <img src="images/Otacos/otacos-tacos.jpg">
-                        </div>
-                    </div>
-                </li>
-                <li>
-                    <div>
-                        <section>
-                            <h1>{{item}}</h1>
-                            <p>Did you know you need to be a user in order to create/ add a restaurant</p>
-                            <p>{{avgPrice}}€</p>
-                        </section>
-                        <div>
-                            <img src="images/Otacos/otacos-tacos.jpg">
-                        </div>
-                    </div>
-                </li>
-            </ul>
-        </section>
-        <section id="boissons" class="margin-top-bottom">
-            <h2>{{category}}</h2>
-            <ul class="list-of-items three-gridded-layout">
-                <li>
-                    <div>
-                        <section>
-                            <h1>{{item}}</h1>
-                            <p>Choisissez la viande et une boisson.</p>
-                            <p>{{avgPrice}}€</p>
-                        </section>
-                        <div>
-                            <img src="images/Otacos/otacos-tacos.jpg">
-                        </div>
-                    </div>
-                </li>
-                <li>
-                    <div>
-                        <section>
-                            <h1>{{item}}</h1>
-                            <p>Did you know you need to be a user in order to create/ add a restaurant</p>
-                            <p>{{avgPrice}}€</p>
-                        </section>
-                        <div>
-                            <img src="images/Otacos/otacos-tacos.jpg">
-                        </div>
-                    </div>
-                </li>
-                <li>
-                    <div>
-                        <section>
-                            <h1>{{item}}</h1>
-                            <p>Did you know you need to be a user in order to create/ add a restaurant</p>
-                            <p>{{avgPrice}}€</p>
-                        </section>
-                        <div>
-                            <img src="images/Otacos/otacos-tacos.jpg">
-                        </div>
-                    </div>
-                </li>
-            </ul>
-        </section>
+                </div>
+            </li>
+            {{/items}}
+        </ul>
     </section>
+    {{/categories}}
     {{/restaurant}}
     <dialog class="popup-item-specifications bg-color-white text-align-left" id="popup_item">
-        <h3 id="item_name">{{groupname}}</h3>
+        {{#groups}}
+        <h3 id="item_name">{{name}}</h3>
         <div class="image-container">
             <img src={{imgSrc}}>
         </div>
         <form method="dialog">
-                <p>Choisissez des légumes : </p>
-                <label for="poivrons">
-                    <input type="radio" name="option1" value="poivrons" id="poivrons">
-                    Poivrons
+            <p>Choisissez des {{name}} : </p>
+            {{#items}}
+                <label for="{{name}}">
+                    <input type="radio" name="option1" value="{{name}}" id="{{name}}">
+                    {{name}}
                 </label>
-                <label for="onions">
-                    <input type="radio" name="option1" value="onion" id="onions">
-                    Onions
-                </label>
+            <!--<label for="onions">
+                <input type="radio" name="option1" value="onion" id="onions">
+                Onions
+            </label>
+        It should be generated by a function depending on the items-->
+            <!--
                 <label for="cocombres">
                     <input type="radio" name="option1" value="cocombres" id="cocombres">
                     Cocombres
-                </label>
+                </label>-->
                 <p>Souhaitez vous des suppléments ?</p>
                 <label>
-                    <input type="checkbox" name="option2" value="eau">
-                    Eau
+                    <input type="checkbox" name="option2" value="{{name}}">
+                    {{name}}
                 </label>
+            <!--
                 <label for="maggi">
                     <input type="checkbox" name="option2" value="maggi" id="maggi">
                     Maggi
@@ -299,12 +155,15 @@
                 <label for="sel">
                     <input type="checkbox" name="option2" value="sel" id="sel">
                     Sel
-                </label>
+                </label>-->
+            {{/items}}
         </form>
+        {{/groups}}
         <section class="buttons">
             <button type="submit" class="bg-color-black color-white" value="cancel" id="close_popup">Annuler</button>
             <button type="submit" class="bg-color-green">Ajouter à vôtre assiette {{total_sup}}</button>
         </section>
+
     </dialog>
     <footer class="full-width-section text-align-left">
         <div>

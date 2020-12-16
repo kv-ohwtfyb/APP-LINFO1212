@@ -114,11 +114,21 @@ app.get('/creating_restaurant', function (req, res){
 });
 
 app.get('/dashboard', function (req, res) {
-    getOrders(app, req, res);
+    if (req.session.restaurant){
+        getOrders(app, req, res);
+    }else {
+        res.render('./seller/SellerLoginPage.html',
+            { loginError : "To access the category modification page you have to login as a seller."});
+    }
 });
 
 app.get('/payments_list', function (req, res) {
-    getPaymentsPage(app, req ,res);
+    if (req.session.restaurant){
+        getPaymentsPage(app, req ,res);
+    }else {
+        res.render('./seller/SellerLoginPage.html',
+            { loginError : "To access the category modification page you have to login as a seller."});
+    }
 });
 
 app.get('/my_store', function (req, res){

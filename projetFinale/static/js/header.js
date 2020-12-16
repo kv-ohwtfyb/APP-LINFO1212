@@ -33,7 +33,7 @@ function sleep (time) {
 
 /**
  * Sends the modify item of the basket request to the server, and freezes
- * every pther pointer events till the response from the server.
+ * every other pointer events till the response from the server.
  * @param event
  */
 function sendModifyingRequest(event){
