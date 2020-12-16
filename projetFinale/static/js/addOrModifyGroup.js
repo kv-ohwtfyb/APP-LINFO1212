@@ -124,7 +124,7 @@ function deleteGroup(form) {
 
 function handleAPIResponse(response) {
     if(response.status){
-        window.open('/dashboard','_parent')
+        window.open('/my_store','_parent')
     } else {
         alert(response.msg);
     }

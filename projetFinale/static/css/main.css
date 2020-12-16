@@ -1064,7 +1064,6 @@ are used as secondary classes in html. */
 .block{
     display: block;
 }
-
 .align-center{
     align-content: center;
     display: inline-flex;
