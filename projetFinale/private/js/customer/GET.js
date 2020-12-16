@@ -36,37 +36,17 @@ function ordersPage(app,req,res){
     .catch((err) => { console.log(`Caught by .catch ${err}`);});
     */
     
-    const user = req.session.user;
-    if(user){
-        res.render('./customer/OrdersPage.html', {
-            loggedIn: true,
-            name: user.name,
-            orders: true,
-            _id : '#hfj12f5f1f145',
-            date : "Dec 08 2020",
-            building: "Batiment Mihigo",
-            status: "delivered",
-            total: 2.80 ,
-            restaurants: [{
-                restaurant : 'Quick',
-                items: [{
-                    name: "Durum",
-                    unityPrice : 2.30,
-                    quantity : 2
-                }]
-            }, 
-            {
-                restaurant : 'Mihigo',
-                items: [{
-                    name: "Chicken Wings",
-                    unityPrice : 0.50,
-                    quantity : 3
-                }]
-            }]
+    userModel.findById(req.session.user._id).then((user) => {
+        user.getArrayOfOrders().then( (array) => {
+            res.render('./customer/OrdersPage.html', { 
+                loggedIn: user,
+                orderList : array
+            })
+        })
+    })
+        .catch((err) => {
+            console.log(`Caught by .catch ${err}`);
         });
-    } else {
-        res.redirect('/');
-    }
     
     
 }

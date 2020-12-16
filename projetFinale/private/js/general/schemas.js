@@ -45,12 +45,16 @@ userSchema.methods.getSellerRestaurant = function (inputAuthKey){
  * Returns an array of order documents for this user.
  * @returns Promise<{*[]}>
  */
-userSchema.methods.getArrayOfOrders = function () {
-    return this.orders.map((refId) => orderModel.findById(refId).toObject());
+userSchema.methods.getArrayOfOrders = async function () {
+    this.orders.forEach(async (refId, idx, array) => { 
+        array[idx] = await orderModel.findById(refId);
+    });
+    return this.orders;
 }
 
 userSchema.methods.addOrder = function (refId) {
-    if (!(refId instanceof String)) throw Error("The ref Id has to be a string");
+    console.log(refId);
+    if (!(refId instanceof mongoose.ObjectId)) throw Error("The ref Id isn't an Id");
     this.orders.push(refId);
     userModel.updateOne({ _id : this._id }, { orders : this.orders } );
 }

@@ -63,59 +63,29 @@
                 <th>Total</th>
                 <th>Action</th>
             </tr>
-            {{#orders}}
+            {{#orderList}}
             <tr class="shadow paid">
                 <td class="orderId">{{_id}}</td >
                 <td class="date">{{date}}</td>
-                <td class="batiment">{{building}} </td>
+                <td class="building">{{building}} </td>
                 <td class="status">{{status}}</td>
-                <td class="total">{{total}}€</td>
+                <td class="total">{{total}}</td>
                 <td class="action">
-                    <button id="reOrder_btn"> Details </button>
+                    <button class ="reOrder_btn"> Details </button>
                 </td>
             </tr>
-            {{/orders}}
-            {{^orders}}
-                <h1> You have any orders yet</h1>
-            {{/orders}}
+            {{/orderList}}
+            {{^orderList}}
+            <tr>
+                <td><h1> You have any orders yet</h1></td>
+            </tr>
+            {{/orderList}}
 
         </table>
         
     </section>
     <dialog class=" popup-plate popup-item-specifications  text-align-left" id="popup_item">
-        <h2>ORDER</h2>
-
-        <section >
-            <ul class="order-view-text-align-left" id="detailsList">
-                <li>Order ID : {{_id}} <!--#i896eh6983h --></li>
-                <li>Date     : {{date}} <!--25 Feb 2020--></li>
-                <li>Batiment : {{building}} <!--Batiment Reamur--></li>
-                <li>Status   : {{status}} <!--Delivered--></li>            
-            </ul>
-        </section>  
-        <p id="msg">{{msg}}</p>
-        <form method="dialog" >
-        
-            <ul class="full-width-section order-view-text-align-left" id="orderList">
-                {{#restaurants}}
-                <li >
-                    <h2 class ="RestoName" >{{restaurant}}</h2>
-                    <hr class="bg-color-black">
-                    <ul>
-                        {{#items}}
-                        <li class="item">
-                            <input type="number"  value="{{quantity}}" class="bg-color-black border-less" id="itemQuantity" name="{{restaurant}}|{{name}}">
-                            <p class="name text-align-left" class="name" name ="itemName" >{{name}}</p>
-                            <p class="text-align-right" id="itemUnityPrice" name ="unityPrice" >{{unityPrice}}€</p>
-                        </li>
-                        {{/items}}
-                    </ul>
-                </li>
-                {{/restaurants}}
-                
-            </ul>
-            
-        </form> 
+         
         <section class="buttons">
             <button value="cancel" class="bg-color-black color-white" id="close_popup" >Annuler</button>
             <button value="default" class="bg-color-green" id="submit_popup" type="submit">REORDER {{total}}€</button>
