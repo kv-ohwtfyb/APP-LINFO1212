@@ -91,12 +91,9 @@ function sellerStore(app,req, res){
         let options = { name : restaurant.name };
         options.listOfItems = await restaurant.getArrayOfItemsDisplayForStore();
         options.listOfGroups = await restaurant.groups;
-<<<<<<< HEAD
         options.loggedIn = true;
         options.user = req.session.user;
-=======
         options.listOfCategories = await restaurant.categories;
->>>>>>> 50f534c416bdb66635d8bed69d90b350e5ac0e9f
         res.render('./seller/StorePage.html', options);
     });
 }

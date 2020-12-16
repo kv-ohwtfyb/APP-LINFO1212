@@ -1,10 +1,5 @@
-<<<<<<< HEAD
-const {getItemSpecFromReqBody} = require("../general/functions");
-const { restaurantModel } = require('./../general/schemas');
-=======
+const { getItemSpecFromReqBody, setVirtualImageSrc } = require("../general/functions");
 const { userModel, restaurantModel } = require('./../general/schemas');
->>>>>>> 50f534c416bdb66635d8bed69d90b350e5ac0e9f
-const { setVirtualImageSrc } = require('./../general/functions');
 
 function homePage(app, req, res){
     restaurantModel.arrayOfRestaurantsForDisplay().then((array) => {
@@ -31,7 +26,7 @@ function ordersPage(app,req,res){
         if(err){
             res.json(err);
         } else {
-            res.render('./customer/OrdersPage.html', { 
+            res.render('./customer/OrdersPage.html', {
                 loggedIn: true,
                 name: user.name,
                 orders: user.orders,
@@ -41,10 +36,10 @@ function ordersPage(app,req,res){
     })
     .catch((err) => { console.log(`Caught by .catch ${err}`);});
     */
-    
+
     userModel.findById(req.session.user._id).then((user) => {
         user.getArrayOfOrders().then( (array) => {
-            res.render('./customer/OrdersPage.html', { 
+            res.render('./customer/OrdersPage.html', {
                 loggedIn: user,
                 orderList : array
             })
@@ -53,8 +48,8 @@ function ordersPage(app,req,res){
         .catch((err) => {
             console.log(`Caught by .catch ${err}`);
         });
-    
-    
+
+
 }
 
 function logInPage(app,req,res){
