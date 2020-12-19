@@ -151,7 +151,27 @@ app.get('/logout', (req,res ) => {
 app.get('/getFullOrders', (req, res) => {
     orderModel.findById(req.query)
         .then((result) => {
-            res.json({status: true, data : result});
+            if (result) {
+                res.json({status: true, data : result});    
+            } else {
+                res.json({status: false , data : "Sorry, Order requested doesn't exist"});
+            }
+            
+        })
+        .catch((error) => {
+            res.json({status: false, data : error.message});
+        })
+})
+
+app.get('/checkOrders', (req, res) => {
+    orderModel.findById(req.query)
+        .then((result) => {
+            if (result) {
+                res.json({status: true, data : result});    
+            } else {
+                res.json({status: false , data : "Sorry, You can't reorder this order"});
+            }
+            
         })
         .catch((error) => {
             res.json({status: false, data : error.message});

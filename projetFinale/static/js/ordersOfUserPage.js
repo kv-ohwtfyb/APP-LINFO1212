@@ -2,49 +2,86 @@
 $(document).ready(function (){
     const dialog = $("#popup_item");
     dialog.hide();
+    let orderId = ""; 
+    let creatingBasket = ``;
+
+    /* Si On appuie sur le button ReOrder  (pour voir les détails de la commande*/
 
     $(".reOrder_btn").on('click', function(event){
-        const orderId = $(event.target).closest("tr").find(".orderId").text();
+        orderId = $(event.target).closest("tr").find(".orderId").text();
         $.ajax( '/getFullOrders',
         {
             method :'GET',
             data   : {_id: orderId},
-            success: methodDialog
+            success: displayDialog
         })
 
     });
 
-    function methodDialog(response) {
+    
+    /* Si On appuie sur le button Annuler*/
+
+    $("#close_popup").on('click', function () { 
+        dialog.hide();
+        dialog.find("h2").remove();
+        dialog.find("#detailsList").remove();
+        dialog.find("#orderList").remove();
+    });
+    
+    /* Si On appuie sur le button reOrder dans le dialog*/
+    
+    $("#submit_popup").click(function (event) {
+        $.ajax( '/checkOrders',
+        {
+            method :'GET',
+            data   : {_id: orderId},
+            success: refreshPage
+        })
+
+        dialog.hide();
+        dialog.find("h2").remove();
+        dialog.find("#detailsList").remove();
+        dialog.find("#orderList").remove();
+    });
+
+
+
+
+
+
+
+
+
+
+    /**
+     * 
+     * @param {Objet} response : Reponse donnée par le serveur. 
+     * Structure: response = {
+     *  status: true (or false),
+     *  data  : {Json d'une ou des commande(s)} ou un message d'erreur 
+     * }
+     *  
+     */
+    function displayDialog(response) {
+        dataFromTheServer = response;
+
         if(response.status){
             let result = ``;
+            let creatingDialog = ``;
             const totalSize = response.data.restaurants.length ;
 
-            for ( let i = 0; i < totalSize ; i++ ){ 
-                result += `<li >
-                    <h2 class ="RestoName" >${response.data.restaurants[i].restaurant}</h2>
-                    <hr class="bg-color-black">
-                    <ul>
-                    
-                        <li class="item">
-                            <input type="number"  value="${response.data.restaurants[i].quantity}" class="bg-color-black border-less" id="itemQuantity" name="${response.data.restaurants[i].restaurant}|${response.data.restaurants[i].name}">
-                            <p class="name text-align-left" class="name" name ="itemName" >${response.data.restaurants[i].name}</p>
-                            <p class="text-align-right" id="itemUnityPrice" name ="unityPrice" >${response.data.restaurants[i].unityPrice}€</p>
-                        </li>
-                    </ul>
-                </li>`  
-                                    
-            } 
+
+            result = afficherLesDetails(totalSize, response.data.restaurants);         
             
-            
-            const creatingDialog = ` <h2>ORDER</h2>
+            creatingDialog  = ` <h2>ORDER</h2>
 
             <section>
                 <ul class="order-view-text-align-left" id="detailsList">
                     
-                    <li>Order ID : ${response.data._id} </li>
-                    <li>Date     : ${response.data.date} </li>
-                    <li>Batiment : ${response.data.building} </li>
-                    <li>Status   : ${response.data.status} </li>            
+                    <li>Order ID : <i>${response.data._id}      </i></li>
+                    <li>Date     : <i>${response.data.date}     </i></li>
+                    <li>Batiment : <i>${response.data.building} </i></li>
+                    <li>Status   : <i>${response.data.status}   </i></li>            
                 </ul>
             </section>  
             <form method="dialog" >
@@ -58,19 +95,65 @@ $(document).ready(function (){
             dialog.show();
 
         } else {
-            console.log("Fuck You");
+            alert(response.data)
         }
     }
-
-    $("#close_popup").on('click', function () { 
-        dialog.hide();
-        dialog.find("#detailsList").remove();
-        dialog.find("#orderList").remove();
-    });
     
-    $("#submit_popup").click(function () {
+    
+    /**
+     * 
+     * @param {number} restoListSize : La taille de la list des Restaurants 
+     * @param {Array} listOfRestaurants : La Liste des restaurants.
+     * 
+     * listOfRestaurants == restaurants : [
+     *      { restaurant: '...', items : [...], total : ...}
+     *      { restaurant: "...", items : [...], total : ...}
+     * ]
+     */
+
+    function afficherLesDetails(restoListSize, listOfRestaurants){
+        let result = ` `;
         
-    });
-    
+        for ( let i = 0; i < restoListSize ; i++ ){ 
 
+            const itemListSize = listOfRestaurants[i].items.length;
+
+            const itemResult = afficherLesItems(itemListSize, listOfRestaurants[i].items, listOfRestaurants[i].restaurant )
+
+            result += `<li >
+                <h2 class ="RestoName" >${listOfRestaurants[i].restaurant}</h2>
+                <hr class="bg-color-black">
+                <ul>
+                    ${itemResult}                       
+                </ul>
+            </li>`  
+                                
+        } 
+
+        return result;
+
+    }
+
+
+    /**
+     * Return an html template of Items
+     * @param {number} itemListSize : La taille de la list; 
+     * @param {Array} itemList : une list d'objet;
+     * @param {String} nameOfRestaurant : The name of the restaurant;
+     */
+    function afficherLesItems(itemListSize, itemList, nameOfRestaurant){
+
+        let result = ``;
+        for (let j = 0; j < itemListSize; j++){
+            result += `
+            <li class="item">
+                <input type="number"  value="${itemList[j].quantity}" class="bg-color-black border-less" id="itemQuantity" name="${nameOfRestaurant}|${itemList[j].name}" disabled>
+                <p class="name text-align-left" class="name" name ="itemName" >${itemList[j].name}</p>
+                <p class="text-align-right" id="itemUnityPrice" name ="unityPrice" >${itemList[j].unityPrice}€</p>
+            </li>`            
+        }
+        return result;
+        
+    }
 });
+

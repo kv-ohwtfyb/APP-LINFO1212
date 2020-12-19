@@ -38,6 +38,7 @@ function ordersPage(app,req,res){
     */
 
     userModel.findById(req.session.user._id).then((user) => {
+
         user.getArrayOfOrders().then( (array) => {
             res.render('./customer/OrdersPage.html', {
                 loggedIn: user,
