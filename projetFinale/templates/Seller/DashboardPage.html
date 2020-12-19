@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GiQ | Dashboard</title>
+    {{#restaurant}}
+        <title>GiQ | {{name}} Dashboard </title>
+    {{/restaurant}}
     <!--    CSS Imports-->
     <link rel="stylesheet" href="./css/main.css">
     <!--    JavaScript Imports-->
@@ -46,21 +48,21 @@
             <a href="/payments_list">Payments</a>
         </div>
     </header>
-    <section class="top-section">
-        <div class="restaurant-details text-align-left">
-            <h2>O'Tacos</h2>
-            <div class="details text-align-left" >
-                <p>Sales today : <strong> 89,56 €</strong></p>
-                <p>Sales this month : <strong> 389,56 €</strong></p>
-                <p>Total Sales : <strong> 2344,09 €</strong></p>
-                <p>Orders today : <strong> 10 €</strong></p>
-                <p>Average price per order : <strong> 7,09€</strong></p>
+    {{#restaurant}}
+        <section class="top-section">
+            <div class="restaurant-details text-align-left">
+                <h2>{{name}}</h2>
+                <div class="details text-align-left" >
+                    <p>Sales today : <strong>{{salesToday}}</strong></p>
+                    <p>Orders today : <strong>{{numberOfOrdersToday}}</strong></p>
+                    <p>Average price per order : <strong>{{avgPrice}}</strong></p>
+                </div>
             </div>
-        </div>
-        <div>
-            <h1 class="text-align-right">Orders Today</h1>
-        </div>
-    </section>
+            <div>
+                <h1 class="text-align-right">Orders Today</h1>
+            </div>
+        </section>
+    {{/restaurant}}
     <table class="table-of-orders" id="table_of_orders">
         <tr class="bg-color-white header-row">
             <th>Order</th>
@@ -69,45 +71,24 @@
             <th>Total</th>
             <th>Action</th>
         </tr>
-        <tr class="order bg-color-green">
-            <td>#i89eh795g</td>
-            <td>25 Feb 2020 11h09</td>
-            <td>
-                <dl>
-                    <dt> Menu Etudiant : </dt>
-                    <dd>- L'eau</dd>
-                    <dd>- Nourriture piquant</dd>
-
-                    <dt> Durum : </dt>
-                    <dd>- Sauce fromagères</dd>
-                </dl>
-            </td>
-            <td> 29,78 €</td>
-            <td>
-                {{#action}}
-                <button class="doneBtn"> Done </button>
-                <button class="annulerBtn">Cancel</button>
-                {{/action}}
-            </td>
-        </tr>
-        <tr class="order bg-color-orange">
-            <td><p>#i89eh795g</p></td>
-            <td>26 Feb 2020 10h09</td>
-            <td>
-                <dl>
-                    <dt> Menu Etudiant :</dt>
-                    <dd>- L'eau</dd>
-                    <dd>- Nourriture piquant</dd>
-                    <dt> Durum :</dt>
-                    <dd>- Sauce fromagères</dd>
-                </dl>
-            </td>
-            <td> 29,78 €</td>
-            <td>
-                <button class="bg-color-black color-white border-less">Done</button>
-                <button class="bg-color-red color-white border-less">Cancel</button>
-            </td>
-        </tr>
+        {{#listOfOrders}}
+            <tr class="order bg-color-green">
+                <td>{{_id}}</td>
+                <td>{{date}}</td>
+                <td>
+                    <ul>
+                        {{#items}}
+                            <li>{{name}}</li>
+                        {{/items}}
+                    </ul>
+                </td>
+                <td>{{total}}</td>
+                <td>
+                    <button class="doneBtn"> Done </button>
+                    <button class="annulerBtn">Cancel</button>
+                </td>
+            </tr>
+        {{#listOfOrders}}
     </table>
     <div class="order-view popup-plate bg-color-white full-height-section" id="order_popup">
         <button class="close border-less bg-color-black color-white">X</button>
