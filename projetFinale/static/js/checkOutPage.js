@@ -1,7 +1,7 @@
 $(document).ready(function () {
 
     $("#confirm_order").on('click', function () {
-        sendOrderRequest($("#building").val());
+        sendOrderRequest($("#building").val(), $("#date").val());
     });
 
     $("form").on('submit',() => {
@@ -10,11 +10,11 @@ $(document).ready(function () {
 })
 
 
-function sendOrderRequest(building){
+function sendOrderRequest(building, date){
     $.ajax('/check_out',
 {
             method: "POST",
-            data : { building : building },
+            data : { building : building, date : date },
             success : handleResponse
         });
 }

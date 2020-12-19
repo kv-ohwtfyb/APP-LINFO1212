@@ -71,7 +71,6 @@ async function compareHashStringToARegularString(string, hashedString){
  * @return Object
  */
 async function findInAnArrayWithASyncPredicate(array, predicate){
-    console.log(array);
     for (let i = 0; i < array.length; i++) {
         if (await predicate(array[i])){
             return array[i]

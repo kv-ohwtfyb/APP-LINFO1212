@@ -257,22 +257,25 @@ function restaurantView(app,req,res){
 }
 
 function orderConfirm(app, req, res){
-    if (new Date().getHours() >= 12){
-        res.json({ status : false,
-                    msg : "Sorry you can only order before noon. You can leave the page your basket will be saved for 24h."})
+    const dateValidation = checkDate(req.body.date);
+    const buildings  = [ "Montesquieu", "Agora" ,"Studio" ,"Sainte-Barbe", "Cyclotron",
+                        "Leclercq", "Doyen", "Lavoisier", "Croix-du-sud", "ILV", "Mercator"];
+
+    if (!dateValidation[0]){
+        return res.json({ status: true, msg :"The date you entered is invalid." });
     }
 
-    const buildings = [ "Montesquieu", "Agora" ,"Studio" ,"Sainte-Barbe", "Cyclotron",
-                        "Leclercq", "Doyen", "Lavoisier", "Croix-du-sud", "ILV", "Mercator"]
     if (buildings.includes(req.body.building)){
         const orderObj = Object.assign(
                                 { building : req.body.building,
                                          user : req.session.user._id.toString(),
-                                         status : "Ongoing"},
-                                        req.session.basket);
+                                         status : "Ongoing",
+                                         date : dateValidation[1]
+                                        }, req.session.basket);
         orderObj.total  = orderObj.totalAmount;
         delete orderObj.totalAmount; delete orderObj.totalItems;
         const order = new orderModel(orderObj);
+        console.log(order);
         order.check()
             .then(() => {
                 order.save()
@@ -298,4 +301,26 @@ exports.postUserRegister = userRegister;
 exports.userLoggingCheck = userLoggingCheck;
 exports.modifyAnItemOfTheBasket = modifyAnItemOfTheBasket;
 exports.postCheckOut = orderConfirm;
+
+function checkDate(givenDateString){
+    const arrayDate = givenDateString.split("-");
+    const givenDate = new Date( parseInt(arrayDate[0]),
+                                parseInt(arrayDate[1])-1,
+                                parseInt(arrayDate[2]));
+    const today = new Date();
+    if (givenDate.getFullYear() >= today.getFullYear()){
+        if (givenDate.getMonth() >= today.getMonth()){
+            if (today.getHours > 12){
+                if (givenDate.getDate() > today.getDate()){
+                    return [true, givenDate]
+                }
+            }else {
+                if (givenDate.getDate() >= today.getDate()){
+                    return [true, givenDate]
+                }
+            }
+        }
+    }
+    return [false, null];
+}
 

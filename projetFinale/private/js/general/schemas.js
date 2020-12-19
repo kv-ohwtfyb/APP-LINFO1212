@@ -584,18 +584,18 @@ restaurantSchema.methods.updateAveragePrice = async function (){
  * Adds the reference Id into the restaurant orders collection.
  * @param refId (String) : the id to the parent order
  * @param restaurantOrderObject
+ * @param dateIsoString
  * @returns {Promise<void>}
  */
-restaurantSchema.methods.addOrder = async function(refId, restaurantOrderObject){
+restaurantSchema.methods.addOrder = async function(refId, restaurantOrderObject, dateIsoString){
     if (!( typeof refId === "string")) throw new Error("The refId has to be a string");
     const thisRestaurantOrdersModel = await mongoose.model("Orders", restaurantOrderSchema, this.orders.toString())
-    const todayOrderDocument = await thisRestaurantOrdersModel.findOne({
-        $where : function (){
-            const dateToCompare = new Date(this.date);
-            const today = new Date();
-            return dateToCompare.getDate() === today.getDate() && dateToCompare.getMonth() === today.getMonth() && dateToCompare.getFullYear() === today.getFullYear();
-        }
-    });
+    const dateGiven = new Date(dateIsoString);
+    const todayOrderDocument = await functions.findWithPromise(await thisRestaurantOrdersModel.find(),
+        (date) => {
+            const dateToCompare = new Date(date);
+            return dateToCompare.getDate() === dateGiven.getDate() && dateToCompare.getMonth() === dateGiven.getMonth() && dateToCompare.getFullYear() === dateGiven.getFullYear();
+        });
     if (todayOrderDocument){
         await todayOrderDocument.orders.push(refId);
         todayOrderDocument.totalAmount = await todayOrderDocument.totalAmount + restaurantOrderObject.total;
@@ -608,7 +608,7 @@ restaurantSchema.methods.addOrder = async function(refId, restaurantOrderObject)
     }else{
         const createTodayDocument = await new thisRestaurantOrdersModel(
                 {
-                    date : new Date(),
+                    date : dateGiven,
                     orders : [ refId ],
                     totalAmount : restaurantOrderObject.total
                 }
@@ -713,7 +713,7 @@ orderSchema.post('save', async function (order) {
     await order.restaurants.forEach((object) => {
         restaurantModel.findOne( { name : object.restaurant } ).then((rest) => {
             restaurantModel.findById(rest._id).then((restaurant) =>{
-                restaurant.addOrder(order._id.toString(), object);
+                restaurant.addOrder(order._id.toString(), object, order.date);
             })
         })
     })
@@ -816,3 +816,5 @@ function checkForSimilarName(name){
 function sorter(a, b) {
     return functions.formatText(a.name).localeCompare(functions.formatText(b.name), 'fr', { sensitivity: 'base' });
 }
+
+

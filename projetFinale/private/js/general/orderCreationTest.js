@@ -20,6 +20,7 @@ const order = new orderModel({
                         total : 20
                     }
                 ],
+    date : new Date(2020,11,28, 5, 0),
     status : "Ongoing",
     user   : "5fce68f454efac2da091f7cb",
     building : "More"
@@ -28,9 +29,9 @@ const order = new orderModel({
 
 order.check().then(() => {
     order.save(function (err, product) {
-    if (err) { console.log(`Caught by .catch ${err}`); }
-    else { console.log(`Saved order to the database.`);}
-});
+        if (err) { console.log(`Caught by .catch ${err}`); }
+        else { console.log(`Saved order to the database.`);}
+    });
 }).catch((err) => {
     const errorMessage = (err instanceof Object) ? err.message : err;
     console.log(errorMessage);
