@@ -6,31 +6,41 @@ mongoose.connect('mongodb://localhost:27017/testingdb',
 );
 
 const order = new orderModel({
-    total : 16,
+    total : 20,
     restaurants : [
                     {
                         restaurant : "Exki",
                         items : [
                                     {
                                         name : "Orange Juice",
-                                        quantity : 4,
-                                        unityPrice : 5,
+                                        quantity : 7,
+                                        unityPrice : 4,
                                     }
                                 ],
                         total : 20
                     }
                 ],
+    date : new Date(2020,11,28, 5, 0),
     status : "Ongoing",
     user   : "5fce68f454efac2da091f7cb",
+    building : "More"
 });
 
-order.save(function (err, product) {
-    if (err) { console.log(`Caught by .catch ${err}`); }
-    else { console.log(`Saved order to the database.`);}
-});
+
+order.check().then(() => {
+    order.save(function (err, product) {
+        if (err) { console.log(`Caught by .catch ${err}`); }
+        else { console.log(`Saved order to the database.`);}
+    });
+}).catch((err) => {
+    const errorMessage = (err instanceof Object) ? err.message : err;
+    console.log(errorMessage);
+})
+
 
 // restaurantModel.findById("5fd2a594fc655f2c0c1ebad3").then((restaurant)=>{
-//     restaurant.getArrayOfOrders().then((array) => {
-//         console.log(array);
-//     })
+//     console.log(restaurant.name);
+//     restaurant.updateAveragePrice().then(r =>{
+//         console.log("updated");
+//     });
 // })

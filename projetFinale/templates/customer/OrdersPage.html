@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ORDERS</title>
+    <title>GiQ | Orders </title>
     <!--    CSS Imports-->
     <link rel="stylesheet" href="./css/main.css">
     <!--    JavaScript Imports-->
@@ -102,7 +102,7 @@
             {{/orderList}}
             {{^orderList}}
             <tr>
-                <td><h1> You have any orders yet</h1></td>
+                <td><h1> You haven't placed orders yet</h1></td>
             </tr>
             {{/orderList}}
 
@@ -110,7 +110,6 @@
         
     </section>
     <dialog class=" popup-plate popup-item-specifications  text-align-left" id="popup_item">
-         
         <section class="buttons">
             <button value="cancel" class="bg-color-black color-white" id="close_popup" >Annuler</button>
             <button value="default" class="bg-color-green" id="submit_popup" type="submit">REORDER {{total}}</button>

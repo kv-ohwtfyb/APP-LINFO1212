@@ -4,7 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GiQ | Check Out</title>
+    <!--    CSS Imports-->
     <link rel="stylesheet" href="./css/main.css">
+    <!--    JavaScript Imports-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script type="text/javascript" src="js/header.js"></script>
+    <script type="text/javascript" src="js/checkOutPage.js"></script>
 </head>
 <body class="input-page">
     <div>
@@ -13,71 +18,57 @@
             <h4>|</h4>
             <h3>UCLouvain</h3>
         </div>
-        <form class="round-border" method="GET">
+        <form class="round-border">
+            <label for="building">Choose a building :</label>
+            <select name="building" id="building" class="input round-border border-less margin-top-bottom">
+                <option value="Montesquieu">Montesquieu</option>
+                <option value="Agora">Agora</option>
+                <option value="Studio">Studio</option>
+                <option value="Sainte-Barbe">Sainte-Barbe</option>
+                <option value="Cyclotron">Cyclotron</option>
+                <option value="Leclercq">Leclercq</option>
+                <option value="Doyen">Doyen</option>
+                <option value="Lavoisier">Lavoisier</option>
+                <option value="Croix-du-sud">Croix-du-sud</option>
+                <option value="ILV">ILV</option>
+                <option value="Mercator">Mercator</option>
+            </select>
             <div>
-                <label for="building">Choose a building :</label>
-                <!-- We are going to use select
-                <input type="" placeholder="Building to which deliver the food ..." name="building" id="building">-->
-                <select name="building" id="building">
-                    <option value="Montesquieu">Montesquieu</option>
-                    <option value="Agora">Agora</option>
-                    <option value="Studio">Studio</option>
-                    <option value="Sainte-Barbe">Sainte-Barbe</option>
-                    <option value="Cyclotron">Cyclotron</option>
-                    <option value="Leclercq">Leclercq</option>
-                    <option value="Doyen">Doyen</option>
-                    <option value="Lavoisier">Lavoisier</option>
-                    <option value="Croix-du-sud">Croix-du-sud</option>
-                    <option value="ILV">ILV</option>
-                    <option value="Mercator">Mercator</option>
-                </select>
-                <label for="date"></label>
-                <input type="date" placeholder="Order for Today" name="date" id="date">
+                <label for="date">Choose the date on which you want your order</label>
+                <input type="date" id="date" min="{{dateMin}}">
             </div>
-            <input type="submit" value="Proceed to payment" class="bg-color-black">
+            <input type="submit" value="Confirm order" class="bg-color-black" id="confirm_order">
         </form>
     </div>
-    <div class="popup-plate full-height-section bg-color-white" >
-        <h2>Plate</h2>
+    <div class="popup-plate full-height-section bg-color-white" id="popup_plate_header">
+        <h2>Order</h2>
+        {{#basket}}
         <ul>
+            {{#restaurants}}
             <li>
-                <h2>Burger King</h2>
+                <h2>{{restaurant}}</h2>
                 <hr class="bg-color-black">
                 <ul>
-                    <li>
-                        <input type="number" min="0" max="20" value="1" class="bg-color-black border-less">
-                        <p class="text-align-left">Item example</p>
-                        <p class="text-align-right">9,65€</p>
+                    {{#items}}
+                    <li class="item">
+                        <input type="number" min="0" max="20" value="{{quantity}}" class="bg-color-black border-less" name="{{restaurant}}|{{name}}">
+                        <p class="name text-align-left" id="name">{{name}}</p>
+                        <p class="text-align-right">{{unityPrice}}€</p>
                     </li>
-                    <li>
-                        <input type="number" min="0" max="20" value="2" class="bg-color-black border-less">
-                        <p class="text-align-left">Item example</p>
-                        <p class="text-align-right">9,65€</p>
-                    </li>
+                    {{/items}}
                 </ul>
             </li>
-            <li>
-                <h2>O'Tacos</h2>
-                <hr class="bg-color-black">
-                <ul>
-                    <li>
-                        <input type="number" min="0" max="20" value="1" class="bg-color-black border-less">
-                        <p class="text-align-left">Item example</p>
-                        <p class="text-align-right">9,65€</p>
-                    </li>
-                    <li>
-                        <input type="number" min="0" max="20" value="2" class="bg-color-black border-less">
-                        <p class="text-align-left">Item example</p>
-                        <p class="text-align-right">9,65€</p>
-                    </li>
-                </ul>
-            </li>
+            {{/restaurants}}
         </ul>
-        <div class="bg-color-black bottom-of-container">
-            <p class="text-align-left">5</p>
+        <div class="bg-color-black bottom-of-container three-gridded-layout">
+            <p class="text-align-left" id="totalItems">{{totalItems}}</p>
             <p>Total</p>
-            <p class="text-align-right">24,98€</p>
+            <p class="text-align-right" id="totalAmount">{{totalAmount}}€</p>
         </div>
+        {{/basket}}
+        {{^basket}}
+            <h1> It seems like your basket is empty try adding some items :)</h1>
+        {{/basket}}
     </div>
 </body>
 </html>

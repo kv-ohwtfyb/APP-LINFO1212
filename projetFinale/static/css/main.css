@@ -341,6 +341,10 @@ header form input[type=submit]:active{
     position: absolute;
     margin: 0 15%;
 }
+.popup-plate .bottom-of-container a{
+    text-decoration: none;
+    align-self: center;
+}
 
 .filter-button{
     position: fixed;
