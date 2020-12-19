@@ -1,4 +1,4 @@
-const {userModel} = require("./../general/schemas");
+const { userModel, orderModel } = require("./../general/schemas");
 const bcrypt = require('bcrypt');
 
 function userLogIn(app, req, res){
@@ -235,6 +235,7 @@ function modifyItem(req){
         let item = restaurant.items.find(item => item.name === req.body.itemName);
         if (item){
             const quantityDifference = (item.quantity - parseInt(req.body.quantity));
+            restaurant.total = restaurant.total - quantityDifference * item.unityPrice
             req.session.basket.totalItems = req.session.basket.totalItems - quantityDifference;
             req.session.basket.totalAmount = req.session.basket.totalAmount - (quantityDifference * item.unityPrice);
             item.quantity = parseInt(req.body.quantity);
@@ -255,14 +256,41 @@ function restaurantView(app,req,res){
 
 }
 
+function orderConfirm(app, req, res){
+    const buildings = [ "Montesquieu", "Agora" ,"Studio" ,"Sainte-Barbe", "Cyclotron",
+                        "Leclercq", "Doyen", "Lavoisier", "Croix-du-sud", "ILV", "Mercator"]
+    if (buildings.includes(req.body.building)){
+        const orderObj = Object.assign(
+                                { building : req.body.building,
+                                         user : req.session.user._id.toString(),
+                                         status : "Ongoing"},
+                                        req.session.basket);
+        orderObj.total  = orderObj.totalAmount;
+        delete orderObj.totalAmount; delete orderObj.totalItems;
+        const order = new orderModel(orderObj);
+        order.check()
+            .then(() => {
+                order.save()
+                    .then(() => { res.json({ status : true });
+                                  console.log("here");
+                    })
+                    .catch(() => { res.json({ status : false, msg : "Sorry an error occurred we are going to fix it retry later."})})
+            }).catch((err) => {
+                const errorMessage = (err instanceof Object) ? err.message : err;
+                res.json({ status : false, msg : errorMessage });
+            })
+    }else {
+        res.json({  status : false ,
+                    msg : `The building you selected ${req.body.building} isn't valid. 
+                           Please select between the suggested building. `})
+    }
+}
+
 exports.postUserLoggedIn = userLogIn;
 exports.addItemToBasket = addItemToBasket;
-exports.modifyAnItemOfTheBasket = modifyAnItemOfTheBasket;
-exports.postUserLoggedIn = userLogIn;
 exports.postPhoneNumberCheck = phoneNumberCheck;
 exports.postUserRegister = userRegister;
 exports.userLoggingCheck = userLoggingCheck;
-exports.postUserLoggedIn = userLogIn;
-exports.addItemToBasket = addItemToBasket;
 exports.modifyAnItemOfTheBasket = modifyAnItemOfTheBasket;
+exports.postCheckOut = orderConfirm;
 

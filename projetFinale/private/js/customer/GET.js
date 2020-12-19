@@ -104,7 +104,9 @@ function searchRestaurants(app,req,res){
     });
 }
 function checkOut(app,req,res){
-    res.render('./customer/CheckOutPage.html');
+    res.render('./customer/CheckOutPage.html', {
+        basket : req.session.basket
+    });
 }
 function signUpVerificationNumber(app,req,res){
     res.render('./customer/SignUpVerificationNumberPage.html');

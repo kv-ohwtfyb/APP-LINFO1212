@@ -39,7 +39,8 @@ const {
     postUserRegister,
     postOrdersOfUser,
     addItemToBasket,
-    modifyAnItemOfTheBasket
+    modifyAnItemOfTheBasket,
+    postCheckOut,
 
 } = require('./private/js/customer/POST');
 
@@ -63,7 +64,7 @@ app.use(session({
     secret: "EnCRypTIoNKeY",
     resave: false,
     saveUninitialized: true,
-    cookie: {path: '/', httpOnly: true, limit: 30 * 60 * 1000}
+    cookie: {path: '/', httpOnly: true, limit: 24* 60 * 60 * 1000}
 }));
 
 //Initiating the basket in the app session
@@ -232,6 +233,23 @@ app.put('/category', ((req, res) => {
 /************ CUSTOMER GET Request PART ************/
 
 app.get('/', function (req, res) {
+    req.session.basket = {
+        totalAmount : 20,
+        totalItems : 5,
+        restaurants : [
+                        {
+                            restaurant : "Exki",
+                            items : [
+                                        {
+                                            name : "Orange Juice",
+                                            quantity : 5,
+                                            unityPrice : 4,
+                                        }
+                                    ],
+                            total : 20
+                        }
+                    ],
+    }
     getHomePage(app, req, res);
 });
 
@@ -295,8 +313,8 @@ app.post('/restaurant', (req, res) => {
 app.post('/search_response', (req, res) => {
     console.log(req.body);
 })
-app.post('/checkout', (req, res) => {
-    console.log(req.body);
+app.post('/check_out', (req, res) => {
+    postCheckOut(app, req, res);
 })
 app.post('/signup_verification',(req, res) => {
     console.log(req.body);
