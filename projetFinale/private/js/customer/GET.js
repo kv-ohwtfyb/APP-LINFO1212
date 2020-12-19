@@ -1,4 +1,4 @@
-const { getItemSpecFromReqBody, setVirtualImageSrc } = require("../general/functions");
+const { getItemSpecFromReqBody, setVirtualImageSrc } = require("./../general/functions");
 const { userModel, restaurantModel } = require('./../general/schemas');
 
 function homePage(app, req, res){
@@ -20,23 +20,6 @@ function homePage(app, req, res){
  * Then render a page with a list of orders the use has ever ordered or an empty list if the user hasn't ordered anything.
  * */
 function ordersPage(app,req,res){
-    /*
-    const user = req.session.user;
-    userModel.find({name: user.name}, function (err, doc) {
-        if(err){
-            res.json(err);
-        } else {
-            res.render('./customer/OrdersPage.html', {
-                loggedIn: true,
-                name: user.name,
-                orders: user.orders,
-                restaurants: user.orders.restaurant
-            });
-        }
-    })
-    .catch((err) => { console.log(`Caught by .catch ${err}`);});
-    */
-
     userModel.findById(req.session.user._id).then((user) => {
         user.getArrayOfOrders().then( (array) => {
             res.render('./customer/OrdersPage.html', {
@@ -62,11 +45,29 @@ function restaurantsPage(app,req,res){
     restaurantModel.findOne({ name : req.query.name }).then((rest) => {
         restaurantModel.findById(rest._id).then(async (restaurant) => {
             const restaurantObject = await restaurant.getRestaurantView();
-            restaurantObject.items.price = (1 - (restaurantObject.items.promo / restaurantObject.items.price));
             console.log(restaurantObject);
+            console.log(restaurantObject.groups);
+            let maxUn;
+            let maxPlusieurs;
+            let giveTo;
+            if (restaurantObject.groups.maxSelection === '1'){
+                maxUn = true;
+
+            }else{
+
+                maxPlusieurs = true;
+            }
+            if (maxUn === true){
+                giveTo = maxUn;
+            }else{
+                giveTo = maxPlusieurs;
+            }
             res.render('./customer/RestaurantViewPage.html', {
                 restaurant : restaurantObject,
                 basket : req.session.basket,
+                groups : restaurantObject.groups,
+                imgSrc : restaurantObject.items.image,
+                maxSelection : giveTo,
             });
         })
     })

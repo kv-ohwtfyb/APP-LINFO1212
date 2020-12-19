@@ -55,13 +55,15 @@
                     <label for="description"></label>
                     <textarea name="description" class="full-width-section shadow border-less" id="description" value="{{description}}"></textarea>
                 </section>
-                <section class="align-center">
-                    <label class="margin-left-right"> Sold Alone :</label>
-                    <label for="sellAloneYes">Oui</label>
-                    <input type="radio" name="soldAlone" id="sellAloneYes" required>
-                    <label for="sellAloneNo">Non</label>
-                    <input type="radio" name="soldAlone" id="sellAloneNo">
-                </section>
+                <form action="registerSoldAlone" method="post">
+                    <section class="align-center">
+                        <label class="margin-left-right"> Sold Alone :</label>
+                        <label for="sellAloneYes">Oui</label>
+                        <input type="radio" name="soldAlone" id="sellAloneYes" required>
+                        <label for="sellAloneNo">Non</label>
+                        <input type="radio" name="soldAlone" id="sellAloneNo" required>
+                    </section>
+                </form>
             </div>
         </section>
         <section class="group-categories bg-color-green shadow column-display">

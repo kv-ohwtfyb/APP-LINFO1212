@@ -1,8 +1,7 @@
-const restaurantModel = require("mongoose");
 $(document).ready(function () {
 
     const dialog = $("#popup_item");
-    dialog.hide(0);
+    dialog.hide();
     $(".list-of-items > li").on('click', function () {
         dialog.show();
     });
@@ -12,6 +11,3 @@ $(document).ready(function () {
     })
 });
 
-function getGroupsInfoToDisplay(){
-    //TODO
-}
