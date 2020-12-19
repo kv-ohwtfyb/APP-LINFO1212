@@ -118,7 +118,7 @@ app.get('/dashboard', function (req, res) {
         getOrders(app, req, res);
     }else {
         res.render('./seller/SellerLoginPage.html',
-            { loginError : "To access the category modification page you have to login as a seller."});
+            { loginError : "To access the dashboard page you have to login as a seller."});
     }
 });
 
@@ -148,6 +148,7 @@ app.get('/logout', (req,res ) => {
    req.session.user = null;
    res.redirect('/');
 });
+
 /* I AM HEREEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE */
 app.get('/getFullOrders', (req, res) => {
     orderModel.findById(req.query)

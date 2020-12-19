@@ -55,7 +55,7 @@
                 <div class="details text-align-left" >
                     <p>Sales today : <strong>{{salesToday}}</strong></p>
                     <p>Orders today : <strong>{{numberOfOrdersToday}}</strong></p>
-                    <p>Average price per order : <strong>{{avgPrice}}</strong></p>
+                    <p>Average price per order : <strong>{{avgPrice}}€</strong></p>
                 </div>
             </div>
             <div>
@@ -88,7 +88,7 @@
                     <button class="annulerBtn">Cancel</button>
                 </td>
             </tr>
-        {{#listOfOrders}}
+        {{/listOfOrders}}
     </table>
     <div class="order-view popup-plate bg-color-white full-height-section" id="order_popup">
         <button class="close border-less bg-color-black color-white">X</button>

@@ -3,10 +3,6 @@ const uniqueValidator = require('mongoose-unique-validator');
 const Schema = mongoose.Schema;
 
 const functions = require('./functions');
-const {setVirtualImageSrc} = require("./functions");
-const {formatText} = require("./functions");
-const {formatRemoveWhiteSpaces} = require("./functions");
-
 
 const userSchema = new Schema({
     name     : { type : String,                       required : true },
@@ -435,7 +431,7 @@ restaurantSchema.statics.arrayOfRestaurantsForDisplay = function ( array = null)
                 if (item.image){
                     object.image = item.image;
                     object.imageType = item.imageType;
-                    setVirtualImageSrc(object);
+                    functions.setVirtualImageSrc(object);
                 }
                 return object;
             });
@@ -568,16 +564,16 @@ restaurantSchema.methods.getArrayOfItemsDisplayForStore = function(){
     })
 }
 
-restaurantSchema.methods.getArrayOfOrders = function(){
+restaurantSchema.methods.getArrayOfDatesOnOrders = function(){
     const thisRestaurantOrderModel = mongoose.model('Restaurant Order', restaurantOrderSchema, this.orders.toString());
     return thisRestaurantOrderModel.find();
 }
 
 
 restaurantSchema.methods.updateAveragePrice = async function (){
-    const orders = await this.getArrayOfOrders();
+    const orders = await this.getArrayOfDatesOnOrders();
     const reducer = function (accumulator, docAvg) { return ( docAvg + accumulator ) / 2 ; }
-    const updated = await orders.map((doc) => doc.totalAmount / doc.orders.length).reduce(reducer);
+    const updated = roundTo2Decimals(await orders.map((doc) => doc.totalAmount / doc.orders.length).reduce(reducer));
     await restaurantModel.updateOne({ _id : this._id}, { avgPrice : updated });
 }
 /**
@@ -590,12 +586,8 @@ restaurantSchema.methods.updateAveragePrice = async function (){
 restaurantSchema.methods.addOrder = async function(refId, restaurantOrderObject, dateIsoString){
     if (!( typeof refId === "string")) throw new Error("The refId has to be a string");
     const thisRestaurantOrdersModel = await mongoose.model("Orders", restaurantOrderSchema, this.orders.toString())
-    const dateGiven = new Date(dateIsoString);
-    const todayOrderDocument = await functions.findWithPromise(await thisRestaurantOrdersModel.find(),
-        (date) => {
-            const dateToCompare = new Date(date);
-            return dateToCompare.getDate() === dateGiven.getDate() && dateToCompare.getMonth() === dateGiven.getMonth() && dateToCompare.getFullYear() === dateGiven.getFullYear();
-        });
+    const dateGiven = await new Date(dateIsoString);
+    const todayOrderDocument = await this.getObjectOfOrdersOnADay(dateIsoString);
     if (todayOrderDocument){
         await todayOrderDocument.orders.push(refId);
         todayOrderDocument.totalAmount = await todayOrderDocument.totalAmount + restaurantOrderObject.total;
@@ -617,17 +609,37 @@ restaurantSchema.methods.addOrder = async function(refId, restaurantOrderObject,
             console.log(`Inserted Today in ${this.name} orders.`);
         });
     }
+    await this.updateAveragePrice();
+}
+
+restaurantSchema.methods.getObjectOfOrdersOnADay = async function (dateIsoString){
+    const thisRestaurantOrdersModel = await mongoose.model("Orders", restaurantOrderSchema, this.orders.toString())
+    const dateGiven = await new Date(dateIsoString);
+    return functions.findWithPromise(await thisRestaurantOrdersModel.find(),
+    ({date}) => {
+            const dateToCompare = new Date(date);
+            return dateToCompare.getDate() === dateGiven.getDate() && dateToCompare.getMonth() === dateGiven.getMonth() && dateToCompare.getFullYear() === dateGiven.getFullYear();
+        });
+}
+
+restaurantSchema.methods.arrayOfOrdersOnADay = async function (dateIsoString){
+    const obj = await this.getObjectOfOrdersOnADay(dateIsoString);
+    const arrayOfOrders = obj.orders;
+    for (let i = 0; i < arrayOfOrders.length; i++) {
+        arrayOfOrders[i] = await orderModel.findById(arrayOfOrders[i]);
+    }
+    return arrayOfOrders;
 }
 
 /**
  * Creates the text indexes which will be used for customer search.
  */
-restaurantSchema.index({'groups.description' : 'text',
-                        'groups.items.name' : 'text',
-                        'categories.description' : 'text',
-                        'categories.items' : 'text',
-                        'name' : 'text'
-                        });
+restaurantSchema.index({  'groups.description' : 'text',
+                                 'groups.items.name' : 'text',
+                                 'categories.description' : 'text',
+                                 'categories.items' : 'text',
+                                 'name' : 'text'
+                              });
 
 const restaurantModel = mongoose.model('Restaurant', restaurantSchema, 'restaurants');
 
@@ -673,7 +685,6 @@ const orderSchema = new Schema({
 });
 
 orderSchema.methods.check = function (){
-
     return new Promise((async (resolve, reject) => {
         await this.restaurants.forEach((restaurantObject) => {
             return restaurantModel.findOne({ name : restaurantObject.restaurant })
@@ -817,4 +828,11 @@ function sorter(a, b) {
     return functions.formatText(a.name).localeCompare(functions.formatText(b.name), 'fr', { sensitivity: 'base' });
 }
 
-
+/**
+ * Rounds a float to 2 decimals after the point.
+ * @param num
+ * @return {number}
+ */
+function roundTo2Decimals(num) {
+    return Math.round((num + Number.EPSILON) * 100) / 100
+}

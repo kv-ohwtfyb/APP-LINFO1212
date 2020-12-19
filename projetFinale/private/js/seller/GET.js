@@ -71,9 +71,22 @@ function createResto(app,req, res){
     res.render('./seller/CreateRestaurantSpeci.html');
 }
 
-function listOfOrders(app, req, res){
-    const restaurant = req.session.restaurant;
-    res.render('./seller/DashboardPage.html',{loggedIn : true, name : restaurant.name });
+function dashboard(app, req, res){
+    restaurantModel.findById(req.session.restaurant._id).then(async (restaurant) => {
+        const date = new Date(2020,11,20);
+        const listOfOrders = await restaurant.arrayOfOrdersOnADay(date.toISOString());
+        const todayElement = await restaurant.getObjectOfOrdersOnADay(date.toISOString());
+        restaurant.salesToday = todayElement.totalAmount;
+        restaurant.numberOfOrdersToday = listOfOrders.length;
+        res.render('./seller/DashboardPage.html',
+            {
+                loggedIn: true,
+                restaurant: restaurant,
+                listOfOrders: listOfOrders,
+
+            }
+                );
+    })
 }
 
 function paymentsList(app, req, res){
@@ -105,7 +118,7 @@ exports.getAddOrModifyItem = addOrModifyItem;
 exports.getAddOrModifyCategory = addOrModifyCategory;
 exports.getAfterCreateRestoMessage = createRestoFinishedMessage;
 exports.getCreateRestaurant = createResto;
-exports.getOrders = listOfOrders;
+exports.getOrders = dashboard;
 exports.getPaymentsPage = paymentsList;
 exports.getTheStorePage = sellerStore;
 exports.getSellerLoginPage = loggingIn;
