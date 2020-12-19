@@ -104,8 +104,10 @@ function searchRestaurants(app,req,res){
     });
 }
 function checkOut(app,req,res){
+    const date = new Date()
     res.render('./customer/CheckOutPage.html', {
-        basket : req.session.basket
+        basket : req.session.basket,
+        // dateMin : ( date.getHours() >= 12 ) ?  :
     });
 }
 function signUpVerificationNumber(app,req,res){

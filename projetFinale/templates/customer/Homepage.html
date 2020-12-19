@@ -18,22 +18,19 @@
         </button>
         <div class="navbar bg-color-white" id="navbar_header">
                 <button id="navbar_close" class="border-less bg-color-black color-white">X</button>
-                {{#loggedIn}}
                 <ul>
+                {{#loggedIn}}
                     <li><a class="login border-less bg-color-black" href="/logout"><h2>Log out</h2></a></li>
                     <li>
                         <h3 class="user-name text-align-left">Hello, {{name}}</h3>
                     </li>
                     <li><a href="/orders_page">Orders</a></li>
-                </ul>
+                    <li><a href="/check_out">Check Out</a></li>
                 {{/loggedIn}}
                 {{^loggedIn}}
-                <ul>
                     <li><a class="login border-less bg-color-black" href="/user_login"><h2>Log in</h2></a></li>
                     <li><a href="/sign_up_giveNumber">Sign Up</a></li>
-                </ul>
                 {{/loggedIn}}
-                <ul>
                     <li><a href="/creating_restaurant">Add your restaurant</a></li>
                     <li><a href="/seller_login">Log in as a seller</a></li>
                 </ul>

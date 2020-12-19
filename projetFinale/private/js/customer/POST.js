@@ -257,6 +257,11 @@ function restaurantView(app,req,res){
 }
 
 function orderConfirm(app, req, res){
+    if (new Date().getHours() >= 12){
+        res.json({ status : false,
+                    msg : "Sorry you can only order before noon. You can leave the page your basket will be saved for 24h."})
+    }
+
     const buildings = [ "Montesquieu", "Agora" ,"Studio" ,"Sainte-Barbe", "Cyclotron",
                         "Leclercq", "Doyen", "Lavoisier", "Croix-du-sud", "ILV", "Mercator"]
     if (buildings.includes(req.body.building)){

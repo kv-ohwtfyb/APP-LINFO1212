@@ -280,7 +280,15 @@ app.get('/search',(req,res) => {
     getSearchRestaurants(app,req,res);
 })
 app.get('/check_out',(req,res) =>{
-    getCheckOutPage(app,req,res);
+    if (req.session.user === undefined){
+        res.render("./customer/UserLoginPage.html", {
+            loginError : "To checkout you must login first."
+        })
+    }else if (req.session.basket === undefined){
+        res.redirect('/');
+    }else{
+        getCheckOutPage(app,req,res);
+    }
 })
 
 app.get('/signup_verification',(req, res) => {
