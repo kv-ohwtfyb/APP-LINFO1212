@@ -164,20 +164,7 @@ app.get('/getFullOrders', (req, res) => {
         })
 })
 
-app.get('/checkOrders', (req, res) => {
-    orderModel.findById(req.query)
-        .then((result) => {
-            if (result) {
-                res.json({status: true, data : result});    
-            } else {
-                res.json({status: false , data : "Sorry, You can't reorder this order"});
-            }
-            
-        })
-        .catch((error) => {
-            res.json({status: false, data : error.message});
-        })
-})
+
 
 /************ Seller POST Request PART ************/
 
@@ -325,6 +312,23 @@ app.get('/signUp_complete', (req, res) => {
 })
 
 /************ CUSTOMER POST Request PART ************/
+app.post('/reOrderCheck', (req, res) => {
+
+    const data = JSON.parse(req.body.order);
+    const order =  new orderModel(data);
+    
+    order.check()
+        .then(() => {
+            req.session.basket = data;
+            res.json({status: true, data : result});     
+            
+        })
+        .catch((error) => {
+            
+            const errorMessage = (error instanceof Object) ? error.message : error;
+            res.json({status: false, msg : errorMessage});
+        })
+})
 
 app.post('/user_log_in',(req, res) => {
     postUserLoggedIn(app,req, res);

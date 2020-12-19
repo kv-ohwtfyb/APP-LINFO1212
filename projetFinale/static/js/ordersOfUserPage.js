@@ -1,4 +1,6 @@
 
+let basket; 
+
 $(document).ready(function (){
     const dialog = $("#popup_item");
     dialog.hide();
@@ -31,17 +33,32 @@ $(document).ready(function (){
     /* Si On appuie sur le button reOrder dans le dialog*/
     
     $("#submit_popup").click(function (event) {
-        $.ajax( '/checkOrders',
+        
+        delete basket._id; 
+        delete basket.date;
+        delete basket.building;
+        delete basket._v;
+
+        basket = JSON.stringify(basket);
+
+        $.ajax( '/reOrderCheck',
         {
-            method :'GET',
-            data   : {_id: orderId},
-            success: refreshPage
+            method :'POST',
+            data   : {order : basket },
+            success: function (response) {
+                if (response.status){
+                    window.open("/check_out", '_parent');
+                } else {
+                    alert(response.msg);
+                }
+                dialog.hide();
+                dialog.find("h2").remove();
+                dialog.find("#detailsList").remove();
+                dialog.find("#orderList").remove();
+            }
         })
 
-        dialog.hide();
-        dialog.find("h2").remove();
-        dialog.find("#detailsList").remove();
-        dialog.find("#orderList").remove();
+        
     });
 
 
@@ -63,7 +80,7 @@ $(document).ready(function (){
      *  
      */
     function displayDialog(response) {
-        dataFromTheServer = response;
+        basket = response.data;
 
         if(response.status){
             let result = ``;
