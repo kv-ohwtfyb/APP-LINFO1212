@@ -667,7 +667,7 @@ const orderSchema = new Schema({
                             }],                         required : true  },
     status      : { type : String,                      required : true  },
     building    : { type : String,                      required : true  },
-    date        : { type : Object,                      required : true,            default: new Date() },
+    date        : { type : Object,                      required : true,            default: new Date(Date.now()).toDateString() /* new Date(Date.now()).toDateString() */ },
     cancelRest  : { type : String,                      required : false },
     user        : { type : String,                      required : true  }
 });
