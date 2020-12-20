@@ -20,7 +20,7 @@
         </div>
         <form class="round-border">
             <label for="building">Choose a building :</label>
-            <select name="building" id="building" class="input round-border border-less margin-top-bottom">
+            <select name="building" id="building" class="input round-border border-less margin-top-bottom" required>
                 <option value="Montesquieu">Montesquieu</option>
                 <option value="Agora">Agora</option>
                 <option value="Studio">Studio</option>
@@ -35,7 +35,7 @@
             </select>
             <div>
                 <label for="date">Choose the date on which you want your order</label>
-                <input type="date" id="date" min="{{dateMin}}">
+                <input type="date" id="date" min="{{dateMin}}" required>
             </div>
             <input type="submit" value="Confirm order" class="bg-color-black" id="confirm_order">
         </form>

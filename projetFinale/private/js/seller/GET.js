@@ -73,19 +73,31 @@ function createResto(app,req, res){
 
 function dashboard(app, req, res){
     restaurantModel.findById(req.session.restaurant._id).then(async (restaurant) => {
-        const date = new Date(2020,11,20);
+        const date = (req.query.date != null) ? new Date(req.query.date) : new Date(2020,11,20);
         const listOfOrders = await restaurant.arrayOfOrdersOnADay(date.toISOString());
-        const todayElement = await restaurant.getObjectOfOrdersOnADay(date.toISOString());
-        restaurant.salesToday = todayElement.totalAmount;
-        restaurant.numberOfOrdersToday = listOfOrders.length;
+        if (listOfOrders){
+            const todayElement = await restaurant.getObjectOfOrdersOnADay(date.toISOString());
+            restaurant.salesToday = todayElement.totalAmount;
+            restaurant.numberOfOrdersToday = listOfOrders.length;
+        }
         res.render('./seller/DashboardPage.html',
             {
-                loggedIn: true,
+                loggedIn: req.session.user,
                 restaurant: restaurant,
                 listOfOrders: listOfOrders,
-
             }
                 );
+    })
+}
+
+function orderDetailsForRestaurant(app, req, res) {
+    restaurantModel.findById(req.session.restaurant._id).then( (restaurant) => {
+        restaurant.getOrdersItemsForRestaurant(req.query.orderId)
+            .then((object) => {
+                if (object)  res.json({ status : true, data : object });
+                else res.json({ status : false, msg : "An order with the given id doesn't exist."})
+
+            })
     })
 }
 
@@ -122,3 +134,4 @@ exports.getOrders = dashboard;
 exports.getPaymentsPage = paymentsList;
 exports.getTheStorePage = sellerStore;
 exports.getSellerLoginPage = loggingIn;
+exports.getOrderDetails = orderDetailsForRestaurant;

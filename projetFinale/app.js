@@ -30,7 +30,8 @@ const {
     getSellerLoginPage,
     getAfterCreateRestoMessage,
     getListOfGroupNames,
-    getListOfCategories
+    getListOfCategories,
+    getOrderDetails,
 } = require('./private/js/seller/GET');
 
 const {
@@ -49,7 +50,9 @@ const {
     postCreatingRestaurant,
     postAddItem,
     postAddGroup,
-    postAddCategory
+    postAddCategory,
+    postConfirmOrder,
+    postCancelOrder
 } = require('./private/js/seller/POST');
 
 const { updateItem, updateGroup, updateCategory } = require('./private/js/seller/PUT');
@@ -118,7 +121,7 @@ app.get('/dashboard', function (req, res) {
         getOrders(app, req, res);
     }else {
         res.render('./seller/SellerLoginPage.html',
-            { loginError : "To access the dashboard page you have to login as a seller."});
+            { loggedIn : req.session.user, loginError : "To access the dashboard page you have to login as a seller."});
     }
 });
 
@@ -165,7 +168,13 @@ app.get('/getFullOrders', (req, res) => {
         })
 })
 
-
+app.get('/getOrderDetails', ((req, res) => {
+    if (req.session.restaurant){
+        getOrderDetails(app, req, res);
+    }else {
+        res.json({ status : false, msg : "Please first sign in as a seller to have access."})
+    }
+}))
 
 /************ Seller POST Request PART ************/
 
@@ -210,6 +219,21 @@ app.post('/seller_login', function (req, res) {
     postSellerLogin(app,req, res);
 });
 
+app.post('/confirmOrder', (req, res) => {
+    if (req.session.restaurant){
+        postConfirmOrder(app, req,res);
+    }else {
+        res.json({ status : false, msg : "Please first login as a seller."});
+    }
+});
+
+app.post('/cancelOrder', (req, res) => {
+    if (req.session.restaurant){
+        postCancelOrder(app, req,res);
+    }else {
+        res.json({ status : false, msg : "Please first login as a seller."});
+    }
+});
 /************ SELLER   DELETE Request Routers *********/
 
 app.delete('/item', function (req, res) {
@@ -241,23 +265,6 @@ app.put('/category', ((req, res) => {
 /************ CUSTOMER GET Request PART ************/
 
 app.get('/', function (req, res) {
-    req.session.basket = {
-        totalAmount : 20,
-        totalItems : 5,
-        restaurants : [
-                        {
-                            restaurant : "Exki",
-                            items : [
-                                        {
-                                            name : "Orange Juice",
-                                            quantity : 5,
-                                            unityPrice : 4,
-                                        }
-                                    ],
-                            total : 20
-                        }
-                    ],
-    }
     getHomePage(app, req, res);
 });
 
@@ -267,8 +274,6 @@ app.get('/orders_page',(req,res) =>{
     } else {
         res.redirect('/');
     }
-    
-  
 })
 
 app.get('/user_login',(req,res) => {

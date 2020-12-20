@@ -671,6 +671,11 @@ footer p,a{
 .seller-page{
     align-items: center;
 }
+
+.seller-page header button{
+    width: 40px;
+    height: 18px;
+}
 .seller-page section{
     margin: auto;
 }
@@ -751,7 +756,7 @@ footer p,a{
 }
 .table-of-orders tr{
     display: grid;
-    grid-template-columns: 200px 200px 350px 50px auto;
+    grid-template-columns: 250px 200px 350px 50px auto;
     margin: 20px auto;
     height: 200px;
 }
@@ -772,7 +777,6 @@ footer p,a{
 
 .order-view ul li ul li{
     display: block;
-    text-align: left;
 }
 
 .order-view-text-align-left{

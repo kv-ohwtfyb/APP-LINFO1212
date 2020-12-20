@@ -40,7 +40,7 @@ mongoose.connect('mongodb://localhost:27017/testingdb',
 
 restaurantModel.findById("5fd2a594fc655f2c0c1ebad3").then((restaurant)=>{
     const date = new Date(2020,11,20);
-    restaurant.arrayOfOrdersOnADay(date.toISOString()).then(object =>{
+    restaurant.getOrdersItemsForRestaurant("5fdf287d3ae71851180468bc").then(object =>{
         console.log(object);
     });
 })

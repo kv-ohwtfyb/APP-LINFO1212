@@ -217,10 +217,10 @@ function modifyAnItemOfTheBasket(app, req, res){
  * @return {Promise<void>}
  */
 async function checkTheInputs(body){
-    if (!(body.hasOwnProperty('restaurant'))) throw Error("No restaurant key was in the request body.");
-    if (!(body.hasOwnProperty('itemName'))) throw Error("No itemName key was in the request body.");
-    if (!(body.hasOwnProperty('quantity'))) throw Error("No quantity key was in the request body.");
-    if (body.quantity < 0) throw Error("Quantity must be greater or equal to 0");
+    if (!(body.hasOwnProperty('restaurant'))) throw new Error("No restaurant key was in the request body.");
+    if (!(body.hasOwnProperty('itemName'))) throw new Error("No itemName key was in the request body.");
+    if (!(body.hasOwnProperty('quantity'))) throw new Error("No quantity key was in the request body.");
+    if (body.quantity < 0) throw new Error("Quantity must be greater or equal to 0");
 }
 
 /**
@@ -245,24 +245,25 @@ function modifyItem(req){
             }
             return true;
         }else {
-            throw `No such item as ${req.body.itemName}`;
+            throw new Error(`No such item as ${req.body.itemName}`);
         }
     }else {
-        throw `No restaurant as ${req.body.restaurant}`;
+        throw new Error(`No restaurant as ${req.body.restaurant}`);
     }
 }
 
-function restaurantView(app,req,res){
-
-}
 
 function orderConfirm(app, req, res){
     const dateValidation = checkDate(req.body.date);
     const buildings  = [ "Montesquieu", "Agora" ,"Studio" ,"Sainte-Barbe", "Cyclotron",
                         "Leclercq", "Doyen", "Lavoisier", "Croix-du-sud", "ILV", "Mercator"];
 
+    if (req.session.basket.restaurants.length === 0) {
+        return res.json({ status: false, msg :"Make sure there's something in your basket" });
+    }
+
     if (!dateValidation[0]){
-        return res.json({ status: true, msg :"The date you entered is invalid." });
+        return res.json({ status: false, msg :"The date you entered is invalid." });
     }
 
     if (buildings.includes(req.body.building)){
@@ -275,13 +276,10 @@ function orderConfirm(app, req, res){
         orderObj.total  = orderObj.totalAmount;
         delete orderObj.totalAmount; delete orderObj.totalItems;
         const order = new orderModel(orderObj);
-        console.log(order);
         order.check()
             .then(() => {
                 order.save()
-                    .then(() => { res.json({ status : true });
-                                  console.log("here");
-                    })
+                    .then(() => { res.json({ status : true }); })
                     .catch(() => { res.json({ status : false, msg : "Sorry an error occurred we are going to fix it retry later."})})
             }).catch((err) => {
                 const errorMessage = (err instanceof Object) ? err.message : err;
@@ -290,7 +288,7 @@ function orderConfirm(app, req, res){
     }else {
         res.json({  status : false ,
                     msg : `The building you selected ${req.body.building} isn't valid. 
-                           Please select between the suggested building. `})
+                           Please select between the suggested building. `});
     }
 }
 

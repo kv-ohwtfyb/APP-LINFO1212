@@ -624,11 +624,62 @@ restaurantSchema.methods.getObjectOfOrdersOnADay = async function (dateIsoString
 
 restaurantSchema.methods.arrayOfOrdersOnADay = async function (dateIsoString){
     const obj = await this.getObjectOfOrdersOnADay(dateIsoString);
+    if (!obj){ return null; }
     const arrayOfOrders = obj.orders;
     for (let i = 0; i < arrayOfOrders.length; i++) {
-        arrayOfOrders[i] = await orderModel.findById(arrayOfOrders[i]);
+        arrayOfOrders[i] = await this.getOrdersItemsForRestaurant(arrayOfOrders[i]);
     }
     return arrayOfOrders;
+}
+
+restaurantSchema.methods.getOrdersItemsForRestaurant = async function(orderId){
+    let order = await orderModel.findById(orderId);
+    order = order.toObject();
+    if (!order) return order;
+    order.restaurants = await functions.findWithPromise(order.restaurants,
+                                            ({restaurant}) => { return restaurant === this.name });
+    order.ConfirmedByThisRestaurant = await order.doneRestaurants.includes(this.name);
+    order.cancelled = await order.cancelRestaurants.length > 0;
+    order.modifiable = !(order.cancelled || order.ConfirmedByThisRestaurant);
+    return order;
+}
+
+restaurantSchema.methods.confirmOrder = function (orderId){
+    return new Promise(async (resolve, reject) => {
+        const order = await orderModel.findById(orderId);
+        const restaurant = await functions.findWithPromise( order.restaurants,
+                                                ({restaurant}) => { return restaurant === this.name });
+        if (restaurant){
+            if (order.status === "Cancelled" || order.doneRestaurants.includes(this.name)) { return resolve(); }
+            order.doneRestaurants.push(this.name);
+            if (order.doneRestaurants.length === order.restaurants.length){
+                await orderModel.updateOne({ _id : order._id}, { doneRestaurants : order.doneRestaurants, status : "Ready" });
+                return resolve();
+
+            }else{
+                await orderModel.updateOne({ _id : order._id}, { doneRestaurants : order.doneRestaurants });
+                return resolve();
+            }
+        }else{
+            return reject(`The restaurant ${this.name} doesn't have access to this order.`);
+        }
+    });
+}
+
+restaurantSchema.methods.cancelOrder = function (orderId){
+    return new Promise(async (resolve, reject) => {
+        const order = await orderModel.findById(orderId);
+        const restaurant = await functions.findWithPromise( order.restaurants,
+                                                ({restaurant}) => { return restaurant === this.name });
+        if (restaurant){
+            if (order.cancelRestaurants.includes(this.name)){ return resolve(); }
+            order.cancelRestaurants.push(this.name);
+            await orderModel.updateOne({ _id : order._id}, { cancelRestaurants : order.cancelRestaurants, status : "Cancelled" });
+            return resolve();
+        }else{
+            return reject(`The restaurant ${this.name} doesn't have access to this order.`);
+        }
+    });
 }
 
 /**
@@ -680,7 +731,8 @@ const orderSchema = new Schema({
     status      : { type : String,                      required : true  },
     building    : { type : String,                      required : true  },
     date        : { type : Object,                      required : true,            default: new Date() },
-    cancelRest  : { type : String,                      required : false },
+    cancelRestaurants  : { type : [ String ],                      required : false },
+    doneRestaurants : { type : [ String ],                    required : false },
     user        : { type : String,                      required : true  }
 });
 

@@ -124,11 +124,45 @@ function addCategory(app, req, res){
     })
 }
 
+function confirmOrder(app, req, res){
+    restaurantModel.findById(req.session.restaurant._id)
+        .then((restaurant) => {
+            restaurant.confirmOrder(req.body.orderId)
+                .then(() => {
+                    res.json({ status : true });
+            })
+                .catch((err) => {
+                    const errorMessage = (err instanceof Object) ? err.message : err;
+                    res.json({ status : false, msg : errorMessage });
+
+                })
+        })
+}
+
+function cancelOrder(app, req, res){
+    restaurantModel.findById(req.session.restaurant._id)
+        .then((restaurant) => {
+            restaurant.cancelOrder(req.body.orderId)
+                .then(() => {
+                    res.json({ status : true });
+            })
+                .catch((err) => {
+                    const errorMessage = (err instanceof Object) ? err.message : err;
+                    res.json({ status : false, msg : errorMessage });
+
+                })
+        })
+}
+
+
+
 exports.postSellerLogin = sellerLogin;
 exports.postCreatingRestaurant = creatingRestaurant;
 exports.postAddItem = addItem;
 exports.postAddGroup = addGroup;
 exports.postAddCategory = addCategory;
+exports.postConfirmOrder = confirmOrder;
+exports.postCancelOrder = cancelOrder;
 
 async function sellerLogInCheck(user, req){
     let User = await userModel.findById(req.session.user._id).exec();

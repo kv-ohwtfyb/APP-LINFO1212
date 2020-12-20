@@ -1,10 +1,7 @@
 $(document).ready(function () {
 
-    $("#confirm_order").on('click', function () {
-        sendOrderRequest($("#building").val(), $("#date").val());
-    });
-
     $("form").on('submit',() => {
+        sendOrderRequest($("#building").val(), $("#date").val());
         return false;
     })
 })
