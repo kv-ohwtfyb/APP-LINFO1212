@@ -17,6 +17,7 @@
     "hogan": "^1.0.2",
     "hogan.js": "^3.0.2",
     "https": "^1.0.0",
+    "ini": "^2.0.0",
     "mongodb": "^3.6.2",
     "mongoose": "^5.11.8",
     "mongoose-unique-validator": "^2.0.3",
