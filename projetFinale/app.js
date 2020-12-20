@@ -58,6 +58,10 @@ const {
 const { updateItem, updateGroup, updateCategory } = require('./private/js/seller/PUT');
 const { deleteItem, deleteGroup, deleteCategory } = require('./private/js/seller/DELETE');
 const { orderModel } = require('./private/js/general/schemas');
+const { loginLimitter} = require('./private/js/general/functions');
+
+
+
 
 app.use(bodyParser.urlencoded({ extended :true, limit: '50mb' }));
 app.engine('html', consolidate.hogan);
@@ -69,6 +73,9 @@ app.use(session({
     saveUninitialized: true,
     cookie: {path: '/', httpOnly: true, limit: 24* 60 * 60 * 1000}
 }));
+
+const custommerloginPageLimit = loginLimitter(5,"You tried to log in many times, Please Try again in 2 min");
+const loginToRestaurantLimit = loginLimitter(3,"Is this really your restaurant? If so, Please Try again in 2 min");
 
 //Initiating the basket in the app session
 
@@ -143,6 +150,7 @@ app.get('/my_store', function (req, res){
     }
 });
 
+
 app.get('/seller_login', (req, res) =>{
     getSellerLoginPage(app, req, res);
 });
@@ -152,16 +160,15 @@ app.get('/logout', (req,res ) => {
    res.redirect('/');
 });
 
-/* I AM HEREEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE */
 app.get('/getFullOrders', (req, res) => {
     orderModel.findById(req.query)
         .then((result) => {
             if (result) {
-                res.json({status: true, data : result});    
+                res.json({status: true, data : result});
             } else {
                 res.json({status: false , data : "Sorry, Order requested doesn't exist"});
             }
-            
+
         })
         .catch((error) => {
             res.json({status: false, data : error.message});
@@ -215,7 +222,7 @@ app.post('/creating_restaurant', function (req, res){
     }
 });
 
-app.post('/seller_login', function (req, res) {
+app.post('/seller_login', loginToRestaurantLimit, function (req, res) {
     postSellerLogin(app,req, res);
 });
 
@@ -276,7 +283,23 @@ app.get('/orders_page',(req,res) =>{
     }
 })
 
-app.get('/user_login',(req,res) => {
+/* I AM HEREEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE */
+app.get('/getFullOrders', (req, res) => {
+    orderModel.findById(req.query)
+        .then((result) => {
+            if (result) {
+                res.json({status: true, data : result});
+            } else {
+                res.json({status: false , data : "Sorry, Order requested doesn't exist"});
+            }
+
+        })
+        .catch((error) => {
+            res.json({status: false, data : error.message});
+        })
+})
+
+app.get('/user_login', (req,res) => {
     if (req.session.user) { res.redirect("/"); }
     else { getUserLoginPage(app, req, res); }
 })
@@ -322,21 +345,21 @@ app.post('/reOrderCheck', (req, res) => {
 
     const data = JSON.parse(req.body.order);
     const order =  new orderModel(data);
-    
+
     order.check()
         .then(() => {
             req.session.basket = data;
-            res.json({status: true, data : result});     
-            
+            res.json({status: true});
         })
         .catch((error) => {
-            
+
             const errorMessage = (error instanceof Object) ? error.message : error;
             res.json({status: false, msg : errorMessage});
         })
 })
 
-app.post('/user_log_in',(req, res) => {
+
+app.post('/user_log_in', custommerloginPageLimit, (req, res) => {
     postUserLoggedIn(app,req, res);
 })
 app.post('/user_sign_up',(req, res, next) => {
