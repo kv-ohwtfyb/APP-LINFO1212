@@ -13,6 +13,7 @@ The file structure is like follow.
 |--- js
 |---|--- customer
 |---|--- seller
+|---|--- general
 |---|--- apis
 | static
 |--- css
@@ -24,6 +25,7 @@ The file structure is like follow.
 | tests
 | app.js
 | server.js
+| serverForTest.js
 ```
 
 ## 3. Style Guide 
@@ -34,23 +36,14 @@ For JavaScript (.js) files here are the rules :
 
 * Imports 
   * Importing modules we will be using the `<require>` keyword.
-  * The name given to the variable containing the import is declared with const and the name starts with a capital Letter.
+  * The name given to the variable containing the import is declared with const and the name starts with a small Letter.
   ```js
-  const Mongoose = Require('mongoose');
-  const MongodbServer = Require('mongodb').Server;
-  const AppClients = Require('./clients/app');
-  ```
-* Variables 
-  * Unchanging variables, are named all in caps with the const declarations. Ex :
-  ```js
-  const DB = Mongoose.connect(...);
-  ```
-  * Changing variables, are named in small letters but with a dash between two words. 
-  ```js
-  let orders_array = [{...}, {...}];
+  const mongoose = Require('mongoose');
+  const mongodbServer = Require('mongodb').Server;
+  const appClients = Require('./clients/app');
   ```
 * Functions 
-  * For functions we are going to prioritize promises than callbacks. Meaning when possible we are going to always return promises. 
+  * Apart from `App.js`, for functions, we are going to prioritize promises than callbacks. Meaning when possible we are going to always return promises. 
   * Async / sync functions ? this will depend on the developers needs.
   * Functions name will started with a small letter but a Capital letter is a must when starting a new word.
   ```js
@@ -58,6 +51,7 @@ For JavaScript (.js) files here are the rules :
     ...
   }
   ```
+  * In App.js, we don't create functions, we only import them and give them to app.get/ app.post. Most of functions imported are in `Private/js`
  ### 3.2 CSS 
  For the Cascading Style Sheets (.css) files we are going to prioritize classes over ids. So that we can use the ids in for the front end javascript programing.
  
