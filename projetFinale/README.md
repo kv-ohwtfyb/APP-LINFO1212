@@ -51,7 +51,9 @@ For JavaScript (.js) files here are the rules :
     ...
   }
   ```
-  * In App.js, we don't create functions, we only import them and give them to app.get/ app.post. Most of functions imported are in `Private/js`
+  * In `App.js`, we don't create functions, we only import and use them in routers callbacks. Most of functions imported are in `private/js`.
+  * In `Server.js`, we import the app and connect the server to our database.
+  
  ### 3.2 CSS 
  For the Cascading Style Sheets (.css) files we are going to prioritize classes over ids. So that we can use the ids in for the front end javascript programing.
  
