@@ -97,4 +97,10 @@ For JavaScript (.js) files here are the rules :
  * We used *Mongoose* for our database structure. [Mongoose Documentation](https://mongoosejs.com/docs/index.html) (-----)
  * To secure sensitive information, prevent from brute-force attack and protect passwords, we used *bcrypt* and *express-rate-limit* modules.
  
+ ## 6. How To run our web
+ 1. If it is your first time running our web ? Please,first, run **this file**  A AJOUTER to import our database.
+ 2. If it isn't your first time:
+    1. First, run your mongodb in a terminal : `mongod --dbpath <pathOfWhereYourDbIs>`
+    2. run our file `server.js` in the terminal: `node server.js`  **Please make sure to be in the 'ProjetFinale' folder**
+    3. Open a web browser and then type '[https://localhost:8080/](https://localhost:8080)'
 
