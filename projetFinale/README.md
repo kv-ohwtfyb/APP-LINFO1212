@@ -34,7 +34,7 @@ For JavaScript (.js) files here are the rules :
 
 * Imports 
   * Importing modules we will be using the `<require>` keyword.
-  * The name given to the variable containing the import is declared with const and the name starts with a capital Letter.
+  * The name given to the variable contaning the import is declared with const and the name starts with a capital Letter.
   ```js
   const Mongoose = Require('mongoose');
   const MongodbServer = Require('mongodb').Server;
