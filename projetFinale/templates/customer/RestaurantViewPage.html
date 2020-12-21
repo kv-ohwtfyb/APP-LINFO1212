@@ -12,6 +12,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script type="text/javascript" src="js/header.js"></script>
     <script type="text/javascript" src="js/restaurantViewPage.js"></script>
+
 </head>
 <body>
     <header>
@@ -120,31 +121,26 @@
     {{/categories}}
     {{/restaurant}}
     <dialog class="popup-item-specifications bg-color-white text-align-left" id="popup_item">
-        {{#groups}}
-        <h3 id="item_name">{{name}}</h3>
+        <h2 id="itemSelect_name">SUPPLEMENTS</h2>
         <div class="image-container">
             <img src={{imgSrc}}>
         </div>
-        <form method="dialog">
-            <p>Choisissez des {{name}} : </p>
-            {{#items}}
-                {{#maxSelection}}
-                <label for="{{name}}">
-                    <input type="radio" name="option1" value="{{name}}" id="{{name}}">
-                    {{name}}
-                </label>
-                {{/maxSelection}}
-                {{^maxSelection}}
-                <p>Souhaitez vous des suppléments ?</p>
-                <label>
-                    <input type="checkbox" name="option2" value="{{name}}">
-                    {{name}}
-                </label>
-                {{/maxSelection}}
-
-            {{/items}}
+        <form class="eachform">
+            {{#groups}}
+            <div id="{{name}}" class="full-width-section">
+                <h3 id="item_name">{{name}}</h3>
+                <p>Choisissez des {{name}} : </p>
+                <div id= "optionSelect" class="eachitem" >
+                    {{#items}}
+                        <label for="{{name}}" >
+                            <input type="checkbox" name="form" value="{{name}}" id="{{name}}">
+                            {{name}}
+                        </label>
+                    {{/items}}
+                </div>
+            </div>
+            {{/groups}}
         </form>
-        {{/groups}}
         <section class="buttons">
             <button type="submit" class="bg-color-black color-white" value="cancel" id="close_popup">Annuler</button>
             <button type="submit" class="bg-color-green">Ajouter à vôtre assiette {{total_sup}}</button>

@@ -155,6 +155,7 @@ function dataListContainsOption(datalist, potentialOption){
             return true;
         }
     }
+    return false;
 }
 
 function addTheSelectedGroupsAndCategories() {

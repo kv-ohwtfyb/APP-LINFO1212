@@ -47,28 +47,15 @@ function restaurantsPage(app,req,res){
         restaurantModel.findById(rest._id).then(async (restaurant) => {
             const restaurantObject = await restaurant.getRestaurantView();
             console.log(restaurantObject);
-            console.log(restaurantObject.groups);
-            let maxUn;
-            let maxPlusieurs;
-            let giveTo;
-            if (restaurantObject.groups.maxSelection === '1'){
-                maxUn = true;
-
-            }else{
-
-                maxPlusieurs = true;
+            for (let i = 0; i < restaurantObject.groups.length; i++){
+                console.log(restaurantObject.groups[i]);
             }
-            if (maxUn === true){
-                giveTo = maxUn;
-            }else{
-                giveTo = maxPlusieurs;
-            }
+            console.log(restaurantObject.groups.length);
+
             res.render('./customer/RestaurantViewPage.html', {
                 restaurant : restaurantObject,
                 basket : req.session.basket,
                 groups : restaurantObject.groups,
-                imgSrc : restaurantObject.items.image,
-                maxSelection : giveTo,
             });
         })
     })
