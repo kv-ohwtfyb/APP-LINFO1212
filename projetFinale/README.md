@@ -68,21 +68,21 @@ For JavaScript (.js) files here are the rules :
  
  ### 4.2 Private 
  * js
-  * This sub-folder is for all back-end functions. All functions in this folder are exported and most of them are the ones exported in `app.js`. 
+   * This sub-folder is for all back-end functions. All functions in this folder are exported and most of them are the ones exported in `app.js`. 
  You can find also the schemas of our database in `private/js/general` folder.
  
  * ssl
-  * This sub-folder contains all certificates.
+   * This sub-folder contains all certificates.
  
  ### 4.3 Static
  * Css
-  * This sub-folder contains the css of web application.
+   * This sub-folder contains the css of web application.
  
  * Images
-  * This sub-folder contains all images used in our web application.
+   * This sub-folder contains all images used in our web application.
  
  * Js
-  * This sub-folder contains all functions for front-end dynamic intervention.
+   * This sub-folder contains all functions for front-end dynamic intervention.
  
  ### 4.4 Templates
  This folder has all HTML pages of our web application.
