@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="./css/main.css">
     <!--    JavaScript Imports-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
     <script type="text/javascript" src="js/header.js"></script>
     <script type="text/javascript" src="js/restaurantViewPage.js"></script>
 
@@ -85,10 +86,9 @@
     {{#restaurant}}
     <section class="restaurant-info bg-color-green">
         <div class="text-align-right">
-            <h1>{{name}} |</h1>
+            <h1><span id="restaurant-name">{{name}}</span> |</h1>
         </div>
         <div class="text-align-left">
-            <p>Ouvert 8H - 9H | +32489457886</p>
             <p>{{address}}</p>
             <p class="prix-moyen-restaurant">
             Prix moyen dépensé : {{avgPrice}}€
@@ -98,8 +98,13 @@
             <img src={{imgSrc}}>
         </div>
     </section>
+    <div class="categories-tab bg-color-white color-black shadow">
+        {{#categories}}
+            <a href="#{{name}}">{{name}}</a>
+        {{/categories}}
+    </div>
     {{#categories}}
-    <section id="category" class="margin-top-bottom">
+    <section id="{{name}}" class="margin-top-bottom">
         <h2>{{name}}</h2>
         <ul class="list-of-items three-gridded-layout">
             {{#items}}
@@ -120,32 +125,17 @@
     </section>
     {{/categories}}
     {{/restaurant}}
-    <dialog class="popup-item-specifications bg-color-white text-align-left" id="popup_item">
-        <h2 id="itemSelect_name">SUPPLEMENTS</h2>
+    <dialog class="initially-hidden align-center popup-item-specifications bg-color-white text-align-left" id="popup_item">
+        <h2 class="margin-top-bottom"></h2>
         <div class="image-container">
-            <img src={{imgSrc}}>
+            <img>
         </div>
-        <form class="eachform">
-            {{#groups}}
-            <div id="{{name}}" class="full-width-section">
-                <h3 id="item_name">{{name}}</h3>
-                <p>Choisissez des {{name}} : </p>
-                <div id= "optionSelect" class="eachitem" >
-                    {{#items}}
-                        <label for="{{name}}" >
-                            <input type="checkbox" name="form" value="{{name}}" id="{{name}}">
-                            {{name}}
-                        </label>
-                    {{/items}}
-                </div>
-            </div>
-            {{/groups}}
+        <form class='full-width-section' action="" method="GET" id='itemForm'>
         </form>
         <section class="buttons">
-            <button type="submit" class="bg-color-black color-white" value="cancel" id="close_popup">Annuler</button>
-            <button type="submit" class="bg-color-green">Ajouter à vôtre assiette {{total_sup}}</button>
+            <button class="close bg-color-black color-white" value="cancel" id="close">Annuler</button>
+            <button type="submit" form="itemForm" class="bg-color-green">Add to Basket</button>
         </section>
-
     </dialog>
     <footer class="full-width-section text-align-left">
         <div>

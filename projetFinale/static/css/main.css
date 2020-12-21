@@ -42,6 +42,7 @@ input[type=submit]{
     color: white;
     position: absolute;
 }
+
 header{
     width: 100%;
     min-width: fit-content;
@@ -469,11 +470,11 @@ header form input[type=submit]:active{
 .list-of-items{
     margin: auto;
     padding: 0;
-    min-width: 1290px;
+    min-width: max(1290px, 100%);
 }
 .list-of-items li{
     height: fit-content;
-    min-width: max-content;
+    min-width: max(420px, 30%);
     box-shadow: var(--shadow);
 }
 .list-of-items li div{
@@ -536,7 +537,7 @@ header form input[type=submit]:active{
     width: 100%;
 }
 .popup-item-specifications .buttons{
-    width: 100%;
+    width: 96%;
     bottom: 20px;
     position: absolute;
     display: flex;
@@ -1024,6 +1025,7 @@ are used as secondary classes in html. */
     grid-template-columns: auto auto auto;
     justify-content: space-evenly;
     min-width: min-content;
+    grid-gap: 10px;
 }
 
 .border-less{
@@ -1084,4 +1086,7 @@ are used as secondary classes in html. */
     align-content: center;
     display: inline-flex;
     alignment: center;
+}
+.initially-hidden{
+    display: none;
 }

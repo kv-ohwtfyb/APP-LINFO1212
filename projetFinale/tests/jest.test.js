@@ -18,7 +18,25 @@ describe('Tests on homepage', () => {
         const title = await driver.getTitle();
         await expect(title).toContain('Home');
     });
+
 });
+
+describe('Test users authentication ', () => {
+    let driver;
+
+    beforeAll(async () => {
+        driver = new Builder().forBrowser("chrome").build();
+    },10000);
+
+    afterAll(async () => {
+        await driver.quit();
+    },15000);
+
+    test('', async () => {
+
+    });
+
+})
 
 //TODO Test for checkout
 //TODO Test for log in

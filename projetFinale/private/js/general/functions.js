@@ -100,8 +100,11 @@ function itemAddOrUpdateBodyParser(reqBody){
     toReturn.soldAlone = toReturn.soldAlone === 'on';
     if (reqBody.image) { savingImage(toReturn, reqBody.image);}
     else                { delete toReturn.image; }
-    if (reqBody.groups.length > 0 ) toReturn.groups = toReturn.groups.split("|").slice(0,-1);
+    console.log(reqBody.groups.trim().length);
+    if (reqBody.groups.trim().length > 0 ) toReturn.groups = toReturn.groups.split("|").slice(0,-1);
+    else toReturn.groups = [];
     delete toReturn.categories;
+    console.log(toReturn);
     return toReturn
 }
 
