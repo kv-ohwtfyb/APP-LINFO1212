@@ -1,4 +1,4 @@
-const {userModel} = require("./../general/schemas");
+const { userModel, orderModel } = require("./../general/schemas");
 const bcrypt = require('bcrypt');
 
 function userLogIn(app, req, res){
@@ -217,10 +217,10 @@ function modifyAnItemOfTheBasket(app, req, res){
  * @return {Promise<void>}
  */
 async function checkTheInputs(body){
-    if (!(body.hasOwnProperty('restaurant'))) throw Error("No restaurant key was in the request body.");
-    if (!(body.hasOwnProperty('itemName'))) throw Error("No itemName key was in the request body.");
-    if (!(body.hasOwnProperty('quantity'))) throw Error("No quantity key was in the request body.");
-    if (body.quantity < 0) throw Error("Quantity must be greater or equal to 0");
+    if (!(body.hasOwnProperty('restaurant'))) throw new Error("No restaurant key was in the request body.");
+    if (!(body.hasOwnProperty('itemName'))) throw new Error("No itemName key was in the request body.");
+    if (!(body.hasOwnProperty('quantity'))) throw new Error("No quantity key was in the request body.");
+    if (body.quantity < 0) throw new Error("Quantity must be greater or equal to 0");
 }
 
 /**
@@ -235,6 +235,7 @@ function modifyItem(req){
         let item = restaurant.items.find(item => item.name === req.body.itemName);
         if (item){
             const quantityDifference = (item.quantity - parseInt(req.body.quantity));
+            restaurant.total = restaurant.total - quantityDifference * item.unityPrice
             req.session.basket.totalItems = req.session.basket.totalItems - quantityDifference;
             req.session.basket.totalAmount = req.session.basket.totalAmount - (quantityDifference * item.unityPrice);
             item.quantity = parseInt(req.body.quantity);
@@ -244,25 +245,80 @@ function modifyItem(req){
             }
             return true;
         }else {
-            throw `No such item as ${req.body.itemName}`;
+            throw new Error(`No such item as ${req.body.itemName}`);
         }
     }else {
-        throw `No restaurant as ${req.body.restaurant}`;
+        throw new Error(`No restaurant as ${req.body.restaurant}`);
     }
 }
 
-function restaurantView(app,req,res){
 
+function orderConfirm(app, req, res){
+    const dateValidation = checkDate(req.body.date);
+    const buildings  = [ "Montesquieu", "Agora" ,"Studio" ,"Sainte-Barbe", "Cyclotron",
+                        "Leclercq", "Doyen", "Lavoisier", "Croix-du-sud", "ILV", "Mercator"];
+
+    if (req.session.basket.restaurants.length === 0) {
+        return res.json({ status: false, msg :"Make sure there's something in your basket" });
+    }
+
+    if (!dateValidation[0]){
+        return res.json({ status: false, msg :"The date you entered is invalid." });
+    }
+
+    if (buildings.includes(req.body.building)){
+        const orderObj = Object.assign(
+                                { building : req.body.building,
+                                         user : req.session.user._id.toString(),
+                                         status : "Ongoing",
+                                         date : dateValidation[1]
+                                        }, req.session.basket);
+        orderObj.total  = orderObj.totalAmount;
+        delete orderObj.totalAmount; delete orderObj.totalItems;
+        const order = new orderModel(orderObj);
+        order.check()
+            .then(() => {
+                order.save()
+                    .then(() => { res.json({ status : true }); })
+                    .catch(() => { res.json({ status : false, msg : "Sorry an error occurred we are going to fix it retry later."})})
+            }).catch((err) => {
+                const errorMessage = (err instanceof Object) ? err.message : err;
+                res.json({ status : false, msg : errorMessage });
+            })
+    }else {
+        res.json({  status : false ,
+                    msg : `The building you selected ${req.body.building} isn't valid. 
+                           Please select between the suggested building. `});
+    }
 }
 
 exports.postUserLoggedIn = userLogIn;
 exports.addItemToBasket = addItemToBasket;
-exports.modifyAnItemOfTheBasket = modifyAnItemOfTheBasket;
-exports.postUserLoggedIn = userLogIn;
 exports.postPhoneNumberCheck = phoneNumberCheck;
 exports.postUserRegister = userRegister;
 exports.userLoggingCheck = userLoggingCheck;
-exports.postUserLoggedIn = userLogIn;
-exports.addItemToBasket = addItemToBasket;
 exports.modifyAnItemOfTheBasket = modifyAnItemOfTheBasket;
+exports.postCheckOut = orderConfirm;
+
+function checkDate(givenDateString){
+    const arrayDate = givenDateString.split("-");
+    const givenDate = new Date( parseInt(arrayDate[0]),
+                                parseInt(arrayDate[1])-1,
+                                parseInt(arrayDate[2]));
+    const today = new Date();
+    if (givenDate.getFullYear() >= today.getFullYear()){
+        if (givenDate.getMonth() >= today.getMonth()){
+            if (today.getHours > 12){
+                if (givenDate.getDate() > today.getDate()){
+                    return [true, givenDate]
+                }
+            }else {
+                if (givenDate.getDate() >= today.getDate()){
+                    return [true, givenDate]
+                }
+            }
+        }
+    }
+    return [false, null];
+}
 

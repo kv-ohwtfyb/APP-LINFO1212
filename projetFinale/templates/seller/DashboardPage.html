@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="EN-US">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {{#restaurant}}
+        <title>GiQ | {{name}} Dashboard </title>
+    {{/restaurant}}
+    <!--    CSS Imports-->
+    <link rel="stylesheet" href="./css/main.css">
+    <!--    JavaScript Imports-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+    <script type="text/javascript" src="js/header.js"></script>
+    <script type="text/javascript" src="js/dashboardPage.js"></script>
+</head>
+<body class="seller-page">
+    <header class="bg-color-white">
+        <button id="navbar_open" type="button" class="border-less color-black bg-color-white">≡
+        </button>
+        <div class="navbar bg-color-white" id="navbar_header">
+            <button id="navbar_close" class="border-less bg-color-black color-white">X</button>
+            <ul>
+            <li><a class="login border-less bg-color-black" href="/logout"><h2>Log out</h2></a></li>
+                {{#loggedIn}}
+                <li>
+                    <h3 class="user-name text-align-left">Hello, {{name}}</h3>
+                </li>
+                {{/loggedIn}}
+                <li><a href="/">HomePage</a></li>
+            </ul>
+        </div>
+        <div class="name-logo">
+            <h2>GIQ</h2>
+            <h4>|</h4>
+            <h3>UCLouvain</h3>
+        </div>
+        <div></div>
+        <div class="nav-tab">
+            <a href="/dashboard">Orders</a>
+            <a href="/my_store">Store</a>
+            <a href="/payments_list">Payments</a>
+        </div>
+    </header>
+    {{#restaurant}}
+        <section class="top-section">
+            <div class="restaurant-details text-align-left">
+                <h2>{{name}}</h2>
+                <div class="details text-align-left" >
+                    <p>Sales on this day : <strong>
+                        {{salesToday}}
+                        {{^salesToday}} 0 {{/salesToday}}€
+                    </strong></p>
+                    <p>Orders on this day : <strong>{{numberOfOrdersToday}}
+                    {{^numberOfOrdersToday}} 0 {{/numberOfOrdersToday}}
+                    </strong></p>
+                    <p>Average price per order : <strong>{{avgPrice}}€</strong></p>
+                </div>
+            </div>
+            <div>
+                <form id="form" method="GET" action="/dashboard">
+                    <label for="date">Search orders on a day</label>
+                    <input type="date" id="date" name="date" required>
+                    <button type="submit" form="form" class="bg-color-green border-less">Go search</button>
+                </form>
+                <h1 class="text-align-right">Orders</h1>
+            </div>
+        </section>
+    {{/restaurant}}
+    <table class="table-of-orders" id="table_of_orders">
+        <tr class="bg-color-white header-row">
+            <th>Order</th>
+            <th>Date</th>
+            <th>Description</th>
+            <th>Total</th>
+            <th>Action</th>
+        </tr>
+        {{#listOfOrders}}
+            {{#modifiable}}
+                    <tr class="order bg-color-orange">
+            {{/modifiable}}
+            {{^modifiable}}
+                {{#cancelled}}
+                    <tr class="order bg-color-red">
+                {{/cancelled}}
+                {{^cancelled}}
+                    <tr class="order bg-color-green">
+                {{/cancelled}}
+            {{/modifiable}}
+                <td class="id">{{_id}}</td>
+                <td>{{date}}</td>
+                <td>{{#restaurants}}
+                    <ul>
+                        {{#items}}
+                            <li>{{name}}</li>
+                        {{/items}}
+                    </ul>
+                    {{/restaurants}}
+                </td>
+                <td>{{total}}</td>
+                <td>
+                    {{#modifiable}}
+                        <button class="doneBtn color-white bg-color-black border-less"> Done </button>
+                        <button class="cancelBtn color-white bg-color-red border-less">Cancel</button>
+                    {{/modifiable}}
+                </td>
+            </tr>
+        {{/listOfOrders}}
+    </table>
+    <div class="order-view popup-plate bg-color-white full-height-section" id="order_popup">
+        <button class="close border-less bg-color-black color-white">X</button>
+        <p> Order </p>
+    </div>
+    <footer class="full-width-section text-align-left">
+        <div>
+            <div class="name-logo">
+                <h2>GIQ</h2>
+                <h4>|</h4>
+                <h3>UCLouvain</h3>
+            </div>
+            <div class="politique-de-conf conditions tarif">
+                <a href="">Politique de confidalité</a>
+                <a href="">Conditions</a>
+                <a href="">Tarifs</a>
+            </div>
+        </div>
+        <div>
+            <h1>A propos de GIQ</h1>
+            <a href="">Histoire</a>
+            <a href="">Enregister votre commerce</a>
+            <a href="">Consulter le FAQ</a>
+        </div>
+        <div>
+            <h1>Nous Contacter</h1>
+            <p>Tel : 0465 36 43 45 </p>
+            <p>E-Mail : contact@giq.be</p>
+        </div>
+    </footer>
+</body>
+</html>

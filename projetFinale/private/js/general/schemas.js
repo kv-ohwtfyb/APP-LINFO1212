@@ -3,10 +3,6 @@ const uniqueValidator = require('mongoose-unique-validator');
 const Schema = mongoose.Schema;
 
 const functions = require('./functions');
-const {setVirtualImageSrc} = require("./functions");
-const {formatText} = require("./functions");
-const {formatRemoveWhiteSpaces} = require("./functions");
-
 
 const userSchema = new Schema({
     name     : { type : String,                       required : true },
@@ -435,7 +431,7 @@ restaurantSchema.statics.arrayOfRestaurantsForDisplay = function ( array = null)
                 if (item.image){
                     object.image = item.image;
                     object.imageType = item.imageType;
-                    setVirtualImageSrc(object);
+                    functions.setVirtualImageSrc(object);
                 }
                 return object;
             });
@@ -568,62 +564,133 @@ restaurantSchema.methods.getArrayOfItemsDisplayForStore = function(){
     })
 }
 
-restaurantSchema.methods.getArrayOfOrders = async function(){
-    const thisRestaurantOrderModel = await mongoose.model('Restaurant Order', restaurantOrderSchema, this.orders.toString());
-    const dates = await thisRestaurantOrderModel.find();
-    // await dates.forEach((date, idx, array) => {
-    //     array[idx].orders = array[idx].orders.map((orderId) => orderModel.find({ _id : orderId }));
-    // });
-    return dates
+restaurantSchema.methods.getArrayOfDatesOnOrders = function(){
+    const thisRestaurantOrderModel = mongoose.model('Restaurant Order', restaurantOrderSchema, this.orders.toString());
+    return thisRestaurantOrderModel.find();
+}
+
+
+restaurantSchema.methods.updateAveragePrice = async function (){
+    const orders = await this.getArrayOfDatesOnOrders();
+    const reducer = function (accumulator, docAvg) { return ( docAvg + accumulator ) / 2 ; }
+    const updated = roundTo2Decimals(await orders.map((doc) => doc.totalAmount / doc.orders.length).reduce(reducer));
+    await restaurantModel.updateOne({ _id : this._id}, { avgPrice : updated });
 }
 /**
  * Adds the reference Id into the restaurant orders collection.
  * @param refId (String) : the id to the parent order
- * @param givenDate (Date) : A Date object on when the order is placed.
- * @param orderItems
+ * @param restaurantOrderObject
+ * @param dateIsoString
  * @returns {Promise<void>}
  */
-restaurantSchema.methods.addOrder = async function(refId){
+restaurantSchema.methods.addOrder = async function(refId, restaurantOrderObject, dateIsoString){
     if (!( typeof refId === "string")) throw new Error("The refId has to be a string");
     const thisRestaurantOrdersModel = await mongoose.model("Orders", restaurantOrderSchema, this.orders.toString())
-    const todayOrderDocument = await thisRestaurantOrdersModel.findOne({
-        $where : function (){
-            const dateToCompare = new Date(this.date);
-            const today = new Date();
-            return dateToCompare.getDate() === today.getDate() && dateToCompare.getMonth() === today.getMonth() && dateToCompare.getFullYear() === today.getFullYear();
-        }
-    });
+    const dateGiven = await new Date(dateIsoString);
+    const todayOrderDocument = await this.getObjectOfOrdersOnADay(dateIsoString);
     if (todayOrderDocument){
-        todayOrderDocument.orders.push(refId);
-        thisRestaurantOrdersModel.updateOne({ _id : todayOrderDocument._id }, { orders : todayOrderDocument.orders })
+        await todayOrderDocument.orders.push(refId);
+        todayOrderDocument.totalAmount = await todayOrderDocument.totalAmount + restaurantOrderObject.total;
+        await thisRestaurantOrdersModel.updateOne({ _id : todayOrderDocument._id }, { orders : todayOrderDocument.orders, totalAmount : todayOrderDocument.totalAmount })
             .then((stats) => {
                 if (stats.nModified >=1 ){
                     console.log(`Added the order in ${this.name} orders.`)
                 }
             });
     }else{
-        const createTodayDocument = new thisRestaurantOrdersModel(
+        const createTodayDocument = await new thisRestaurantOrdersModel(
                 {
-                    date : new Date(),
-                    orders : [ refId ]
+                    date : dateGiven,
+                    orders : [ refId ],
+                    totalAmount : restaurantOrderObject.total
                 }
             );
-        createTodayDocument.save().then(() => {
+        await createTodayDocument.save().then(() => {
             console.log(`Inserted Today in ${this.name} orders.`);
         });
     }
+    await this.updateAveragePrice();
+}
 
+restaurantSchema.methods.getObjectOfOrdersOnADay = async function (dateIsoString){
+    const thisRestaurantOrdersModel = await mongoose.model("Orders", restaurantOrderSchema, this.orders.toString())
+    const dateGiven = await new Date(dateIsoString);
+    return functions.findWithPromise(await thisRestaurantOrdersModel.find(),
+    ({date}) => {
+            const dateToCompare = new Date(date);
+            return dateToCompare.getDate() === dateGiven.getDate() && dateToCompare.getMonth() === dateGiven.getMonth() && dateToCompare.getFullYear() === dateGiven.getFullYear();
+        });
+}
+
+restaurantSchema.methods.arrayOfOrdersOnADay = async function (dateIsoString){
+    const obj = await this.getObjectOfOrdersOnADay(dateIsoString);
+    if (!obj){ return null; }
+    const arrayOfOrders = obj.orders;
+    for (let i = 0; i < arrayOfOrders.length; i++) {
+        arrayOfOrders[i] = await this.getOrdersItemsForRestaurant(arrayOfOrders[i]);
+    }
+    return arrayOfOrders;
+}
+
+restaurantSchema.methods.getOrdersItemsForRestaurant = async function(orderId){
+    let order = await orderModel.findById(orderId);
+    order = order.toObject();
+    if (!order) return order;
+    order.restaurants = await functions.findWithPromise(order.restaurants,
+                                            ({restaurant}) => { return restaurant === this.name });
+    order.ConfirmedByThisRestaurant = await order.doneRestaurants.includes(this.name);
+    order.cancelled = await order.cancelRestaurants.length > 0;
+    order.modifiable = !(order.cancelled || order.ConfirmedByThisRestaurant);
+    return order;
+}
+
+restaurantSchema.methods.confirmOrder = function (orderId){
+    return new Promise(async (resolve, reject) => {
+        const order = await orderModel.findById(orderId);
+        const restaurant = await functions.findWithPromise( order.restaurants,
+                                                ({restaurant}) => { return restaurant === this.name });
+        if (restaurant){
+            if (order.status === "Cancelled" || order.doneRestaurants.includes(this.name)) { return resolve(); }
+            order.doneRestaurants.push(this.name);
+            if (order.doneRestaurants.length === order.restaurants.length){
+                await orderModel.updateOne({ _id : order._id}, { doneRestaurants : order.doneRestaurants, status : "Ready" });
+                return resolve();
+
+            }else{
+                await orderModel.updateOne({ _id : order._id}, { doneRestaurants : order.doneRestaurants });
+                return resolve();
+            }
+        }else{
+            return reject(`The restaurant ${this.name} doesn't have access to this order.`);
+        }
+    });
+}
+
+restaurantSchema.methods.cancelOrder = function (orderId){
+    return new Promise(async (resolve, reject) => {
+        const order = await orderModel.findById(orderId);
+        const restaurant = await functions.findWithPromise( order.restaurants,
+                                                ({restaurant}) => { return restaurant === this.name });
+        if (restaurant){
+            if (order.cancelRestaurants.includes(this.name)){ return resolve(); }
+            order.cancelRestaurants.push(this.name);
+            await orderModel.updateOne({ _id : order._id}, { cancelRestaurants : order.cancelRestaurants, status : "Cancelled" });
+            return resolve();
+        }else{
+            return reject(`The restaurant ${this.name} doesn't have access to this order.`);
+        }
+    });
 }
 
 /**
  * Creates the text indexes which will be used for customer search.
  */
-restaurantSchema.index({'groups.description' : 'text',
-                        'groups.items.name' : 'text',
-                        'categories.description' : 'text',
-                        'categories.items' : 'text',
-                        'name' : 'text'
-                        });
+restaurantSchema.index({  'groups.description' : 'text',
+                                 'groups.items.name' : 'text',
+                                 'categories.description' : 'text',
+                                 'categories.items' : 'text',
+                                 'name' : 'text'
+                              });
 
 const restaurantModel = mongoose.model('Restaurant', restaurantSchema, 'restaurants');
 
@@ -633,7 +700,8 @@ restaurantModel.createIndexes(function (err) {
 
 const restaurantOrderSchema = new Schema({
     date   : { type : Date,             default : new Date() },
-    orders : { type : [ String ],       required : false     },
+    orders : { type : [ String ],       required : true      },
+    totalAmount : { type : Number,      required : true      }
 });
 
 const paymentModel = mongoose.model('Payment', Schema({
@@ -663,16 +731,52 @@ const orderSchema = new Schema({
     status      : { type : String,                      required : true  },
     building    : { type : String,                      required : true  },
     date        : { type : Object,                      required : true,            default: new Date() },
-    cancelRest  : { type : String,                      required : false },
+    cancelRestaurants  : { type : [ String ],                      required : false },
+    doneRestaurants : { type : [ String ],                    required : false },
     user        : { type : String,                      required : true  }
 });
+
+orderSchema.methods.check = function (){
+    return new Promise((async (resolve, reject) => {
+        await this.restaurants.forEach((restaurantObject) => {
+            return restaurantModel.findOne({ name : restaurantObject.restaurant })
+                .then((restaurant) => {
+                    if (restaurant){
+                        return checkIfItemsExists(restaurant, restaurantObject.items)
+                            .then(async ()=> {
+                                await restaurantObject.items.forEach(async (item) => {
+                                    const itemFromDb = await restaurant.getItem(item.name);
+                                    if (itemFromDb.price !== item.unityPrice){
+                                        return reject(`The current price for ${item.name} in the ${restaurant.name} `+
+                                                        `store is currently at ${itemFromDb.price} instead of ${item.unityPrice}`);
+                                    }
+                                });
+                                await userModel.exists({ _id: this.user }    )
+                                    .then(r => {
+                                        if (!r){
+                                            return reject(`The user Id given doesn't match any user`);
+                                        }
+                                    }).catch((err)=> {
+                                            return reject(`The user Id given doesn't match any user`);
+                                    });
+                                return resolve();
+                            }).catch((err) => {
+                                return reject(err);
+                        })
+                    }else {
+                        return reject(`The restaurant ${restaurantObject.restaurant} doesn't exist.`);
+                    }
+                })
+        });
+    }))
+}
 
 orderSchema.post('save', async function (order) {
     await userModel.findById(order.user).then((user) => {user.addOrder(order._id.toString())});
     await order.restaurants.forEach((object) => {
         restaurantModel.findOne( { name : object.restaurant } ).then((rest) => {
             restaurantModel.findById(rest._id).then((restaurant) =>{
-                restaurant.addOrder(order._id.toString());
+                restaurant.addOrder(order._id.toString(), object, order.date);
             })
         })
     })
@@ -774,4 +878,13 @@ function checkForSimilarName(name){
  */
 function sorter(a, b) {
     return functions.formatText(a.name).localeCompare(functions.formatText(b.name), 'fr', { sensitivity: 'base' });
+}
+
+/**
+ * Rounds a float to 2 decimals after the point.
+ * @param num
+ * @return {number}
+ */
+function roundTo2Decimals(num) {
+    return Math.round((num + Number.EPSILON) * 100) / 100
 }

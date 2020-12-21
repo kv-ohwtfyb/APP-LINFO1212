@@ -5,32 +5,42 @@ mongoose.connect('mongodb://localhost:27017/testingdb',
     {useNewUrlParser: true, useUnifiedTopology: true }
 );
 
-const order = new orderModel({
-    total : 16,
-    restaurants : [
-                    {
-                        restaurant : "Exki",
-                        items : [
-                                    {
-                                        name : "Orange Juice",
-                                        quantity : 4,
-                                        unityPrice : 5,
-                                    }
-                                ],
-                        total : 20
-                    }
-                ],
-    status : "Ongoing",
-    user   : "5fce68f454efac2da091f7cb",
-});
+// const order = new orderModel({
+//     total : 20,
+//     restaurants : [
+//                     {
+//                         restaurant : "Exki",
+//                         items : [
+//                                     {
+//                                         name : "Orange Juice",
+//                                         quantity : 7,
+//                                         unityPrice : 4,
+//                                     }
+//                                 ],
+//                         total : 20
+//                     }
+//                 ],
+//     date : new Date(2020,11,28, 5, 0),
+//     status : "Ongoing",
+//     user   : "5fce68f454efac2da091f7cb",
+//     building : "More"
+// });
 
-order.save(function (err, product) {
-    if (err) { console.log(`Caught by .catch ${err}`); }
-    else { console.log(`Saved order to the database.`);}
-});
 
-// restaurantModel.findById("5fd2a594fc655f2c0c1ebad3").then((restaurant)=>{
-//     restaurant.getArrayOfOrders().then((array) => {
-//         console.log(array);
-//     })
+// order.check().then(() => {
+//     order.save(function (err, product) {
+//         if (err) { console.log(`Caught by .catch ${err}`); }
+//         else { console.log(`Saved order to the database.`);}
+//     });
+// }).catch((err) => {
+//     const errorMessage = (err instanceof Object) ? err.message : err;
+//     console.log(errorMessage);
 // })
+
+
+restaurantModel.findById("5fd2a594fc655f2c0c1ebad3").then((restaurant)=>{
+    const date = new Date(2020,11,20);
+    restaurant.getOrdersItemsForRestaurant("5fdf287d3ae71851180468bc").then(object =>{
+        console.log(object);
+    });
+})

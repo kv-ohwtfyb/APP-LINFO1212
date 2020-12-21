@@ -1,6 +1,22 @@
 const { restaurantModel, itemSchema } = require('./schemas');
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
+const limmitter  = require('express-rate-limit');
+
+
+/**
+ * Limit pages requests
+ */
+function limittingPages(numOfLoading, returnMessage) {
+    return limmitter({
+        windowMs : 2 * 60 * 1000, //For 2 min 
+        max : numOfLoading, //number of times the user can request(or go on) the same page.
+        message : returnMessage
+    });
+}
+
+
+
 
 /**
     Saves the encoded image to a model. The schema must have an image key that takes a
@@ -71,7 +87,6 @@ async function compareHashStringToARegularString(string, hashedString){
  * @return Object
  */
 async function findInAnArrayWithASyncPredicate(array, predicate){
-    console.log(array);
     for (let i = 0; i < array.length; i++) {
         if (await predicate(array[i])){
             return array[i]
@@ -103,6 +118,7 @@ function groupAddOrUpdateBodyParser(reqBody){
     return toReturn;
 }
 
+exports.loginLimitter = limittingPages;
 exports.savingImageToModel = savingImage;
 exports.setVirtualImageSrc = setImageSrc;
 exports.formatText = formatText;

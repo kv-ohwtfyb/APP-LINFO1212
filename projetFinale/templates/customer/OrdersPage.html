@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ORDERS</title>
+    <title>GiQ | Orders </title>
     <!--    CSS Imports-->
     <link rel="stylesheet" href="./css/main.css">
     <!--    JavaScript Imports-->
@@ -47,8 +47,33 @@
         <div class="popup-plate full-height-section bg-color-white" id="popup_plate_header">
             <button class="bg-color-white border-less left" id="popup_plate_close">X</button>
             <h2>PLATE</h2>
-            <h1 id="basketText"> It seems like your basket is empty try adding some items :)</h1>
-            <p id="p"> </p>
+            {{#basket}}
+            <ul>
+                {{#restaurants}}
+                <li>
+                    <h2>{{restaurant}}</h2>
+                    <hr class="bg-color-black">
+                    <ul>
+                        {{#items}}
+                        <li class="item">
+                            <input type="number" min="0" max="20" value="{{quantity}}" class="bg-color-black border-less" name="{{restaurant}}|{{name}}">
+                            <p class="name text-align-left" id="name">{{name}}</p>
+                            <p class="text-align-right">{{unityPrice}}€</p>
+                        </li>
+                        {{/items}}
+                    </ul>
+                </li>
+                {{/restaurants}}
+            </ul>
+            <div class="bg-color-black bottom-of-container three-gridded-layout">
+                <p class="text-align-left" id="totalItems">{{totalItems}}</p>
+                <p>Total</p>
+                <p class="text-align-right" id="totalAmount">{{totalAmount}}€</p>
+            </div>
+            {{/basket}}
+            {{^basket}}
+                <h1> It seems like your basket is empty try adding some items :)</h1>
+            {{/basket}}
         </div>
     </header>
     <section class="list-orders">
@@ -71,13 +96,13 @@
                 <td class="status">{{status}}</td>
                 <td class="total">{{total}}</td>
                 <td class="action">
-                    <button class ="reOrder_btn"> Details </button>
+                    <button class ="reOrder_btn"> ReOrder </button>
                 </td>
             </tr>
             {{/orderList}}
             {{^orderList}}
             <tr>
-                <td><h1> You have any orders yet</h1></td>
+                <td><h1> You haven't placed orders yet</h1></td>
             </tr>
             {{/orderList}}
 
@@ -85,10 +110,9 @@
         
     </section>
     <dialog class=" popup-plate popup-item-specifications  text-align-left" id="popup_item">
-         
         <section class="buttons">
             <button value="cancel" class="bg-color-black color-white" id="close_popup" >Annuler</button>
-            <button value="default" class="bg-color-green" id="submit_popup" type="submit">REORDER {{total}}€</button>
+            <button value="default" class="bg-color-green" id="submit_popup" type="submit">REORDER {{total}}</button>
         </section>       
     </dialog>
 </body>

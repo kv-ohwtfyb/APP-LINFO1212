@@ -21,6 +21,7 @@ function homePage(app, req, res){
  * */
 function ordersPage(app,req,res){
     userModel.findById(req.session.user._id).then((user) => {
+
         user.getArrayOfOrders().then( (array) => {
             res.render('./customer/OrdersPage.html', {
                 loggedIn: user,
@@ -92,7 +93,12 @@ function searchRestaurants(app,req,res){
     });
 }
 function checkOut(app,req,res){
-    res.render('./customer/CheckOutPage.html');
+    const date = new Date();
+    const tomorrow = new Date(); tomorrow.setDate(tomorrow.getDate()+1);
+    res.render('./customer/CheckOutPage.html', {
+        basket : req.session.basket,
+        dateMin : ( date.getHours() >= 12 ) ? tomorrow.toISOString().slice(0,10) : date.toISOString().slice(0,10)
+    });
 }
 function signUpVerificationNumber(app,req,res){
     res.render('./customer/SignUpVerificationNumberPage.html');

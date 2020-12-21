@@ -30,7 +30,8 @@ const {
     getSellerLoginPage,
     getAfterCreateRestoMessage,
     getListOfGroupNames,
-    getListOfCategories
+    getListOfCategories,
+    getOrderDetails,
 } = require('./private/js/seller/GET');
 
 const {
@@ -39,7 +40,8 @@ const {
     postUserRegister,
     postOrdersOfUser,
     addItemToBasket,
-    modifyAnItemOfTheBasket
+    modifyAnItemOfTheBasket,
+    postCheckOut,
 
 } = require('./private/js/customer/POST');
 
@@ -48,12 +50,18 @@ const {
     postCreatingRestaurant,
     postAddItem,
     postAddGroup,
-    postAddCategory
+    postAddCategory,
+    postConfirmOrder,
+    postCancelOrder
 } = require('./private/js/seller/POST');
 
 const { updateItem, updateGroup, updateCategory } = require('./private/js/seller/PUT');
 const { deleteItem, deleteGroup, deleteCategory } = require('./private/js/seller/DELETE');
 const { orderModel } = require('./private/js/general/schemas');
+const { loginLimitter} = require('./private/js/general/functions');
+
+
+
 
 app.use(bodyParser.urlencoded({ extended :true, limit: '50mb' }));
 app.engine('html', consolidate.hogan);
@@ -63,8 +71,11 @@ app.use(session({
     secret: "EnCRypTIoNKeY",
     resave: false,
     saveUninitialized: true,
-    cookie: {path: '/', httpOnly: true, limit: 30 * 60 * 1000}
+    cookie: {path: '/', httpOnly: true, limit: 24* 60 * 60 * 1000}
 }));
+
+const custommerloginPageLimit = loginLimitter(5,"You tried to log in many times, Please Try again in 2 min");
+const loginToRestaurantLimit = loginLimitter(3,"Is this really your restaurant? If so, Please Try again in 2 min");
 
 //Initiating the basket in the app session
 
@@ -117,7 +128,7 @@ app.get('/dashboard', function (req, res) {
         getOrders(app, req, res);
     }else {
         res.render('./seller/SellerLoginPage.html',
-            { loginError : "To access the category modification page you have to login as a seller."});
+            { loggedIn : req.session.user, loginError : "To access the dashboard page you have to login as a seller."});
     }
 });
 
@@ -139,6 +150,7 @@ app.get('/my_store', function (req, res){
     }
 });
 
+
 app.get('/seller_login', (req, res) =>{
     getSellerLoginPage(app, req, res);
 });
@@ -147,16 +159,29 @@ app.get('/logout', (req,res ) => {
    req.session.user = null;
    res.redirect('/');
 });
-/* I AM HEREEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE */
+
 app.get('/getFullOrders', (req, res) => {
     orderModel.findById(req.query)
         .then((result) => {
-            res.json({status: true, data : result});
+            if (result) {
+                res.json({status: true, data : result});
+            } else {
+                res.json({status: false , data : "Sorry, Order requested doesn't exist"});
+            }
+
         })
         .catch((error) => {
             res.json({status: false, data : error.message});
         })
 })
+
+app.get('/getOrderDetails', ((req, res) => {
+    if (req.session.restaurant){
+        getOrderDetails(app, req, res);
+    }else {
+        res.json({ status : false, msg : "Please first sign in as a seller to have access."})
+    }
+}))
 
 /************ Seller POST Request PART ************/
 
@@ -197,10 +222,25 @@ app.post('/creating_restaurant', function (req, res){
     }
 });
 
-app.post('/seller_login', function (req, res) {
+app.post('/seller_login', loginToRestaurantLimit, function (req, res) {
     postSellerLogin(app,req, res);
 });
 
+app.post('/confirmOrder', (req, res) => {
+    if (req.session.restaurant){
+        postConfirmOrder(app, req,res);
+    }else {
+        res.json({ status : false, msg : "Please first login as a seller."});
+    }
+});
+
+app.post('/cancelOrder', (req, res) => {
+    if (req.session.restaurant){
+        postCancelOrder(app, req,res);
+    }else {
+        res.json({ status : false, msg : "Please first login as a seller."});
+    }
+});
 /************ SELLER   DELETE Request Routers *********/
 
 app.delete('/item', function (req, res) {
@@ -241,11 +281,25 @@ app.get('/orders_page',(req,res) =>{
     } else {
         res.redirect('/');
     }
-    
-  
 })
 
-app.get('/user_login',(req,res) => {
+/* I AM HEREEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE */
+app.get('/getFullOrders', (req, res) => {
+    orderModel.findById(req.query)
+        .then((result) => {
+            if (result) {
+                res.json({status: true, data : result});
+            } else {
+                res.json({status: false , data : "Sorry, Order requested doesn't exist"});
+            }
+
+        })
+        .catch((error) => {
+            res.json({status: false, data : error.message});
+        })
+})
+
+app.get('/user_login', (req,res) => {
     if (req.session.user) { res.redirect("/"); }
     else { getUserLoginPage(app, req, res); }
 })
@@ -262,7 +316,15 @@ app.get('/search',(req,res) => {
     getSearchRestaurants(app,req,res);
 })
 app.get('/check_out',(req,res) =>{
-    getCheckOutPage(app,req,res);
+    if (req.session.user === undefined){
+        res.render("./customer/UserLoginPage.html", {
+            loginError : "To checkout you must login first."
+        })
+    }else if (req.session.basket === undefined){
+        res.redirect('/');
+    }else{
+        getCheckOutPage(app,req,res);
+    }
 })
 
 app.get('/signup_verification',(req, res) => {
@@ -279,8 +341,25 @@ app.get('/signUp_complete', (req, res) => {
 })
 
 /************ CUSTOMER POST Request PART ************/
+app.post('/reOrderCheck', (req, res) => {
 
-app.post('/user_log_in',(req, res) => {
+    const data = JSON.parse(req.body.order);
+    const order =  new orderModel(data);
+
+    order.check()
+        .then(() => {
+            req.session.basket = data;
+            res.json({status: true});
+        })
+        .catch((error) => {
+
+            const errorMessage = (error instanceof Object) ? error.message : error;
+            res.json({status: false, msg : errorMessage});
+        })
+})
+
+
+app.post('/user_log_in', custommerloginPageLimit, (req, res) => {
     postUserLoggedIn(app,req, res);
 })
 app.post('/user_sign_up',(req, res, next) => {
@@ -295,8 +374,8 @@ app.post('/restaurant', (req, res) => {
 app.post('/search_response', (req, res) => {
     console.log(req.body);
 })
-app.post('/checkout', (req, res) => {
-    console.log(req.body);
+app.post('/check_out', (req, res) => {
+    postCheckOut(app, req, res);
 })
 app.post('/signup_verification',(req, res) => {
     console.log(req.body);
