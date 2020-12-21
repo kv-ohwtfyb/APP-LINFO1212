@@ -750,6 +750,7 @@ orderSchema.methods.check = function (){
                                         return reject(`The current price for ${item.name} in the ${restaurant.name} `+
                                                         `store is currently at ${itemFromDb.price} instead of ${item.unityPrice}`);
                                     }
+                                    //TODO check the groups
                                 });
                                 await userModel.exists({ _id: this.user }    )
                                     .then(r => {
