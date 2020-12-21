@@ -84,7 +84,7 @@ function roundTo2Decimals(num) {
  * @param groupSearchInput
  */
 function updateSelectedGroups(event, groupSearchInput){
-    const validation = dataListContainsOption(document.getElementById('list-of-categories'), groupSearchInput.val());
+    const validation = dataListContainsOption(document.getElementById('list-of-groups'), groupSearchInput.val());
     if (validation) {
         let listItemGeneric = `
             <li class="row-display margin-top-bottom">
@@ -155,6 +155,7 @@ function dataListContainsOption(datalist, potentialOption){
             return true;
         }
     }
+    return false;
 }
 
 function addTheSelectedGroupsAndCategories() {
