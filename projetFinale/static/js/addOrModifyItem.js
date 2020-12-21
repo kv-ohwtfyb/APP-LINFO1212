@@ -159,14 +159,22 @@ function dataListContainsOption(datalist, potentialOption){
 }
 
 function addTheSelectedGroupsAndCategories() {
-    $('[name=groups]').val($('#selectedGroups').map((idx, el) => {
-        if ($(el).find('p').text().length > 0) return $(el).find('p').text()+"|";
-        else return "";
-    }).get())
-    $('[name=categories]').val($('#selectedCategories').map((idx, el) => {
-        if ($(el).find('p').text().length > 0) return $(el).find('p').text()+"|";
-        else return ";"
-    }).get())
+    let selectedGroups = "";
+    const selectedGroupsList = $('#selectedGroups li');
+    for (let i = 0; i < selectedGroupsList.length; i++) {
+        if ($(selectedGroupsList[i]).find('p').text().length > 0) {
+            selectedGroups+= $(selectedGroupsList[i]).find('p').text()+"|";
+        }
+    }
+    $('[name=groups]').val(selectedGroups);
+    let selectedCategories = "";
+    const selectedCategoriesList = $('#selectedCategories li');
+    for (let i = 0; i < selectedCategoriesList.length; i++) {
+        if ($(selectedCategoriesList[i]).find('p').text().length > 0) {
+            selectedCategories+= $(selectedCategoriesList[i]).find('p').text()+"|";
+        }
+    }
+    $('[name=categories]').val(selectedCategories);
 }
 
 function sendPutRequest(form){

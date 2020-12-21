@@ -10,16 +10,8 @@ const {  getItemSpecFromReqBody, getGroupSpecFromReqBody } = require('./../gener
 function updateItem(app, req, res){
     restaurantModel.findById(req.session.restaurant._id).then((restaurant) => {
         const itemSpec = getItemSpecFromReqBody(req.body);
-        restaurant.updateItem({name : itemSpec.name}, itemSpec)
+        restaurant.updateItem({name : itemSpec.name}, itemSpec, req.body.categories)
             .then(() => {
-                if (req.body.categories.length > 0 ) {
-                        const categories = req.body.categories.split("|").slice(0,-1);
-                        if (categories){
-                            categories.forEach((name) =>{
-                                restaurant.addItemToCategory(name, itemSpec.name);
-                            })
-                        }
-                    }
                 res.json({ status : true });
             })
             .catch((error) => {

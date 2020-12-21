@@ -16,7 +16,7 @@ const {
     getSignUpGiveNumber,
     getStripe,
     getUserSignUpComplete,
-
+    getUserRestaurantViewItemSpecification
 } = require('./private/js/customer/GET');
 
 const {
@@ -283,7 +283,6 @@ app.get('/orders_page',(req,res) =>{
     }
 })
 
-/* I AM HEREEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE */
 app.get('/getFullOrders', (req, res) => {
     orderModel.findById(req.query)
         .then((result) => {
@@ -339,6 +338,10 @@ app.get('/stripe', (req, res) => {
 app.get('/signUp_complete', (req, res) => {
     getUserSignUpComplete(app,req,res);
 })
+
+app.get('/getItemSpecifications', (req, res) => {
+    getUserRestaurantViewItemSpecification(app, req, res)
+});
 
 /************ CUSTOMER POST Request PART ************/
 app.post('/reOrderCheck', (req, res) => {

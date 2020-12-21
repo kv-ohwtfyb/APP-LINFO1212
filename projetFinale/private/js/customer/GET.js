@@ -46,12 +46,6 @@ function restaurantsPage(app,req,res){
     restaurantModel.findOne({ name : req.query.name }).then((rest) => {
         restaurantModel.findById(rest._id).then(async (restaurant) => {
             const restaurantObject = await restaurant.getRestaurantView();
-            console.log(restaurantObject);
-            for (let i = 0; i < restaurantObject.groups.length; i++){
-                console.log(restaurantObject.groups[i]);
-            }
-            console.log(restaurantObject.groups.length);
-
             res.render('./customer/RestaurantViewPage.html', {
                 restaurant : restaurantObject,
                 basket : req.session.basket,
@@ -92,6 +86,21 @@ function searchRestaurants(app,req,res){
         }
     });
 }
+
+function getItemSpecifications(app, req, res){
+    restaurantModel.findOne({ name : req.query.restaurantName})
+        .then((restaurant) => {
+            restaurant.getItem(req.query.itemName, true)
+                .then((item) => {
+                    if (item) res.json({ status : true, data : item});
+                    else res.json({ status : false, msg : `There's no item called ${req.query.itemName} in ${req.query.restaurantName} store.` });
+                })
+        }).catch((err) => {
+            const errorMessage = (err instanceof Object) ? err.message : err;
+             res.json({ status : false, msg : errorMessage });
+    })
+}
+
 function checkOut(app,req,res){
     const date = new Date();
     const tomorrow = new Date(); tomorrow.setDate(tomorrow.getDate()+1);
@@ -124,3 +133,4 @@ exports.getSignUpVerificationNumber = signUpVerificationNumber;
 exports.getSignUpGiveNumber = signUpGiveNumber;
 exports.getStripe = stripe;
 exports.getUserSignUpComplete = userSignUpComplete;
+exports.getUserRestaurantViewItemSpecification = getItemSpecifications;
