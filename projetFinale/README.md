@@ -94,7 +94,7 @@ For JavaScript (.js) files here are the rules :
  
  ## 5. Additional Information
  * In `Server.js`, we only import the app and connect the server to our database.
- * We used *Mongoose* for our database structure. [Mongoose Documentation] (https://mongoosejs.com/docs/index.html) (-----)
+ * We used *Mongoose* for our database structure. [Mongoose Documentation](https://mongoosejs.com/docs/index.html) (-----)
  * To secure sensitive information, prevent from brute-force attack and protect passwords, we used *bcrypt* and *express-rate-limit* modules.
  
 
