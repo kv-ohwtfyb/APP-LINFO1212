@@ -7,6 +7,7 @@ const session = require('express-session');
 const {
     getHomePage,
     getOrdersPage,
+    getCustomerFullOrders,
     getUserLoginPage,
     getUserSignUpPage,
     getRestaurantsPage,
@@ -42,6 +43,7 @@ const {
     addItemToBasket,
     modifyAnItemOfTheBasket,
     postCheckOut,
+    postCheckBeforeReOrdering
 
 } = require('./private/js/customer/POST');
 
@@ -74,8 +76,8 @@ app.use(session({
     cookie: {path: '/', httpOnly: true, limit: 24* 60 * 60 * 1000}
 }));
 
-const custommerloginPageLimit = loginLimitter(5,"You tried to log in many times, Please Try again in 2 min");
-const loginToRestaurantLimit = loginLimitter(3,"Is this really your restaurant? If so, Please Try again in 2 min");
+const custommerloginPageLimit = loginLimitter(5,"You tried to log in many times, Please Try again in 1 hour");
+const loginToRestaurantLimit = loginLimitter(3,"Is this really your restaurant? If so, Please Try again in 1 hour");
 
 //Initiating the basket in the app session
 
@@ -283,20 +285,12 @@ app.get('/orders_page',(req,res) =>{
     }
 })
 
-/* I AM HEREEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE */
 app.get('/getFullOrders', (req, res) => {
-    orderModel.findById(req.query)
-        .then((result) => {
-            if (result) {
-                res.json({status: true, data : result});
-            } else {
-                res.json({status: false , data : "Sorry, Order requested doesn't exist"});
-            }
-
-        })
-        .catch((error) => {
-            res.json({status: false, data : error.message});
-        })
+    if(req.session.user){
+        getCustomerFullOrders(app, req, res);
+    } else {
+        res.redirect('/');
+    }
 })
 
 app.get('/user_login', (req,res) => {
@@ -342,20 +336,7 @@ app.get('/signUp_complete', (req, res) => {
 
 /************ CUSTOMER POST Request PART ************/
 app.post('/reOrderCheck', (req, res) => {
-
-    const data = JSON.parse(req.body.order);
-    const order =  new orderModel(data);
-
-    order.check()
-        .then(() => {
-            req.session.basket = data;
-            res.json({status: true});
-        })
-        .catch((error) => {
-
-            const errorMessage = (error instanceof Object) ? error.message : error;
-            res.json({status: false, msg : errorMessage});
-        })
+    postCheckBeforeReOrdering(app, req, res);   
 })
 
 

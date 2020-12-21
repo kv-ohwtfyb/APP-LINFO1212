@@ -9,7 +9,7 @@ const limmitter  = require('express-rate-limit');
  */
 function limittingPages(numOfLoading, returnMessage) {
     return limmitter({
-        windowMs : 2 * 60 * 1000, //For 2 min 
+        windowMs : 1 * 60 * 60 * 1000, //For 1 hour
         max : numOfLoading, //number of times the user can request(or go on) the same page.
         message : returnMessage
     });

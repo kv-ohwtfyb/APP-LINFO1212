@@ -176,7 +176,7 @@ function userRegister(app,req,res){
             });
             user.save(function (err,user){
                 if(err){res.render('./customer/UserSignUpCompletingPage.html', {userRegisterError: err});}
-                else {res.render('./customer/HomePage.html', {loggedIn : true , name: user.name});
+                else {res.render('./customer/Homepage.html', {loggedIn : true , name: user.name});
                 req.session.user = user;}
             });
         });
@@ -291,6 +291,34 @@ function orderConfirm(app, req, res){
                            Please select between the suggested building. `});
     }
 }
+/**
+ * This function check if what the user wants to reorder still in our database. Most importantly,if they exist.
+ *  
+ * @param {Object} req : Full order details 
+ * @param {JSON file} res: containing status and (or ) error message.  {status: true/False, msg: error} 
+ * 
+ * If everything is okay, add the order to the basket and return status.
+ * 
+ * If not, return status (false) and the error occured.
+ * 
+ */
+function checkBeforeReordering(app, req, res) {
+    
+    const data = JSON.parse(req.body.order);
+    const order =  new orderModel(data);
+
+    order.check()
+        .then(() => {
+            req.session.basket = data;
+            res.json({status: true});
+        })
+        .catch((error) => {
+
+            const errorMessage = (error instanceof Object) ? error.message : error;
+            res.json({status: false, msg : errorMessage});
+        })
+    
+}
 
 exports.postUserLoggedIn = userLogIn;
 exports.addItemToBasket = addItemToBasket;
@@ -299,6 +327,7 @@ exports.postUserRegister = userRegister;
 exports.userLoggingCheck = userLoggingCheck;
 exports.modifyAnItemOfTheBasket = modifyAnItemOfTheBasket;
 exports.postCheckOut = orderConfirm;
+exports.postCheckBeforeReOrdering = checkBeforeReordering;
 
 function checkDate(givenDateString){
     const arrayDate = givenDateString.split("-");
