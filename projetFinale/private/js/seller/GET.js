@@ -73,7 +73,7 @@ function createResto(app,req, res){
 
 function dashboard(app, req, res){
     restaurantModel.findById(req.session.restaurant._id).then(async (restaurant) => {
-        const date = (req.query.date != null) ? new Date(req.query.date) : new Date(2020,11,20);
+        const date = (req.query.date != null) ? new Date(req.query.date) : new Date();
         const listOfOrders = await restaurant.arrayOfOrdersOnADay(date.toISOString());
         if (listOfOrders){
             const todayElement = await restaurant.getObjectOfOrdersOnADay(date.toISOString());

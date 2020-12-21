@@ -94,7 +94,8 @@ const itemSchema = new Schema ({
     soldAlone   : { type : Boolean,                     required : true },
     image       : { type : Buffer,                      required : false },
     imageType   : { type : String,                      required : false },
-    description : { type : String,                      required : false }
+    description : { type : String,                      required : false },
+    groups      : { type : [ String ],                  required : false }
 }, { autoIndex : false });
 
 itemSchema.plugin(uniqueValidator);
@@ -399,10 +400,11 @@ restaurantSchema.methods.addItemToCategory = function (categoryName, itemName) {
 restaurantSchema.methods.getRestaurantView = async function(){
     const thisRestaurantItemModel = mongoose.model('Item', itemSchema, this.items.toString());
     const allItems = await thisRestaurantItemModel.find();
+    functions.setVirtualImageSrc(this);
     for (const category of this.categories) {
         for (let i = 0; i < category.items.length; i++) {
             category.items[i] = await functions.findWithPromise(allItems, ({name}) => { return category.items[i]===name; });
-            functions.setVirtualImageSrc(category.items[i]);
+            if (category.items[i]) functions.setVirtualImageSrc(category.items[i]);
         }
     }
     return this;
@@ -471,15 +473,41 @@ restaurantSchema.methods.addItem = function (itemSpec){
  * Update an Item from the restaurant's items collection
  * @param selectorSpec (Object) : contains infos used to select item we want to update
  * @param updateSpec (Object) : contains all the infos to update.
+ * @param categoriesFromWeb
  * @Returns Promise<Null>
  * @Throws Errors when they occur.
  */
-restaurantSchema.methods.updateItem = function (selectorSpec, updateSpec){
+restaurantSchema.methods.updateItem = function (selectorSpec, updateSpec, categoriesFromWeb = ""){
     const thisRestaurantItemModel = mongoose.model('Item', itemSchema, this.items.toString());
     return thisRestaurantItemModel.updateOne(selectorSpec, updateSpec)
         .then((res) =>{
             if(res.n === 0){
-                throw Error("No item matching the given name.");
+                throw Error("No item matching the given specifications.");
+            }
+            let bool = false;
+            let categories = [];
+            if (categoriesFromWeb.length > 0 ) {
+                categories = categoriesFromWeb.split("|").slice(0,-1);
+                if (categories){
+                    categories.forEach((name) =>{
+                        this.addItemToCategory(name, selectorSpec.name);
+                    })
+                }
+            }
+
+            for (let i = 0; i < this.categories.length; i++) {
+                if (this.categories[i].items.includes(selectorSpec.name) && !categories.includes(this.categories[i].name)){
+                    bool = true;
+                    this.categories[i].items = this.categories[i].items.filter((item) => {return item !== selectorSpec.name});
+                }
+            }
+            if (bool){
+                return restaurantModel.updateOne({ name : this.name},{ categories : this.categories})
+                    .then(() => {
+                        console.log('Update category');
+                    });
+            } else{
+                return;
             }
         })
         .catch((error) => {throw Error(error.message); })
@@ -521,9 +549,10 @@ restaurantSchema.methods.deleteItem = function (selectorSpec){
 /**
  * Returns the Item object (document) with the categories in which the item is added in.
  * @param name
+ * @param getGroups
  * @return {Promise|PromiseLike<*>|Promise<*>}
  */
-restaurantSchema.methods.getItem = function (name){
+restaurantSchema.methods.getItem = function (name, getGroups = false){
     const thisRestaurantItemModel = mongoose.model('Item', itemSchema, this.items.toString());
     return thisRestaurantItemModel.findOne({ name : name })
         .then((item) =>{
@@ -531,6 +560,12 @@ restaurantSchema.methods.getItem = function (name){
                 let toReturn = Object.assign({}, item.toObject());
                 toReturn.categories = this.categories.filter((category) => category.items.includes(name))
                                                         .map((category) => category.name);
+                if (toReturn.image) functions.setVirtualImageSrc(toReturn);
+                if (getGroups){
+                    for (let i = 0; i < toReturn.groups.length; i++) {
+                        toReturn.groups[i] = this.findGroup(toReturn.groups[i]);
+                    }
+                }
                 return toReturn;
             }
             return item;
@@ -568,7 +603,6 @@ restaurantSchema.methods.getArrayOfDatesOnOrders = function(){
     const thisRestaurantOrderModel = mongoose.model('Restaurant Order', restaurantOrderSchema, this.orders.toString());
     return thisRestaurantOrderModel.find();
 }
-
 
 restaurantSchema.methods.updateAveragePrice = async function (){
     const orders = await this.getArrayOfDatesOnOrders();
@@ -750,6 +784,7 @@ orderSchema.methods.check = function (){
                                         return reject(`The current price for ${item.name} in the ${restaurant.name} `+
                                                         `store is currently at ${itemFromDb.price} instead of ${item.unityPrice}`);
                                     }
+                                    //TODO check the groups
                                 });
                                 await userModel.exists({ _id: this.user }    )
                                     .then(r => {
