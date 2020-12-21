@@ -68,7 +68,7 @@ For JavaScript (.js) files here are the rules :
  
  ### 4.2 Private 
  
- #### 4.2.1 js
+  * **js**
   This sub-folder is for all *back-end functions*. All functions in this folder are exported and most of them are the ones exported in `app.js`. 
   You can find also the schemas of our database in `private/js/general` folder.
  
