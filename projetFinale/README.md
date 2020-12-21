@@ -52,10 +52,43 @@ For JavaScript (.js) files here are the rules :
   }
   ```
   * In `App.js`, we don't create functions, we only import and use them in routers callbacks. Most of functions imported are in `private/js`.
-  * In `Server.js`, we import the app and connect the server to our database.
+* In `Server.js`, we import the app and connect the server to our database.
   
  ### 3.2 CSS 
  For the Cascading Style Sheets (.css) files we are going to prioritize classes over ids. So that we can use the ids in for the front end javascript programing.
  
  ### 3.3 HTML
  The html files are mostly going to be `<templates>` that use mustache [mustache](https://github.com/janl/mustache.js).
+ 
+ ## 4. Folder Organisation
+ We have 5 main folders : db, private, static, templates, tests.
+ 
+ ### 4.1 Db
+ This folder contains the plan( structure ) of our database.
+ 
+ ### 4.2 Private 
+ * js
+ This sub-folder is for all back-end functions. All functions in this folder are exported and most of them are the ones exported in `app.js`. 
+ You can find also the schemas of our database in `private/js/general` folder.
+ 
+ * ssl
+ This sub-folder contains all certificates.
+ 
+ ### 4.3 Static
+ * Css
+ This sub-folder contains the css of web application.
+ 
+ * Images
+ This sub-folder contains all images used in our web application.
+ 
+ * Js
+ This sub-folder contains all functions for front-end dynamic intervention.
+ 
+ ### 4.4 Templates
+ This folder has all HTML pages of our web application.
+
+ ### 4.5 Tests
+ This folder has necessary functions we used to test our web application.
+ 
+ 
+
