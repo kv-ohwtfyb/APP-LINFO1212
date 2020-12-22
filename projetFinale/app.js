@@ -79,7 +79,6 @@ const loginToRestaurantLimit = loginLimitter(3,"Is this really your restaurant? 
 
 //Initiating the basket in the app session
 
-
 /************ SELLER GET Request PART ************/
 
 app.get('/group', (req, res) => {

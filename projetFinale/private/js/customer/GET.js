@@ -42,6 +42,7 @@ function logInPage(app,req,res){
 function signUp(app,req,res){
     res.render('./customer/UserSignUpCompletingPage.html');
 }
+
 function restaurantsPage(app,req,res){
     restaurantModel.findOne({ name : req.query.name }).then((rest) => {
         restaurantModel.findById(rest._id).then(async (restaurant) => {
@@ -97,7 +98,7 @@ function getItemSpecifications(app, req, res){
                 })
         }).catch((err) => {
             const errorMessage = (err instanceof Object) ? err.message : err;
-             res.json({ status : false, msg : errorMessage });
+            res.json({ status : false, msg : errorMessage });
     })
 }
 
@@ -134,3 +135,6 @@ exports.getSignUpGiveNumber = signUpGiveNumber;
 exports.getStripe = stripe;
 exports.getUserSignUpComplete = userSignUpComplete;
 exports.getUserRestaurantViewItemSpecification = getItemSpecifications;
+
+
+
