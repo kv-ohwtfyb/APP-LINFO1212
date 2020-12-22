@@ -766,6 +766,7 @@ footer p,a{
     align-items: center;
     display: flex;
     justify-content: space-evenly;
+    overflow: hidden;
 }
 .table-of-orders tr td button{
     width: 40%;

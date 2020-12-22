@@ -1,0 +1,12 @@
+
+use testingdb
+
+db.createUser(
+   {
+     user: "App",
+     pwd: "hirwa",  // Or  "<cleartext password>"
+     roles: [ { role : "readWrite", db : "testingdb"} ]
+   }
+)
+
+exit 
