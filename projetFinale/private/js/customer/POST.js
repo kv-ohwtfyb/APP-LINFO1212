@@ -2,6 +2,7 @@ const { userModel, orderModel } = require("./../general/schemas");
 const bcrypt = require('bcrypt');
 const {addItemToBasketBodyParser} = require("../general/functions");
 const {findWithPromise} = require("../general/functions");
+const {sendVerification} = require("../apis/phoneAPI");
 
 function userLogIn(app, req, res){
     userLoggingCheck(req)
@@ -76,8 +77,8 @@ function phoneNumberAlreadyUsed(phoneNumberString) {
  */
 
 function phoneNumberCheck (app, req, res){
-    if (req.body.phoneNumber[0] !== '0' || req.body.phoneNumber[1] !=='4'){
-        res.render('./customer/SignUpGiveNumberPage.html', {phoneNumberError: "Please start with 04..."});
+    if (req.body.phoneNumber[0] !== '3' || req.body.phoneNumber[1] !=='2'){
+        res.render('./customer/SignUpGiveNumberPage.html', {phoneNumberError: "Please start with 32..."});
     }else{
         if (req.body.phoneNumber.length !== 10){
             res.render('./customer/SignUpGiveNumberPage.html', {phoneNumberError: "Please a valid number"});
@@ -88,7 +89,9 @@ function phoneNumberCheck (app, req, res){
                         res.render('./customer/SignUpGiveNumberPage.html', {phoneNumberError: check.msg})
                     }else{
                         req.session.phoneNumber = req.body.phoneNumber;
-                        res.redirect('/user_signup');
+                        const message = sendVerification(req.body.phoneNumber);
+                        //TODO
+
                     }
                 })
         }

@@ -458,7 +458,7 @@ header form input[type=submit]:active{
 }
 
 .categories-tab{
-    width: 40% ;
+    width: 70%;
     min-width: fit-content;
     display: flex;
     height: 40px;
@@ -495,9 +495,18 @@ header form input[type=submit]:active{
     text-align: left;
     display: grid;
     grid-template-rows: 33% 33% 33%;
+    overflow: hidden;
+    white-space: nowrap;
+
 }
 .list-of-items li div section h1,p{
     margin-left: 4px;
+
+
+}
+.list-of-items li div section p{
+
+    text-overflow: ellipsis;
 }
 .list-of-items li div div{
     display: block;
@@ -770,6 +779,7 @@ footer p,a{
     align-items: center;
     display: flex;
     justify-content: space-evenly;
+    overflow: hidden;
 }
 .table-of-orders tr td button{
     width: 40%;

@@ -5,10 +5,15 @@ const nexmo = new Nexmo({
   apiSecret: 'ViXopy56NGiQQ6dq',
 });
 
-nexmo.verify.request({
-  number: '32466432080',
-  brand: 'GiQ',
-  code_length: '4'
-}, (err, result) => {
-  console.log(err ? err : result)
-});
+function sendVerification(number) {
+  nexmo.verify.request({
+    number: number,
+    brand: 'GiQ',
+    code_length: '4'
+  }, (err, result) => {
+    console.log(err ? err : result);
+    return err ? err : result;
+
+  });
+}
+exports.sendVerification = sendVerification;
