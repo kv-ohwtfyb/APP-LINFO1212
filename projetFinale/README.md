@@ -47,17 +47,17 @@ For JavaScript (.js) files here are the rules :
 * Functions 
   * Apart from `App.js`, for functions, we are going to prioritize promises than callbacks. Meaning when possible we are going to always return promises. 
   * Async / sync functions ? this will depend on the developers needs.
-  * Functions name will started with a small letter but a Capital letter is a must when starting a new word.
+  * Functions names start with a small letter but a Capital letter is a must when starting a new word.
   ```js
   async function fetchFromDb(db, spec){
     ...
   }
   ```
-  * In `App.js`, we don't create functions, we only import and use them in routers callbacks. Most of functions imported are in `private/js`.
+  * In `App.js`, we don't create functions, we only import and use them in routers callbacks. Most of the imported functions are in `private/js`.
 
   
  ### 3.2 CSS 
- For the Cascading Style Sheets (.css) files we are going to prioritize classes over ids. So that we can use the ids in for the front end javascript programing.
+ For the Cascading Style Sheets (.css) files we are going to prioritize classes over ids. So that we can use the ids for the front end javascript programing.
  
  ### 3.3 HTML
  The html files are mostly going to be `<templates>` that use mustache [mustache](https://github.com/janl/mustache.js).
@@ -71,7 +71,7 @@ For JavaScript (.js) files here are the rules :
  ### 4.2 Private 
  
   * **Js** :
-  This sub-folder is for all *back-end functions*. All functions in this folder are exported and most of them are the ones exported in `app.js`. 
+  This sub-folder is for all *back-end functions*. All functions in this folder are exported and most of them are the ones used in `app.js`. 
   You can find also the schemas of our database in `private/js/general` folder.
  
   * **Ssl** : 
@@ -95,7 +95,7 @@ For JavaScript (.js) files here are the rules :
   This folder has necessary functions we used to test our web application.
  
  ## 5. Additional Information
- * In `Server.js`, we only import the app and connect the server to our database.
+ * In `server.js`, we only import the app and connect the server to our database.
  * We used *Mongoose* to give structure to our database and connect our server with our database. [Mongoose Documentation](https://mongoosejs.com/docs/index.html) (-----)
  * To secure sensitive information, prevent from brute-force attack and protect passwords, we used *bcrypt* and *express-rate-limit* modules.
  * To secure our database, we created a user's security creditials which without it, you can't get access to our database. (**Is it necessary?**)
