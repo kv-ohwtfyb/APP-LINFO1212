@@ -63,7 +63,6 @@ function checkBoxMinLimit(){
                 count++;
                 const groupItem = group.items.filter((o) => o.name === $(itemsArray[i]).val())[0];
                 totalAmount+=groupItem.charge;
-                console.log(totalAmount);
             }
         }
         if (count < group.minSelection){

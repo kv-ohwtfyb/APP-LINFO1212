@@ -124,6 +124,7 @@ function getItemSpecifications(app, req, res){
 function checkOut(app,req,res){
     const date = new Date();
     const tomorrow = new Date(); tomorrow.setDate(tomorrow.getDate()+1);
+    console.log(req.session.basket);
     res.render('./customer/CheckOutPage.html', {
         basket : req.session.basket,
         dateMin : ( date.getHours() >= 12 ) ? tomorrow.toISOString().slice(0,10) : date.toISOString().slice(0,10)
