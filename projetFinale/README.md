@@ -40,9 +40,9 @@ For JavaScript (.js) files here are the rules :
   * Importing modules we will be using the `<require>` keyword.
   * The name given to the variable containing the import is declared with const and the name starts with a small Letter.
   ```js
-  const mongoose = Require('mongoose');
-  const mongodbServer = Require('mongodb').Server;
-  const appClients = Require('./clients/app');
+  const mongoose = require('mongoose');
+  const mongodbServer = require('mongodb').Server;
+  const appClients = require('./clients/app');
   ```
 * Functions 
   * Apart from `App.js`, for functions, we are going to prioritize promises than callbacks. Meaning when possible we are going to always return promises. 
