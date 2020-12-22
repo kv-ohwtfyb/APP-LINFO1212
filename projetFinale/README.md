@@ -103,14 +103,14 @@ For JavaScript (.js) files here are the rules :
  ## 6. How To run our web
  
 1. If it is your first time running our web, You will *need to import our database*, for a better experience. To do so:
-	1.1. Run your mongodb in a terminal : `mongod --dbpath <pathOfWhereYourDbIs>`.
-	1.2. Go in 'db' folder of our project. You'll see a folder named 'testingdb'.
-	1.3. Copy the path of 'testingdb'. 
-	1.4. Open a new terminal in the 'ProjetFinale' folder.
-	1.5. Run this command : `mongorestore --db giq --drop <pathYouCopied>`. 
-		It should look like this : `mongorestore --db giq --drop <pathWhereYouPutOurProject/projetFinale/db/testingdb`.
-	1.6. If everything is okay, run also this command: `mongo < dbCommand.txt`.
-	1.7. then Skip point 2 below and Go directly to point 3.
+	1) Run your mongodb in a terminal : `mongod --dbpath <pathOfWhereYourDbIs>`.
+	2) Go in 'db' folder of our project. You'll see a folder named 'testingdb'.
+	3) Copy the path of 'testingdb'. 
+	4) Open a new terminal in the 'ProjetFinale' folder.
+	5) Run this command : `mongorestore --db giq --drop <pathYouCopied>`. 
+	It should look like this : `mongorestore --db giq --drop <pathWhereYouPutOurProject/projetFinale/db/testingdb`.
+	6) If everything is okay, run also this command: `mongo < dbCommand.txt`.
+	7) then Skip point 2 below and Go directly to point 3.
 
 2. If it isn't your first time, please, run your mongodb in a terminal : mongod --dbpath <pathOfWhereYourDbIs>.
 3. Run our file server.js in the terminal: `node server.js` **(Please make sure to be in the 'ProjetFinale' folder)**
