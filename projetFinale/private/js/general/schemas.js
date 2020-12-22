@@ -670,7 +670,8 @@ restaurantSchema.methods.checkBasketItemConditionsAndPrice = function(item, corr
 
             if (item.total < roundTo2Decimals(currentUnityPrice * item.quantity)){
                 if (correct) item.total = roundTo2Decimals(currentUnityPrice * item.quantity);
-                else return reject(`The total for ${item.name} is less than from the current total in the database.`);
+                else return reject(`The total for ${item.name} is less than from the current total in the database.
+                                            The current total ${roundTo2Decimals(currentUnityPrice * item.quantity)} and your total is ${item.total}.`);
             }
 
             return resolve();

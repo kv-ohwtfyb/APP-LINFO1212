@@ -1,11 +1,8 @@
 const { userModel, orderModel } = require("./../general/schemas");
 const bcrypt = require('bcrypt');
 const {addItemToBasketBodyParser} = require("../general/functions");
-<<<<<<< HEAD
 const {findWithPromise} = require("../general/functions");
 const {sendVerification} = require("../apis/phoneAPI");
-=======
->>>>>>> 4aab66d2671139accc0f5bd293cf3240ef0c6304
 
 function userLogIn(app, req, res){
     userLoggingCheck(req)
@@ -94,7 +91,6 @@ function phoneNumberCheck (app, req, res){
                         req.session.phoneNumber = req.body.phoneNumber;
                         const message = sendVerification(req.body.phoneNumber);
                         //TODO
-
                     }
                 })
         }
@@ -287,6 +283,8 @@ function modifyItem(req){
             req.session.basket.totalAmount = roundTo2Decimals(req.session.basket.totalAmount);
             req.session.basket.totalItems -= quantityDifference;
             item.quantity = parseInt(req.body.quantity);
+            item.total = roundTo2Decimals(quantityDifference * item.unityPrice);
+            item.total = roundTo2Decimals(item.total);
             if (item.quantity === 0){
                 restaurant.items = restaurant.items.filter( value => value.name !== item.name );
                 req.session.basket.restaurants = req.session.basket.restaurants.filter(value => value.items.length > 0);
