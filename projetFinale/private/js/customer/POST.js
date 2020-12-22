@@ -90,6 +90,7 @@ function phoneNumberCheck (app, req, res){
                     }else{
                         req.session.phoneNumber = req.body.phoneNumber;
                         const message = sendVerification(req.body.phoneNumber);
+
                         //TODO
                     }
                 })
