@@ -584,6 +584,34 @@ restaurantSchema.methods.getArrayOfItemsName = function(){
 }
 
 /**
+ * Checks if the item given from the basket respects all the conditions.
+ * If correction is enabled the function might correct the item if correction not enabled.
+ * It will just return false. This means that when the function is called with correction enables it can
+ * calculate the accurate prices for an element and even delete groups that are not recognized.
+ * @param item (object)
+ * @param correct (bool)
+ */
+restaurantSchema.methods.checkBasketItemConditionsAndPrice = function(item, correct = false){
+    return new Promise((resolve, reject) => {
+        this.getItem(item.name, true).then((itemFromDatabase) =>{
+            let total = 0; let extraCharge = 0;
+            if (!itemFromDatabase) return reject(`Item ${item.name} doesn't exist in the given restaurant ${this.name} database.`);
+            // Checks unityPrice
+            if (itemFromDatabase.unityPrice !== item.unityPrice){
+                if (correct) item.unityPrice = itemFromDatabase.unityPrice;
+                else return reject(`The unity prices are not the same for ${item.name} in ${this.name}`)
+            }
+            total += roundTo2Decimals(item.quantity * itemFromDatabase.unityPrice);
+
+            // Checks the groups
+            for (let group in item.groupSets){
+                const groupFromDatabase = itemFromDatabase.groups.find(({name})=> name === group.name);
+            }
+        })
+    });
+}
+
+/**
  * Returns the list of items to display on the store items.
  * @returns {Promise|PromiseLike<any>|Promise<any>}
  */
@@ -758,7 +786,9 @@ const orderSchema = new Schema({
                                                             selected : [ String ]
                                                         }],
                                             unityPrice : Number,
+                                            extraCharge : Number,
                                             quantity : Number,
+                                            total : Number,
                                         }],
                                 total : Number
                             }],                         required : true  },

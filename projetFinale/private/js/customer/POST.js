@@ -1,5 +1,7 @@
 const { userModel, orderModel } = require("./../general/schemas");
 const bcrypt = require('bcrypt');
+const {addItemToBasketBodyParser} = require("../general/functions");
+const {findWithPromise} = require("../general/functions");
 
 function userLogIn(app, req, res){
     userLoggingCheck(req)
@@ -186,6 +188,48 @@ function userRegister(app,req,res){
 }
 
 function addItemToBasket(app, req, res){
+    console.log(req.body);
+    console.log("--------------------------------");
+    addItemToBasketBodyParser(req.body)
+        .then((itemObject) => {
+            console.log(itemObject);
+            if (req.session.basket){
+                let restaurant = req.session.basket.restaurants.find( restaurant => restaurant.restaurant === req.body.restaurantName );
+                if (restaurant){
+                    let item = restaurant.items.find(item => item.name === req.body.itemName);
+                    if (item) return res.json(`The item ${item.name} already exist in your basket. Please if you want to modify it then remove the one existing already.`)
+                    restaurant.items.push(itemObject);
+                    restaurant.total += parseFloat(req.body.total);
+                } else{
+                    req.session.basket.restaurants.push({
+                                                            restaurant : req.body.restaurantName,
+                                                            items : [ itemObject ],
+                                                            total : parseFloat(req.body.total)
+                                                        });
+                }
+                console.log(req.body);
+                req.session.basket.totalAmount += parseFloat(req.body.total);
+                req.session.basket.totalItems += parseInt(req.body.quantity);
+            } else {
+                req.session.basket =
+                    {
+                        totalAmount : parseFloat(req.body.total),
+                        totalItems : itemObject.quantity,
+                        restaurants :   [
+                                            {
+                                                restaurant : req.body.restaurantName,
+                                                items : [ itemObject ],
+                                                total : parseFloat(req.body.total)
+                                            }
+                                        ]
+                    }
+            }
+            return res.json({ status : true });
+        })
+        .catch((err) => {
+                const errorMessage = (err instanceof Object) ? err.message : err;
+                res.json({ status : false, msg : errorMessage});
+            })
 }
 
 
@@ -235,20 +279,21 @@ function modifyItem(req){
         let item = restaurant.items.find(item => item.name === req.body.itemName);
         if (item){
             const quantityDifference = (item.quantity - parseInt(req.body.quantity));
-            restaurant.total = restaurant.total - quantityDifference * item.unityPrice
-            req.session.basket.totalItems = req.session.basket.totalItems - quantityDifference;
-            req.session.basket.totalAmount = req.session.basket.totalAmount - (quantityDifference * item.unityPrice);
+            restaurant.total = roundTo2Decimals(restaurant.total - ( quantityDifference * item.unityPrice));
+            req.session.basket.totalItems -= quantityDifference;
+            req.session.basket.totalAmount = roundTo2Decimals(req.session.basket.totalAmount - (quantityDifference * item.unityPrice));
             item.quantity = parseInt(req.body.quantity);
             if (item.quantity === 0){
                 restaurant.items = restaurant.items.filter( value => value.name !== item.name );
                 req.session.basket.restaurants = req.session.basket.restaurants.filter(value => value.items.length > 0);
+                if (req.session.restaurants.length === 0) req.session.restaurants = undefined;
             }
             return true;
         }else {
-            throw new Error(`No such item as ${req.body.itemName}`);
+            throw new Error(`No such item as ${req.body.itemName} in the basket`);
         }
     }else {
-        throw new Error(`No restaurant as ${req.body.restaurant}`);
+        throw new Error(`No restaurant as ${req.body.restaurant} in the basket`);
     }
 }
 
@@ -351,3 +396,6 @@ function checkDate(givenDateString){
     return [false, null];
 }
 
+function roundTo2Decimals(num) {
+    return Math.round((num + Number.EPSILON) * 100) / 100
+}

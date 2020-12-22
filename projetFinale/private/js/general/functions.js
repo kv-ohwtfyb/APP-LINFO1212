@@ -121,6 +121,24 @@ function groupAddOrUpdateBodyParser(reqBody){
     return toReturn;
 }
 
+async function parseTheAddItemToBasketBody(reqBody){
+    let copyOfReqBody = Object.assign({}, reqBody);
+    let toReturn = {};
+    toReturn.name = reqBody.name; delete copyOfReqBody.name;
+    toReturn.quantity = parseInt(reqBody.quantity); delete copyOfReqBody.quantity;
+    toReturn.unityPrice = parseFloat(reqBody.unityPrice); delete copyOfReqBody.unityPrice;
+    delete copyOfReqBody.total; delete copyOfReqBody.restaurantName;
+    toReturn.groupSets = [];
+    for (let key in copyOfReqBody){
+        toReturn.groupSets.push({
+                                    name : key,
+                                    selected : copyOfReqBody[key]
+                                });
+    }
+    await checkItemWithDatabase(toReturn, reqBody.restaurantName);
+    return toReturn;
+}
+
 exports.loginLimitter = limittingPages;
 exports.savingImageToModel = savingImage;
 exports.setVirtualImageSrc = setImageSrc;
@@ -130,3 +148,20 @@ exports.hashComparing = compareHashStringToARegularString;
 exports.findWithPromise = findInAnArrayWithASyncPredicate;
 exports.getItemSpecFromReqBody = itemAddOrUpdateBodyParser;
 exports.getGroupSpecFromReqBody = groupAddOrUpdateBodyParser;
+exports.addItemToBasketBodyParser = parseTheAddItemToBasketBody;
+
+
+function roundTo2Decimals(num) {
+    return Math.round((num + Number.EPSILON) * 100) / 100
+}
+
+function checkItemWithDatabase(item, restaurantName){
+    return restaurantModel.findOne({ name : restaurantName})
+        .then((restaurant) => {
+            return restaurant.checkBasketItemConditionsAndPrice(item, true);
+        })
+        .catch((err) => {
+            const errorMessage = (err instanceof Object) ? err.message : err;
+            throw new Error(errorMessage);
+        })
+}

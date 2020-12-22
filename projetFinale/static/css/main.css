@@ -45,7 +45,9 @@ input[type=submit]{
     color: white;
     position: absolute;
 }
-
+dialog{
+     overflow: auto;
+}
 header{
     width: 100%;
     min-width: fit-content;
