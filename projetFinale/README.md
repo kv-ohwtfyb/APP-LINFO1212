@@ -8,6 +8,7 @@ This application is a web application that allows UCLouvain students to order fo
 The file structure is like follow.
 ```
 | db
+|--- testingdb
 | private
 |--- ssl
 |--- js
@@ -23,6 +24,7 @@ The file structure is like follow.
 |--- customer
 |--- seller
 | tests
+| dbCommand.txt
 | app.js
 | server.js
 | serverForTest.js
@@ -36,11 +38,7 @@ For JavaScript (.js) files here are the rules :
 
 * Imports 
   * Importing modules we will be using the `<require>` keyword.
-<<<<<<< HEAD
-  * The name given to the variable contaning the import is declared with const and the name starts with a capital Letter.
-=======
   * The name given to the variable containing the import is declared with const and the name starts with a small Letter.
->>>>>>> d569245c1b6e3376c3cb6881c6740c55ce140d34
   ```js
   const mongoose = Require('mongoose');
   const mongodbServer = Require('mongodb').Server;
@@ -68,7 +66,7 @@ For JavaScript (.js) files here are the rules :
  We have 5 main folders : db, private, static, templates and tests folder.
  
  ### 4.1 Db
- This folder contains the plan (or structure ) of our database.
+ This folder contains sub-folder *testingdb* which is our database.
  
  ### 4.2 Private 
  
@@ -100,19 +98,19 @@ For JavaScript (.js) files here are the rules :
  * In `Server.js`, we only import the app and connect the server to our database.
  * We used *Mongoose* to give structure to our database and connect our server with our database. [Mongoose Documentation](https://mongoosejs.com/docs/index.html) (-----)
  * To secure sensitive information, prevent from brute-force attack and protect passwords, we used *bcrypt* and *express-rate-limit* modules.
- * To secure our database, we created a user's security creditials which without it you can't get access to our database. (**Is it necessary?**)
+ * To secure our database, we created a user's security creditials which without it, you can't get access to our database. (**Is it necessary?**)
  
  ## 6. How To run our web
  
 1. If it is your first time running our web, You will *need to import our database*, for a better experience. To do so:
-	1. Run your mongodb in a terminal : `mongod --dbpath <pathOfWhereYourDbIs>`.
-	2. Go in 'db' folder of our project. You'll see a folder named 'testingdb'.
-	3. Copy the path of 'testingdb'. 
-	4. Open a new terminal in the 'ProjetFinale' folder.
-	5. Run this command : `mongorestore --db giq --drop <pathYouCopied>`. 
+	1.1. Run your mongodb in a terminal : `mongod --dbpath <pathOfWhereYourDbIs>`.
+	1.2. Go in 'db' folder of our project. You'll see a folder named 'testingdb'.
+	1.3. Copy the path of 'testingdb'. 
+	1.4. Open a new terminal in the 'ProjetFinale' folder.
+	1.5. Run this command : `mongorestore --db giq --drop <pathYouCopied>`. 
 		It should look like this : `mongorestore --db giq --drop <pathWhereYouPutOurProject/projetFinale/db/testingdb`.
-	6. If everything is okay, run also this command: `mongo < dbCommand.txt`.
-	7. then Skip point 2 below and Go directly to point 3.
+	1.6. If everything is okay, run also this command: `mongo < dbCommand.txt`.
+	1.7. then Skip point 2 below and Go directly to point 3.
 
 2. If it isn't your first time, please, run your mongodb in a terminal : mongod --dbpath <pathOfWhereYourDbIs>.
 3. Run our file server.js in the terminal: `node server.js` **(Please make sure to be in the 'ProjetFinale' folder)**
