@@ -33,18 +33,11 @@ $(document).ready(function (){
     /* Si On appuie sur le button reOrder dans le dialog*/
     
     $("#submit_popup").click(function (event) {
-        
-        delete basket._id; 
-        delete basket.date;
-        delete basket.building;
-        delete basket._v;
-
-        basket = JSON.stringify(basket);
 
         $.ajax( '/reOrderCheck',
         {
             method :'POST',
-            data   : {order : basket },
+            data   : { orderId : basket._id },
             success: function (response) {
                 if (response.status){
                     window.open("/check_out", '_parent');
@@ -57,8 +50,6 @@ $(document).ready(function (){
                 dialog.find("#orderList").remove();
             }
         })
-
-        
     });
 
 

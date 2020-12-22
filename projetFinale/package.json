@@ -3,7 +3,11 @@
         "start": "nodemon server.js"
     },
     "dependencies": {
+<<<<<<< HEAD
         "bcrypt": "^5.0.0",
         "nexmo": "^2.9.1"
+=======
+        "bcrypt": "^5.0.0"
+>>>>>>> 4aab66d2671139accc0f5bd293cf3240ef0c6304
     }
 }

@@ -1,4 +1,5 @@
 const { restaurantModel, itemSchema } = require('./schemas');
+const schemas = require('./schemas');
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const limmitter  = require('express-rate-limit');
@@ -125,14 +126,18 @@ async function parseTheAddItemToBasketBody(reqBody){
     let copyOfReqBody = Object.assign({}, reqBody);
     let toReturn = {};
     toReturn.name = reqBody.name; delete copyOfReqBody.name;
-    toReturn.quantity = parseInt(reqBody.quantity); delete copyOfReqBody.quantity;
-    toReturn.unityPrice = parseFloat(reqBody.unityPrice); delete copyOfReqBody.unityPrice;
-    delete copyOfReqBody.total; delete copyOfReqBody.restaurantName;
+    toReturn.quantity = (reqBody.quantity) ? parseInt(reqBody.quantity) : 1; delete copyOfReqBody.quantity;
+    toReturn.price = (reqBody.price) ? parseFloat(reqBody.price) : 0; delete copyOfReqBody.price;
+    toReturn.unityPrice = (reqBody.unityPrice) ? parseFloat(reqBody.unityPrice) : 0; delete copyOfReqBody.unityPrice;
+    toReturn.unityExtraCharge = (reqBody.unityExtraCharge) ? parseFloat(reqBody.unityExtraCharge) : 0; delete copyOfReqBody.unityExtraCharge;
+    toReturn.total = (reqBody.total) ? parseFloat(reqBody.total) : 0; delete copyOfReqBody.total;
+    delete copyOfReqBody.restaurantName;
+
     toReturn.groupSets = [];
     for (let key in copyOfReqBody){
         toReturn.groupSets.push({
                                     name : key,
-                                    selected : copyOfReqBody[key]
+                                    selected : (Array.isArray(copyOfReqBody[key])) ? copyOfReqBody[key] : [ copyOfReqBody[key] ],
                                 });
     }
     await checkItemWithDatabase(toReturn, reqBody.restaurantName);
@@ -156,8 +161,9 @@ function roundTo2Decimals(num) {
 }
 
 function checkItemWithDatabase(item, restaurantName){
-    return restaurantModel.findOne({ name : restaurantName})
+    return schemas.restaurantModel.findOne({ name : restaurantName } )
         .then((restaurant) => {
+            if (!restaurant) throw Error(`Seems like there's no restaurant called ${restaurantName}.`)
             return restaurant.checkBasketItemConditionsAndPrice(item, true);
         })
         .catch((err) => {

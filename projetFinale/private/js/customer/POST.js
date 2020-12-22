@@ -1,8 +1,11 @@
 const { userModel, orderModel } = require("./../general/schemas");
 const bcrypt = require('bcrypt');
 const {addItemToBasketBodyParser} = require("../general/functions");
+<<<<<<< HEAD
 const {findWithPromise} = require("../general/functions");
 const {sendVerification} = require("../apis/phoneAPI");
+=======
+>>>>>>> 4aab66d2671139accc0f5bd293cf3240ef0c6304
 
 function userLogIn(app, req, res){
     userLoggingCheck(req)
@@ -191,38 +194,34 @@ function userRegister(app,req,res){
 }
 
 function addItemToBasket(app, req, res){
-    console.log(req.body);
-    console.log("--------------------------------");
     addItemToBasketBodyParser(req.body)
         .then((itemObject) => {
-            console.log(itemObject);
             if (req.session.basket){
                 let restaurant = req.session.basket.restaurants.find( restaurant => restaurant.restaurant === req.body.restaurantName );
                 if (restaurant){
-                    let item = restaurant.items.find(item => item.name === req.body.itemName);
-                    if (item) return res.json(`The item ${item.name} already exist in your basket. Please if you want to modify it then remove the one existing already.`)
+                    let item = restaurant.items.find(item => item.name === req.body.name);
+                    if (item) return res.json({status : false, msg :`The item ${item.name} already exist in your basket. Please if you want to modify it then remove the one existing already.`});
                     restaurant.items.push(itemObject);
-                    restaurant.total += parseFloat(req.body.total);
+                    restaurant.total += itemObject.total;
                 } else{
                     req.session.basket.restaurants.push({
                                                             restaurant : req.body.restaurantName,
                                                             items : [ itemObject ],
-                                                            total : parseFloat(req.body.total)
+                                                            total : itemObject.total
                                                         });
                 }
-                console.log(req.body);
-                req.session.basket.totalAmount += parseFloat(req.body.total);
-                req.session.basket.totalItems += parseInt(req.body.quantity);
+                req.session.basket.totalAmount += itemObject.total;
+                req.session.basket.totalItems += itemObject.quantity;
             } else {
                 req.session.basket =
                     {
-                        totalAmount : parseFloat(req.body.total),
+                        totalAmount : itemObject.total,
                         totalItems : itemObject.quantity,
                         restaurants :   [
                                             {
                                                 restaurant : req.body.restaurantName,
                                                 items : [ itemObject ],
-                                                total : parseFloat(req.body.total)
+                                                total : itemObject.total
                                             }
                                         ]
                     }
@@ -231,7 +230,7 @@ function addItemToBasket(app, req, res){
         })
         .catch((err) => {
                 const errorMessage = (err instanceof Object) ? err.message : err;
-                res.json({ status : false, msg : errorMessage});
+                return res.json({ status : false, msg : errorMessage});
             })
 }
 
@@ -246,10 +245,10 @@ function addItemToBasket(app, req, res){
 function modifyAnItemOfTheBasket(app, req, res){
     checkTheInputs(req.body)
         .then(() =>{
-            res.json({ status : modifyItem(req),
-                        totalAmount : req.session.basket.totalAmount,
-                        totalItems : req.session.basket.totalItems,
-            });
+            let options = { status : modifyItem(req), }
+            options.totalAmount = (req.session.basket) ? req.session.basket.totalAmount : 0;
+            options.totalItems = (req.session.basket) ? req.session.basket.totalItems : 0;
+            res.json(options);
         })
         .catch(err =>{
             res.json({ status : false, msg : err.message});
@@ -282,14 +281,16 @@ function modifyItem(req){
         let item = restaurant.items.find(item => item.name === req.body.itemName);
         if (item){
             const quantityDifference = (item.quantity - parseInt(req.body.quantity));
-            restaurant.total = roundTo2Decimals(restaurant.total - ( quantityDifference * item.unityPrice));
+            restaurant.total -= roundTo2Decimals( quantityDifference * item.unityPrice);
+            restaurant.total = roundTo2Decimals(restaurant.total);
+            req.session.basket.totalAmount -= roundTo2Decimals(quantityDifference * item.unityPrice);
+            req.session.basket.totalAmount = roundTo2Decimals(req.session.basket.totalAmount);
             req.session.basket.totalItems -= quantityDifference;
-            req.session.basket.totalAmount = roundTo2Decimals(req.session.basket.totalAmount - (quantityDifference * item.unityPrice));
             item.quantity = parseInt(req.body.quantity);
             if (item.quantity === 0){
                 restaurant.items = restaurant.items.filter( value => value.name !== item.name );
                 req.session.basket.restaurants = req.session.basket.restaurants.filter(value => value.items.length > 0);
-                if (req.session.restaurants.length === 0) req.session.restaurants = undefined;
+                if (req.session.basket.restaurants.length === 0) req.session.basket = undefined;
             }
             return true;
         }else {
@@ -328,7 +329,10 @@ function orderConfirm(app, req, res){
             .then(() => {
                 order.save()
                     .then(() => { res.json({ status : true }); })
-                    .catch(() => { res.json({ status : false, msg : "Sorry an error occurred we are going to fix it retry later."})})
+                    .catch((err) => {
+
+                        res.json({ status : false, msg : err.message });
+                    })
             }).catch((err) => {
                 const errorMessage = (err instanceof Object) ? err.message : err;
                 res.json({ status : false, msg : errorMessage });
@@ -341,31 +345,35 @@ function orderConfirm(app, req, res){
 }
 /**
  * This function check if what the user wants to reorder still in our database. Most importantly,if they exist.
- *  
- * @param {Object} req : Full order details 
- * @param {JSON file} res: containing status and (or ) error message.  {status: true/False, msg: error} 
- * 
+ *
+ * @param app
+ * @param {Object} req : Full order details
+ * @param {JSON file} res: containing status and (or ) error message.  {status: true/False, msg: error}
+ *
  * If everything is okay, add the order to the basket and return status.
- * 
- * If not, return status (false) and the error occured.
- * 
+ *
+ * If not, return status (false) and the error occurred.
+ *
  */
 function checkBeforeReordering(app, req, res) {
-    
-    const data = JSON.parse(req.body.order);
-    const order =  new orderModel(data);
 
-    order.check()
-        .then(() => {
-            req.session.basket = data;
-            res.json({status: true});
-        })
-        .catch((error) => {
-
-            const errorMessage = (error instanceof Object) ? error.message : error;
-            res.json({status: false, msg : errorMessage});
-        })
-    
+    orderModel.findOne( { _id : req.body.orderId } ).then((obj) => {
+        if (!obj.toObject()) return res.json( { status: false, msg : "There's no order under the given id."} );
+        const order = new orderModel(obj);
+        order.check()
+            .then(() => {
+                const basket = Object.assign({}, obj.toObject());
+                delete basket.building; delete basket._id; delete basket.user; delete basket.date;
+                basket.totalAmount = obj.total;
+                delete basket.total; delete basket.__v; delete basket.doneRestaurants; delete basket.cancelRestaurants;
+                req.session.basket = basket;
+                res.json({status: true});
+            })
+            .catch((error) => {
+                const errorMessage = (error instanceof Object) ? error.message : error;
+                res.json({status: false, msg : errorMessage});
+            })
+    })
 }
 
 exports.postUserLoggedIn = userLogIn;
