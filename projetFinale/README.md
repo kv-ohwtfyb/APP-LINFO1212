@@ -96,21 +96,21 @@ For JavaScript (.js) files here are the rules :
  
  ## 5. Additional Information
  * In `server.js`, we only import the app and connect the server to our database.
- * We used *Mongoose* to give structure to our database and connect our server with our database. [Mongoose Documentation](https://mongoosejs.com/docs/index.html) (-----)
- * To secure sensitive information, prevent from brute-force attack and protect passwords, we used *bcrypt* and *express-rate-limit* modules.
- * To secure our database, we created a user's security creditials which without it, you can't get access to our database. (**Is it necessary?**)
+ * We used *Mongoose* to give structure to and connect our server with our database. [Mongoose Documentation](https://mongoosejs.com/docs/index.html) (-----)
+ * To secure sensitive information,to prevent from brute-force attack and protect passwords, we used *bcrypt* and *express-rate-limit* modules.
+ * To secure our database, we created a user's security creditials which without it, the user can't get access to our database. (**Is it necessary?**)
  
  ## 6. How To run our web
  
 1. If it is your first time running our web, You will *need to import our database*, for a better experience. To do so:
 	* Run your mongodb in a terminal : `mongod --dbpath <pathOfWhereYourDbIs>`.
-	* Go in 'db' folder of our project. You'll see a folder named 'testingdb'.
+	* Go in 'db' folder of our project. There is a folder named 'testingdb'.
 	* Copy the path of 'testingdb'. 
 	* Open a new terminal in the 'ProjetFinale' folder.
 	* Run this command : `mongorestore --db giq --drop <pathYouCopied>`. 
 		It should look like this : `mongorestore --db giq --drop pathWhereYouPutOurProject/projetFinale/db/testingdb`.
 	* If everything is okay, run also this command: `mongo < dbCommand.txt`.
-	* then Skip point 2 below and Go directly to point 3.
+	* then Skip point 2 below and go directly to point 3.
 
 2. If it isn't your first time, please, run your mongodb in a terminal : `mongod --dbpath <pathOfWhereYourDbIs>` .
 3. Run our file server.js in the terminal: `node server.js` **(Please make sure to be in the 'ProjetFinale' folder)**
