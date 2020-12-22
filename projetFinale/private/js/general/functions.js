@@ -1,4 +1,5 @@
 const { restaurantModel, itemSchema } = require('./schemas');
+const schemas = require('./schemas');
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const limmitter  = require('express-rate-limit');
@@ -119,6 +120,28 @@ function groupAddOrUpdateBodyParser(reqBody){
     return toReturn;
 }
 
+async function parseTheAddItemToBasketBody(reqBody){
+    let copyOfReqBody = Object.assign({}, reqBody);
+    let toReturn = {};
+    toReturn.name = reqBody.name; delete copyOfReqBody.name;
+    toReturn.quantity = (reqBody.quantity) ? parseInt(reqBody.quantity) : 1; delete copyOfReqBody.quantity;
+    toReturn.price = (reqBody.price) ? parseFloat(reqBody.price) : 0; delete copyOfReqBody.price;
+    toReturn.unityPrice = (reqBody.unityPrice) ? parseFloat(reqBody.unityPrice) : 0; delete copyOfReqBody.unityPrice;
+    toReturn.unityExtraCharge = (reqBody.unityExtraCharge) ? parseFloat(reqBody.unityExtraCharge) : 0; delete copyOfReqBody.unityExtraCharge;
+    toReturn.total = (reqBody.total) ? parseFloat(reqBody.total) : 0; delete copyOfReqBody.total;
+    delete copyOfReqBody.restaurantName;
+
+    toReturn.groupSets = [];
+    for (let key in copyOfReqBody){
+        toReturn.groupSets.push({
+                                    name : key,
+                                    selected : (Array.isArray(copyOfReqBody[key])) ? copyOfReqBody[key] : [ copyOfReqBody[key] ],
+                                });
+    }
+    await checkItemWithDatabase(toReturn, reqBody.restaurantName);
+    return toReturn;
+}
+
 exports.loginLimitter = limittingPages;
 exports.savingImageToModel = savingImage;
 exports.setVirtualImageSrc = setImageSrc;
@@ -128,3 +151,21 @@ exports.hashComparing = compareHashStringToARegularString;
 exports.findWithPromise = findInAnArrayWithASyncPredicate;
 exports.getItemSpecFromReqBody = itemAddOrUpdateBodyParser;
 exports.getGroupSpecFromReqBody = groupAddOrUpdateBodyParser;
+exports.addItemToBasketBodyParser = parseTheAddItemToBasketBody;
+
+
+function roundTo2Decimals(num) {
+    return Math.round((num + Number.EPSILON) * 100) / 100
+}
+
+function checkItemWithDatabase(item, restaurantName){
+    return schemas.restaurantModel.findOne({ name : restaurantName } )
+        .then((restaurant) => {
+            if (!restaurant) throw Error(`Seems like there's no restaurant called ${restaurantName}.`)
+            return restaurant.checkBasketItemConditionsAndPrice(item, true);
+        })
+        .catch((err) => {
+            const errorMessage = (err instanceof Object) ? err.message : err;
+            throw new Error(errorMessage);
+        })
+}

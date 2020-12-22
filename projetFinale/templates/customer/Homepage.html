@@ -33,6 +33,9 @@
                 {{/loggedIn}}
                     <li><a href="/creating_restaurant">Add your restaurant</a></li>
                     <li><a href="/seller_login">Log in as a seller</a></li>
+                {{#loggedInAsASeller}}
+                    <li><a href="/dashboard">Go to {{name}} Dashboard.</a></li>
+                {{/loggedInAsASeller}}
                 </ul>
         </div>
         <div class="name-logo">

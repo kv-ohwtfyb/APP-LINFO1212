@@ -65,6 +65,7 @@ const { loginLimitter} = require('./private/js/general/functions');
 
 
 
+
 app.use(bodyParser.urlencoded({ extended :true, limit: '50mb' }));
 app.engine('html', consolidate.hogan);
 app.set('views', 'templates');
@@ -80,7 +81,6 @@ const custommerloginPageLimit = loginLimitter(5,"You tried to log in many times,
 const loginToRestaurantLimit = loginLimitter(3,"Is this really your restaurant? If so, Please Try again in 1 hour");
 
 //Initiating the basket in the app session
-
 
 /************ SELLER GET Request PART ************/
 

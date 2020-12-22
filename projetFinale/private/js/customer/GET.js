@@ -61,6 +61,7 @@ function logInPage(app,req,res){
 function signUp(app,req,res){
     res.render('./customer/UserSignUpCompletingPage.html');
 }
+
 function restaurantsPage(app,req,res){
     restaurantModel.findOne({ name : req.query.name }).then((rest) => {
         
@@ -117,13 +118,14 @@ function getItemSpecifications(app, req, res){
                 })
         }).catch((err) => {
             const errorMessage = (err instanceof Object) ? err.message : err;
-             res.json({ status : false, msg : errorMessage });
+            res.json({ status : false, msg : errorMessage });
     })
 }
 
 function checkOut(app,req,res){
     const date = new Date();
     const tomorrow = new Date(); tomorrow.setDate(tomorrow.getDate()+1);
+    console.log(req.session.basket);
     res.render('./customer/CheckOutPage.html', {
         basket : req.session.basket,
         dateMin : ( date.getHours() >= 12 ) ? tomorrow.toISOString().slice(0,10) : date.toISOString().slice(0,10)
@@ -155,3 +157,6 @@ exports.getSignUpGiveNumber = signUpGiveNumber;
 exports.getStripe = stripe;
 exports.getUserSignUpComplete = userSignUpComplete;
 exports.getUserRestaurantViewItemSpecification = getItemSpecifications;
+
+
+

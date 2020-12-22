@@ -584,6 +584,102 @@ restaurantSchema.methods.getArrayOfItemsName = function(){
 }
 
 /**
+ * Checks if the item given from the basket respects all the conditions.
+ * If correction is enabled the function might correct the item if correction not enabled.
+ * It will just return false. This means that when the function is called with correction enables it can
+ * calculate the accurate prices for an element and even delete groups that are not recognized.
+ * @param item (object)
+ * @param correct (bool)
+ */
+restaurantSchema.methods.checkBasketItemConditionsAndPrice = function(item, correct = false){
+    return new Promise((resolve, reject) => {
+        this.getItem(item.name, true).then((itemFromDatabase) =>{
+            let currentUnityPrice = 0; let unityExtraCharge = 0;
+            if (!itemFromDatabase) return reject(`Item ${item.name} doesn't exist in the given restaurant ${this.name} database.`);
+
+            // Checks price
+            if (itemFromDatabase.price !== item.price){
+                if (correct) item.price = itemFromDatabase.price;
+                else return reject(`The prices are not the same for ${item.name} in ${this.name}.
+                                    Current price is ${itemFromDatabase.price} which defers ${item.price}`);
+            }
+
+            // Checks the groups
+            for (let i = 0; i < item.groupSets.length; i++){
+                let group = item.groupSets[i];
+                const groupFromDatabase = itemFromDatabase.groups.find(g => g.name === group.name);
+                //Checks if the group is in the item groups.
+                if (!groupFromDatabase){
+                    if (correct) { delete item.groupSets[i]; continue; }
+                    else return reject(`The group ${group.name} doesn't exist in ${item.name} groups.`)
+                }
+                // Checks selected items
+                for (let i = 0; i < group.selected.length; i++){
+                    const itemFromGroup = groupFromDatabase.items.find(it => it.name === group.selected[i]);
+                    if (!itemFromGroup){
+                        if (correct) delete group.selected[i];
+                        else return reject(`There's no item ${group.selected.length[i]} in the ${group.name} group for ${item.name}.`)
+                    }
+                }
+                group.selected = group.selected.filter((it) => it !== undefined );
+                // Checks the minimum selections
+                if (group.selected.length < groupFromDatabase.minSelection){
+                    const dif = groupFromDatabase.minSelection - group.selected.length ;
+                    if (correct){
+                        const arr = [];
+                        for (i = 0; i < dif; i++){
+                            arr.push(groupFromDatabase.items[i].name);
+                        }
+                        group.selected = arr;
+                    } else return reject(`For the ${group.name} you only selected ${group.selected.length} the minimum selections 
+                                        is ${groupFromDatabase.minSelection} for ${item.name}`);
+                }
+
+                // Check the maximum
+                if (group.selected.length > groupFromDatabase.maxSelection){
+                    const dif = group.selected.length - groupFromDatabase.maxSelection ;
+                    if (correct){
+                        for (i = 0; i < dif; i++){
+                            group.selected.pop()
+                        }
+                        group.selected = group.selected.filter((it) => it !== undefined );
+                    } else return reject(`For the ${group.name} you only selected ${group.selected.length} the minimum selections 
+                                        is ${groupFromDatabase.minSelection} for ${item.name}`);
+                }
+
+                // Check the extra charge
+                for (let i = 0; i < group.selected.length; i++){
+                    const itemFromGroup = groupFromDatabase.items.find(it => it.name === group.selected[i]);
+                    unityExtraCharge += itemFromGroup.charge;
+                }
+            }
+            item.groupSets = item.groupSets.filter((o) => o !== undefined );
+
+            currentUnityPrice = itemFromDatabase.price += unityExtraCharge
+            // Checks unityPrice
+            if (item.unityPrice !== currentUnityPrice){
+                if (correct) item.unityPrice = currentUnityPrice;
+                else return reject(`The unityPrice for ${item.name} defers from the current unity price in the database. 
+                                        current price ${currentUnityPrice} - ${item.quantity}.`);
+            }
+            // Checks unityExtraCharge
+            if (item.unityExtraCharge !== unityExtraCharge){
+                if (correct) item.unityExtraCharge = unityExtraCharge;
+                else return reject(`The unityExtraCharge for ${item.name} defers from the  unityExtraCharge in the database.`);
+            }
+
+            if (item.total < roundTo2Decimals(currentUnityPrice * item.quantity)){
+                if (correct) item.total = roundTo2Decimals(currentUnityPrice * item.quantity);
+                else return reject(`The total for ${item.name} is less than from the current total in the database.
+                                            The current total ${roundTo2Decimals(currentUnityPrice * item.quantity)} and your total is ${item.total}.`);
+            }
+
+            return resolve();
+        })
+    });
+}
+
+/**
  * Returns the list of items to display on the store items.
  * @returns {Promise|PromiseLike<any>|Promise<any>}
  */
@@ -748,7 +844,7 @@ const paymentModel = mongoose.model('Payment', Schema({
 
 
 const orderSchema = new Schema({
-    total       : { type : Number,                      required : true },
+    total       : { type : Number,                      required : true,            unique : false },
     restaurants : { type : [{
                                 restaurant : String,
                                 items : [{
@@ -757,47 +853,37 @@ const orderSchema = new Schema({
                                                             name : String,
                                                             selected : [ String ]
                                                         }],
+                                            price : Number,
                                             unityPrice : Number,
+                                            unityExtraCharge : Number,
                                             quantity : Number,
+                                            total : Number,
                                         }],
                                 total : Number
                             }],                         required : true  },
     status      : { type : String,                      required : true  },
     building    : { type : String,                      required : true  },
     date        : { type : Object,                      required : true,            default: new Date() },
-    cancelRestaurants  : { type : [ String ],                      required : false },
-    doneRestaurants : { type : [ String ],                    required : false },
+    cancelRestaurants  : { type : [ String ],           required : false },
+    doneRestaurants : { type : [ String ],              required : false },
     user        : { type : String,                      required : true  }
 });
+
 
 orderSchema.methods.check = function (){
     return new Promise((async (resolve, reject) => {
         await this.restaurants.forEach((restaurantObject) => {
             return restaurantModel.findOne({ name : restaurantObject.restaurant })
-                .then((restaurant) => {
+                .then(async (restaurant) => {
                     if (restaurant){
-                        return checkIfItemsExists(restaurant, restaurantObject.items)
-                            .then(async ()=> {
-                                await restaurantObject.items.forEach(async (item) => {
-                                    const itemFromDb = await restaurant.getItem(item.name);
-                                    if (itemFromDb.price !== item.unityPrice){
-                                        return reject(`The current price for ${item.name} in the ${restaurant.name} `+
-                                                        `store is currently at ${itemFromDb.price} instead of ${item.unityPrice}`);
-                                    }
-                                    //TODO check the groups
-                                });
-                                await userModel.exists({ _id: this.user }    )
-                                    .then(r => {
-                                        if (!r){
-                                            return reject(`The user Id given doesn't match any user`);
-                                        }
-                                    }).catch((err)=> {
-                                            return reject(`The user Id given doesn't match any user`);
-                                    });
-                                return resolve();
-                            }).catch((err) => {
-                                return reject(err);
-                        })
+                        for (let i = 0; i < restaurantObject.items.length; i++) {
+                            try{
+                                await restaurant.checkBasketItemConditionsAndPrice(restaurantObject.items[i]);
+                            }catch (e) {
+                                return reject(e);
+                            }
+                        }
+                        return resolve();
                     }else {
                         return reject(`The restaurant ${restaurantObject.restaurant} doesn't exist.`);
                     }
@@ -805,6 +891,7 @@ orderSchema.methods.check = function (){
         });
     }))
 }
+
 
 orderSchema.post('save', async function (order) {
     await userModel.findById(order.user).then((user) => {user.addOrder(order._id.toString())});

@@ -113,7 +113,7 @@
                     <section>
                         <h1>{{name}}</h1>
                         <p>{{description}}</p>
-                        <p>{{price}}€</p>
+                        <h5>{{price}}€</h5>
                     </section>
                     <div>
                         <img src={{imgSrc}}>
@@ -130,11 +130,11 @@
         <div class="image-container">
             <img>
         </div>
-        <form class='full-width-section' action="" method="GET" id='itemForm'>
+        <form class='full-width-section' id='itemForm'>
         </form>
         <section class="buttons">
             <button class="close bg-color-black color-white" value="cancel" id="close">Annuler</button>
-            <button type="submit" form="itemForm" class="bg-color-green">Add to Basket</button>
+            <button type="submit" form="itemForm" class="bg-color-green">Add to Basket(<span id="showPrice">0</span>€)</button>
         </section>
     </dialog>
     <footer class="full-width-section text-align-left">

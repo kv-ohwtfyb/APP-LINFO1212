@@ -192,3 +192,4 @@ function handleAPIResponse(response) {
         alert(response.msg);
     }
 }
+

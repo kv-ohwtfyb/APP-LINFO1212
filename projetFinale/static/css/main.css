@@ -22,6 +22,9 @@ body{
     background-size: cover;
 }
 
+form{
+    overflow: auto;
+}
 pre{
     font-family: "Helvetica", sans-serif;
 }
@@ -42,7 +45,9 @@ input[type=submit]{
     color: white;
     position: absolute;
 }
-
+dialog{
+     overflow: auto;
+}
 header{
     width: 100%;
     min-width: fit-content;
@@ -453,7 +458,7 @@ header form input[type=submit]:active{
 }
 
 .categories-tab{
-    width: 40% ;
+    width: 70%;
     min-width: fit-content;
     display: flex;
     height: 40px;
@@ -490,9 +495,18 @@ header form input[type=submit]:active{
     text-align: left;
     display: grid;
     grid-template-rows: 33% 33% 33%;
+    overflow: hidden;
+    white-space: nowrap;
+
 }
 .list-of-items li div section h1,p{
     margin-left: 4px;
+
+
+}
+.list-of-items li div section p{
+
+    text-overflow: ellipsis;
 }
 .list-of-items li div div{
     display: block;
@@ -538,11 +552,10 @@ header form input[type=submit]:active{
 }
 .popup-item-specifications .buttons{
     width: 96%;
-    bottom: 20px;
-    position: absolute;
     display: flex;
     align-content: space-evenly;
     align-items: center;
+    margin: 20px 0;
 }
 .popup-item-specifications .buttons button{
     width: 40%;
