@@ -103,11 +103,22 @@ For JavaScript (.js) files here are the rules :
  * To secure our database, we created a user's security creditials which without it you can't get access to our database. (**Is it necessary?**)
  
  ## 6. How To run our web
- 1. If it is your first time running our web, Please,first, run **this file (A AJOUTER)** to import our database.
- 2. If it isn't your first time, please, run your mongodb in a terminal : `mongod --dbpath <pathOfWhereYourDbIs>`.
- 3. Run our file `server.js` in the terminal: `node server.js`  (**Please make sure to be in the 'ProjetFinale' folder**)
- 4. Open a web browser and then type '[https://localhost:8080/](https://localhost:8080)'
- 5. If you get a Privacy error, go to Advance => Proceed to localhost (unsafe) (Don't worry, No hackers will come for our website).
+ 
+1. If it is your first time running our web, You will *need to import our database*, for a better experience. To do so:
+	1. Run your mongodb in a terminal : `mongod --dbpath <pathOfWhereYourDbIs>`.
+	2. Go in 'db' folder of our project. You'll see a folder named 'testingdb'.
+	3. Copy the path of 'testingdb'. 
+	4. Open a new terminal in the 'ProjetFinale' folder.
+	5. Run this command : `mongorestore --db giq --drop <pathYouCopied>`. 
+		It should look like this : `mongorestore --db giq --drop <pathWhereYouPutOurProject/projetFinale/db/testingdb`.
+	6. If everything is okay, run also this command: `mongo < dbCommand.txt`.
+	7. then Skip point 2 below and Go directly to point 3.
 
-Welcome to our web application !!
+2. If it isn't your first time, please, run your mongodb in a terminal : mongod --dbpath <pathOfWhereYourDbIs>.
+3. Run our file server.js in the terminal: `node server.js` **(Please make sure to be in the 'ProjetFinale' folder)**
+4. Open a web browser and then type 'https://localhost:8080/'
+5. If you get a Privacy error, go to Advance => Proceed to localhost (unsafe) (Don't worry, No hackers will come for our website).
+
+
+**Welcome to our web application !!**
 
