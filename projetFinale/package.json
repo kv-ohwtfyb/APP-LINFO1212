@@ -1,4 +1,8 @@
-{"scripts": {
-    "start": "nodemon server.js"
-  }
+{
+    "scripts": {
+        "start": "nodemon server.js"
+    },
+    "dependencies": {
+        "bcrypt": "^5.0.0"
+    }
 }
