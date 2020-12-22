@@ -1,4 +1,3 @@
-const { getItemSpecFromReqBody, setVirtualImageSrc } = require("./../general/functions");
 const { userModel, restaurantModel } = require('./../general/schemas');
 
 function homePage(app, req, res){
@@ -14,7 +13,6 @@ function homePage(app, req, res){
 /********* For returning a list of orders of a user *******************/
 
 /**
- * !!!!!!!!!!!! a retravailler
  * Call a function that check all orders of a certain user.
  *
  * Then render a page with a list of orders the use has ever ordered or an empty list if the user hasn't ordered anything.
@@ -34,6 +32,27 @@ function ordersPage(app,req,res){
         });
 
 
+}
+/**
+ * Return full details of an order.
+ * By taking the Id of an order, this function search and return full order details.
+ */
+
+function seeFullOrders(app, req, res) {
+
+    orderModel.findById(req.query)
+        .then((result) => {
+            if (result) {
+                res.json({status: true, data : result});
+            } else {
+                res.json({status: false , data : "Sorry, Order requested might not exist"});
+            }
+
+        })
+        .catch((error) => {
+            res.json({status: false, data : error.message});
+        })
+    
 }
 
 function logInPage(app,req,res){
@@ -124,6 +143,7 @@ function userSignUpComplete(app,req,res){
 
 exports.getHomePage = homePage;
 exports.getOrdersPage = ordersPage;
+exports.getCustomerFullOrders = seeFullOrders;
 exports.getUserLoginPage = logInPage;
 exports.getUserSignUpPage = signUp;
 exports.getRestaurantsPage = restaurantsPage;

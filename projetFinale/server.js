@@ -3,8 +3,15 @@ const https = require('https');
 const app = require('./app');
 const mongoose = require('mongoose');
 
-mongoose.connect('mongodb://localhost:27017/testingdb',
-    {useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true }
+mongoose.connect('mongodb://App:hirwa@localhost:27017/testingdb', 
+    {
+        keepAlive: true,
+        keepAliveInitialDelay: 300000,
+        useNewUrlParser: true, 
+        useUnifiedTopology: true, 
+        useCreateIndex: true
+        
+    }, (err) => { return err}
 );
 
 mongoose.connection.on('connected', (err, res) => {
@@ -23,5 +30,5 @@ mongoose.connection.on('disconnected', (err, res) => {
 });
 
 mongoose.connection.on('error', (err) => {
-    console.log( new Date().toLocaleTimeString() + `Caught by .catch ${err}`);
+    console.log( new Date().toLocaleTimeString() + ` Caught by .catch ${err}`);
 });
