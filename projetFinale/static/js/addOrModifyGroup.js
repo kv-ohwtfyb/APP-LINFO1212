@@ -48,7 +48,7 @@ function updateSelectedItems(event, itemsSearchInput){
                 </div>
                 <div class="row-display align-center">
                     <label for="extra-charge-${itemsSearchInput.val()}" class="margin-left-right">Extra charge</label>
-                    <input id="extra-charge-${itemsSearchInput.val()}" min="0" placeholder="Charger 00.00€" class="round-border border-less" type="number" step="0.01">
+                    <input id="extra-charge-${itemsSearchInput.val()}" value ="0" min="0" placeholder="Charger 00.00€" class="round-border border-less" type="number" step="0.01">
                 </div>
             </li>
         `

@@ -64,6 +64,7 @@ function signUp(app,req,res){
 
 function restaurantsPage(app,req,res){
     restaurantModel.findOne({ name : req.query.name }).then((rest) => {
+        
         restaurantModel.findById(rest._id).then(async (restaurant) => {
             const restaurantObject = await restaurant.getRestaurantView();
             res.render('./customer/RestaurantViewPage.html', {

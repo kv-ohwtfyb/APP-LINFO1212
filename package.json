@@ -6,6 +6,7 @@
     "@vonage/server-sdk": "^2.10.4",
     "bcrypt": "^5.0.0",
     "body-parser": "^1.19.0",
+    "chromedriver": "^87.0.4",
     "connect": "^3.7.0",
     "connect-flash": "^0.1.1",
     "dotenv": "^8.2.0",
@@ -18,6 +19,7 @@
     "hogan.js": "^3.0.2",
     "https": "^1.0.0",
     "ini": "^2.0.0",
+    "jest": "^26.6.3",
     "mongodb": "^3.6.2",
     "mongoose": "^5.11.8",
     "mongoose-unique-validator": "^2.0.3",
@@ -25,7 +27,9 @@
     "nexmo": "^2.9.1",
     "node-gyp": "^7.1.2",
     "node-pre-gyp": "^0.16.0",
-    "nodemon": "^2.0.6"
+    "nodemon": "^2.0.6",
+    "selenium": "^2.20.0",
+    "selenium-webdriver": "^4.0.0-alpha.8"
   },
   "devDependencies": {
     "consolidate": "^0.16.0"

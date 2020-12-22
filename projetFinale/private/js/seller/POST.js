@@ -69,7 +69,7 @@ function addItem(app, req, res){
                             })
                         }
                     }
-                    res.redirect('/dashboard');
+                    res.redirect('/my_store');
                 })
                 .catch(async (error) => {
                     const listOfGroups = await restaurant.listOfGroupNames();
