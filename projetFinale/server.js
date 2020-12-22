@@ -3,7 +3,7 @@ const https = require('https');
 const app = require('./app');
 const mongoose = require('mongoose');
 
-mongoose.connect('mongodb://App:hirwa@localhost:27017/testingdb',
+mongoose.connect('mongodb://App:hirwa@localhost:27017/giq',
     {
         keepAlive: true,
         keepAliveInitialDelay: 300000,
@@ -15,7 +15,7 @@ mongoose.connect('mongodb://App:hirwa@localhost:27017/testingdb',
 );
 
 mongoose.connection.on('connected', (err, res) => {
-    console.log( new Date().toLocaleTimeString() + " Connected to MongoDB db <testingdb> the server is running on 27017.");
+    console.log( new Date().toLocaleTimeString() + " Connected to MongoDB db <giq> the server is running on 27017.");
     https.createServer({
     key         : fs.readFileSync('./private/ssl/key.pem'),
     cert        : fs.readFileSync('./private/ssl/cert.pem'),

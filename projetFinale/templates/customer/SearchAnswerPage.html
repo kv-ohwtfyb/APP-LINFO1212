@@ -23,7 +23,7 @@
                     <li>
                         <h3 class="user-name text-align-left">Hello, {{name}}</h3>
                     </li>
-                    <li><a href="/orders_page">Orders</a></li>
+                    <li><a href="/">HomePage</a></li>
                 {{/loggedIn}}
                 {{^loggedIn}}
                 <ul>
@@ -53,17 +53,17 @@
             <ul>
                 {{#restaurants}}
                 <li>
-                    <a href="/restaurant_view?name={{name}}">
-                        <div>
-                            {{#imgSrc}}
-                                <img src={{imgSrc}} alt="The Restaurant Image wasn't provided">
-                            {{/imgSrc}}
-                            {{^imgSrc}}
-                                <img src="./images/No-Photo-Available.jpg">
-                            {{/imgSrc}}
-                        </div>
-                        <section class="color-black"><h1>{{name}}</h1><p>{{avgPrice}}€</p></section>
-                    </a>
+                    <h2>{{restaurant}}</h2>
+                    <hr class="bg-color-black">
+                    <ul>
+                        {{#items}}
+                        <li class="item">
+                            <input type="number" min="0" max="20" value="{{quantity}}" class="bg-color-black border-less" name="{{restaurant}}|{{name}}">
+                            <p class="name text-align-left" id="name">{{name}}</p>
+                            <p class="text-align-right">{{unityPrice}}€</p>
+                        </li>
+                        {{/items}}
+                    </ul>
                 </li>
                 {{/restaurants}}
             </ul>
@@ -83,7 +83,7 @@
         <ul class="list-of-restaurants three-gridded-layout">
             {{#restaurants}}
             <li>
-                <a href="/restaurant_view?id={{name}}">
+                <a href="/restaurant_view?name={{name}}">
                     <div>
                         {{#imgSrc}}
                             <img src={{imgSrc}} alt="The Incident Image wasn't provided">

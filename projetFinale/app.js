@@ -159,6 +159,7 @@ app.get('/seller_login', (req, res) =>{
 
 app.get('/logout', (req,res ) => {
    req.session.user = null;
+   req.session.basket = null;
    res.redirect('/');
 });
 
@@ -342,8 +343,6 @@ app.get('/getItemSpecifications', (req, res) => {
 app.post('/reOrderCheck', (req, res) => {
     postCheckBeforeReOrdering(app, req, res);   
 })
-
-
 app.post('/user_log_in', custommerloginPageLimit, (req, res) => {
     postUserLoggedIn(app,req, res);
 })

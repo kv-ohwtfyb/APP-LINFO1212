@@ -136,6 +136,7 @@ function clearDialog(){
     $('dialog img').attr('src','');
     $('#itemForm').html(' ');
     totalAmount = 0;
+    $('#showPrice').html('0');
 }
 
 function sendAddToBasketRequest(restaurantName) {

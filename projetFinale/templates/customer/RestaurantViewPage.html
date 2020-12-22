@@ -30,8 +30,9 @@
                     <li><a href="/orders_page">Orders</a></li>
                 </ul>
                 {{/loggedIn}}
-                {{^loggedIn}}
                 <ul>
+                {{^loggedIn}}
+                
                     <li><a class="login border-less bg-color-black" href="/user_login"><h2>Log in</h2></a></li>
                     <li><a href="/sign_up_giveNumber">Sign Up</a></li>
                 {{/loggedIn}}

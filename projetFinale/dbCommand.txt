@@ -1,11 +1,11 @@
 
-use testingdb
+use giq
 
 db.createUser(
    {
      user: "App",
-     pwd: "hirwa",  // Or  "<cleartext password>"
-     roles: [ { role : "readWrite", db : "testingdb"} ]
+     pwd: "hirwa",
+     roles: [ { role : "readWrite", db : "giq"} ]
    }
 )
 

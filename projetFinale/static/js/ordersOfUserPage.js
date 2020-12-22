@@ -5,7 +5,6 @@ $(document).ready(function (){
     const dialog = $("#popup_item");
     dialog.hide();
     let orderId = ""; 
-    let creatingBasket = ``;
 
     /* Si On appuie sur le button ReOrder  (pour voir les détails de la commande*/
 
@@ -47,6 +46,7 @@ $(document).ready(function (){
                 dialog.hide();
                 dialog.find("h2").remove();
                 dialog.find("#detailsList").remove();
+                dialog.find("#theForm").remove();
                 dialog.find("#orderList").remove();
             }
         })
@@ -62,7 +62,7 @@ $(document).ready(function (){
 
 
     /**
-     * 
+     * Creér un dialog et l'affiche 
      * @param {Objet} response : Reponse donnée par le serveur. 
      * Structure: response = {
      *  status: true (or false),
@@ -76,30 +76,28 @@ $(document).ready(function (){
         if(response.status){
             let result = ``;
             let creatingDialog = ``;
+            let createForm = ``;
             const totalSize = response.data.restaurants.length ;
 
 
             result = afficherLesDetails(totalSize, response.data.restaurants);         
             
             creatingDialog  = ` <h2>ORDER</h2>
-
-            <section>
-                <ul class="order-view-text-align-left" id="detailsList">
+            <ul class="order-view-text-align-left" id="detailsList">
                     
                     <li>Order ID : <i>${response.data._id}      </i></li>
                     <li>Date     : <i>${response.data.date}     </i></li>
                     <li>Batiment : <i>${response.data.building} </i></li>
                     <li>Status   : <i>${response.data.status}   </i></li>            
-                </ul>
-            </section>  
-            <form method="dialog" >
+            </ul>`
             
-                <ul class="full-width-section order-view-text-align-left" id="orderList">
-                    ${result} 
-                </ul>
-            </form>`
-
-            dialog.append(creatingDialog);
+            createForm = `
+            <ul class="full-width-section order-view-text-align-left" id="orderList">
+                ${result} 
+            </ul>`
+            
+            dialog.find(".orderDetails").append(creatingDialog);
+            dialog.find("#theForm").append(createForm);
             dialog.show();
 
         } else {

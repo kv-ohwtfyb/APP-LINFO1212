@@ -335,8 +335,10 @@ function orderConfirm(app, req, res){
             }).catch((err) => {
                 const errorMessage = (err instanceof Object) ? err.message : err;
                 res.json({ status : false, msg : errorMessage });
-            })
-    }else {
+            });
+        
+        delete req.session.basket;
+     }else {
         res.json({  status : false ,
                     msg : `The building you selected ${req.body.building} isn't valid. 
                            Please select between the suggested building. `});
