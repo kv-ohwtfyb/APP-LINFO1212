@@ -3,6 +3,12 @@ const { savingImageToModel, getItemSpecFromReqBody, getGroupSpecFromReqBody } = 
 const { userLoggingCheck } = require('./../customer/POST');
 const bcrypt = require('bcrypt');
 
+/**
+ * This function check if the user is logged in and if not it sned the page to log in
+ * @param app
+ * @param req
+ * @param res
+ */
 function sellerLogin(app, req, res){
     if (!(req.session.user)){ //If not logged in
         userLoggingCheck(req)
@@ -27,6 +33,13 @@ function sellerLogin(app, req, res){
             });
     }
 }
+
+/**
+ * This function creates the restaurant of the user in the db
+ * @param app
+ * @param req
+ * @param res
+ */
 
 function creatingRestaurant(app, req, res){
     bcrypt.hash(req.body.authKey, 10, (err, hash) =>{
@@ -54,6 +67,12 @@ function creatingRestaurant(app, req, res){
     })
 }
 
+/**
+ * This functions adds item in the restaurant
+ * @param app
+ * @param req
+ * @param res
+ */
 
 function addItem(app, req, res){
     restaurantModel.findById(req.session.restaurant._id).then((restaurant) => {
@@ -89,6 +108,13 @@ function addItem(app, req, res){
     })
 }
 
+/**
+ * This function add the group in the restaurant
+ * @param app
+ * @param req
+ * @param res
+ */
+
 function addGroup(app, req, res){
     restaurantModel.findById(req.session.restaurant._id).then((restaurant) => {
         const group = getGroupSpecFromReqBody(req.body);
@@ -109,6 +135,13 @@ function addGroup(app, req, res){
     })
 }
 
+/**
+ * This function adds the category in the restaurant
+ * @param app
+ * @param req
+ * @param res
+ */
+
 function addCategory(app, req, res){
     restaurantModel.findById(req.session.restaurant._id)
         .then((restaurant) => {
@@ -123,6 +156,13 @@ function addCategory(app, req, res){
         })
     })
 }
+
+/**
+ * This function confirms the order of the user
+ * @param app
+ * @param req
+ * @param res
+ */
 
 function confirmOrder(app, req, res){
     restaurantModel.findById(req.session.restaurant._id)
@@ -139,6 +179,13 @@ function confirmOrder(app, req, res){
         })
 }
 
+/**
+ * This function cancels the order of the user
+ * @param app
+ * @param req
+ * @param res
+ */
+
 function cancelOrder(app, req, res){
     restaurantModel.findById(req.session.restaurant._id)
         .then((restaurant) => {
@@ -154,16 +201,12 @@ function cancelOrder(app, req, res){
         })
 }
 
-
-
-exports.postSellerLogin = sellerLogin;
-exports.postCreatingRestaurant = creatingRestaurant;
-exports.postAddItem = addItem;
-exports.postAddGroup = addGroup;
-exports.postAddCategory = addCategory;
-exports.postConfirmOrder = confirmOrder;
-exports.postCancelOrder = cancelOrder;
-
+/**
+ * Thsi function checks if the user (seller)  is logged in before accessing the restaurant
+ * @param user
+ * @param req
+ * @return {Promise<void>}
+ */
 async function sellerLogInCheck(user, req){
     let User = await userModel.findById(req.session.user._id).exec();
     return User.getSellerRestaurant(req.body.authKey)
@@ -176,6 +219,20 @@ async function sellerLogInCheck(user, req){
         });
 }
 
+/**
+ * This function formats the white spaces in a given string
+ * @param name
+ * @return {string}
+ */
+
 function formatRemoveWhiteSpaces(name) {
     return name.trim().replace(/\s/g, "");
 }
+
+exports.postSellerLogin = sellerLogin;
+exports.postCreatingRestaurant = creatingRestaurant;
+exports.postAddItem = addItem;
+exports.postAddGroup = addGroup;
+exports.postAddCategory = addCategory;
+exports.postConfirmOrder = confirmOrder;
+exports.postCancelOrder = cancelOrder;

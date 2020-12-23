@@ -22,6 +22,13 @@ function updateItem(app, req, res){
     })
 }
 
+/**
+ * This functions updates the group
+ * @param app
+ * @param req
+ * @param res
+ */
+
 function updateGroup(app, req, res){
     restaurantModel.findById(req.session.restaurant._id).then((restaurant) => {
         const group = getGroupSpecFromReqBody(req.body);
@@ -35,6 +42,13 @@ function updateGroup(app, req, res){
         });
     });
 }
+
+/**
+ * Thsi function updates the category
+ * @param app
+ * @param req
+ * @param res
+ */
 
 function updateCategory(app, req, res){
     restaurantModel.findById(req.session.restaurant._id).then((restaurant) => {

@@ -3,7 +3,6 @@ const consolidate = require('consolidate');
 const app = express ();
 const bodyParser = require('body-parser');
 const session = require('express-session');
-const {verifyPhoneNumber} = require("./private/js/customer/POST");
 
 const {
     getHomePage,
@@ -16,7 +15,6 @@ const {
     getCheckOutPage,
     getSignUpVerificationNumber,
     getSignUpGiveNumber,
-    getStripe,
     getUserSignUpComplete,
     getUserRestaurantViewItemSpecification
 } = require('./private/js/customer/GET');
@@ -31,8 +29,6 @@ const {
     getTheStorePage,
     getSellerLoginPage,
     getAfterCreateRestoMessage,
-    getListOfGroupNames,
-    getListOfCategories,
     getOrderDetails,
 } = require('./private/js/seller/GET');
 
@@ -40,7 +36,6 @@ const {
     postUserLoggedIn,
     postPhoneNumberCheck,
     postUserRegister,
-    postOrdersOfUser,
     addItemToBasket,
     modifyAnItemOfTheBasket,
     postCheckOut,
@@ -62,9 +57,6 @@ const { updateItem, updateGroup, updateCategory } = require('./private/js/seller
 const { deleteItem, deleteGroup, deleteCategory } = require('./private/js/seller/DELETE');
 const { orderModel } = require('./private/js/general/schemas');
 const { loginLimitter} = require('./private/js/general/functions');
-
-
-
 
 
 app.use(bodyParser.urlencoded({ extended :true, limit: '50mb' }));
@@ -350,26 +342,11 @@ app.post('/user_log_in', custommerloginPageLimit, (req, res) => {
 app.post('/user_sign_up',(req, res, next) => {
     postUserRegister(app, req, res);
 })
-app.post('/user_orders', (req, res) => {
-    console.log(req.body);
-})
-app.post('/restaurant', (req, res) => {
-    console.log(req.body);
-})
-app.post('/search_response', (req, res) => {
-    console.log(req.body);
-})
 app.post('/check_out', (req, res) => {
     postCheckOut(app, req, res);
 })
-app.post('/signup_verification',(req, res) => {
-    console.log(req.body);
-})
 app.post('/signup_giveNumber', (req, res) => {
     postPhoneNumberCheck(app, req, res);
-})
-app.post('/stripe', (req, res) => {
-    console.log(req.body);
 })
 app.post('/message', (req, res) => {
     res.render('./customer/MessagePage.html')
@@ -380,7 +357,5 @@ app.post('/basket_add', (req, res) => {
 app.post('/basket_modify',(req, res) =>{
     modifyAnItemOfTheBasket(app, req, res);
 })
-app.post('/userReOrder', (req, res) => {
-    console.log(req.body);
-})
+
 module.exports = app;
