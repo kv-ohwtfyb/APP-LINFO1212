@@ -38,11 +38,37 @@ For JavaScript (.js) files here are the rules :
 
 * Imports 
   * Importing modules we will be using the `<require>` keyword.
+  > We import our exported functions independently
+  ```
+  const {
+    postUserLoggedIn,
+    postPhoneNumberCheck,
+    postUserRegister,
+    postOrdersOfUser,
+    addItemToBasket,
+    modifyAnItemOfTheBasket,
+    postCheckOut,
+    postCheckBeforeReOrdering} = require('./private/js/customer/POST');
+  
+  ```
+  > If this doesn't work, please import the entire module and then call it.
+  ```
+  import * as myModule from './private/js/customer/POST'
+  		OR
+  const myModule = require('./private/js/customer/POST');
+  
+  THEN CALL IT LIKE THIS:
+  
+  myModule.postUserLoggedIn();
+  
+  ```
+  
   * The name given to the variable containing the import is declared with const and the name starts with a small Letter.
   ```js
   const mongoose = require('mongoose');
   const mongodbServer = require('mongodb').Server;
   const appClients = require('./clients/app');
+  
   ```
 * Functions 
   * Apart from `App.js`, for functions, we are going to prioritize promises than callbacks. Meaning when possible we are going to always return promises. 
@@ -113,7 +139,7 @@ For JavaScript (.js) files here are the rules :
 	* then Skip point 2 below and go directly to point 3.
 
 2. If it isn't your first time, please, run your mongodb in a terminal : `mongod --dbpath <pathOfWhereYourDbIs>` .
-3. Run our file server.js in the terminal: `node server.js` **(Please make sure to be in the 'ProjetFinale' folder)**
+3. Run our file server.js in the terminal: `node server.js` or `npm start` **(Please make sure to be in the 'ProjetFinale' folder)**
 4. Open a web browser and then type 'https://localhost:8080/'
 5. If you get a Privacy error, go to Advance => Proceed to localhost (unsafe) (Don't worry, No hackers will come for our website).
 

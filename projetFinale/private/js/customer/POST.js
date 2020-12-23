@@ -1,21 +1,22 @@
 const { userModel, orderModel } = require("./../general/schemas");
 const bcrypt = require('bcrypt');
-const {addItemToBasketBodyParser} = require("../general/functions");
-const {findWithPromise} = require("../general/functions");
-const phoneAPI = require("../apis/phoneAPI");
+const { addItemToBasketBodyParser } = require("../general/functions");
 
-
+/**
+ * Redirects to the homepage if the data in the req.body match a user in teh database.
+ * Else renders the login page with the error that
+ * @param app
+ * @param req
+ * @param res
+ */
 function userLogIn(app, req, res){
     userLoggingCheck(req)
         .then(() => { res.redirect('/'); })
         .catch((err) => { res.render('./customer/UserLoginPage.html', {loginError: err.message}) });
 }
 
-/********* Function called by userLogIn(...) *******************/
-
-
 /**
- * Check if the user is in our database( with the email entered).
+ * Check if the user is in our database( with the email entered ).
 
  if we found the email in the database.
   - we take the whole Json of the user (== parameter 'user').
@@ -53,10 +54,9 @@ function userLoggingCheck(req){
 
 /**
  * Check if the phone Number is already used
- * @param phoneNumberString
+ * @param {String} phoneNumberString
  * @returns {Promise|PromiseLike<phoneNumberAlreadyUsed>|Promise<phoneNumberAlreadyUsed>}
  */
-
 function phoneNumberAlreadyUsed(phoneNumberString) {
     return userModel.findOne({ phone : phoneNumberString })
         .then((user) => {
@@ -71,12 +71,12 @@ function phoneNumberAlreadyUsed(phoneNumberString) {
 }
 
 /**
- * Verify the number then goes to the sign up completing Page if the number is in a correct form
+ * Verify the number then goes to the sign up completing Page if the number is in a correct form.
+ * If the phone number is correct then its added in the session for further use.
  * @param app
  * @param req
  * @param res
  */
-
 function phoneNumberCheck (app, req, res){
     if (req.body.phoneNumber[0] !== '3' || req.body.phoneNumber[1] !=='2' || isNaN(req.body.phoneNumber) || req.body.phoneNumber.length < 11){
         res.render('./customer/SignUpGiveNumberPage.html', {phoneNumberError: "Please enter a valid phone number that starts with start with 32..."});
@@ -95,16 +95,14 @@ function phoneNumberCheck (app, req, res){
 
 
 /**
- * Checks if the number is already used in the db
- * @param emailString
+ * Checks if the email is already used in the db.
+ * @param {String} emailString
  * @returns {Promise|PromiseLike<emailAlreadyUsed>|Promise<emailAlreadyUsed>}
  */
-
 function emailAlreadyUsed(emailString){
     return userModel.findOne({ email : emailString })
         .then((user) => {
             if (user) {
-                this.msg = emailString + " is already used";
                 this.status = true;
             }else{
                 this.status = false;
@@ -114,39 +112,31 @@ function emailAlreadyUsed(emailString){
 }
 
 /**
- * Check the email and return false if the email is not used
+ * Check the email and return false if the email is not used.
  * @param app
  * @param req
  * @param res
- * @return false or render the page with an error
+ * @return false if the email is not used in the database or render the page with an error.
  */
-function emailCheck(app,req,res){
+function emailCheck(app, req, res){
     emailAlreadyUsed(req.body.email)
         .then((check) => {
-            if(check.status){
-                res.render('./customer/UserSignUpCompletingPage.html', {userRegisterError: check.msg});
-            }else{
-                return false;
-            }
+            return check.status;
         })
         .catch(err => {
-            console.log(err);
+            return false;
         })
 }
 
 /**
- * Checks if the confirm password is the same as the inital one
+ * Checks if the confirm password and the password are the same.
  * @param app
  * @param req
  * @param res
  * @return {boolean}
  */
-function confirmPasswordCheck(app,req,res){
-    if (req.body.confirmPassword !== req.body.password){
-        res.render('./customer/UserSignUpCompletingPage.html', {userRegisterError: "Your passwords don't match"});
-    }else {
-        return true;
-    }
+function confirmPasswordCheck(app, req, res){
+    return req.body.confirmPassword === req.body.password;
 }
 
 /**
@@ -155,17 +145,18 @@ function confirmPasswordCheck(app,req,res){
  * @param req
  * @param res
  */
-
 function userRegister(app,req,res){
     const userName = req.body.name;
     //Checking if the email is already used
     let userEmail;
-    if(!emailCheck(app,req,res)) {
+    if(!emailCheck(app, req, res)) {
         userEmail = req.body.email;
+    }else{
+        res.render('./customer/UserSignUpCompletingPage.html', {userRegisterError: req.session.email + " already used."});
     }
     const userPassword = req.body.password;
     const saltRounds = 10;
-    //hashed password + adding the user in the db
+
     if (confirmPasswordCheck(app,req,res)){
         bcrypt.hash(userPassword, saltRounds, (err, hash) => {
             //add the user in the database
@@ -183,11 +174,17 @@ function userRegister(app,req,res){
                 }
             });
         });
+    }else {
+        res.render('./customer/UserSignUpCompletingPage.html', {userRegisterError: "Your passwords don't match"});
     }
-
-
 }
 
+/**
+ * Executes the functions necessarily for adding item in the basket.
+ * @param app
+ * @param req
+ * @param res
+ */
 function addItemToBasket(app, req, res){
     addItemToBasketBodyParser(req.body)
         .then((itemObject) => {
@@ -233,7 +230,7 @@ function addItemToBasket(app, req, res){
 /**
  * Modifies the current basket in the session. Responds to the request with an object
  * containing an instance status (boolean) and (msg).
- * @param app : express app.
+ * @param app : app.
  * @param req : request.
  * @param res : response.
  */
@@ -343,15 +340,19 @@ function orderConfirm(app, req, res){
     }
 }
 /**
- * This function check if what the user wants to reorder still in our database. Most importantly,if they exist.
+ * This function check if what the user wants to reorder is still in our database.
+ * Most importantly, if they have the same prices and groups.
+ *
+ * If everything is correct it it sends a JSON file with status on true,
+ * else status false therefore the file contains a msg key that hold the message.
  *
  * @param app
  * @param {Object} req : Full order details
- * @param {JSON file} res: containing status and (or ) error message.  {status: true/False, msg: error}
+ * @param {Object} res: containing status and (or ) error message.  {status: true/False, msg: error}
  *
  * If everything is okay, add the order to the basket and return status.
  *
- * If not, return status (false) and the error occurred.
+ * If not,
  *
  */
 function checkBeforeReordering(app, req, res) {
@@ -384,6 +385,11 @@ exports.modifyAnItemOfTheBasket = modifyAnItemOfTheBasket;
 exports.postCheckOut = orderConfirm;
 exports.postCheckBeforeReOrdering = checkBeforeReordering;
 
+/**
+ * Checks if the date given respects the date constraints explained in the report.
+ * @param {string} givenDateString
+ * @returns {(boolean|Date)[]|boolean[]}
+ */
 function checkDate(givenDateString){
     const arrayDate = givenDateString.split("-");
     const givenDate = new Date( parseInt(arrayDate[0]),
@@ -406,6 +412,11 @@ function checkDate(givenDateString){
     return [false, null];
 }
 
+/**
+ * Rounds the num in the to 2 digits after the decimals.
+ * @param {number} num
+ * @returns {number}
+ */
 function roundTo2Decimals(num) {
     return Math.round((num + Number.EPSILON) * 100) / 100
 }

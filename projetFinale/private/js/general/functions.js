@@ -8,7 +8,7 @@ const limmitter  = require('express-rate-limit');
 /**
  * Limit pages requests
  */
-function limittingPages(numOfLoading, returnMessage) {
+function limitingPages(numOfLoading, returnMessage) {
     return limmitter({
         windowMs : 1 * 60 * 60 * 1000, //For 1 hour
         max : numOfLoading, //number of times the user can request(or go on) the same page.
@@ -142,7 +142,7 @@ async function parseTheAddItemToBasketBody(reqBody){
     return toReturn;
 }
 
-exports.loginLimitter = limittingPages;
+exports.loginLimitter = limitingPages;
 exports.savingImageToModel = savingImage;
 exports.setVirtualImageSrc = setImageSrc;
 exports.formatText = formatText;
@@ -153,10 +153,6 @@ exports.getItemSpecFromReqBody = itemAddOrUpdateBodyParser;
 exports.getGroupSpecFromReqBody = groupAddOrUpdateBodyParser;
 exports.addItemToBasketBodyParser = parseTheAddItemToBasketBody;
 
-
-function roundTo2Decimals(num) {
-    return Math.round((num + Number.EPSILON) * 100) / 100
-}
 
 function checkItemWithDatabase(item, restaurantName){
     return schemas.restaurantModel.findOne({ name : restaurantName } )

@@ -695,6 +695,10 @@ restaurantSchema.methods.getArrayOfItemsDisplayForStore = function(){
     })
 }
 
+/**
+ * Returns an array of orders that are placed in this restaurant for that day.
+ * @returns {Query<Array<Document>, Document>}
+ */
 restaurantSchema.methods.getArrayOfDatesOnOrders = function(){
     const thisRestaurantOrderModel = mongoose.model('Restaurant Order', restaurantOrderSchema, this.orders.toString());
     return thisRestaurantOrderModel.find();
@@ -831,16 +835,20 @@ restaurantSchema.methods.cancelOrder = function (orderId){
  * Creates the text indexes which will be used for customer search.
  */
 restaurantSchema.index({  'groups.description' : 'text',
-                                 'groups.items.name' : 'text',
-                                 'categories.description' : 'text',
-                                 'categories.items' : 'text',
-                                 'name' : 'text'
-                              });
+                                'groups.items.name' : 'text',
+                                'categories.description' : 'text',
+                                'categories.items' : 'text',
+                                'name' : 'text'
+                              }, {
+                                collation: {
+                                    locale: 'simple',
+                                }
+});
 
 const restaurantModel = mongoose.model('Restaurant', restaurantSchema, 'restaurants');
 
 restaurantModel.createIndexes(function (err) {
-    if (err) console.log(`Error ensuring indexes.`);
+    if (err) console.log(`Error ensuring indexes.${err.message}`);
 });
 
 const restaurantOrderSchema = new Schema({
