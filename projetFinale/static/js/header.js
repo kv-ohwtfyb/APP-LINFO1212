@@ -9,6 +9,11 @@ $(document).ready(function () {
         navbarInHeader.css("width","0px");
     });
 
+    //When you click on the logo, You return to the homepage
+    $(".name-logo").on('click', function () {
+        window.open('/', '_parent');
+    });
+
     // Opening and closing the basket in the header.
     const platePopUpInHeader = $('#popup_plate_header');
     $("#popup_plate_open").on('click', function () {
