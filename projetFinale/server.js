@@ -3,7 +3,7 @@ const https = require('https');
 const app = require('./app');
 const mongoose = require('mongoose');
 
-mongoose.connect('mongodb://App:hirwa@localhost:27017/giq',
+mongoose.connect('mongodb://localhost:27017/giq',
     {
         keepAlive: true,
         keepAliveInitialDelay: 300000,

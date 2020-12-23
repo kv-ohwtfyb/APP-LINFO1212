@@ -49,6 +49,7 @@ dialog{
     overflow: auto;
 }
 footer{
+    pointer-events: none;
 
 }
 header{
