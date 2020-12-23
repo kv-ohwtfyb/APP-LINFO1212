@@ -139,7 +139,7 @@ For JavaScript (.js) files here are the rules :
 	* then Skip point 2 below and go directly to point 3.
 
 2. If it isn't your first time, please, run your mongodb in a terminal : `mongod --dbpath <pathOfWhereYourDbIs>` .
-3. Run our file server.js in the terminal: `node server.js` **(Please make sure to be in the 'ProjetFinale' folder)**
+3. Run our file server.js in the terminal: `node server.js` or `npm start` **(Please make sure to be in the 'ProjetFinale' folder)**
 4. Open a web browser and then type 'https://localhost:8080/'
 5. If you get a Privacy error, go to Advance => Proceed to localhost (unsafe) (Don't worry, No hackers will come for our website).
 
