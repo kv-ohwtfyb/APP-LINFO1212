@@ -177,8 +177,10 @@ function userRegister(app,req,res){
             });
             user.save(function (err,user){
                 if(err){res.render('./customer/UserSignUpCompletingPage.html', {userRegisterError: err});}
-                else {res.render('./customer/Homepage.html', {loggedIn : true , name: user.name});
-                req.session.user = user;}
+                else {
+                    req.session.user = user;
+                    res.redirect('/');
+                }
             });
         });
     }
