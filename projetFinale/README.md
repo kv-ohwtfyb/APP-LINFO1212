@@ -132,8 +132,8 @@ For JavaScript (.js) files here are the rules :
  
 1. If it is your first time running our web, You will *need to import our database*, for a better experience. To do so:
 	* Run your mongodb in a terminal : `mongod --dbpath <pathOfWhereYourDbIs>`.
-	* Go in 'db' folder of our project. There is a folder named 'testingdb'.
-	* Copy the path of 'testingdb'. 
+	* Go in 'db' folder of our project. There is a folder named 'giq'.
+	* Copy the path of 'giq'. 
 	* Open a new terminal in the 'ProjetFinale' folder.
 	* Run this command : `mongorestore --db giq --drop <pathYouCopied>`. 
 		It should look like this : `mongorestore --db giq --drop pathWhereYouPutOurProject/projetFinale/db/giq`.
