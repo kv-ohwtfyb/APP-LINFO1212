@@ -35,7 +35,7 @@ $(document).ready(function (){
 
         $.ajax( '/reOrderCheck',
         {
-            method :'POST',
+            method : 'POST',
             data   : { orderId : basket._id },
             success: function (response) {
                 if (response.status){

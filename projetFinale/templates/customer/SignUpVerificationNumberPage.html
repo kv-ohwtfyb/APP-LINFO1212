@@ -13,13 +13,12 @@
             <h4>|</h4>
             <h3>UCLouvain</h3>
         </div>
-        <form class="round-border" method="POST" action="/user_signup">
+        <form class="round-border" method="POST" action="/signup_verification">
             <p>{{VerificationError}}</p>
-            <label for="number"></label>
-            <input type="number" id="number" name="codeNumber" placeholder="Start with 32 ..." minlength="4" maxlength="4">
+            <label for="code"></label>
+            <input type="number" id="code" name="codeNumber" placeholder="Enter the verification code ..." minlength="4" maxlength="4">
             <input type="submit" value="Send" class="bg-color-black">
         </form>
-
         <div class="column-display">
             <a href="">Resend Code</a>
             <a href="">Change Phone Number</a>

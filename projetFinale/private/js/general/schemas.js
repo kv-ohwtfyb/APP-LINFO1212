@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 const uniqueValidator = require('mongoose-unique-validator');
 const Schema = mongoose.Schema;
-
 const functions = require('./functions');
+const phoneAPI = require('./../apis/phoneAPI');
 
 const userSchema = new Schema({
     name     : { type : String,                       required : true },
@@ -783,6 +783,12 @@ restaurantSchema.methods.confirmOrder = function (orderId){
             if (order.status === "Cancelled" || order.doneRestaurants.includes(this.name)) { return resolve(); }
             order.doneRestaurants.push(this.name);
             if (order.doneRestaurants.length === order.restaurants.length){
+                userModel.findById(order.user)
+                    .then((user) => {
+                        phoneAPI.confirmOrderMessage(user.phone, order.date);
+                    }).catch((err) => {
+                        console.log(err.message);
+                    })
                 await orderModel.updateOne({ _id : order._id}, { doneRestaurants : order.doneRestaurants, status : "Ready" });
                 return resolve();
 
@@ -802,6 +808,15 @@ restaurantSchema.methods.cancelOrder = function (orderId){
         const restaurant = await functions.findWithPromise( order.restaurants,
                                                 ({restaurant}) => { return restaurant === this.name });
         if (restaurant){
+            if (order.cancelRestaurants.length === 0 ){
+                userModel.findById(order.user)
+                    .then((user) => {
+                        phoneAPI.cancelOrderMessage(user.phone, order.date);
+                    })
+                    .catch((err) => {
+                        console.log(err.message);
+                    })
+            }
             if (order.cancelRestaurants.includes(this.name)){ return resolve(); }
             order.cancelRestaurants.push(this.name);
             await orderModel.updateOne({ _id : order._id}, { cancelRestaurants : order.cancelRestaurants, status : "Cancelled" });

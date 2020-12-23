@@ -13,27 +13,20 @@
 </head>
 <body class="seller-page">
     <header class="bg-color-white">
-        <div id="navbar_open">≡
-        </div>
+        <button id="navbar_open" type="button" class="border-less color-black bg-color-white">≡
+        </button>
         <div class="navbar bg-color-white" id="navbar_header">
-                <h4 id="navbar_close">X</h4>
+            <button id="navbar_close" class="border-less bg-color-black color-white">X</button>
+            <ul>
+            <li><a class="login border-less bg-color-black" href="/logout"><h2>Log out</h2></a></li>
                 {{#loggedIn}}
-                <ul>
-                    <li><a class="login border-less bg-color-black" href="/logout"><h2>Log out</h2></a></li>
-                    <li>
-                        <h3 class="user-name text-align-left">Hello, {{name}}</h3>
-                    </li>
-                    <li><a href="/orders_page">Orders</a></li>
-                </ul>
+                <li>
+                    <h3 class="user-name text-align-left">Hello, {{name}}</h3>
+                </li>
                 {{/loggedIn}}
-                {{^loggedIn}}
-                <ul>
-                    <li><a class="login border-less bg-color-black" href="/user_login"><h2>Log in</h2></a></li>
-                    <li><a href="/sign_up_giveNumber">Sign Up</a></li>
-                </ul>
-                {{/loggedIn}}
-
-            </div>
+                <li><a href="/">HomePage</a></li>
+            </ul>
+        </div>
         <div class="name-logo">
             <h2>GIQ</h2>
             <h4>|</h4>

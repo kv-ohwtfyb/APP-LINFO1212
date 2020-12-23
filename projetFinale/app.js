@@ -3,6 +3,7 @@ const consolidate = require('consolidate');
 const app = express ();
 const bodyParser = require('body-parser');
 const session = require('express-session');
+const {verifyPhoneNumber} = require("./private/js/customer/POST");
 
 const {
     getHomePage,
