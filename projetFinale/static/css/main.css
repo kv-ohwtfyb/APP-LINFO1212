@@ -46,7 +46,10 @@ input[type=submit]{
     position: absolute;
 }
 dialog{
-     overflow: auto;
+    overflow: auto;
+}
+footer{
+
 }
 header{
     width: 100%;
