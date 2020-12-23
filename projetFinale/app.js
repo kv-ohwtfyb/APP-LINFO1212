@@ -78,7 +78,7 @@ app.use(session({
 }));
 
 const custommerloginPageLimit = loginLimitter(5,"You tried to log in many times, Please Try again in 1 hour");
-const loginToRestaurantLimit = loginLimitter(3,"Is this really your restaurant? If so, Please Try again in 1 hour");
+const loginToRestaurantLimit  = loginLimitter(5,"You tried to go at your restaurant so many times, Please come back again in 1 hour");
 
 //Initiating the basket in the app session
 
