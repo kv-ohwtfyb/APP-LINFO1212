@@ -119,6 +119,8 @@ For JavaScript (.js) files here are the rules :
 
  ### 4.5 Tests
   This folder has necessary functions we used to test our web application.
+  
+  In order to run the tests, you have to start the server that is created for tests. The reason why we created this server is because with our https server, we couldn't access the url. After running the server (test's server), go into the tests directory and run the command `npm test`
  
  ## 5. Additional Information
  * In `server.js`, we only import the app and connect the server to our database.
