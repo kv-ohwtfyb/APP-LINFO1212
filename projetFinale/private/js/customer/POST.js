@@ -2,7 +2,8 @@ const { userModel, orderModel } = require("./../general/schemas");
 const bcrypt = require('bcrypt');
 const {addItemToBasketBodyParser} = require("../general/functions");
 const {findWithPromise} = require("../general/functions");
-const {sendVerification} = require("../apis/phoneAPI");
+const phoneAPI = require("../apis/phoneAPI");
+
 
 function userLogIn(app, req, res){
     userLoggingCheck(req)
@@ -77,26 +78,21 @@ function phoneNumberAlreadyUsed(phoneNumberString) {
  */
 
 function phoneNumberCheck (app, req, res){
-    if (req.body.phoneNumber[0] !== '3' || req.body.phoneNumber[1] !=='2'){
-        res.render('./customer/SignUpGiveNumberPage.html', {phoneNumberError: "Please start with 32..."});
+    if (req.body.phoneNumber[0] !== '3' || req.body.phoneNumber[1] !=='2' || isNaN(req.body.phoneNumber) || req.body.phoneNumber.length < 11){
+        res.render('./customer/SignUpGiveNumberPage.html', {phoneNumberError: "Please enter a valid phone number that starts with start with 32..."});
     }else{
-        if (req.body.phoneNumber.length !== 10){
-            res.render('./customer/SignUpGiveNumberPage.html', {phoneNumberError: "Please a valid number"});
-        }else{
-            phoneNumberAlreadyUsed(req.body.phoneNumber)
-                .then((check) => {
-                    if (check.status){
-                        res.render('./customer/SignUpGiveNumberPage.html', {phoneNumberError: check.msg})
-                    }else{
-                        req.session.phoneNumber = req.body.phoneNumber;
-                        const message = sendVerification(req.body.phoneNumber);
-
-                        //TODO
-                    }
-                })
-        }
+        phoneNumberAlreadyUsed(req.body.phoneNumber)
+            .then((check) => {
+                if (check.status){
+                    res.render('./customer/SignUpGiveNumberPage.html', { phoneNumberError: check.msg })
+                }else{
+                    req.session.phoneNumber = req.body.phoneNumber;
+                    res.render('./customer/UserSignUpCompletingPage.html');
+                }
+            })
     }
 }
+
 
 /**
  * Checks if the number is already used in the db
