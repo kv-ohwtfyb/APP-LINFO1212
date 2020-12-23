@@ -38,11 +38,37 @@ For JavaScript (.js) files here are the rules :
 
 * Imports 
   * Importing modules we will be using the `<require>` keyword.
+  > We import our exported functions independently
+  ```
+  const {
+    postUserLoggedIn,
+    postPhoneNumberCheck,
+    postUserRegister,
+    postOrdersOfUser,
+    addItemToBasket,
+    modifyAnItemOfTheBasket,
+    postCheckOut,
+    postCheckBeforeReOrdering} = require('./private/js/customer/POST');
+  
+  ```
+  > If this doesn't work, please import the entire module and then call it.
+  ```
+  import * as myModule from './private/js/customer/POST'
+  		OR
+  const myModule = require('./private/js/customer/POST');
+  
+  THEN CALL IT LIKE THIS:
+  
+  myModule.postUserLoggedIn();
+  
+  ```
+  
   * The name given to the variable containing the import is declared with const and the name starts with a small Letter.
   ```js
   const mongoose = require('mongoose');
   const mongodbServer = require('mongodb').Server;
   const appClients = require('./clients/app');
+  
   ```
 * Functions 
   * Apart from `App.js`, for functions, we are going to prioritize promises than callbacks. Meaning when possible we are going to always return promises. 
