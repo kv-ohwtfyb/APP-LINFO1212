@@ -15,7 +15,7 @@ mongoose.connect('mongodb://App:hirwa@localhost:27017/giq',
 );
 
 mongoose.connection.on('connected', (err, res) => {
-    console.log( new Date().toLocaleTimeString() + " Connected to MongoDB db <giq> the server is running on 27017.");
+    console.log( new Date().toLocaleTimeString() + " Connected to MongoDB db <giq> running on 27017.");
     https.createServer({
     key         : fs.readFileSync('./private/ssl/key.pem'),
     cert        : fs.readFileSync('./private/ssl/cert.pem'),

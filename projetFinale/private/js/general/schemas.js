@@ -46,10 +46,11 @@ userSchema.methods.getSellerRestaurant = function (inputAuthKey){
  * @returns Promise<{*[]}>
  */
 userSchema.methods.getArrayOfOrders = async function () {
-    await this.orders.forEach(async (refId, idx, array) => {
-        array[idx] = await orderModel.findById(refId);
-    });
-    return this.orders;
+    let toReturn = [...this.orders];
+    for (let i = 0; i < toReturn.length; i++) {
+        toReturn[i] = await orderModel.findById(toReturn[i]);
+    }
+    return toReturn;
 }
 
 userSchema.methods.addOrder = function (refId) {
