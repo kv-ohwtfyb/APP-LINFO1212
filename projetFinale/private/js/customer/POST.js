@@ -168,8 +168,10 @@ function userRegister(app,req,res){
             });
             user.save(function (err,user){
                 if(err){res.render('./customer/UserSignUpCompletingPage.html', {userRegisterError: err});}
-                else {res.render('./customer/Homepage.html', {loggedIn : true , name: user.name});
-                req.session.user = user;}
+                else {
+                    req.session.user = user;
+                    res.redirect('/');
+                }
             });
         });
     }else {
@@ -293,7 +295,13 @@ function modifyItem(req){
     }
 }
 
-
+/**
+ * This functions confirms the building and the date of the delivery
+ * @param app
+ * @param req
+ * @param res
+ * @return {*}
+ */
 function orderConfirm(app, req, res){
     const dateValidation = checkDate(req.body.date);
     const buildings  = [ "Montesquieu", "Agora" ,"Studio" ,"Sainte-Barbe", "Cyclotron",
@@ -374,14 +382,6 @@ function checkBeforeReordering(app, req, res) {
     })
 }
 
-exports.postUserLoggedIn = userLogIn;
-exports.addItemToBasket = addItemToBasket;
-exports.postPhoneNumberCheck = phoneNumberCheck;
-exports.postUserRegister = userRegister;
-exports.userLoggingCheck = userLoggingCheck;
-exports.modifyAnItemOfTheBasket = modifyAnItemOfTheBasket;
-exports.postCheckOut = orderConfirm;
-exports.postCheckBeforeReOrdering = checkBeforeReordering;
 
 /**
  * Checks if the date given respects the date constraints explained in the report.
@@ -418,3 +418,13 @@ function checkDate(givenDateString){
 function roundTo2Decimals(num) {
     return Math.round((num + Number.EPSILON) * 100) / 100
 }
+
+
+exports.postUserLoggedIn = userLogIn;
+exports.addItemToBasket = addItemToBasket;
+exports.postPhoneNumberCheck = phoneNumberCheck;
+exports.postUserRegister = userRegister;
+exports.userLoggingCheck = userLoggingCheck;
+exports.modifyAnItemOfTheBasket = modifyAnItemOfTheBasket;
+exports.postCheckOut = orderConfirm;
+exports.postCheckBeforeReOrdering = checkBeforeReordering;

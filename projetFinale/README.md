@@ -8,7 +8,7 @@ This application is a web application that allows UCLouvain students to order fo
 The file structure is like follow.
 ```
 | db
-|--- testingdb
+|--- giq
 | private
 |--- ssl
 |--- js
@@ -92,7 +92,7 @@ For JavaScript (.js) files here are the rules :
  We have 5 main folders : db, private, static, templates and tests folder.
  
  ### 4.1 Db
- This folder contains sub-folder *testingdb* which is our database.
+ This folder contains sub-folder *giq* which is our database.
  
  ### 4.2 Private 
  
@@ -119,6 +119,8 @@ For JavaScript (.js) files here are the rules :
 
  ### 4.5 Tests
   This folder has necessary functions we used to test our web application.
+  
+  In order to run the tests, you have to start the server that is created for tests. The reason why we created this server is because with our https server, we couldn't access the url. After running the server (test's server), go into the tests directory and run the command `npm test`
  
  ## 5. Additional Information
  * In `server.js`, we only import the app and connect the server to our database.
@@ -130,16 +132,16 @@ For JavaScript (.js) files here are the rules :
  
 1. If it is your first time running our web, You will *need to import our database*, for a better experience. To do so:
 	* Run your mongodb in a terminal : `mongod --dbpath <pathOfWhereYourDbIs>`.
-	* Go in 'db' folder of our project. There is a folder named 'testingdb'.
-	* Copy the path of 'testingdb'. 
+	* Go in 'db' folder of our project. There is a folder named 'giq'.
+	* Copy the path of 'giq'. 
 	* Open a new terminal in the 'ProjetFinale' folder.
 	* Run this command : `mongorestore --db giq --drop <pathYouCopied>`. 
-		It should look like this : `mongorestore --db giq --drop pathWhereYouPutOurProject/projetFinale/db/testingdb`.
+		It should look like this : `mongorestore --db giq --drop pathWhereYouPutOurProject/projetFinale/db/giq`.
 	* If everything is okay, run also this command: `mongo < dbCommand.txt`.
 	* then Skip point 2 below and go directly to point 3.
 
 2. If it isn't your first time, please, run your mongodb in a terminal : `mongod --dbpath <pathOfWhereYourDbIs>` .
-3. Run our file server.js in the terminal: `node server.js` **(Please make sure to be in the 'ProjetFinale' folder)**
+3. Run our file server.js in the terminal: `node server.js` or `npm start` **(Please make sure to be in the 'ProjetFinale' folder)**
 4. Open a web browser and then type 'https://localhost:8080/'
 5. If you get a Privacy error, go to Advance => Proceed to localhost (unsafe) (Don't worry, No hackers will come for our website).
 

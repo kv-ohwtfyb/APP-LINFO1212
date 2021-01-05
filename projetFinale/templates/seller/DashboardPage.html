@@ -107,6 +107,9 @@
             </tr>
         {{/listOfOrders}}
     </table>
+    {{^listOfOrders}}
+        <h1> IL N'Y A PAS DE COMMANDE POUR CETTE DATE </h1>
+    {{/listOfOrders}}
     <div class="order-view popup-plate bg-color-white full-height-section" id="order_popup">
         <button class="close border-less bg-color-black color-white">X</button>
         <p> Order </p>
