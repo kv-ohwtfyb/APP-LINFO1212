@@ -64,9 +64,6 @@ const { orderModel } = require('./private/js/general/schemas');
 const { loginLimitter} = require('./private/js/general/functions');
 
 
-
-
-
 app.use(bodyParser.urlencoded({ extended :true, limit: '50mb' }));
 app.engine('html', consolidate.hogan);
 app.set('views', 'templates');
@@ -159,8 +156,9 @@ app.get('/seller_login', (req, res) =>{
 });
 
 app.get('/logout', (req,res ) => {
-   req.session.user = null;
-   req.session.basket = null;
+   req.session.user = undefined;
+   req.session.basket = undefined;
+   req.session.restaurant = undefined;
    res.redirect('/');
 });
 
