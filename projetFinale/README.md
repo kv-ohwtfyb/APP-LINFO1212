@@ -56,9 +56,11 @@ For JavaScript (.js) files here are the rules :
   import * as myModule from './private/js/customer/POST'
   		OR
   const myModule = require('./private/js/customer/POST');
+  ```
   
   THEN CALL IT LIKE THIS:
   
+  ```js
   myModule.postUserLoggedIn();
   
   ```
