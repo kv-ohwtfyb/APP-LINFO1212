@@ -76,6 +76,7 @@ For JavaScript (.js) files here are the rules :
   * Functions names start with a small letter but a Capital letter is a must when starting a new word.
   ```js
   async function fetchFromDb(db, spec){
+  
     ...
   }
   ```
