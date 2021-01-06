@@ -10,7 +10,7 @@ const userSchema = new Schema({
     phone    : { type : String,                       required : true,               unique : true },
     password : { type : String,                       required : true  },
     orders   : { type : [ String ],        required : false }
-}, { autoIndex: false });
+}, { autoIndex : false } );
 
 
 /**
@@ -46,10 +46,11 @@ userSchema.methods.getSellerRestaurant = function (inputAuthKey){
  * @returns Promise<{*[]}>
  */
 userSchema.methods.getArrayOfOrders = async function () {
-    this.orders.forEach(async (refId, idx, array) => {
-        array[idx] = await orderModel.findById(refId);
-    });
-    return this.orders;
+    let toReturn = [...this.orders];
+    for (let i = 0; i < toReturn.length; i++) {
+        toReturn[i] = await orderModel.findById(toReturn[i]);
+    }
+    return toReturn;
 }
 
 userSchema.methods.addOrder = function (refId) {
@@ -87,7 +88,7 @@ const categorySchema = new Schema({
 const categoryModel = new mongoose.model('Category', categorySchema);
 
 const itemSchema = new Schema ({
-    name        : { type : String,                      required : true,           unique : true },
+    name        : { type : String,                      required : true,            unique : true },
     price       : { type : Number,                      required : true },
     promo       : { type : Number,                      required : false,           default : 0 },
     quantity    : { type : Number,                      required : true },
@@ -136,7 +137,6 @@ restaurantSchema.pre('save',async function (next) {
         mongoose.connection.createCollection(this.orders)
         .then(()   => {console.log("orders"+ this.orders + " collection created.");})
         .catch(err => console.log(`When creating orders collection ${err}`)),
-
     ]).then(() => {
        next();
     });
@@ -290,7 +290,8 @@ restaurantSchema.methods.addCategory = function (theCategory) {
  */
 restaurantSchema.methods.removeGroup = function (name) {
     this.groups = this.groups.filter((group) =>{
-        return formatText(group.name) !== formatText(name);
+        // return formatText(group.name) !== formatText(name);
+        return functions.formatText(group.name) !== functions.formatText(name);
     });
     return restaurantModel.updateOne({ _id : this._id}, { groups : this.groups })
         .then((res)=>{
@@ -321,7 +322,7 @@ restaurantSchema.methods.removeCategory = function (name) {
  * @param name (String) : name of the group to update.
  * @param spec (JSON Object) : the elements to change and their values. Ex :
     { "name" : "Boisons Froide" }.
- * @throws TypeError if the group doesn't exist. and other erros if the items don't exist.
+ * @throws TypeError if the group doesn't exist. and other errors if the items don't exist.
  * @returns Promise<>
  */
 restaurantSchema.methods.updateGroup = function (name, spec) {

@@ -151,8 +151,9 @@ app.get('/seller_login', (req, res) =>{
 });
 
 app.get('/logout', (req,res ) => {
-   req.session.user = null;
-   req.session.basket = null;
+   req.session.user = undefined;
+   req.session.basket = undefined;
+   req.session.restaurant = undefined;
    res.redirect('/');
 });
 

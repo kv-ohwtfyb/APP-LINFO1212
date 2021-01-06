@@ -8,7 +8,7 @@ This application is a web application that allows UCLouvain students to order fo
 The file structure is like follow.
 ```
 | db
-|--- testingdb
+|--- giq
 | private
 |--- ssl
 |--- js
@@ -93,7 +93,7 @@ For JavaScript (.js) files here are the rules :
  We have 5 main folders : db, private, static, templates and tests folder.
  
  ### 4.1 Db
- This folder contains sub-folder *testingdb* which is our database.
+ This folder contains sub-folder *giq* which is our database.
  
  ### 4.2 Private 
  
@@ -133,11 +133,11 @@ For JavaScript (.js) files here are the rules :
  
 1. If it is your first time running our web, You will *need to import our database*, for a better experience. To do so:
 	* Run your mongodb in a terminal : `mongod --dbpath <pathOfWhereYourDbIs>`.
-	* Go in 'db' folder of our project. There is a folder named 'testingdb'.
-	* Copy the path of 'testingdb'. 
+	* Go in 'db' folder of our project. There is a folder named 'giq'.
+	* Copy the path of 'giq'. 
 	* Open a new terminal in the 'ProjetFinale' folder.
 	* Run this command : `mongorestore --db giq --drop <pathYouCopied>`. 
-		It should look like this : `mongorestore --db giq --drop pathWhereYouPutOurProject/projetFinale/db/testingdb`.
+		It should look like this : `mongorestore --db giq --drop pathWhereYouPutOurProject/projetFinale/db/giq`.
 	* If everything is okay, run also this command: `mongo < dbCommand.txt`.
 	* then Skip point 2 below and go directly to point 3.
 

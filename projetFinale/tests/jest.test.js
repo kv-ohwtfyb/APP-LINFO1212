@@ -1,19 +1,13 @@
-const {Builder,By,Key,Util, Capabilities} = require('selenium-webdriver');
+const selenium = require('selenium-webdriver');
 const { beforeAll , afterAll, test, describe} = require('@jest/globals');
-const chrome = require('selenium-webdriver/chrome');
-const chromedriver = require('chromedriver');
-const { Dirent } = require('fs');
-const { exception } = require('console');
+require('chromedriver');
 
-chrome.setDefaultService(new chrome.ServiceBuilder(chromedriver.path).build());
-
-const url = "http://localhost:1348/";
 
 describe('Tests on homepage', () => {
     let driver;
 
     beforeAll(async () => {
-        driver = new Builder().forBrowser("chrome").build();
+        driver = new selenium.Builder().forBrowser("chrome").build();
     },10000);
 
     afterAll(async () => {
@@ -21,20 +15,9 @@ describe('Tests on homepage', () => {
     },15000);
 
     test('Check the homepage title', async () => {
-        await driver.get(url);
+        await driver.get("http://localhost:1348/");
         const title = await driver.getTitle();
         expect(title).toContain('Home');
-    });
-
-    test('Check the customer log in page', async () => {
-        await driver.get(url);
-        await driver.findElement(By.id("navbar_open")).click();
-        await driver.findElement(By.className("login border-less bg-color-black")).click();
-        await driver.findElement(By.name("mail")).sendKeys("mmihigojonathan@gmail.com");
-        await driver.findElement(By.name("password")).sendKeys("jonathan");
-        await driver.findElement(By.className("bg-color-black")).click();
-
-        //expect(By.className("msg")).toContain("");
     });
 
 });
