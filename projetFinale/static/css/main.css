@@ -441,7 +441,7 @@ header form input[type=submit]:active{
     width: 100%;
     min-height: fit-content;
     display: grid;
-    grid-template-columns: 300px 300px auto;
+    grid-template-columns: 400px 300px auto;
     grid-gap: 20px;
     padding-top: 20px;
     padding-bottom: 20px;

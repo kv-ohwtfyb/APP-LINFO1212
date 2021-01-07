@@ -52,7 +52,7 @@ function updateGroup(app, req, res){
 
 function updateCategory(app, req, res){
     restaurantModel.findById(req.session.restaurant._id).then((restaurant) => {
-        restaurant.updateCategory("Drinks", { description : "Testing test." })
+        restaurant.updateCategory(req.body.name, { description : req.body.description })
             .then(() =>{
                 res.json({ status : true });
             })

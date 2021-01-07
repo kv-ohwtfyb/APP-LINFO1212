@@ -3,6 +3,8 @@ const uniqueValidator = require('mongoose-unique-validator');
 const Schema = mongoose.Schema;
 const functions = require('./functions');
 const phoneAPI = require('./../apis/phoneAPI');
+const util = require('util');
+
 
 const userSchema = new Schema({
     name     : { type : String,                       required : true },
@@ -595,6 +597,9 @@ restaurantSchema.methods.getArrayOfItemsName = function(){
 restaurantSchema.methods.checkBasketItemConditionsAndPrice = function(item, correct = false){
     return new Promise((resolve, reject) => {
         this.getItem(item.name, true).then((itemFromDatabase) =>{
+
+            console.log(util.inspect(item, {showHidden: false, depth: null}));
+
             let currentUnityPrice = 0; let unityExtraCharge = 0;
             if (!itemFromDatabase) return reject(`Item ${item.name} doesn't exist in the given restaurant ${this.name} database.`);
 

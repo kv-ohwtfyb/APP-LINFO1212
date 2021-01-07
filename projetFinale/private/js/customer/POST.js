@@ -100,32 +100,21 @@ function phoneNumberCheck (app, req, res){
  * @returns {Promise|PromiseLike<emailAlreadyUsed>|Promise<emailAlreadyUsed>}
  */
 function emailAlreadyUsed(emailString){
+    console.log(emailString);
     return userModel.findOne({ email : emailString })
         .then((user) => {
-            if (user) {
-                this.status = true;
-            }else{
-                this.status = false;
-            }
+            this.status = !!user;
             return this;
         });
 }
 
 /**
  * Check the email and return false if the email is not used.
- * @param app
- * @param req
- * @param res
  * @return false if the email is not used in the database or render the page with an error.
+ * @param email
  */
-function emailCheck(app, req, res){
-    emailAlreadyUsed(req.body.email)
-        .then((check) => {
-            return check.status;
-        })
-        .catch(err => {
-            return false;
-        })
+function emailCheck(email){
+    return userModel.exists({ email : email }).then((bool) => { return bool; });
 }
 
 /**
@@ -149,34 +138,35 @@ function userRegister(app,req,res){
     const userName = req.body.name;
     //Checking if the email is already used
     let userEmail;
-    if(!emailCheck(app, req, res)) {
-        userEmail = req.body.email;
-    }else{
-        res.render('./customer/UserSignUpCompletingPage.html', {userRegisterError: req.session.email + " already used."});
-    }
-    const userPassword = req.body.password;
-    const saltRounds = 10;
-
-    if (confirmPasswordCheck(app,req,res)){
-        bcrypt.hash(userPassword, saltRounds, (err, hash) => {
-            //add the user in the database
-            const user = userModel({
-                name : userName,
-                email : req.body.email,
-                phone : req.session.phoneNumber,
-                password : hash
-            });
-            user.save(function (err,user){
-                if(err){res.render('./customer/UserSignUpCompletingPage.html', {userRegisterError: err});}
-                else {
-                    req.session.user = user;
-                    res.redirect('/');
-                }
-            });
-        });
-    }else {
-        res.render('./customer/UserSignUpCompletingPage.html', {userRegisterError: "Your passwords don't match"});
-    }
+    emailCheck(req.body.email).then((bool) => {
+        if(!bool) {
+            userEmail = req.body.email;
+            const userPassword = req.body.password;
+            const saltRounds = 10;
+            if (confirmPasswordCheck(app,req,res)){
+                bcrypt.hash(userPassword, saltRounds, (err, hash) => {
+                    //add the user in the database
+                    const user = userModel({
+                        name : userName,
+                        email : req.body.email,
+                        phone : req.session.phoneNumber,
+                        password : hash
+                    });
+                    user.save(function (err,user){
+                        if(err){res.render('./customer/UserSignUpCompletingPage.html', {userRegisterError: err});}
+                        else {
+                            req.session.user = user;
+                            res.redirect('/');
+                        }
+                    });
+                });
+            }else {
+                res.render('./customer/UserSignUpCompletingPage.html', {userRegisterError: "Your passwords don't match"});
+            }
+        }else{
+            res.render('./customer/UserSignUpCompletingPage.html', {userRegisterError: req.body.email + " already used."});
+        }
+    })
 }
 
 /**
@@ -279,7 +269,7 @@ function modifyItem(req){
             req.session.basket.totalAmount = roundTo2Decimals(req.session.basket.totalAmount);
             req.session.basket.totalItems -= quantityDifference;
             item.quantity = parseInt(req.body.quantity);
-            item.total = roundTo2Decimals(quantityDifference * item.unityPrice);
+            item.total = roundTo2Decimals(item.quantity * item.unityPrice);
             item.total = roundTo2Decimals(item.total);
             if (item.quantity === 0){
                 restaurant.items = restaurant.items.filter( value => value.name !== item.name );
@@ -288,10 +278,10 @@ function modifyItem(req){
             }
             return true;
         }else {
-            throw new Error(`No such item as ${req.body.itemName} in the basket`);
+            throw new Error(`No such item as ${req.body.itemName} in the basket. Try to reload your page`);
         }
     }else {
-        throw new Error(`No restaurant as ${req.body.restaurant} in the basket`);
+        throw new Error(`No restaurant as ${req.body.restaurant} in the basket. Try to reload your page`);
     }
 }
 
@@ -373,6 +363,12 @@ function checkBeforeReordering(app, req, res) {
                 basket.totalAmount = obj.total;
                 delete basket.total; delete basket.__v; delete basket.doneRestaurants; delete basket.cancelRestaurants;
                 req.session.basket = basket;
+                req.session.basket.totalItems = 0;
+                for (let i = 0; i < basket.restaurants.length; i++){
+                    for (let j = 0; j < basket.restaurants[i].items.length; j++){
+                        req.session.basket.totalItems += basket.restaurants[i].items[j].quantity;
+                    }
+                }
                 res.json({status: true});
             })
             .catch((error) => {
