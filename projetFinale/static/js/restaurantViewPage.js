@@ -151,10 +151,12 @@ function sendAddToBasketRequest(restaurantName) {
 
 function handleAddToBasketResponse(response) {
     if (response.status){
-        window.open(window.location.href, '_parent');
         clearDialog();
         $('dialog').hide();
-    }else alert(response.msg);
+        location.reload(true);
+    }else {
+        alert(response.msg);
+    }
 }
 
 /**

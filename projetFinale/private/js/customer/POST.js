@@ -362,6 +362,7 @@ function checkBeforeReordering(app, req, res) {
                 delete basket.building; delete basket._id; delete basket.user; delete basket.date;
                 basket.totalAmount = obj.total;
                 delete basket.total; delete basket.__v; delete basket.doneRestaurants; delete basket.cancelRestaurants;
+                delete basket.status;
                 req.session.basket = basket;
                 req.session.basket.totalItems = 0;
                 for (let i = 0; i < basket.restaurants.length; i++){
