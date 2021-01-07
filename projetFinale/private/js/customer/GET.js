@@ -116,7 +116,7 @@ function searchRestaurants(app,req,res){
         dbSearch = restaurantModel.find({ $text: { $search: searchString }},
                                             { score: { $meta: "textScore" }})
                                       .sort({ score: { $meta: "textScore" }});
-    }else{ //Else that means the user triggered the website with a budget
+    }else{ //Else that means the user triggered the search with a budget
         dbSearch = restaurantModel.find();
     }
     dbSearch.then((result) => {

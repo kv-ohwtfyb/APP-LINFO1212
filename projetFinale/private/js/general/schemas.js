@@ -716,6 +716,7 @@ restaurantSchema.methods.updateAveragePrice = async function (){
     const updated = roundTo2Decimals(await orders.map((doc) => doc.totalAmount / doc.orders.length).reduce(reducer));
     await restaurantModel.updateOne({ _id : this._id}, { avgPrice : updated });
 }
+
 /**
  * Adds the reference Id into the restaurant orders collection.
  * @param refId (String) : the id to the parent order
