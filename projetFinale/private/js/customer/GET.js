@@ -96,7 +96,8 @@ function aRestaurantViewPage(app, req, res){
                 restaurant : restaurantObject,
                 basket : req.session.basket,
                 groups : restaurantObject.groups,
-                loggedIn : req.session.user, 
+                loggedIn : req.session.user,
+                loggedInAsASeller : req.session.restaurant
             });
         })
     })

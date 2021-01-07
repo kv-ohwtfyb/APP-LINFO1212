@@ -56,7 +56,7 @@ const {
 const { updateItem, updateGroup, updateCategory } = require('./private/js/seller/PUT');
 const { deleteItem, deleteGroup, deleteCategory } = require('./private/js/seller/DELETE');
 const { orderModel } = require('./private/js/general/schemas');
-const { loginLimitter} = require('./private/js/general/functions');
+const { loginLimitter } = require('./private/js/general/functions');
 
 
 app.use(bodyParser.urlencoded({ extended :true, limit: '50mb' }));
@@ -73,7 +73,6 @@ app.use(session({
 const custommerloginPageLimit = loginLimitter(5,"You tried to log in many times, Please Try again in 1 hour");
 const loginToRestaurantLimit  = loginLimitter(5,"You tried to go at your restaurant so many times, Please come back again in 1 hour");
 
-//Initiating the basket in the app session
 
 /************ SELLER GET Request PART ************/
 

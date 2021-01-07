@@ -1001,7 +1001,11 @@ footer p,a{
     display: none;
 }
 .table-of-customer-orders tr{
-    grid-template-columns: 100px 200px 300px 50px 100px auto;
+    grid-template-columns: 100px 50px 300px 50px 100px auto;
+}
+.table-of-customer-orders tr td{
+    justify-content: normal;
+    overflow: hidden;
 }
 .table-of-customer-orders tr td button{
     width: 100%;

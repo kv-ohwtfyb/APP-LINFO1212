@@ -23,19 +23,19 @@ function limitingPages(numOfLoading, returnMessage) {
     Saves the encoded image to a model. The schema must have an image key that takes a
     nested document structured as follow :
 
-    @param model (mongoose Model)  : Any schema that has an image field like following :
+    @param object (mongoose Schema)  : Any schema that has an image field like following :
                                         image : {
                                                     data : Buffer,
                                                     type : <ImageType> (String)
                                                 }
     @param imgEncoded (Object)     : encoded image by filepond from the web app.
  */
-function savingImage(model, imgEncoded) {
+function savingImage(object, imgEncoded) {
     if (imgEncoded == null) return;
     const img = JSON.parse(imgEncoded);
     if (img != null && ["image/jpeg", "image/png", "images/gif", "image/jpg"].includes(img.type)) {
-        model.image = new Buffer.from(img.data, "base64");
-        model.imageType = img.type;
+        object.image = new Buffer.from(img.data, "base64");
+        object.imageType = img.type;
     }
 }
 

@@ -45,14 +45,13 @@ function loadTheOrderView(data){
     const list = `<ul></ul>`
     template.append(list);
     let totalItems = 0;
-    console.log(data)
     data.restaurants.items.forEach((item) => {
         totalItems+= item.quantity;
         let itemHTML = `<li>
             <h3 class="text-align-left">${item.quantity} | ${item.name}</h3>
             <hr class="bg-color-black">
         `
-        let itemGroupSetsHTML = "<ul>";
+        let itemGroupSetsHTML = "<ul class='text-align-right'>";
         item.groupSets.forEach((group) => {
             group.selected.forEach((selectedItem) => {
                 itemGroupSetsHTML += `
@@ -63,6 +62,7 @@ function loadTheOrderView(data){
             })
         })
         itemGroupSetsHTML+="</ul>";
+        itemHTML+=itemGroupSetsHTML;
         itemHTML += "</li>";
         $('.order-view ul').append(itemHTML);
     })
