@@ -39,7 +39,7 @@ For JavaScript (.js) files here are the rules :
 * Imports 
   * Importing modules we will be using the `<require>` keyword.
   > We import our exported functions independently
-  ```
+  ```js
   const {
     postUserLoggedIn,
     postPhoneNumberCheck,
@@ -52,13 +52,15 @@ For JavaScript (.js) files here are the rules :
   
   ```
   > If this doesn't work, please import the entire module and then call it.
-  ```
+  ```js
   import * as myModule from './private/js/customer/POST'
   		OR
   const myModule = require('./private/js/customer/POST');
+  ```
   
   THEN CALL IT LIKE THIS:
   
+  ```js
   myModule.postUserLoggedIn();
   
   ```
