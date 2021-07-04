@@ -32,13 +32,13 @@ The file structure is like follow.
 | server.js
 ```
 
- ## 5. Additional Information
+ ## 3. Additional Information
  * In `server.js`, we only import the app and connect the server to our database.
  * We used *Mongoose* to give structure to and connect our server with our database. [Mongoose Documentation](https://mongoosejs.com/docs/index.html) (-----)
  * To secure sensitive information,to prevent from brute-force attack and protect passwords, we used *bcrypt* and *express-rate-limit* modules.
  * To secure our database, we created a user's security creditials which without it, the user can't get access to our database. (**Is it necessary?**)
  
- ## 6. How To run our web
+ ## 4. How To run our web
  
 It's important to install all the requirements before running the server
 
