@@ -1,9 +1,0 @@
-{
-    "scripts": {
-        "start": "node server.js"
-    },
-    "dependencies": {
-        "bcrypt": "^5.0.0",
-        "nexmo": "^2.9.1"
-    }
-}
